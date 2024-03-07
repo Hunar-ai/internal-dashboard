@@ -7,11 +7,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-ErrorTracker.init({
-    dsn: process.env.REACT_APP_SENTRY_DSN,
-    environment: process.env.REACT_APP_ENVIRONMENT,
-    release: process.env.REACT_APP_VERSION
-});
+// ErrorTracker.init({
+//     dsn: process.env.REACT_APP_SENTRY_DSN,
+//     environment: process.env.REACT_APP_ENVIRONMENT,
+//     release: process.env.REACT_APP_VERSION
+// });
 
 const container = document.getElementById('root');
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
