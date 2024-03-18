@@ -1,6 +1,0 @@
-[build]
-    [context.main]
-        command = "yarn run build:production"
-
-    [context.dev]
-        command = "yarn run build"
