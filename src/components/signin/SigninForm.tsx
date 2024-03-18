@@ -1,13 +1,20 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Alert from '@mui/material/Alert';
-import LoadingButton from '@mui/lab/LoadingButton';
 
 import { RegExUtil } from 'utils';
 import { useIsMobile } from 'hooks';
+import {
+    Grid,
+    GridItem,
+    Container,
+    Heading,
+    Input,
+    Flex,
+    Box,
+    VStack,
+    Button,
+    FormLabel
+} from '@chakra-ui/react';
 
 export interface ValidationMapProps {
     [key: string]: (_: string) => boolean;
@@ -69,82 +76,98 @@ export const SigninForm = ({ apiError, handleSubmit, isLoading }: Props) => {
         Object.values(errorState).indexOf(true) > -1;
 
     return (
-        <Grid container p={{ xs: 3, sm: 6 }} spacing={2}>
-            <Grid item xs={12} mb={isMobile ? 0 : 3}>
-                <Grid container spacing={0.5} justifyContent="center">
-                    <Grid item xs={12} textAlign="center">
-                        <Typography variant="h5" component="h5">
-                            Sign in
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12} textAlign="center">
-                        <Typography variant="subtitle1">
-                            to continue to Hunar LMS
-                        </Typography>
-                    </Grid>
-                </Grid>
-            </Grid>
-            {apiError && (
-                <Grid item xs={12}>
-                    <Alert severity="error">{apiError}</Alert>
-                </Grid>
-            )}
-            <Grid item xs={12} container spacing={isMobile ? 2 : 3}>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        fullWidth
-                        id="email"
-                        variant="outlined"
+        <Flex
+            color="white"
+            bg="#1E2442"
+            justifyContent="center"
+            height="100vh"
+            p={10}
+        >
+            <VStack bg="#242b4d" width={'30%'} p={10} spacing={6}>
+                <Box>
+                    <Heading as="h2" fontSize={20}>
+                        Troy
+                    </Heading>
+                </Box>
+                <Box width={300}>
+                    <FormLabel fontSize={12}>Email address</FormLabel>
+                    <Input
+                        placeholder="Enter your email address"
+                        size="sm"
+                        bg="#393f5c"
+                        border="none"
                         name="email"
-                        label="Email"
-                        placeholder="Enter your Email ID"
-                        value={form.email}
-                        error={errorState.email}
-                        helperText={
-                            errorState.email
-                                ? 'Must be a valid email address'
-                                : ''
-                        }
                         onChange={updateForm}
                     />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        fullWidth
-                        id="password"
-                        variant="outlined"
+                </Box>
+                <Box width={300}>
+                    <FormLabel fontSize={12}>Password</FormLabel>
+                    <Input
+                        bg="#393f5c"
+                        size="sm"
+                        border="none"
                         name="password"
-                        label="Password"
-                        placeholder="Enter your Password"
-                        type="password"
-                        value={form.password}
-                        error={errorState.password}
-                        helperText={errorState.password ? 'Required' : ''}
                         onChange={updateForm}
                     />
-                </Grid>
-            </Grid>
-            <Grid item xs={12}>
-                <Grid container justifyContent="end">
-                    <LoadingButton
-                        variant="contained"
-                        size="large"
+                </Box>
+                <Box width={300}>
+                    <Button
+                        bg="#5a99e8"
+                        size="sm"
+                        width={'100%'}
+                        color="white"
                         onClick={() => handleSubmit(form)}
-                        loading={isLoading}
-                        disabled={hasFormError}
-                        sx={{
-                            bgcolor: '#3545A3',
-                            '&:hover': {
-                                bgcolor: '#404ea1'
-                            }
-                        }}
+                        isLoading={isLoading}
+                        loadingText="Submitting"
+                        fontSize={12}
                     >
-                        Sign in
-                    </LoadingButton>
-                </Grid>
-            </Grid>
-        </Grid>
+                        LOGIN
+                    </Button>
+                </Box>
+            </VStack>
+        </Flex>
+        // <Container
+        //     centerContent
+        //     bg="teal.100"
+        //     p={{ xs: 3, sm: 6 }}
+        //     h={100}
+        //     width={300}
+        // >
+        //     <GridItem mb={isMobile ? 0 : 3}>
+        //         <Container justifyContent="center">
+        //             <GridItem textAlign="center">
+        //                 <Heading
+        //                     as="h1"
+        //                     size="4xl"
+        //                     noOfLines={1}
+        //                     fontSize="25px"
+        //                 >
+        //                     Sign in
+        //                 </Heading>
+        //             </GridItem>
+        //             <GridItem textAlign="center">
+        //                 to continue to Hunar LMS
+        //             </GridItem>
+        //         </Container>
+        //     </GridItem>
+        //     <GridItem>
+        //         <Input placeholder="Enter your Email ID" size="sm" />
+        //         <TextField
+        //             required
+        //             fullWidth
+        //             id="email"
+        //             variant="outlined"
+        //             name="email"
+        //             label="Email"
+        //             placeholder="Enter your Email ID"
+        //             value={form.email}
+        //             error={errorState.email}
+        //             helperText={
+        //                 errorState.email ? 'Must be a valid email address' : ''
+        //             }
+        //             onChange={updateForm}
+        //         />
+        //     </GridItem>
+        // </Container>
     );
 };

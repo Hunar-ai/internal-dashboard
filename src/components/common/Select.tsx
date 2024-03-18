@@ -8,7 +8,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import AddIcon from '@mui/icons-material/Add';
 
 import type { OptionsProps, OptionProps } from 'interfaces';
-import { useWidth } from 'hooks';
+
 import { SxProps } from '@mui/system';
 import Button from '@mui/material/Button';
 
@@ -79,7 +79,7 @@ export const Select = ({
             onOpen={openPopper}
             onClose={closePopper}
             sx={sx}
-            disablePortal={useWidth() === 'xs' ? true : false}
+            disablePortal={true}
             size={size}
             autoComplete={false}
             disableCloseOnSelect={multiple}

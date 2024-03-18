@@ -35,6 +35,8 @@ export const SigninContainer = () => {
                     const next = searchParams.get('next');
                     if (next) {
                         navigate(next);
+                    } else {
+                        navigate(`/client-reset-password`);
                     }
                 },
                 onError: apiError => {

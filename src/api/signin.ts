@@ -15,3 +15,7 @@ export const requestOTP = ApiClient({
 export const verifyOTP = ApiClient({
     url: `/auth/mobile/verify`
 });
+
+export const resetNotify = ApiClient({
+    url: `auth/password/reset-notify`
+});

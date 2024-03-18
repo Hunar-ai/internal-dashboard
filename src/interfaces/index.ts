@@ -27,3 +27,17 @@ export {
     type ChatIconProps,
     type PositionClassMapProps
 } from './chatBot.interface';
+export type {
+    PersonnelProps,
+    PersonnelFiltersProps
+} from './personnel.interface';
+
+export {
+    type Sort,
+    type PaginationInfo,
+    type HandleSortProps,
+    type DateRangeFilterKey,
+    type SelectAllClickProps
+} from './table.interface';
+
+export { type QueryResult } from './react-query.interface';

@@ -104,11 +104,20 @@ export const DataUtils = {
         const val = jsonmergepatch.generate(obj1, obj2);
         return val;
     },
-
+    getNested(data: unknown, path: string, defaultValue: unknown) {
+        const extractedData = _.get(data, path, defaultValue);
+        return extractedData === null ? defaultValue : extractedData;
+    },
+    setNested(object: any, path: string, value: any) {
+        _.set(object, path, value);
+    },
+    deleteNested(object: any, path: string) {
+        _.unset(object, path);
+    },
     convertArrayToCamelCase(data: string[]): string[] {
         return data.map(datum => _.camelCase(datum));
     },
-    getFormattedForm<Type>(form: any): Type {
+    getFormattedForm(form: any) {
         const formKeys = Object.keys(form) as Array<keyof typeof form>;
         const formattedForm = formKeys.reduce(
             (formattedObject: any, current: keyof typeof form) => {
@@ -132,6 +141,9 @@ export const DataUtils = {
         input: Record<string, unknown> | Record<string, unknown>[] | unknown
     ): input is Record<string, unknown>[] {
         return Array.isArray(input);
+    },
+    arrayRange(size: number): number[] {
+        return Array.from(Array(size).keys());
     },
 
     isObject(
@@ -234,7 +246,7 @@ export const DataUtils = {
             if (DataUtils.isObject(input)) {
                 return Object.keys(input).reduce((acc: any, key: string) => {
                     return Object.assign(acc, {
-                        [DataUtils.sortKeyToSnake(key)]: recurse(input[key])
+                        [DataUtils.toSnakeWrapper(key)]: recurse(input[key])
                     });
                 }, {} as K);
             } else if (DataUtils.isArray(input)) {
@@ -251,11 +263,27 @@ export const DataUtils = {
     toSnake(str: string): string {
         return _.snakeCase(str);
     },
-    sortKeyToSnake(str: string): string {
+    toSnakeWrapper(str: string): string {
         const splitStrings = str.split('.');
         const snakizedSplitStrings = splitStrings.map(datum =>
             _.snakeCase(datum)
         );
         return snakizedSplitStrings.join('.');
+    },
+    getFormattedParams(params: { [key: string]: string | null | undefined }) {
+        const formKeys = Object.keys(params) as Array<keyof typeof params>;
+        const formattedForm = formKeys.reduce(
+            (formattedObject: any, current: keyof typeof params) => {
+                if (params[current]) {
+                    return {
+                        ...formattedObject,
+                        [current]: params[current]
+                    };
+                }
+                return formattedObject;
+            },
+            {}
+        );
+        return formattedForm;
     }
 };
