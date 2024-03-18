@@ -86,7 +86,7 @@ export const SigninForm = ({ apiError, handleSubmit, isLoading }: Props) => {
             <VStack bg="#242b4d" width={'30%'} p={10} spacing={6}>
                 <Box>
                     <Heading as="h2" fontSize={20}>
-                        Troy
+                        Athena
                     </Heading>
                 </Box>
                 <Box width={300}>
