@@ -108,6 +108,7 @@ export const SigninForm = ({ apiError, handleSubmit, isLoading }: Props) => {
                         border="none"
                         name="password"
                         onChange={updateForm}
+                        type="password"
                     />
                 </Box>
                 <Box width={300}>

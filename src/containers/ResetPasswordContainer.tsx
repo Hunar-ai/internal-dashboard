@@ -14,6 +14,7 @@ import {
 import { useResetNotify } from 'hooks/apiHooks/useResetPassword';
 
 import { useSearchPersonnels } from 'hooks/apiHooks/useSearchPersonnels';
+import { PersonnelProps } from 'interfaces';
 import React from 'react';
 
 export const ResetPasswordContainer = () => {
@@ -24,9 +25,12 @@ export const ResetPasswordContainer = () => {
         string | undefined
     >('');
     const [getPersonnels, setGetPersonnels] = React.useState(false);
+    const [personnelOptions, setPersonnelOptions] = React.useState<
+        PersonnelProps[]
+    >([]);
 
     const toast = useToast();
-    const { data: searchPersonnelResponse } = useSearchPersonnels({
+    const { data: searchPersonnelResponse, isFetching } = useSearchPersonnels({
         params: {
             companyId
         },
@@ -38,6 +42,10 @@ export const ResetPasswordContainer = () => {
     });
 
     const resetPasswordAndNotify = useResetNotify();
+
+    React.useEffect(() => {
+        setPersonnelOptions(searchPersonnelResponse?.data ?? []);
+    }, [searchPersonnelResponse?.data]);
 
     const onReset = () => {
         const personnel = searchPersonnelResponse?.data.find(
@@ -78,19 +86,22 @@ export const ResetPasswordContainer = () => {
         <Flex justifyContent="center" alignItems="center" mt={10}>
             <Box
                 p={5}
-                maxW="md"
+                maxW="lg"
                 borderWidth="1px"
                 borderRadius="lg"
                 overflow="hidden"
+                width="50%"
                 height={'40%'}
             >
                 <VStack>
-                    <InputGroup size="md">
+                    <InputGroup>
                         <Input
                             placeholder={'Company Id'}
                             type="text"
                             name="companyID"
                             onChange={e => {
+                                setPersonnelOptions([]);
+                                setSelectedPersonnelId('');
                                 setCompanyId(e.target.value);
                             }}
                         />
@@ -104,6 +115,8 @@ export const ResetPasswordContainer = () => {
                                         setGetPersonnels(false);
                                     }, 1000);
                                 }}
+                                isLoading={isFetching}
+                                isDisabled={!companyId}
                             >
                                 SUBMIT
                             </Button>
@@ -113,12 +126,13 @@ export const ResetPasswordContainer = () => {
                     <FormControl>
                         <FormLabel>Personnels</FormLabel>
                         <Select
+                            value={selectedPersonnelId}
                             placeholder="Select option"
                             onChange={e => {
                                 setSelectedPersonnelId(e.target.value);
                             }}
                         >
-                            {searchPersonnelResponse?.data.map(datum => (
+                            {personnelOptions.map(datum => (
                                 <option
                                     value={datum.personnelId}
                                     key={datum.personnelId}
@@ -130,14 +144,14 @@ export const ResetPasswordContainer = () => {
                     </FormControl>
                     <FormControl>
                         <Button
-                            bg="#5a99e8"
+                            colorScheme="blue"
                             size="sm"
                             width={'100%'}
-                            color="white"
                             onClick={onReset}
                             isLoading={resetPasswordAndNotify.isLoading}
                             loadingText="Submitting"
                             fontSize={12}
+                            isDisabled={!companyId || !selectedPersonnelId}
                         >
                             RESET
                         </Button>

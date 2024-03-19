@@ -1,3 +1,4 @@
+import { useToast } from '@chakra-ui/react';
 import { search } from 'api/personnel';
 
 import { usePostReactQuery } from 'hooks/usePostReactQuery';
@@ -35,6 +36,7 @@ export const useSearchPersonnels = ({
 }: SearchPersonnelsProps): QueryResult<Response, ApiError> => {
     const { companyId } = params;
     const { page, itemsPerPage, filters, sort } = body;
+    const toast = useToast();
 
     return usePostReactQuery({
         queryKey: ['useSearchPersonnels', page],
@@ -47,6 +49,15 @@ export const useSearchPersonnels = ({
             sort
         },
         enabled,
-        onSuccess: () => undefined
+        onSuccess: () => undefined,
+        onError: (apiError: ApiError) => {
+            toast({
+                title: 'Something went wrong!',
+                description: apiError.errors.displayError,
+                status: 'error',
+                duration: 9000,
+                isClosable: true
+            });
+        }
     });
 };
