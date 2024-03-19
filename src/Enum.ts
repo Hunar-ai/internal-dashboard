@@ -142,5 +142,6 @@ export enum ALLOWED_EXTENSION {
 }
 
 export enum DOCUMENT_TYPE {
-    'CV' = 'cv'
+    'CV' = 'cv',
+    'RESUME' = 'resume'
 }

@@ -1,1 +1,3 @@
 export { NotFound } from './NotFound';
+export { ResetPasswordContainer } from './ResetPasswordContainer';
+export { AppContainer } from './AppContainer';

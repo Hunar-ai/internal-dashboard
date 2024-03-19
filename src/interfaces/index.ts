@@ -18,6 +18,8 @@ export {
     type QuestionOptionProps
 } from './jobQuery.interface';
 
+export { type JQCommSettingsProps } from './interviewScheduling.interface';
+
 export { type Worker, type ShortlistWorkerProps } from './worker.interface';
 
 export {
