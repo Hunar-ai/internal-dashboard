@@ -13,7 +13,8 @@ import {
     Box,
     VStack,
     Button,
-    FormLabel
+    FormLabel,
+    Text
 } from '@chakra-ui/react';
 
 export interface ValidationMapProps {
@@ -82,11 +83,14 @@ export const SigninForm = ({ apiError, handleSubmit, isLoading }: Props) => {
             p={10}
         >
             <VStack bg="#242b4d" width={'30%'} p={10} spacing={6}>
-                <Box>
-                    <Heading as="h2" fontSize={20}>
-                        Athena
-                    </Heading>
-                </Box>
+                <Flex alignItems="baseline">
+                    <>
+                        <Text fontWeight={500} fontSize={20} mr={2}>
+                            Athena -
+                        </Text>
+                        <Text fontSize={11}>{`   All things internal`}</Text>
+                    </>
+                </Flex>
                 <Box width={300}>
                     <FormLabel fontSize={12}>Email address</FormLabel>
                     <Input
