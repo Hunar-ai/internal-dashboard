@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box';
 export const NotFound = () => {
     return (
-        <Box>
+        <div>
             <img
                 style={{
                     display: 'block',
@@ -12,6 +11,6 @@ export const NotFound = () => {
                 src="https://res.cloudinary.com/dczeev0fe/image/upload/v1652506664/6363147_oibkci.jpg"
                 alt="Page not found"
             />
-        </Box>
+        </div>
     );
 };
