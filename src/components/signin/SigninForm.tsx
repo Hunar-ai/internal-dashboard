@@ -40,8 +40,6 @@ const validationMap: ValidationMapProps = {
 };
 
 export const SigninForm = ({ apiError, handleSubmit, isLoading }: Props) => {
-    const isMobile = useIsMobile();
-
     const [form, setForm] = React.useState<SigninFormProps>({
         email: '',
         password: ''

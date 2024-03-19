@@ -1,9 +1,11 @@
 import {
     Box,
     Button,
+    Divider,
     Flex,
     FormControl,
     FormLabel,
+    Heading,
     Input,
     InputGroup,
     InputRightElement,
@@ -83,81 +85,89 @@ export const ResetPasswordContainer = () => {
     };
 
     return (
-        <Flex justifyContent="center" alignItems="center" mt={10}>
-            <Box
-                p={5}
-                maxW="lg"
-                borderWidth="1px"
-                borderRadius="lg"
-                overflow="hidden"
-                width="50%"
-                height={'40%'}
-            >
-                <VStack>
-                    <InputGroup>
-                        <Input
-                            placeholder={'Company Id'}
-                            type="text"
-                            name="companyID"
-                            onChange={e => {
-                                setPersonnelOptions([]);
-                                setSelectedPersonnelId('');
-                                setCompanyId(e.target.value);
-                            }}
-                        />
-                        <InputRightElement width="4.5rem">
-                            <Button
-                                h="1.75rem"
-                                size="xs"
-                                onClick={() => {
-                                    setGetPersonnels(true);
-                                    setTimeout(() => {
-                                        setGetPersonnels(false);
-                                    }, 1000);
-                                }}
-                                isLoading={isFetching}
-                                isDisabled={!companyId}
-                            >
-                                SUBMIT
-                            </Button>
-                        </InputRightElement>
-                    </InputGroup>
-
-                    <FormControl>
-                        <FormLabel>Personnels</FormLabel>
-                        <Select
-                            value={selectedPersonnelId}
-                            placeholder="Select option"
-                            onChange={e => {
-                                setSelectedPersonnelId(e.target.value);
-                            }}
-                        >
-                            {personnelOptions.map(datum => (
-                                <option
-                                    value={datum.personnelId}
-                                    key={datum.personnelId}
-                                >
-                                    {datum.fullName} - {datum.email}
-                                </option>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <FormControl>
-                        <Button
-                            colorScheme="blue"
-                            size="sm"
-                            width={'100%'}
-                            onClick={onReset}
-                            isLoading={resetPasswordAndNotify.isLoading}
-                            loadingText="Submitting"
-                            fontSize={12}
-                            isDisabled={!companyId || !selectedPersonnelId}
-                        >
-                            RESET
-                        </Button>
-                    </FormControl>
-                </VStack>
+        <>
+            <Box p={4}>
+                <Heading as="h2" fontSize={20}>
+                    Reset Password
+                </Heading>
             </Box>
-        </Flex>
+            <Divider />
+            <Flex justifyContent="center" alignItems="center" mt={10}>
+                <Box
+                    p={5}
+                    maxW="lg"
+                    borderWidth="1px"
+                    borderRadius="lg"
+                    overflow="hidden"
+                    width="50%"
+                    height={'40%'}
+                >
+                    <VStack spacing={5}>
+                        <InputGroup>
+                            <Input
+                                placeholder={'Enter Company Id'}
+                                type="text"
+                                name="companyID"
+                                onChange={e => {
+                                    setPersonnelOptions([]);
+                                    setSelectedPersonnelId('');
+                                    setCompanyId(e.target.value);
+                                }}
+                            />
+                            <InputRightElement width="4.5rem">
+                                <Button
+                                    h="1.75rem"
+                                    size="xs"
+                                    onClick={() => {
+                                        setGetPersonnels(true);
+                                        setTimeout(() => {
+                                            setGetPersonnels(false);
+                                        }, 1000);
+                                    }}
+                                    isLoading={isFetching}
+                                    isDisabled={!companyId}
+                                >
+                                    SUBMIT
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+
+                        <FormControl>
+                            <FormLabel>Personnels</FormLabel>
+                            <Select
+                                value={selectedPersonnelId}
+                                placeholder="Select option"
+                                onChange={e => {
+                                    setSelectedPersonnelId(e.target.value);
+                                }}
+                            >
+                                {personnelOptions.map(datum => (
+                                    <option
+                                        value={datum.personnelId}
+                                        key={datum.personnelId}
+                                    >
+                                        {datum.fullName} - {datum.email}
+                                    </option>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl>
+                            <Button
+                                colorScheme="blue"
+                                size="sm"
+                                width={'100%'}
+                                onClick={onReset}
+                                isLoading={resetPasswordAndNotify.isLoading}
+                                loadingText="Submitting"
+                                fontSize={12}
+                                isDisabled={!companyId || !selectedPersonnelId}
+                            >
+                                RESET
+                            </Button>
+                        </FormControl>
+                    </VStack>
+                </Box>
+            </Flex>
+        </>
     );
 };
