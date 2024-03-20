@@ -1,4 +1,5 @@
-import Box from '@mui/material/Box';
+import { Box } from '@chakra-ui/react';
+
 export const NotFound = () => {
     return (
         <Box>
