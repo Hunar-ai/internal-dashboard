@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { type FormFields, type Company, type PersonnelProps } from 'interfaces';
-import { InterviewSchedulingSettingsInitState } from 'components/jobQuery/JQConstants';
 import { PERSONNEL_TYPE } from 'Enum';
 
 interface SettingsContextType {
@@ -83,8 +82,7 @@ export const settingsInitialState: SettingsContextType = {
                 },
                 vendor: {
                     disableVerification: false
-                },
-                interviewCommunication: InterviewSchedulingSettingsInitState
+                }
             }
         }
     },
