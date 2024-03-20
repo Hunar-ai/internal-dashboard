@@ -1,6 +1,8 @@
+import { Box } from '@chakra-ui/react';
+
 export const NotFound = () => {
     return (
-        <div>
+        <Box>
             <img
                 style={{
                     display: 'block',
@@ -11,6 +13,6 @@ export const NotFound = () => {
                 src="https://res.cloudinary.com/dczeev0fe/image/upload/v1652506664/6363147_oibkci.jpg"
                 alt="Page not found"
             />
-        </div>
+        </Box>
     );
 };
