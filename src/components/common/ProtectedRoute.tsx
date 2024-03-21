@@ -3,6 +3,7 @@ import { createSearchParams, Navigate, useLocation } from 'react-router-dom';
 
 import { useToken } from 'hooks';
 import { SettingsContext } from 'contexts';
+
 import { PERSONNEL_TYPE } from 'Enum';
 
 interface ProtectedProps {
@@ -22,20 +23,19 @@ export const ProtectedRoute = ({ children }: ProtectedProps) => {
             token && loggedInPersonnel?.type === PERSONNEL_TYPE.HUNAR_PERSONNEL,
         [loggedInPersonnel?.type, token]
     );
-
     const isAuthenticated = React.useMemo(() => !!token, [token]);
 
-    if (!isAuthorized || !isAuthenticated)
-        return (
-            <Navigate
-                to={{
-                    pathname: unauthorizedRedirectionPath,
-                    search: createSearchParams({
-                        next: `${location.pathname}${location.search}`
-                    }).toString()
-                }}
-                replace
-            />
-        );
-    return <>{children}</>;
+    return !isAuthorized || !isAuthenticated ? (
+        <Navigate
+            to={{
+                pathname: unauthorizedRedirectionPath,
+                search: createSearchParams({
+                    next: `${location.pathname}${location.search}`
+                }).toString()
+            }}
+            replace
+        />
+    ) : (
+        <>{children}</>
+    );
 };

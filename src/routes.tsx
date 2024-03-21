@@ -1,6 +1,6 @@
-import { AppContainer } from 'containers';
-import { SigninContainer } from 'containers/SigninContainer';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import { AppContainer, SigninContainer } from 'containers';
 
 const RoutesContainer = () => {
     const renderRoutes = () => {
