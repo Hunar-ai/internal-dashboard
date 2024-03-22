@@ -2,7 +2,7 @@ import React from 'react';
 import { useTheme } from '@mui/material/styles';
 
 import { grey } from '@mui/material/colors';
-import TextareaAutosize from '@mui/base/TextareaAutosize';
+import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import Box from '@mui/material/Box';
 import { Grid, Typography } from '@mui/material';
 
