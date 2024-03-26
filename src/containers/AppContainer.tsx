@@ -12,11 +12,9 @@ export const AppContainer = () => {
         enabled: !!token
     });
 
-    if (token && isLoading) {
-        return <></>;
-    }
-
-    return (
+    return token && isLoading ? (
+        <></>
+    ) : (
         <SettingsContext.Provider
             value={{
                 ...settingsInitialState,
