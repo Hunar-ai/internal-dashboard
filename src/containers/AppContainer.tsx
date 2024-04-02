@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from '@components/common';
 import { ResetPasswordContainer } from 'containers';
 
-import { settingsInitialState, SettingsContext } from 'contexts';
+import { SettingsContext } from 'contexts';
 import { useGetLoggedInPersonnel, useToken } from 'hooks';
 
 export const AppContainer = () => {
@@ -17,7 +17,6 @@ export const AppContainer = () => {
     ) : (
         <SettingsContext.Provider
             value={{
-                ...settingsInitialState,
                 loggedInPersonnel: {
                     personnelId: personnel?.personnelId || '',
                     fullName: personnel?.fullName,
