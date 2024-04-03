@@ -4,5 +4,6 @@ export { useGetReactQuery } from './useGetReactQuery';
 // export { useWidth } from './useWidth';
 export { useToken } from './useToken';
 export { useFormUtils } from './useFormUtils';
+export { useMenubarConfig } from './useMenubarConfig';
 
 export * from './apiHooks';

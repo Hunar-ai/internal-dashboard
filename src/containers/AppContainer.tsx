@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { ProtectedRoute } from '@components/common';
+import { Menubar, ProtectedRoute } from '@components/common';
 import { ResetPasswordContainer } from 'containers';
 
 import { SettingsContext } from 'contexts';
@@ -28,6 +28,7 @@ export const AppContainer = () => {
                 }
             }}
         >
+            <Menubar />
             <ProtectedRoute>
                 <Routes>
                     <Route
