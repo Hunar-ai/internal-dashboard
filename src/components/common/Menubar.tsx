@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import {
+    Box,
     Button,
     Drawer,
     DrawerBody,
@@ -12,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import { useIsMobile, useMenubarConfig, useToken } from 'hooks';
+import { useBaseLogo, useIsMobile, useMenubarConfig, useToken } from 'hooks';
 
 export const Menubar = () => {
     const { removeToken } = useToken();
@@ -20,6 +21,7 @@ export const Menubar = () => {
     const menuConfig = useMenubarConfig();
     const { pathname } = useLocation();
     const isMobile = useIsMobile();
+    const logo = useBaseLogo();
 
     const [open, setOpen] = React.useState(false);
 
@@ -44,10 +46,10 @@ export const Menubar = () => {
     return (
         <>
             <Flex
-                px={4}
-                as="header"
-                height={14}
+                px={isMobile ? 2 : 4}
+                height={isMobile ? 10 : 14}
                 alignItems="center"
+                justifyContent="space-between"
                 borderBottom="1px solid"
                 borderBottomColor="gray.200"
             >
@@ -59,6 +61,14 @@ export const Menubar = () => {
                             alignItems="center"
                             flexGrow={1}
                         >
+                            <Box
+                                as="img"
+                                src={logo}
+                                height="100%"
+                                py={4}
+                                pr={3}
+                                alt="Hunar Logo"
+                            />
                             {menuConfig.map(menu => (
                                 <Flex
                                     key={menu.id}
@@ -101,21 +111,25 @@ export const Menubar = () => {
                                 </Flex>
                             ))}
                         </Flex>
-                        <Button
-                            size="sm"
-                            onClick={onLogoutClick}
-                            fontSize={12}
-                            variant="ghost"
-                        >
-                            LOGOUT
-                        </Button>
                     </>
                 ) : (
                     <>
                         <IconButton
                             aria-label="Menu"
+                            size="sm"
+                            variant="ghost"
                             icon={<MenuIcon />}
                             onClick={() => setOpen(true)}
+                        />
+                        <Box
+                            as="img"
+                            src={logo}
+                            position="absolute"
+                            height={6}
+                            left={0}
+                            right={0}
+                            mx="auto"
+                            alt="Hunar Logo"
                         />
                         <Drawer
                             placement="left"
@@ -161,6 +175,14 @@ export const Menubar = () => {
                         </Drawer>
                     </>
                 )}
+                <Button
+                    size="sm"
+                    onClick={onLogoutClick}
+                    fontSize={12}
+                    variant="ghost"
+                >
+                    LOGOUT
+                </Button>
             </Flex>
         </>
     );
