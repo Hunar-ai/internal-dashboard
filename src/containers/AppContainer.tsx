@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { Menubar, ProtectedRoute } from '@components/common';
+import { ProtectedRoute } from '@components/common';
 import { ResetPasswordContainer } from 'containers';
 
 import { SettingsContext } from 'contexts';
@@ -28,17 +28,12 @@ export const AppContainer = () => {
                 }
             }}
         >
-            <Menubar />
             <ProtectedRoute>
                 <Routes>
                     <Route
                         path="/client-reset-password"
                         element={<ResetPasswordContainer />}
                     />
-                    <Route path="/reset-something" element={<>Page 2</>} />
-                    <Route path="/custom-settings" element={<>Page 3</>} />
-                    <Route path="/custom-settings/:id" element={<>Page 3a</>} />
-                    <Route path="/password-place" element={<>Page 4</>} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </ProtectedRoute>
