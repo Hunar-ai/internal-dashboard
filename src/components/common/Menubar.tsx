@@ -49,6 +49,12 @@ export const Menubar = ({ children }: MenubarProps) => {
         [menuConfig, pathname]
     );
 
+    const handleMobileDrawerClose = () => {
+        if (open) {
+            setOpen(false);
+        }
+    };
+
     const onLogoutClick = () => {
         removeToken();
         navigate(`/`);
@@ -63,10 +69,8 @@ export const Menubar = ({ children }: MenubarProps) => {
                     top={0}
                     bottom={0}
                     boxShadow="inset -10px 0 6px -5px hsla(0,0%,0%,.25)"
-                    sx={{
-                        transform: open ? `translate(0)` : `translate(-100%)`,
-                        transition: 'transform 0.2s ease-in'
-                    }}
+                    transform={open ? `translate(0)` : `translate(-100%)`}
+                    transition="transform 0.2s ease-in"
                 >
                     <Flex
                         height={10}
@@ -110,7 +114,7 @@ export const Menubar = ({ children }: MenubarProps) => {
                                             color: 'inherit'
                                         }
                                     }}
-                                    onClick={() => setOpen(false)}
+                                    onClick={handleMobileDrawerClose}
                                 >
                                     {menu.title}
                                 </Button>
@@ -127,10 +131,9 @@ export const Menubar = ({ children }: MenubarProps) => {
                     </Flex>
                 </Box>
                 <Box
-                    sx={{
-                        transform: open ? `translate(80%)` : `translate(0)`,
-                        transition: 'transform 0.2s ease-in'
-                    }}
+                    transform={open ? `translate(80%)` : `translate(0)`}
+                    transition="transform 0.2s ease-in"
+                    onClick={handleMobileDrawerClose}
                 >
                     <Flex
                         px={2}
@@ -189,9 +192,11 @@ export const Menubar = ({ children }: MenubarProps) => {
                     {menuConfig.map(menu => (
                         <Flex
                             key={menu.id}
+                            height="100%"
+                            position="relative"
+                            flexDirection="column"
+                            justifyContent="center"
                             sx={{
-                                height: '100%',
-                                position: 'relative',
                                 '&::after': isMenuActive[menu.id]
                                     ? {
                                           content: '""',
@@ -206,18 +211,18 @@ export const Menubar = ({ children }: MenubarProps) => {
                                       }
                                     : {}
                             }}
-                            flexDirection="column"
-                            justifyContent="center"
                         >
                             <Button
                                 as={Link}
                                 to={menu.link}
                                 fontSize={14}
                                 variant="ghost"
-                                sx={{
-                                    color: isMenuActive[menu.id]
+                                color={
+                                    isMenuActive[menu.id]
                                         ? 'blue.600'
-                                        : undefined,
+                                        : undefined
+                                }
+                                sx={{
                                     '&:hover': {
                                         color: 'inherit'
                                     }
