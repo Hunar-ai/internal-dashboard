@@ -5,5 +5,6 @@ export { useGetReactQuery } from './useGetReactQuery';
 export { useToken } from './useToken';
 export { useFormUtils } from './useFormUtils';
 export { useMenubarConfig } from './useMenubarConfig';
+export { useBaseLogo } from './useBaseLogo';
 
 export * from './apiHooks';

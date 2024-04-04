@@ -1,14 +1,15 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { Button, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex } from '@chakra-ui/react';
 
-import { useMenubarConfig, useToken } from 'hooks';
+import { useBaseLogo, useMenubarConfig, useToken } from 'hooks';
 
 export const Menubar = () => {
     const { removeToken } = useToken();
     const navigate = useNavigate();
     const menuConfig = useMenubarConfig();
+    const logo = useBaseLogo();
     const { pathname } = useLocation();
 
     const isMenuActive = React.useMemo<{
@@ -40,6 +41,14 @@ export const Menubar = () => {
                 borderBottomColor="gray.200"
             >
                 <Flex as="nav" height="100%" alignItems="center" flexGrow={1}>
+                    <Box
+                        as="img"
+                        src={logo}
+                        height={5}
+                        pr={3}
+                        alt="Hunar Logo"
+                    />
+
                     {menuConfig.map(menu => (
                         <Flex
                             key={menu.id}
