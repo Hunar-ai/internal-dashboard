@@ -28,16 +28,17 @@ export const AppContainer = () => {
                 }
             }}
         >
-            <Menubar />
-            <ProtectedRoute>
-                <Routes>
-                    <Route
-                        path="/client-reset-password"
-                        element={<ResetPasswordContainer />}
-                    />
-                    <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-            </ProtectedRoute>
+            <Menubar>
+                <ProtectedRoute>
+                    <Routes>
+                        <Route
+                            path="/client-reset-password"
+                            element={<ResetPasswordContainer />}
+                        />
+                        <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
+                </ProtectedRoute>
+            </Menubar>
         </SettingsContext.Provider>
     );
 };
