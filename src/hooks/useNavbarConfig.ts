@@ -6,8 +6,8 @@ export interface MenuProps {
     link: string;
 }
 
-export const useMenubarConfig = () => {
-    const menuConfig: MenuProps[] = React.useMemo(() => {
+export const useNavbarConfig = () => {
+    const navbarConfig: MenuProps[] = React.useMemo(() => {
         return [
             {
                 id: 'client-reset-password',
@@ -17,5 +17,5 @@ export const useMenubarConfig = () => {
         ];
     }, []);
 
-    return menuConfig;
+    return navbarConfig;
 };

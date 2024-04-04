@@ -3,12 +3,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { Box, Button, Flex } from '@chakra-ui/react';
 
-import { useBaseLogo, useMenubarConfig, useToken } from 'hooks';
+import { useBaseLogo, useNavbarConfig, useToken } from 'hooks';
 
-export const Menubar = () => {
+export const Navbar = () => {
     const { removeToken } = useToken();
     const navigate = useNavigate();
-    const menuConfig = useMenubarConfig();
+    const menuConfig = useNavbarConfig();
     const logo = useBaseLogo();
     const { pathname } = useLocation();
 
