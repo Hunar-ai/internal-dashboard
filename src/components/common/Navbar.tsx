@@ -1,7 +1,9 @@
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Box, Button, Flex } from '@chakra-ui/react';
+
+import { NavbarMenu } from './NavbarMenu';
 
 import { useBaseLogo, useNavbarMenuConfig, useToken } from 'hooks';
 
@@ -51,45 +53,12 @@ export const Navbar = () => {
                         alt="Hunar Logo"
                     />
                     {menuConfig.map(menu => (
-                        <Flex
+                        <NavbarMenu
                             key={menu.id}
-                            sx={{
-                                height: '100%',
-                                position: 'relative',
-                                '&::after': isMenuActive[menu.id]
-                                    ? {
-                                          content: '""',
-                                          height: 1,
-                                          backgroundColor: 'blue.600',
-                                          position: 'absolute',
-                                          left: 4,
-                                          right: 4,
-                                          bottom: 0,
-                                          borderTopLeftRadius: 2,
-                                          borderTopRightRadius: 2
-                                      }
-                                    : {}
-                            }}
-                            flexDirection="column"
-                            justifyContent="center"
-                        >
-                            <Button
-                                as={Link}
-                                to={menu.link}
-                                fontSize={14}
-                                variant="ghost"
-                                sx={{
-                                    color: isMenuActive[menu.id]
-                                        ? 'blue.600'
-                                        : undefined,
-                                    '&:hover': {
-                                        color: 'inherit'
-                                    }
-                                }}
-                            >
-                                {menu.title}
-                            </Button>
-                        </Flex>
+                            isActive={isMenuActive[menu.id]}
+                            menuLink={menu.link}
+                            menuTitle={menu.title}
+                        />
                     ))}
                 </Flex>
                 <Button
