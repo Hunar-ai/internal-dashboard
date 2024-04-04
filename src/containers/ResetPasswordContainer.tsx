@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
     Box,
     Button,
@@ -11,11 +13,11 @@ import {
     VStack,
     useToast
 } from '@chakra-ui/react';
-import { useResetNotify } from 'hooks/apiHooks/useResetPassword';
 
+import { useResetNotify } from 'hooks/apiHooks/useResetPassword';
 import { useSearchPersonnels } from 'hooks/apiHooks/useSearchPersonnels';
-import { PersonnelProps } from 'interfaces';
-import React from 'react';
+
+import type { PersonnelProps } from 'interfaces';
 
 export const ResetPasswordContainer = () => {
     const [companyId, setCompanyId] = React.useState<string | undefined>(

@@ -5,6 +5,8 @@ import { Box, Button, Flex } from '@chakra-ui/react';
 
 import { useBaseLogo, useNavbarMenuConfig, useToken } from 'hooks';
 
+const navbarHeight = '56px';
+
 export const Navbar = () => {
     const { removeToken } = useToken();
     const navigate = useNavigate();
@@ -35,7 +37,7 @@ export const Navbar = () => {
             <Flex
                 px={4}
                 as="header"
-                height={14}
+                height={navbarHeight}
                 alignItems="center"
                 borderBottom="1px solid"
                 borderBottomColor="gray.200"
@@ -48,7 +50,6 @@ export const Navbar = () => {
                         pr={3}
                         alt="Hunar Logo"
                     />
-
                     {menuConfig.map(menu => (
                         <Flex
                             key={menu.id}
