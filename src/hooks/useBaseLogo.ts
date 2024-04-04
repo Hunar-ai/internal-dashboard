@@ -1,5 +1,5 @@
-import LogoMedium from 'components/common/Logo.png';
+import Logo from 'components/common/Logo.png';
 
 export const useBaseLogo = (): string => {
-    return LogoMedium;
+    return Logo;
 };
