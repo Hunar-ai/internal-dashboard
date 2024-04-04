@@ -7,6 +7,7 @@ import {
     Drawer,
     DrawerBody,
     DrawerContent,
+    DrawerHeader,
     DrawerOverlay,
     Flex,
     IconButton
@@ -137,7 +138,20 @@ export const Menubar = () => {
                             onClose={() => setOpen(false)}
                         >
                             <DrawerOverlay />
-                            <DrawerContent maxW={'min-content'}>
+                            <DrawerContent maxW={240}>
+                                <DrawerHeader
+                                    height={10}
+                                    py={3}
+                                    display="flex"
+                                    justifyContent="center"
+                                >
+                                    <Box
+                                        as="img"
+                                        src={logo}
+                                        height={6}
+                                        alt="Hunar Logo"
+                                    />
+                                </DrawerHeader>
                                 <DrawerBody px={2}>
                                     <Flex
                                         flexDirection="column"
