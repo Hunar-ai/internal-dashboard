@@ -1,18 +1,14 @@
-import { ResetPasswordContainer } from 'containers/ResetPasswordContainer';
-import { SigninContainer } from 'containers/SigninContainer';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import { AppContainer, SigninContainer } from 'containers';
 
 const RoutesContainer = () => {
     const renderRoutes = () => {
         return (
             <Routes>
                 <>
-                    <Route path="*" element={<Navigate to="/" replace />} />
                     <Route path="/" element={<SigninContainer />} />
-                    <Route
-                        path="/client-reset-password"
-                        element={<ResetPasswordContainer />}
-                    />
+                    <Route path="*" element={<AppContainer />} />
                 </>
             </Routes>
         );
