@@ -1,11 +1,11 @@
+import React from 'react';
+
 import {
     Box,
     Button,
-    Divider,
     Flex,
     FormControl,
     FormLabel,
-    Heading,
     Input,
     InputGroup,
     InputRightElement,
@@ -13,13 +13,11 @@ import {
     VStack,
     useToast
 } from '@chakra-ui/react';
-import { useToken } from 'hooks';
-import { useResetNotify } from 'hooks/apiHooks/useResetPassword';
 
+import { useResetNotify } from 'hooks/apiHooks/useResetPassword';
 import { useSearchPersonnels } from 'hooks/apiHooks/useSearchPersonnels';
-import { PersonnelProps } from 'interfaces';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import type { PersonnelProps } from 'interfaces';
 
 export const ResetPasswordContainer = () => {
     const [companyId, setCompanyId] = React.useState<string | undefined>(
@@ -33,8 +31,6 @@ export const ResetPasswordContainer = () => {
         PersonnelProps[]
     >([]);
 
-    const { removeToken } = useToken();
-    const navigate = useNavigate();
     const toast = useToast();
     const { data: searchPersonnelResponse, isFetching } = useSearchPersonnels({
         params: {
@@ -88,27 +84,8 @@ export const ResetPasswordContainer = () => {
             );
     };
 
-    const onLogoutClick = () => {
-        removeToken();
-        navigate(`/signin`);
-    };
-
     return (
         <>
-            <Flex p={4} justifyContent="space-between">
-                <Heading as="h2" fontSize={20}>
-                    Reset Password
-                </Heading>
-                <Button
-                    size="sm"
-                    onClick={onLogoutClick}
-                    fontSize={12}
-                    variant="ghost"
-                >
-                    LOGOUT
-                </Button>
-            </Flex>
-            <Divider />
             <Flex justifyContent="center" alignItems="center" mt={10}>
                 <Box
                     p={5}
