@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Navbar, ProtectedRoute } from '@components/common';
-import { ResetPasswordContainer } from 'containers';
+import { CreateCompanyContainer, ResetPasswordContainer } from 'containers';
 
 import { SettingsContext } from 'contexts';
 import { useGetLoggedInPersonnel, useToken } from 'hooks';
@@ -34,6 +34,10 @@ export const AppContainer = () => {
                     <Route
                         path="/client-reset-password"
                         element={<ResetPasswordContainer />}
+                    />
+                    <Route
+                        path="/create-company"
+                        element={<CreateCompanyContainer />}
                     />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
