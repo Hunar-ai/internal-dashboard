@@ -10,7 +10,8 @@ type Params = {
 };
 
 interface SuccessResponse {
-    token: string;
+    access: string;
+    refresh: string;
 }
 
 export const useSignin = () => {

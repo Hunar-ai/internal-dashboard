@@ -12,9 +12,9 @@ export const useToken = () => {
 
     const [token, setToken] = useState<string>(getToken());
 
-    const saveToken = ({ token }: { token: string }) => {
-        if (token) {
-            localStorage.setItem('token', JSON.stringify(token));
+    const saveToken = ({ access }: { access: string }) => {
+        if (access) {
+            localStorage.setItem('token', JSON.stringify(access));
             setToken(token);
         }
     };
