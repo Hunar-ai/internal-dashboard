@@ -144,3 +144,7 @@ export enum ALLOWED_EXTENSION {
 export enum DOCUMENT_TYPE {
     'CV' = 'cv'
 }
+
+export enum CHECK_INTEREST_PROVIDER {
+    WATI = 'WATI'
+}
