@@ -19,7 +19,11 @@ import { useValidationHelper } from 'hooks';
 
 import { ErrorMsg, RegExUtil } from 'utils';
 import { CHECK_INTEREST_PROVIDER } from 'Enum';
-import type { FormErrorProps, ValidationMapProps } from 'interfaces';
+import type {
+    CompanyFormProps,
+    FormErrorProps,
+    ValidationMapProps
+} from 'interfaces';
 
 const validationMap: ValidationMapProps = {
     companyId: (companyId: string) => RegExUtil.isId(companyId),
@@ -65,22 +69,15 @@ const formErrorStateInitialValues: FormErrorProps<
     mobileNumber: false
 };
 
-interface CompanyFormProps {
-    companyId: string;
-    name: string;
-    description: string;
-    rawAddress: string;
-    email: string;
-    mobileNumber: string;
-    settings: {
-        lmsSettings: {
-            blockMessaging: boolean;
-            checkInterestProvider: CHECK_INTEREST_PROVIDER;
-        };
-    };
+interface CompanyCreationFormProps {
+    isLoading: boolean;
+    onSubmitClick: (_: CompanyFormProps) => void;
 }
 
-export const CompanyCreationForm = () => {
+export const CompanyCreationForm = ({
+    isLoading,
+    onSubmitClick
+}: CompanyCreationFormProps) => {
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
 
@@ -160,6 +157,8 @@ export const CompanyCreationForm = () => {
         if (hasFormError) {
             return;
         }
+
+        onSubmitClick(form);
     };
 
     return (
@@ -284,6 +283,7 @@ export const CompanyCreationForm = () => {
                         width="100%"
                         colorScheme="blue"
                         onClick={onCreateClick}
+                        isLoading={isLoading}
                     >
                         CREATE COMPANY
                     </Button>
