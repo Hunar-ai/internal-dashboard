@@ -75,7 +75,7 @@ interface CompanyFormProps {
     settings: {
         lmsSettings: {
             blockMessaging: boolean;
-            checkInterestProvider: CHECK_INTEREST_PROVIDER;
+            checkInterestProvider?: CHECK_INTEREST_PROVIDER;
         };
     };
 }
@@ -130,17 +130,22 @@ export const CompanyCreationForm = () => {
     };
 
     const onBlockMessagingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const fieldName = e.target.name;
-        const fieldValue = e.target.checked;
+        const isMessagingBlocked = !e.target.checked;
+
+        const modifiedLmsSettings = isMessagingBlocked
+            ? {
+                  blockMessaging: true
+              }
+            : {
+                  blockMessaging: false,
+                  checkInterestProvider: CHECK_INTEREST_PROVIDER.WATI
+              };
 
         setForm(oldForm => ({
             ...oldForm,
             settings: {
                 ...oldForm.settings,
-                lmsSettings: {
-                    ...oldForm.settings.lmsSettings,
-                    [fieldName]: !fieldValue
-                }
+                lmsSettings: modifiedLmsSettings
             }
         }));
     };
