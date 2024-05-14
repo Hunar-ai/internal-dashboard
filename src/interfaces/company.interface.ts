@@ -54,7 +54,8 @@ export interface CompanyFormProps {
     rawAddress: string;
     email: string;
     mobileNumber: string;
-    settings: {
-        lmsSettings: LmsSettingsProps;
+    governmentIdentifiers: {
+        gstin: string;
     };
+    settings: CompanySettingsProps;
 }
