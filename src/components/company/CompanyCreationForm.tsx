@@ -31,7 +31,10 @@ import {
 } from './CompanyConstants';
 
 interface CompanyFieldProps {
-    fieldName: keyof Omit<CompanyFormProps, 'settings'>;
+    fieldName: keyof Omit<
+        CompanyFormProps,
+        'settings' | 'governmentIdentifiers'
+    >;
     label: string;
     placeholder: string;
     type: 'text' | 'textArea';
@@ -58,7 +61,7 @@ const requiredFields: (keyof CompanyFormProps)[] = [
 ];
 
 const formErrorStateInitialValues: FormErrorProps<
-    Omit<CompanyFormProps, 'settings'>
+    Omit<CompanyFormProps, 'settings' | 'governmentIdentifiers'>
 > = {
     companyId: false,
     name: false,
