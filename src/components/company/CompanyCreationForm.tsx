@@ -190,13 +190,11 @@ export const CompanyCreationForm = () => {
 
     const onBlockMessagingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const isMessagingBlocked = !e.target.checked;
-
         const modifiedLmsSettings = isMessagingBlocked
             ? {
                   blockMessaging: true
               }
             : { ...DEFAULT_LMS_SETTINGS };
-
         setForm(oldForm => ({
             ...oldForm,
             settings: {
@@ -212,7 +210,6 @@ export const CompanyCreationForm = () => {
                 form,
                 requiredFields
             });
-
         setFormErrorState(prevErrorState => ({
             ...prevErrorState,
             ...modifiedErrorState
@@ -221,13 +218,15 @@ export const CompanyCreationForm = () => {
         if (hasFormError) {
             return;
         }
+
+        // TODO: Integrate API (done in next PR)
     };
 
     return (
         <Box
             px={8}
             py={6}
-            borderWidth={{ base: 0, sm: '1px' }}
+            borderWidth={{ base: 0, sm: 1 }}
             borderRadius="lg"
             width="3xl"
         >
