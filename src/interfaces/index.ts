@@ -49,6 +49,7 @@ export {
 export { type QueryResult } from './react-query.interface';
 
 export type {
+    CompanyFormProps,
     CompanySettingsProps,
     ISCommunicationSettingsProps,
     LeadSettingsProps,

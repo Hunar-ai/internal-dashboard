@@ -2,7 +2,7 @@ import { CHECK_INTEREST_PROVIDER } from 'Enum';
 
 export interface LmsSettingsProps {
     blockMessaging: boolean;
-    checkInterestProvider: CHECK_INTEREST_PROVIDER;
+    checkInterestProvider?: CHECK_INTEREST_PROVIDER;
 }
 
 export interface LeadSettingsProps {
@@ -44,5 +44,17 @@ export interface CompanySettingsProps {
     workerSettings: LeadSettingsProps;
     dashboardSettings: {
         interviewCommunication: ISCommunicationSettingsProps;
+    };
+}
+
+export interface CompanyFormProps {
+    companyId: string;
+    name: string;
+    description: string;
+    rawAddress: string;
+    email: string;
+    mobileNumber: string;
+    settings: {
+        lmsSettings: LmsSettingsProps;
     };
 }

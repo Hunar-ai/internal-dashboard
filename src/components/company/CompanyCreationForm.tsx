@@ -18,8 +18,11 @@ import { HelperText } from '@components/common';
 import { useValidationHelper } from 'hooks';
 
 import { ErrorMsg, RegExUtil } from 'utils';
-import { CHECK_INTEREST_PROVIDER } from 'Enum';
-import type { FormErrorProps, ValidationMapProps } from 'interfaces';
+import type {
+    CompanyFormProps,
+    FormErrorProps,
+    ValidationMapProps
+} from 'interfaces';
 import {
     DEFAULT_COMPANY_SETTINGS,
     DEFAULT_LMS_SETTINGS
@@ -66,21 +69,6 @@ const formErrorStateInitialValues: FormErrorProps<
     email: false,
     mobileNumber: false
 };
-
-interface CompanyFormProps {
-    companyId: string;
-    name: string;
-    description: string;
-    rawAddress: string;
-    email: string;
-    mobileNumber: string;
-    settings: {
-        lmsSettings: {
-            blockMessaging: boolean;
-            checkInterestProvider?: CHECK_INTEREST_PROVIDER;
-        };
-    };
-}
 
 export const CompanyCreationForm = () => {
     const { hasFormFieldError, getFormErrorData } =
