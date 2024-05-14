@@ -1,7 +1,6 @@
 import { CHECK_INTEREST_PROVIDER } from 'Enum';
 import type {
     CompanySettingsProps,
-    ISCommunicationSettingsProps,
     LeadSettingsProps,
     LmsSettingsProps
 } from 'interfaces';
@@ -32,43 +31,9 @@ export const DEFAULT_LEAD_SETTINGS: LeadSettingsProps = {
     ]
 };
 
-export const DEFAULT_IS_COMMUNICATION_SETTINGS: ISCommunicationSettingsProps = {
-    general: {
-        isSchedulingForQualifiedEnabled: true,
-        isReschedulingByCandidateEnabled: true,
-        isContactingByCandidateEnabled: true,
-        isFeedbackOnRejectionEnabled: false
-    },
-    preInterview: {
-        isConfirmationEnabled: false,
-        isReminderEnabled: true
-    },
-    postInterview: {
-        isFollowUpEnabled: true,
-        isNoShowFollowUpEnabled: true
-    },
-    nudges: {
-        checkInterest: {
-            isEnabled: true,
-            duration: 5
-        },
-        qualificationMessage: {
-            isEnabled: true,
-            duration: 5
-        },
-        noResponse: {
-            isEnabled: true,
-            duration: 5
-        }
-    }
-};
-
 export const DEFAULT_COMPANY_SETTINGS: CompanySettingsProps = {
     lmsSettings: DEFAULT_LMS_SETTINGS,
-    workerSettings: DEFAULT_LEAD_SETTINGS,
-    dashboardSettings: {
-        interviewCommunication: DEFAULT_IS_COMMUNICATION_SETTINGS
-    }
+    workerSettings: DEFAULT_LEAD_SETTINGS
 };
 
 export const DEFAULT_COMPANY_ADDRESS = 'Plot in Gurgaon, Haryana';

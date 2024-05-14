@@ -20,39 +20,54 @@ export const CompanyContainer = () => {
     const addDomainAlias = useAddDomainAlias();
 
     const [formCompanyId, setFormCompanyId] = React.useState('');
+    const [showDNSStatus, setShowDNSStatus] = React.useState(false);
+    const [showDomainAliasStatus, setShowDomainAliasStatus] =
+        React.useState(false);
 
-    const showCreationStatus = React.useMemo(() => {
+    const isCreationStatusVisible = React.useMemo(() => {
         return (
-            createCompany.isSuccess &&
-            (addDNSRecord.isLoading ||
-                addDNSRecord.isSuccess ||
-                addDNSRecord.isError) &&
-            (addDomainAlias.isLoading ||
-                addDomainAlias.isSuccess ||
-                addDomainAlias.isError)
+            createCompany.isSuccess && showDNSStatus && showDomainAliasStatus
+        );
+    }, [createCompany.isSuccess, showDNSStatus, showDomainAliasStatus]);
+
+    const isCreatingCompany = React.useMemo(() => {
+        return (
+            createCompany.isLoading ||
+            addDNSRecord.isLoading ||
+            addDomainAlias.isLoading
         );
     }, [
-        addDNSRecord.isError,
         addDNSRecord.isLoading,
-        addDNSRecord.isSuccess,
-        addDomainAlias.isError,
         addDomainAlias.isLoading,
-        addDomainAlias.isSuccess,
-        createCompany.isSuccess
+        createCompany.isLoading
     ]);
 
     const createDNSRecord = (companyId: string) => {
-        addDNSRecord.mutate({
-            params: { companyId },
-            requestBody: { name: `${companyId}.hunar.ai` }
-        });
+        addDNSRecord.mutate(
+            {
+                params: { companyId },
+                requestBody: { name: `${companyId}.hunar.ai` }
+            },
+            {
+                onSettled: () => {
+                    setShowDNSStatus(true);
+                }
+            }
+        );
     };
 
     const createDomainAlias = (companyId: string) => {
-        addDomainAlias.mutate({
-            params: { companyId },
-            requestBody: { domainAlias: `${companyId}.hunar.ai` }
-        });
+        addDomainAlias.mutate(
+            {
+                params: { companyId },
+                requestBody: { domainAlias: `${companyId}.hunar.ai` }
+            },
+            {
+                onSettled: () => {
+                    setShowDomainAliasStatus(true);
+                }
+            }
+        );
     };
 
     const onSubmitClick = (form: CompanyFormProps) => {
@@ -82,7 +97,7 @@ export const CompanyContainer = () => {
 
     return (
         <Flex justifyContent="center" alignItems="center" my={6}>
-            {showCreationStatus ? (
+            {isCreationStatusVisible ? (
                 <Box
                     px={8}
                     py={6}
@@ -102,7 +117,7 @@ export const CompanyContainer = () => {
                                 : 'Company created successfully!'}
                         </Text>
                         <DomainUpdateStatus
-                            icon={<img src={GoogleIconImage} />}
+                            icon={<img src={GoogleIconImage} alt="Google" />}
                             isRetrying={addDNSRecord.isLoading}
                             isSuccessful={addDNSRecord.isSuccess}
                             title="Google DNS"
@@ -112,7 +127,7 @@ export const CompanyContainer = () => {
                             onRetryClick={() => createDNSRecord(formCompanyId)}
                         />
                         <DomainUpdateStatus
-                            icon={<img src={NetlifyIconImage} />}
+                            icon={<img src={NetlifyIconImage} alt="Netlify" />}
                             isRetrying={addDomainAlias.isLoading}
                             isSuccessful={addDomainAlias.isSuccess}
                             title="Netlify"
@@ -127,8 +142,8 @@ export const CompanyContainer = () => {
                 </Box>
             ) : (
                 <CompanyCreationForm
-                    isLoading={createCompany.isLoading}
-                    onSubmitClick={onSubmitClick}
+                    isCreateBtnLoading={isCreatingCompany}
+                    handleCompanyCreation={onSubmitClick}
                 />
             )}
         </Flex>

@@ -72,13 +72,13 @@ const formErrorStateInitialValues: FormErrorProps<
 };
 
 interface CompanyCreationFormProps {
-    isLoading: boolean;
-    onSubmitClick: (_: CompanyFormProps) => void;
+    isCreateBtnLoading: boolean;
+    handleCompanyCreation: (_: CompanyFormProps) => void;
 }
 
 export const CompanyCreationForm = ({
-    isLoading,
-    onSubmitClick
+    isCreateBtnLoading,
+    handleCompanyCreation
 }: CompanyCreationFormProps) => {
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
@@ -230,7 +230,7 @@ export const CompanyCreationForm = ({
             return;
         }
 
-        onSubmitClick(form);
+        handleCompanyCreation(form);
     };
 
     return (
@@ -305,7 +305,7 @@ export const CompanyCreationForm = ({
                         width="100%"
                         colorScheme="blue"
                         onClick={onCreateClick}
-                        isLoading={isLoading}
+                        isLoading={isCreateBtnLoading}
                     >
                         CREATE COMPANY
                     </Button>

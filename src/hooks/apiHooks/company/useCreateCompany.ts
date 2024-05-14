@@ -2,14 +2,13 @@ import { useMutation } from '@tanstack/react-query';
 
 import { company } from 'api/settings';
 
-import type { ApiError } from 'interfaces';
+import type { ApiError, CompanyFormProps } from 'interfaces';
 
 interface CreateCompanyProps {
     params: {
         companyId: string;
     };
-    // TODO: fix type
-    requestBody: any;
+    requestBody: CompanyFormProps;
 }
 
 interface CreateCompanyResponse {
