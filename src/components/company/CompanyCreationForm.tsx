@@ -20,6 +20,10 @@ import { useValidationHelper } from 'hooks';
 import { ErrorMsg, RegExUtil } from 'utils';
 import { CHECK_INTEREST_PROVIDER } from 'Enum';
 import type { FormErrorProps, ValidationMapProps } from 'interfaces';
+import {
+    DEFAULT_COMPANY_SETTINGS,
+    DEFAULT_LMS_SETTINGS
+} from './CompanyConstants';
 
 const validationMap: ValidationMapProps = {
     companyId: (companyId: string) => RegExUtil.isId(companyId),
@@ -46,12 +50,10 @@ const companyFormInitialState = {
     rawAddress: 'Plot in Gurgaon, Haryana',
     email: '',
     mobileNumber: '',
-    settings: {
-        lmsSettings: {
-            blockMessaging: false,
-            checkInterestProvider: CHECK_INTEREST_PROVIDER.WATI
-        }
-    }
+    governmentIdentifiers: {
+        gstin: '09AAACH1279R4ZZ'
+    },
+    settings: DEFAULT_COMPANY_SETTINGS
 };
 
 const formErrorStateInitialValues: FormErrorProps<
@@ -136,10 +138,7 @@ export const CompanyCreationForm = () => {
             ? {
                   blockMessaging: true
               }
-            : {
-                  blockMessaging: false,
-                  checkInterestProvider: CHECK_INTEREST_PROVIDER.WATI
-              };
+            : { ...DEFAULT_LMS_SETTINGS };
 
         setForm(oldForm => ({
             ...oldForm,

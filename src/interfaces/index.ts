@@ -47,3 +47,11 @@ export {
 } from './table.interface';
 
 export { type QueryResult } from './react-query.interface';
+
+export type {
+    CompanySettingsProps,
+    ISCommunicationSettingsProps,
+    LeadSettingsProps,
+    LmsSettingsProps,
+    NudgesProps
+} from './company.interface';
