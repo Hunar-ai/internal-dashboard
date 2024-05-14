@@ -13,6 +13,8 @@ import { useCreateCompany } from 'hooks/apiHooks/company/useCreateCompany';
 
 import type { CompanyFormProps } from 'interfaces';
 
+const RETRY_LIMIT = 3;
+
 export const CompanyContainer = () => {
     const toast = useToast();
     const createCompany = useCreateCompany();
@@ -23,6 +25,8 @@ export const CompanyContainer = () => {
     const [showDNSStatus, setShowDNSStatus] = React.useState(false);
     const [showDomainAliasStatus, setShowDomainAliasStatus] =
         React.useState(false);
+    const [dnsRetryCount, setDnsRetryCount] = React.useState(0);
+    const [domainAliasRetryCount, setDomainAliasRetryCount] = React.useState(0);
 
     const isCreationStatusVisible = React.useMemo(() => {
         return (
@@ -51,6 +55,7 @@ export const CompanyContainer = () => {
             {
                 onSettled: () => {
                     setShowDNSStatus(true);
+                    setDnsRetryCount(count => count + 1);
                 }
             }
         );
@@ -65,6 +70,7 @@ export const CompanyContainer = () => {
             {
                 onSettled: () => {
                     setShowDomainAliasStatus(true);
+                    setDomainAliasRetryCount(count => count + 1);
                 }
             }
         );
@@ -118,9 +124,10 @@ export const CompanyContainer = () => {
                         </Text>
                         <DomainUpdateStatus
                             iconSrc={GoogleIconImage}
+                            title="Google DNS"
                             isRetrying={addDNSRecord.isLoading}
                             isSuccessful={addDNSRecord.isSuccess}
-                            title="Google DNS"
+                            isRetryVisible={dnsRetryCount <= RETRY_LIMIT}
                             errorMessage={
                                 addDNSRecord.error?.errors.displayError
                             }
@@ -128,9 +135,12 @@ export const CompanyContainer = () => {
                         />
                         <DomainUpdateStatus
                             iconSrc={NetlifyIconImage}
+                            title="Netlify"
                             isRetrying={addDomainAlias.isLoading}
                             isSuccessful={addDomainAlias.isSuccess}
-                            title="Netlify"
+                            isRetryVisible={
+                                domainAliasRetryCount <= RETRY_LIMIT
+                            }
                             errorMessage={
                                 addDomainAlias.error?.errors.displayError
                             }
