@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Navbar, ProtectedRoute } from '@components/common';
-import { CreateCompanyContainer, ResetPasswordContainer } from 'containers';
+import { CompanyContainer, ResetPasswordContainer } from 'containers';
 
 import { SettingsContext } from 'contexts';
 import { useGetLoggedInPersonnel, useToken } from 'hooks';
@@ -37,7 +37,7 @@ export const AppContainer = () => {
                     />
                     <Route
                         path="/create-company"
-                        element={<CreateCompanyContainer />}
+                        element={<CompanyContainer />}
                     />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

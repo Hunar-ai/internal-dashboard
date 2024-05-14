@@ -16,14 +16,28 @@ import {
 import { HelperText } from '@components/common';
 
 import { useValidationHelper } from 'hooks';
+import { useCompanyHelper } from './useCompanyHelper';
 
 import { ErrorMsg, RegExUtil } from 'utils';
-import { CHECK_INTEREST_PROVIDER } from 'Enum';
 import type {
     CompanyFormProps,
     FormErrorProps,
     ValidationMapProps
 } from 'interfaces';
+import {
+    DEFAULT_COMPANY_ADDRESS,
+    DEFAULT_COMPANY_SETTINGS,
+    DEFAULT_LMS_SETTINGS
+} from './CompanyConstants';
+
+interface CompanyFieldProps {
+    fieldName: keyof Omit<CompanyFormProps, 'settings'>;
+    label: string;
+    placeholder: string;
+    type: 'text' | 'textArea';
+    isRequired: boolean;
+    errorMsg: string;
+}
 
 const validationMap: ValidationMapProps = {
     companyId: (companyId: string) => RegExUtil.isId(companyId),
@@ -42,21 +56,6 @@ const requiredFields: (keyof CompanyFormProps)[] = [
     'email',
     'mobileNumber'
 ];
-
-const companyFormInitialState = {
-    companyId: '',
-    name: '',
-    description: '',
-    rawAddress: 'Plot in Gurgaon, Haryana',
-    email: '',
-    mobileNumber: '',
-    settings: {
-        lmsSettings: {
-            blockMessaging: false,
-            checkInterestProvider: CHECK_INTEREST_PROVIDER.WATI
-        }
-    }
-};
 
 const formErrorStateInitialValues: FormErrorProps<
     Omit<CompanyFormProps, 'settings'>
@@ -80,6 +79,23 @@ export const CompanyCreationForm = ({
 }: CompanyCreationFormProps) => {
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
+    const { generateRandomGSTIN } = useCompanyHelper();
+
+    const companyFormInitialState = React.useMemo(
+        () => ({
+            companyId: '',
+            name: '',
+            description: '',
+            rawAddress: DEFAULT_COMPANY_ADDRESS,
+            email: '',
+            mobileNumber: '',
+            governmentIdentifiers: {
+                gstin: generateRandomGSTIN()
+            },
+            settings: { ...DEFAULT_COMPANY_SETTINGS }
+        }),
+        [generateRandomGSTIN]
+    );
 
     const [form, setForm] = React.useState<CompanyFormProps>({
         ...companyFormInitialState
@@ -87,6 +103,60 @@ export const CompanyCreationForm = ({
     const [formErrorState, setFormErrorState] = React.useState({
         ...formErrorStateInitialValues
     });
+
+    const companyFields: CompanyFieldProps[] = React.useMemo(
+        () => [
+            {
+                fieldName: 'name',
+                label: 'Company Name',
+                placeholder: 'Enter Company Name',
+                type: 'text',
+                errorMsg: ErrorMsg.alphaNumeric(),
+                isRequired: true
+            },
+            {
+                fieldName: 'companyId',
+                label: 'Company ID',
+                placeholder: 'Enter Company ID',
+                type: 'text',
+                errorMsg: ErrorMsg.id(),
+                isRequired: true
+            },
+            {
+                fieldName: 'email',
+                label: 'Email ID of Company POC',
+                placeholder: 'Enter Email ID',
+                type: 'text',
+                errorMsg: ErrorMsg.email(),
+                isRequired: true
+            },
+            {
+                fieldName: 'mobileNumber',
+                label: 'Phone Number of Company POC',
+                placeholder: 'Enter Phone Number',
+                type: 'text',
+                errorMsg: ErrorMsg.mobileNumber(),
+                isRequired: true
+            },
+            {
+                fieldName: 'rawAddress',
+                label: 'Address',
+                placeholder: 'Enter Address',
+                type: 'textArea',
+                errorMsg: ErrorMsg.characterLength(),
+                isRequired: true
+            },
+            {
+                fieldName: 'description',
+                label: 'Description',
+                placeholder: 'Enter Description',
+                type: 'textArea',
+                errorMsg: ErrorMsg.characterLength(),
+                isRequired: true
+            }
+        ],
+        []
+    );
 
     const onFormFieldChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -127,17 +197,17 @@ export const CompanyCreationForm = ({
     };
 
     const onBlockMessagingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const fieldName = e.target.name;
-        const fieldValue = e.target.checked;
-
+        const isMessagingBlocked = !e.target.checked;
+        const modifiedLmsSettings = isMessagingBlocked
+            ? {
+                  blockMessaging: true
+              }
+            : { ...DEFAULT_LMS_SETTINGS };
         setForm(oldForm => ({
             ...oldForm,
             settings: {
                 ...oldForm.settings,
-                lmsSettings: {
-                    ...oldForm.settings.lmsSettings,
-                    [fieldName]: !fieldValue
-                }
+                lmsSettings: modifiedLmsSettings
             }
         }));
     };
@@ -148,7 +218,6 @@ export const CompanyCreationForm = ({
                 form,
                 requiredFields
             });
-
         setFormErrorState(prevErrorState => ({
             ...prevErrorState,
             ...modifiedErrorState
@@ -165,7 +234,7 @@ export const CompanyCreationForm = ({
         <Box
             px={8}
             py={6}
-            borderWidth={{ base: 0, sm: '1px' }}
+            borderWidth={{ base: 0, sm: 1 }}
             borderRadius="lg"
             width="3xl"
         >
@@ -186,84 +255,34 @@ export const CompanyCreationForm = ({
                         Create Company
                     </Text>
                 </GridItem>
-                <FormControl isInvalid={formErrorState.name} isRequired>
-                    <FormLabel>Company Name</FormLabel>
-                    <Input
-                        placeholder="Enter Company Name"
-                        name="name"
-                        value={form.name}
-                        onChange={onFormFieldChange}
-                    />
-                    <HelperText
-                        hasError={formErrorState.name}
-                        errorMsg={ErrorMsg.alphaNumeric()}
-                    />
-                </FormControl>
-                <FormControl isInvalid={formErrorState.companyId} isRequired>
-                    <FormLabel>Company ID</FormLabel>
-                    <Input
-                        placeholder="Enter Company ID"
-                        name="companyId"
-                        value={form.companyId}
-                        onChange={onFormFieldChange}
-                    />
-                    <HelperText
-                        hasError={formErrorState.companyId}
-                        errorMsg={ErrorMsg.id()}
-                    />
-                </FormControl>
-                <FormControl isInvalid={formErrorState.email} isRequired>
-                    <FormLabel>Email ID of Company POC</FormLabel>
-                    <Input
-                        placeholder="Enter Email ID"
-                        name="email"
-                        value={form.email}
-                        onChange={onFormFieldChange}
-                    />
-                    <HelperText
-                        hasError={formErrorState.email}
-                        errorMsg={ErrorMsg.email()}
-                    />
-                </FormControl>
-                <FormControl isInvalid={formErrorState.mobileNumber} isRequired>
-                    <FormLabel>Phone Number of Company POC</FormLabel>
-                    <Input
-                        placeholder="Enter Phone Number"
-                        name="mobileNumber"
-                        value={form.mobileNumber}
-                        onChange={onFormFieldChange}
-                    />
-                    <HelperText
-                        hasError={formErrorState.mobileNumber}
-                        errorMsg={ErrorMsg.mobileNumber()}
-                    />
-                </FormControl>
-                <FormControl isRequired isInvalid={formErrorState.rawAddress}>
-                    <FormLabel>Address</FormLabel>
-                    <Textarea
-                        placeholder="Enter Address"
-                        name="rawAddress"
-                        value={form.rawAddress}
-                        onChange={onFormFieldChange}
-                    />
-                    <HelperText
-                        hasError={formErrorState.rawAddress}
-                        errorMsg={ErrorMsg.characterLength()}
-                    />
-                </FormControl>
-                <FormControl isRequired isInvalid={formErrorState.description}>
-                    <FormLabel>Description</FormLabel>
-                    <Textarea
-                        placeholder="Enter Description"
-                        name="description"
-                        value={form.description}
-                        onChange={onFormFieldChange}
-                    />
-                    <HelperText
-                        hasError={formErrorState.description}
-                        errorMsg={ErrorMsg.characterLength()}
-                    />
-                </FormControl>
+                {companyFields.map(field => (
+                    <FormControl
+                        key={field.fieldName}
+                        isInvalid={formErrorState[field.fieldName]}
+                        isRequired={field.isRequired}
+                    >
+                        <FormLabel>{field.label}</FormLabel>
+                        {field.type === 'textArea' ? (
+                            <Textarea
+                                placeholder={field.placeholder}
+                                name={field.fieldName}
+                                value={form[field.fieldName]}
+                                onChange={onFormFieldChange}
+                            />
+                        ) : (
+                            <Input
+                                placeholder={field.placeholder}
+                                name={field.fieldName}
+                                value={form[field.fieldName]}
+                                onChange={onFormFieldChange}
+                            />
+                        )}
+                        <HelperText
+                            hasError={formErrorState[field.fieldName]}
+                            errorMsg={field.errorMsg}
+                        />
+                    </FormControl>
+                ))}
                 <FormControl
                     display="flex"
                     justifyContent="space-between"

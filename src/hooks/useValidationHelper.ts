@@ -22,6 +22,7 @@ export const useValidationHelper = (validationMap: ValidationMapProps = {}) => {
             typeof fieldValue === 'number'
                 ? `${fieldValue}`
                 : fieldValue?.trimStart();
+
         if (isRequired) {
             error =
                 !trimmedFieldValue ||
@@ -33,6 +34,7 @@ export const useValidationHelper = (validationMap: ValidationMapProps = {}) => {
                 fieldName in validationMap &&
                 !validationMap[fieldName](trimmedFieldValue);
         }
+
         return error;
     };
 
@@ -42,6 +44,7 @@ export const useValidationHelper = (validationMap: ValidationMapProps = {}) => {
     }: GetFormErrorStateProps) => {
         const errorState = Object.keys(form).reduce((acc, fieldName) => {
             const isRequired = requiredFields.includes(fieldName);
+
             if (fieldName in validationMap || isRequired) {
                 return {
                     ...acc,

@@ -48,4 +48,11 @@ export {
 
 export { type QueryResult } from './react-query.interface';
 
-export type { CompanyFormProps } from './company.interface';
+export type {
+    CompanyFormProps,
+    CompanySettingsProps,
+    ISCommunicationSettingsProps,
+    LeadSettingsProps,
+    LmsSettingsProps,
+    NudgesProps
+} from './company.interface';

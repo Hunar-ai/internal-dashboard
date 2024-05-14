@@ -13,7 +13,7 @@ import { useCreateCompany } from 'hooks/apiHooks/company/useCreateCompany';
 
 import type { CompanyFormProps } from 'interfaces';
 
-export const CreateCompanyContainer = () => {
+export const CompanyContainer = () => {
     const toast = useToast();
     const createCompany = useCreateCompany();
     const addDNSRecord = useAddDNSRecord();
