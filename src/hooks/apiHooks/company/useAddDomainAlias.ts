@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+
 import { companyDomainAlias } from 'api/settings';
 
 import type { ApiError } from 'interfaces';

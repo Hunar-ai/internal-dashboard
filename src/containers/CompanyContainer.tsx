@@ -117,7 +117,7 @@ export const CompanyContainer = () => {
                                 : 'Company created successfully!'}
                         </Text>
                         <DomainUpdateStatus
-                            icon={<img src={GoogleIconImage} alt="Google" />}
+                            iconSrc={GoogleIconImage}
                             isRetrying={addDNSRecord.isLoading}
                             isSuccessful={addDNSRecord.isSuccess}
                             title="Google DNS"
@@ -127,7 +127,7 @@ export const CompanyContainer = () => {
                             onRetryClick={() => createDNSRecord(formCompanyId)}
                         />
                         <DomainUpdateStatus
-                            icon={<img src={NetlifyIconImage} alt="Netlify" />}
+                            iconSrc={NetlifyIconImage}
                             isRetrying={addDomainAlias.isLoading}
                             isSuccessful={addDomainAlias.isSuccess}
                             title="Netlify"

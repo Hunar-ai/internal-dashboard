@@ -4,7 +4,7 @@ import { CheckCircleIcon, InfoIcon } from '@chakra-ui/icons';
 import RetryIcon from 'assets/retry.svg?react';
 
 interface DomainUpdateStatusProps {
-    icon: React.ReactNode;
+    iconSrc: string;
     title: string;
     isSuccessful: boolean;
     isRetrying: boolean;
@@ -13,7 +13,7 @@ interface DomainUpdateStatusProps {
 }
 
 export const DomainUpdateStatus = ({
-    icon,
+    iconSrc,
     title,
     isSuccessful,
     isRetrying,
@@ -24,7 +24,7 @@ export const DomainUpdateStatus = ({
         <VStack width="100%" spacing={4}>
             <Flex width="100%" justifyContent="space-between">
                 <HStack spacing={3}>
-                    {icon}
+                    <img src={iconSrc} alt={title} />
                     <Text fontSize="md" fontWeight={700}>
                         {title}
                     </Text>
