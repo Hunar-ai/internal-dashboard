@@ -16,6 +16,7 @@ import {
 import { HelperText } from '@components/common';
 
 import { useValidationHelper } from 'hooks';
+import { useCompanyHelper } from './useCompanyHelper';
 
 import { ErrorMsg, RegExUtil } from 'utils';
 import type {
@@ -24,6 +25,7 @@ import type {
     ValidationMapProps
 } from 'interfaces';
 import {
+    DEFAULT_COMPANY_ADDRESS,
     DEFAULT_COMPANY_SETTINGS,
     DEFAULT_LMS_SETTINGS
 } from './CompanyConstants';
@@ -46,19 +48,6 @@ const requiredFields: (keyof CompanyFormProps)[] = [
     'mobileNumber'
 ];
 
-const companyFormInitialState = {
-    companyId: '',
-    name: '',
-    description: '',
-    rawAddress: 'Plot in Gurgaon, Haryana',
-    email: '',
-    mobileNumber: '',
-    governmentIdentifiers: {
-        gstin: '09AAACH1279R4ZZ'
-    },
-    settings: DEFAULT_COMPANY_SETTINGS
-};
-
 const formErrorStateInitialValues: FormErrorProps<
     Omit<CompanyFormProps, 'settings'>
 > = {
@@ -73,6 +62,23 @@ const formErrorStateInitialValues: FormErrorProps<
 export const CompanyCreationForm = () => {
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
+    const { generateRandomGSTIN } = useCompanyHelper();
+
+    const companyFormInitialState = React.useMemo(
+        () => ({
+            companyId: '',
+            name: '',
+            description: '',
+            rawAddress: DEFAULT_COMPANY_ADDRESS,
+            email: '',
+            mobileNumber: '',
+            governmentIdentifiers: {
+                gstin: generateRandomGSTIN()
+            },
+            settings: DEFAULT_COMPANY_SETTINGS
+        }),
+        [generateRandomGSTIN]
+    );
 
     const [form, setForm] = React.useState<CompanyFormProps>({
         ...companyFormInitialState

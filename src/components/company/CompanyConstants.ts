@@ -70,3 +70,5 @@ export const DEFAULT_COMPANY_SETTINGS: CompanySettingsProps = {
         interviewCommunication: DEFAULT_IS_COMMUNICATION_SETTINGS
     }
 };
+
+export const DEFAULT_COMPANY_ADDRESS = 'Plot in Gurgaon, Haryana';
