@@ -51,8 +51,6 @@ export { type QueryResult } from './react-query.interface';
 export type {
     CompanyFormProps,
     CompanySettingsProps,
-    ISCommunicationSettingsProps,
     LeadSettingsProps,
-    LmsSettingsProps,
-    NudgesProps
+    LmsSettingsProps
 } from './company.interface';
