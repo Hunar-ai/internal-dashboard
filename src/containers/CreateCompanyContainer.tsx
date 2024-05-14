@@ -14,25 +14,56 @@ import {
     GridItem
 } from '@chakra-ui/react';
 
-import { RegExUtil } from 'utils';
-import { CHECK_INTEREST_PROVIDER } from 'Enum';
+import { HelperText } from '@components/common';
 
-const companyFormInitState = {
+import { useValidationHelper } from 'hooks';
+
+import { ErrorMsg, RegExUtil } from 'utils';
+import { CHECK_INTEREST_PROVIDER } from 'Enum';
+import type { FormErrorProps, ValidationMapProps } from 'interfaces';
+
+const validationMap: ValidationMapProps = {
+    companyId: (companyId: string) => RegExUtil.isId(companyId),
+    name: (name: string) => RegExUtil.isName(name),
+    description: (description: string) => RegExUtil.isDescription(description),
+    rawAddress: (address: string) => RegExUtil.isDescription(address),
+    email: (email: string) => RegExUtil.isEmail(email),
+    mobileNumber: (mobile: string) => RegExUtil.isMobileNumber(mobile)
+};
+
+const requiredFields: (keyof CompanyFormProps)[] = [
+    'companyId',
+    'name',
+    'description',
+    'rawAddress',
+    'email',
+    'mobileNumber'
+];
+
+const companyFormInitialState = {
     companyId: '',
     name: '',
     description: '',
     rawAddress: 'Plot in Gurgaon, Haryana',
     email: '',
     mobileNumber: '',
-    governamentIdentifiers: {
-        gstin: ''
-    },
     settings: {
         lmsSettings: {
             blockMessaging: false,
             checkInterestProvider: CHECK_INTEREST_PROVIDER.WATI
         }
     }
+};
+
+const formErrorStateInitialValues: FormErrorProps<
+    Omit<CompanyFormProps, 'settings'>
+> = {
+    companyId: false,
+    name: false,
+    description: false,
+    rawAddress: false,
+    email: false,
+    mobileNumber: false
 };
 
 interface CompanyFormProps {
@@ -42,9 +73,6 @@ interface CompanyFormProps {
     rawAddress: string;
     email: string;
     mobileNumber: string;
-    governamentIdentifiers: {
-        gstin: string;
-    };
     settings: {
         lmsSettings: {
             blockMessaging: boolean;
@@ -54,16 +82,30 @@ interface CompanyFormProps {
 }
 
 export const CreateCompanyContainer = () => {
+    const { hasFormFieldError, getFormErrorData } =
+        useValidationHelper(validationMap);
+
     const [form, setForm] = React.useState<CompanyFormProps>({
-        ...companyFormInitState
+        ...companyFormInitialState
+    });
+    const [formErrorState, setFormErrorState] = React.useState({
+        ...formErrorStateInitialValues
     });
 
     const onFormFieldChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-        const fieldName = e.target.name;
+        const fieldName = e.target.name as keyof CompanyFormProps;
         const fieldValue = e.target.value;
         setForm(oldForm => ({ ...oldForm, [fieldName]: fieldValue }));
+        setFormErrorState(prevErrorState => ({
+            ...prevErrorState,
+            [fieldName]: hasFormFieldError({
+                fieldName,
+                fieldValue,
+                isRequired: requiredFields.indexOf(fieldName) > -1
+            })
+        }));
 
         if (fieldName === 'name') {
             const companyId = RegExUtil.conformToId(fieldValue);
@@ -71,6 +113,19 @@ export const CreateCompanyContainer = () => {
                 ...oldForm,
                 companyId,
                 description: fieldValue
+            }));
+            setFormErrorState(prevErrorState => ({
+                ...prevErrorState,
+                companyId: hasFormFieldError({
+                    fieldName: 'companyId',
+                    fieldValue: companyId,
+                    isRequired: requiredFields.indexOf('companyId') > -1
+                }),
+                description: hasFormFieldError({
+                    fieldName: 'description',
+                    fieldValue,
+                    isRequired: requiredFields.indexOf('description') > -1
+                })
             }));
         }
     };
@@ -89,6 +144,23 @@ export const CreateCompanyContainer = () => {
                 }
             }
         }));
+    };
+
+    const onCreateClick = () => {
+        const { errorState: modifiedErrorState, hasFormError } =
+            getFormErrorData({
+                form,
+                requiredFields
+            });
+
+        setFormErrorState(prevErrorState => ({
+            ...prevErrorState,
+            ...modifiedErrorState
+        }));
+
+        if (hasFormError) {
+            return;
+        }
     };
 
     return (
@@ -117,7 +189,7 @@ export const CreateCompanyContainer = () => {
                             Create Company
                         </Text>
                     </GridItem>
-                    <FormControl isRequired>
+                    <FormControl isInvalid={formErrorState.name} isRequired>
                         <FormLabel>Company Name</FormLabel>
                         <Input
                             placeholder="Enter Company Name"
@@ -125,8 +197,15 @@ export const CreateCompanyContainer = () => {
                             value={form.name}
                             onChange={onFormFieldChange}
                         />
+                        <HelperText
+                            hasError={formErrorState.name}
+                            errorMsg={ErrorMsg.alphaNumeric()}
+                        />
                     </FormControl>
-                    <FormControl isRequired>
+                    <FormControl
+                        isInvalid={formErrorState.companyId}
+                        isRequired
+                    >
                         <FormLabel>Company ID</FormLabel>
                         <Input
                             placeholder="Enter Company ID"
@@ -134,8 +213,12 @@ export const CreateCompanyContainer = () => {
                             value={form.companyId}
                             onChange={onFormFieldChange}
                         />
+                        <HelperText
+                            hasError={formErrorState.companyId}
+                            errorMsg={ErrorMsg.id()}
+                        />
                     </FormControl>
-                    <FormControl isRequired>
+                    <FormControl isInvalid={formErrorState.email} isRequired>
                         <FormLabel>Email ID of Company POC</FormLabel>
                         <Input
                             placeholder="Enter Email ID"
@@ -143,8 +226,15 @@ export const CreateCompanyContainer = () => {
                             value={form.email}
                             onChange={onFormFieldChange}
                         />
+                        <HelperText
+                            hasError={formErrorState.email}
+                            errorMsg={ErrorMsg.email()}
+                        />
                     </FormControl>
-                    <FormControl isRequired>
+                    <FormControl
+                        isInvalid={formErrorState.mobileNumber}
+                        isRequired
+                    >
                         <FormLabel>Phone Number of Company POC</FormLabel>
                         <Input
                             placeholder="Enter Phone Number"
@@ -152,8 +242,15 @@ export const CreateCompanyContainer = () => {
                             value={form.mobileNumber}
                             onChange={onFormFieldChange}
                         />
+                        <HelperText
+                            hasError={formErrorState.mobileNumber}
+                            errorMsg={ErrorMsg.mobileNumber()}
+                        />
                     </FormControl>
-                    <FormControl>
+                    <FormControl
+                        isRequired
+                        isInvalid={formErrorState.rawAddress}
+                    >
                         <FormLabel>Address</FormLabel>
                         <Textarea
                             placeholder="Enter Address"
@@ -161,14 +258,25 @@ export const CreateCompanyContainer = () => {
                             value={form.rawAddress}
                             onChange={onFormFieldChange}
                         />
+                        <HelperText
+                            hasError={formErrorState.rawAddress}
+                            errorMsg={ErrorMsg.characterLength()}
+                        />
                     </FormControl>
-                    <FormControl>
+                    <FormControl
+                        isRequired
+                        isInvalid={formErrorState.description}
+                    >
                         <FormLabel>Description</FormLabel>
                         <Textarea
                             placeholder="Enter Description"
                             name="description"
                             value={form.description}
                             onChange={onFormFieldChange}
+                        />
+                        <HelperText
+                            hasError={formErrorState.description}
+                            errorMsg={ErrorMsg.characterLength()}
                         />
                     </FormControl>
                     <FormControl
@@ -188,7 +296,11 @@ export const CreateCompanyContainer = () => {
                 </SimpleGrid>
                 <SimpleGrid columns={{ base: 1, sm: 2 }} spacingX={6} mt={8}>
                     <GridItem colStart={{ base: 1, sm: 2 }} textAlign="end">
-                        <Button size="md" colorScheme="gray" width="100%">
+                        <Button
+                            width="100%"
+                            colorScheme="blue"
+                            onClick={onCreateClick}
+                        >
                             CREATE COMPANY
                         </Button>
                     </GridItem>

@@ -6,5 +6,6 @@ export { useToken } from './useToken';
 export { useFormUtils } from './useFormUtils';
 export { useNavbarMenuConfig } from './useNavbarMenuConfig';
 export { useBaseLogo } from './useBaseLogo';
+export { useValidationHelper } from './useValidationHelper';
 
 export * from './apiHooks';

@@ -4,6 +4,10 @@ export const RegExUtil = {
         const id = psuedoId.replace(/[^a-zA-Z0-9_]/g, '-');
         return id.slice(0, 33).toLowerCase();
     },
+    isId: (id: string, limit = 25): boolean => {
+        const re = /^[a-zA-Z0-9_-]*$/;
+        return !!id && re.test(id) && id.length > 0 && id.length <= limit;
+    },
     isMobileNumber: (mobileNumber: string): boolean => {
         const re = /^[6-9]\d{9}$/;
         return !!mobileNumber && re.test(mobileNumber);

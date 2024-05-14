@@ -5,6 +5,12 @@ export {
     type MappedField
 } from './formFields.interface';
 
+export type {
+    ValidationMapProps,
+    FormErrorProps,
+    ErrorStateProps
+} from './form.interface';
+
 export { type Error, type ApiError } from './error.interface';
 
 export {
