@@ -47,6 +47,10 @@ export const CompanyContainer = () => {
     ]);
 
     const createDNSRecord = (companyId: string) => {
+        // TODO: Remove two lines below once testing is done
+        setShowDNSStatus(true);
+        return;
+
         addDNSRecord.mutate(
             {
                 params: { companyId },
@@ -62,6 +66,10 @@ export const CompanyContainer = () => {
     };
 
     const createDomainAlias = (companyId: string) => {
+        // TODO: Remove two lines below once testing is done
+        setShowDomainAliasStatus(true);
+        return;
+
         addDomainAlias.mutate(
             {
                 params: { companyId },
