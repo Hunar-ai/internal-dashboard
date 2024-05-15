@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box, Flex, useToast, VStack, Text } from '@chakra-ui/react';
 
-import { CompanyCreationForm, DomainUpdateStatus } from '@components/company';
+import { CompanyCreationForm, DomainStatus } from '@components/company';
 
 import GoogleIconImage from 'assets/google.png';
 import NetlifyIconImage from 'assets/netlify.png';
@@ -107,7 +107,7 @@ export const CompanyContainer = () => {
                 <Box
                     px={8}
                     py={6}
-                    borderWidth={{ base: 0, sm: '1px' }}
+                    borderWidth={{ base: 0, sm: 1 }}
                     borderRadius="lg"
                     width="lg"
                 >
@@ -122,7 +122,7 @@ export const CompanyContainer = () => {
                                 ? 'Company domain creation failed'
                                 : 'Company created successfully!'}
                         </Text>
-                        <DomainUpdateStatus
+                        <DomainStatus
                             iconSrc={GoogleIconImage}
                             title="Google DNS"
                             isRetrying={addDNSRecord.isLoading}
@@ -133,7 +133,7 @@ export const CompanyContainer = () => {
                             }
                             onRetryClick={() => createDNSRecord(formCompanyId)}
                         />
-                        <DomainUpdateStatus
+                        <DomainStatus
                             iconSrc={NetlifyIconImage}
                             title="Netlify"
                             isRetrying={addDomainAlias.isLoading}

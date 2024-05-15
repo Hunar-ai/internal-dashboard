@@ -1,10 +1,10 @@
 import { Button, Flex, HStack, Text, VStack } from '@chakra-ui/react';
-import { CheckCircleIcon, InfoIcon } from '@chakra-ui/icons';
 
 import RetryIcon from 'assets/retry.svg?react';
 import React from 'react';
+import { DomainStatusText } from './DomainStatusText';
 
-interface DomainUpdateStatusProps {
+interface DomainStatusProps {
     iconSrc: string;
     title: string;
     isSuccessful: boolean;
@@ -14,7 +14,7 @@ interface DomainUpdateStatusProps {
     onRetryClick: VoidFunction;
 }
 
-export const DomainUpdateStatus = ({
+export const DomainStatus = ({
     iconSrc,
     title,
     isSuccessful,
@@ -22,7 +22,7 @@ export const DomainUpdateStatus = ({
     isRetryVisible,
     errorMessage = '',
     onRetryClick
-}: DomainUpdateStatusProps) => {
+}: DomainStatusProps) => {
     const errorMsg = React.useMemo(() => {
         return isRetryVisible
             ? errorMessage
@@ -40,17 +40,7 @@ export const DomainUpdateStatus = ({
                     </Text>
                 </HStack>
                 <HStack spacing={1}>
-                    {isSuccessful ? (
-                        <>
-                            <Text>Completed</Text>
-                            <CheckCircleIcon color="green.500" />
-                        </>
-                    ) : (
-                        <>
-                            <Text>Failed</Text>
-                            <InfoIcon color="red.500" />
-                        </>
-                    )}
+                    <DomainStatusText isSuccessful={isSuccessful} />
                 </HStack>
             </Flex>
             {!isSuccessful && (
