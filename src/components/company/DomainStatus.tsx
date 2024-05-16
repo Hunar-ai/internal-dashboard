@@ -62,6 +62,7 @@ export const DomainStatus = ({
                             isLoading={isRetrying}
                             rightIcon={<RetryIcon />}
                             onClick={onRetryClick}
+                            minWidth="84px"
                         >
                             Retry
                         </Button>
