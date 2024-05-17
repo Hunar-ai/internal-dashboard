@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Flex, useToast, VStack, Text } from '@chakra-ui/react';
+import { Box, Flex, VStack, Text } from '@chakra-ui/react';
 
 import { CompanyCreationForm, DomainStatus } from '@components/company';
 
@@ -10,16 +10,17 @@ import NetlifyIconImage from 'assets/netlify.png';
 import { useAddDNSRecord } from 'hooks/apiHooks/company/useAddDNSRecord';
 import { useAddDomainAlias } from 'hooks/apiHooks/company/useAddDomainAlias';
 import { useCreateCompany } from 'hooks/apiHooks/company/useCreateCompany';
+import { useToast } from 'hooks/useToast';
 
 import type { CompanyFormProps } from 'interfaces';
 
 const RETRY_LIMIT = 3;
 
 export const CompanyContainer = () => {
-    const toast = useToast();
     const createCompany = useCreateCompany();
     const addDNSRecord = useAddDNSRecord();
     const addDomainAlias = useAddDomainAlias();
+    const { showError } = useToast();
 
     const [formCompanyId, setFormCompanyId] = React.useState('');
     const [showDNSStatus, setShowDNSStatus] = React.useState(false);
@@ -97,12 +98,9 @@ export const CompanyContainer = () => {
                     createDomainAlias(form.companyId);
                 },
                 onError: error => {
-                    toast({
+                    showError({
                         title: 'Failed to create company',
-                        description: error.errors.displayError,
-                        status: 'error',
-                        duration: 9000,
-                        isClosable: true
+                        description: error.errors.displayError
                     });
                 }
             }
