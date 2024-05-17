@@ -40,6 +40,7 @@ interface CompanyFieldProps {
     type: 'text' | 'textArea';
     isRequired: boolean;
     errorMsg: string;
+    helperText?: string;
 }
 
 const validationMap: ValidationMapProps = {
@@ -123,6 +124,7 @@ export const CompanyCreationForm = ({
                 placeholder: 'Enter Company ID',
                 type: 'text',
                 errorMsg: ErrorMsg.id(),
+                helperText: 'Please keep it short (upto 15 characters)',
                 isRequired: true
             },
             {
@@ -176,7 +178,7 @@ export const CompanyCreationForm = ({
             })
         }));
 
-        if (fieldName === 'name') {
+        if (fieldName === 'name' && fieldValue) {
             const companyId = RegExUtil.conformToId(fieldValue);
             setForm(oldForm => ({
                 ...oldForm,
@@ -283,6 +285,7 @@ export const CompanyCreationForm = ({
                         <HelperText
                             hasError={formErrorState[field.fieldName]}
                             errorMsg={field.errorMsg}
+                            msg={field.helperText}
                         />
                     </FormControl>
                 ))}
