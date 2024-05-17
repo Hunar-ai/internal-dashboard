@@ -170,7 +170,7 @@ export const CompanyCreationForm = () => {
             })
         }));
 
-        if (fieldName === 'name' && fieldValue) {
+        if (fieldName === 'name') {
             const companyId = RegExUtil.conformToId(fieldValue);
             setForm(oldForm => ({
                 ...oldForm,
