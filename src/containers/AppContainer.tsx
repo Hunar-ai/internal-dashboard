@@ -35,10 +35,7 @@ export const AppContainer = () => {
                         path="/client-reset-password"
                         element={<ResetPasswordContainer />}
                     />
-                    <Route
-                        path="/create-company"
-                        element={<CompanyContainer />}
-                    />
+                    <Route path="/company" element={<CompanyContainer />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </ProtectedRoute>
