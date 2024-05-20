@@ -72,7 +72,7 @@ const formErrorStateInitialValues: FormErrorProps<
     mobileNumber: false
 };
 
-export const CompanyCreationForm = () => {
+export const CompanyAddForm = () => {
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
     const { generateRandomGSTIN } = useCompanyHelper();

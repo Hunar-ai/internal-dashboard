@@ -1,1 +1,1 @@
-export { CompanyCreationForm } from './CompanyCreationForm';
+export { CompanyAddForm } from './CompanyAddForm';

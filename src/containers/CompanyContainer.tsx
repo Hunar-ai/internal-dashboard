@@ -2,7 +2,7 @@ import { Navigate, useSearchParams } from 'react-router-dom';
 
 import { Flex } from '@chakra-ui/react';
 
-import { CompanyCreationForm } from '@components/company';
+import { CompanyAddForm } from '@components/company';
 
 export const CompanyContainer = () => {
     const [searchParams] = useSearchParams();
@@ -13,7 +13,7 @@ export const CompanyContainer = () => {
 
     return (
         <Flex justifyContent="center" alignItems="center" my={6}>
-            <CompanyCreationForm />
+            <CompanyAddForm />
         </Flex>
     );
 };
