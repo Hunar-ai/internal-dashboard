@@ -28,7 +28,7 @@ import {
     DEFAULT_COMPANY_ADDRESS,
     DEFAULT_COMPANY_SETTINGS,
     DEFAULT_LMS_SETTINGS
-} from './CompanyConstants';
+} from 'Constants';
 
 interface CompanyFieldProps {
     fieldName: keyof Omit<
