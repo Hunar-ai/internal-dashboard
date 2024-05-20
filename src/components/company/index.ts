@@ -1,2 +1,2 @@
-export { CompanyCreationForm } from './CompanyCreationForm';
+export { CompanyAddForm } from './CompanyAddForm';
 export { DomainStatus } from './DomainStatus';

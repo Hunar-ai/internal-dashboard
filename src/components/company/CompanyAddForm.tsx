@@ -28,7 +28,7 @@ import {
     DEFAULT_COMPANY_ADDRESS,
     DEFAULT_COMPANY_SETTINGS,
     DEFAULT_LMS_SETTINGS
-} from './CompanyConstants';
+} from 'Constants';
 
 interface CompanyFieldProps {
     fieldName: keyof Omit<
@@ -72,15 +72,15 @@ const formErrorStateInitialValues: FormErrorProps<
     mobileNumber: false
 };
 
-interface CompanyCreationFormProps {
+interface CompanyAddFormProps {
     isCreateBtnLoading: boolean;
     handleCompanyCreation: (_: CompanyFormProps) => void;
 }
 
-export const CompanyCreationForm = ({
+export const CompanyAddForm = ({
     isCreateBtnLoading,
     handleCompanyCreation
-}: CompanyCreationFormProps) => {
+}: CompanyAddFormProps) => {
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
     const { generateRandomGSTIN } = useCompanyHelper();
@@ -178,7 +178,7 @@ export const CompanyCreationForm = ({
             })
         }));
 
-        if (fieldName === 'name' && fieldValue) {
+        if (fieldName === 'name') {
             const companyId = RegExUtil.conformToId(fieldValue);
             setForm(oldForm => ({
                 ...oldForm,

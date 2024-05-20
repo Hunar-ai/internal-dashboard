@@ -1,8 +1,9 @@
 import React from 'react';
+import { Navigate, useSearchParams } from 'react-router-dom';
 
 import { Box, Flex, VStack, Text } from '@chakra-ui/react';
 
-import { CompanyCreationForm, DomainStatus } from '@components/company';
+import { CompanyAddForm, DomainStatus } from '@components/company';
 
 import GoogleIconImage from 'assets/google.png';
 import NetlifyIconImage from 'assets/netlify.png';
@@ -20,6 +21,8 @@ export const CompanyContainer = () => {
     const createCompany = useCreateCompany();
     const addDNSRecord = useAddDNSRecord();
     const addDomainAlias = useAddDomainAlias();
+    const [searchParams] = useSearchParams();
+
     const { showError } = useToast();
 
     const [formCompanyId, setFormCompanyId] = React.useState('');
@@ -99,6 +102,10 @@ export const CompanyContainer = () => {
         );
     };
 
+    if (!searchParams.has('add')) {
+        return <Navigate to="/not-found" replace />;
+    }
+
     return (
         <Flex justifyContent="center" alignItems="center" my={6}>
             {isCreationStatusVisible ? (
@@ -149,7 +156,7 @@ export const CompanyContainer = () => {
                     </VStack>
                 </Box>
             ) : (
-                <CompanyCreationForm
+                <CompanyAddForm
                     isCreateBtnLoading={isCreatingCompany}
                     handleCompanyCreation={onSubmitClick}
                 />
