@@ -160,6 +160,7 @@ export const CompanyAddForm = () => {
     ) => {
         const fieldName = e.target.name as keyof CompanyFormProps;
         const fieldValue = e.target.value;
+
         setForm(oldForm => ({ ...oldForm, [fieldName]: fieldValue }));
         setFormErrorState(prevErrorState => ({
             ...prevErrorState,
@@ -200,6 +201,7 @@ export const CompanyAddForm = () => {
                   blockMessaging: true
               }
             : { ...DEFAULT_LMS_SETTINGS };
+
         setForm(oldForm => ({
             ...oldForm,
             settings: {
@@ -215,6 +217,7 @@ export const CompanyAddForm = () => {
                 form,
                 requiredFields
             });
+
         setFormErrorState(prevErrorState => ({
             ...prevErrorState,
             ...modifiedErrorState
