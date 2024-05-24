@@ -30,19 +30,6 @@ import {
     DEFAULT_LMS_SETTINGS
 } from 'Constants';
 
-interface CompanyFieldProps {
-    fieldName: keyof Omit<
-        CompanyFormProps,
-        'settings' | 'governmentIdentifiers'
-    >;
-    label: string;
-    placeholder: string;
-    type: 'text' | 'textArea';
-    isRequired: boolean;
-    errorMsg: string;
-    helperText?: string;
-}
-
 const validationMap: ValidationMapProps = {
     companyId: (companyId: string) => RegExUtil.isId(companyId),
     name: (name: string) => RegExUtil.isName(name),
@@ -108,66 +95,12 @@ export const CompanyAddForm = ({
         ...formErrorStateInitialValues
     });
 
-    const companyFields: CompanyFieldProps[] = React.useMemo(
-        () => [
-            {
-                fieldName: 'name',
-                label: 'Company Name',
-                placeholder: 'Enter Company Name',
-                type: 'text',
-                errorMsg: ErrorMsg.alphaNumeric(),
-                isRequired: true
-            },
-            {
-                fieldName: 'companyId',
-                label: 'Company ID',
-                placeholder: 'Enter Company ID',
-                type: 'text',
-                errorMsg: ErrorMsg.id(),
-                helperText: 'Please keep it short (upto 15 characters)',
-                isRequired: true
-            },
-            {
-                fieldName: 'email',
-                label: 'Email ID of Company POC',
-                placeholder: 'Enter Email ID',
-                type: 'text',
-                errorMsg: ErrorMsg.email(),
-                isRequired: true
-            },
-            {
-                fieldName: 'mobileNumber',
-                label: 'Phone Number of Company POC',
-                placeholder: 'Enter Phone Number',
-                type: 'text',
-                errorMsg: ErrorMsg.mobileNumber(),
-                isRequired: true
-            },
-            {
-                fieldName: 'rawAddress',
-                label: 'Address',
-                placeholder: 'Enter Address',
-                type: 'textArea',
-                errorMsg: ErrorMsg.characterLength(),
-                isRequired: true
-            },
-            {
-                fieldName: 'description',
-                label: 'Description',
-                placeholder: 'Enter Description',
-                type: 'textArea',
-                errorMsg: ErrorMsg.characterLength(),
-                isRequired: true
-            }
-        ],
-        []
-    );
-
     const onFormFieldChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const fieldName = e.target.name as keyof CompanyFormProps;
         const fieldValue = e.target.value;
+
         setForm(oldForm => ({ ...oldForm, [fieldName]: fieldValue }));
         setFormErrorState(prevErrorState => ({
             ...prevErrorState,
@@ -208,6 +141,7 @@ export const CompanyAddForm = ({
                   blockMessaging: true
               }
             : { ...DEFAULT_LMS_SETTINGS };
+
         setForm(oldForm => ({
             ...oldForm,
             settings: {
@@ -223,6 +157,7 @@ export const CompanyAddForm = ({
                 form,
                 requiredFields
             });
+
         setFormErrorState(prevErrorState => ({
             ...prevErrorState,
             ...modifiedErrorState
@@ -260,35 +195,85 @@ export const CompanyAddForm = ({
                         Create Company
                     </Text>
                 </GridItem>
-                {companyFields.map(field => (
-                    <FormControl
-                        key={field.fieldName}
-                        isInvalid={formErrorState[field.fieldName]}
-                        isRequired={field.isRequired}
-                    >
-                        <FormLabel>{field.label}</FormLabel>
-                        {field.type === 'textArea' ? (
-                            <Textarea
-                                placeholder={field.placeholder}
-                                name={field.fieldName}
-                                value={form[field.fieldName]}
-                                onChange={onFormFieldChange}
-                            />
-                        ) : (
-                            <Input
-                                placeholder={field.placeholder}
-                                name={field.fieldName}
-                                value={form[field.fieldName]}
-                                onChange={onFormFieldChange}
-                            />
-                        )}
-                        <HelperText
-                            hasError={formErrorState[field.fieldName]}
-                            errorMsg={field.errorMsg}
-                            msg={field.helperText}
-                        />
-                    </FormControl>
-                ))}
+                <FormControl isInvalid={formErrorState.name} isRequired>
+                    <FormLabel>Company Name</FormLabel>
+                    <Input
+                        placeholder="Enter Company Name"
+                        name="name"
+                        value={form.name}
+                        onChange={onFormFieldChange}
+                    />
+                    <HelperText
+                        hasError={formErrorState.name}
+                        errorMsg={ErrorMsg.alphaNumeric()}
+                    />
+                </FormControl>
+                <FormControl isInvalid={formErrorState.companyId} isRequired>
+                    <FormLabel>Company ID</FormLabel>
+                    <Input
+                        placeholder="Enter Company ID"
+                        name="companyId"
+                        value={form.companyId}
+                        onChange={onFormFieldChange}
+                    />
+                    <HelperText
+                        hasError={formErrorState.companyId}
+                        errorMsg={ErrorMsg.id()}
+                        msg="Please keep it short (upto 15 characters)"
+                    />
+                </FormControl>
+                <FormControl isInvalid={formErrorState.email} isRequired>
+                    <FormLabel>Email ID of Company POC</FormLabel>
+                    <Input
+                        placeholder="Enter Email ID"
+                        name="email"
+                        value={form.email}
+                        onChange={onFormFieldChange}
+                    />
+                    <HelperText
+                        hasError={formErrorState.email}
+                        errorMsg={ErrorMsg.email()}
+                    />
+                </FormControl>
+                <FormControl isInvalid={formErrorState.mobileNumber} isRequired>
+                    <FormLabel>Phone Number of Company POC</FormLabel>
+                    <Input
+                        placeholder="Enter Phone Number"
+                        name="mobileNumber"
+                        value={form.mobileNumber}
+                        onChange={onFormFieldChange}
+                    />
+                    <HelperText
+                        hasError={formErrorState.mobileNumber}
+                        errorMsg={ErrorMsg.mobileNumber()}
+                    />
+                </FormControl>
+                <FormControl isInvalid={formErrorState.rawAddress} isRequired>
+                    <FormLabel>Address</FormLabel>
+                    <Textarea
+                        placeholder="Enter Address"
+                        name="rawAddress"
+                        value={form.rawAddress}
+                        onChange={onFormFieldChange}
+                    />
+                    <HelperText
+                        hasError={formErrorState.rawAddress}
+                        errorMsg={ErrorMsg.characterLength()}
+                    />
+                </FormControl>
+                <FormControl isInvalid={formErrorState.description} isRequired>
+                    <FormLabel>Description</FormLabel>
+                    <Textarea
+                        placeholder="Enter Description"
+                        name="description"
+                        value={form.description}
+                        onChange={onFormFieldChange}
+                    />
+                    <HelperText
+                        hasError={formErrorState.description}
+                        errorMsg={ErrorMsg.characterLength()}
+                    />
+                </FormControl>
                 <FormControl
                     display="flex"
                     justifyContent="space-between"
