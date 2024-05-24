@@ -171,21 +171,15 @@ export const CompanyAddForm = ({
     };
 
     return (
-        <Box
-            px={8}
-            py={6}
-            borderWidth={{ base: 0, sm: 1 }}
-            borderRadius="lg"
-            width="3xl"
-        >
+        <Box px={8} py={6}>
             <SimpleGrid
-                columns={{ base: 1, sm: 2 }}
+                columns={{ base: 1, md: 2 }}
                 spacingX={6}
                 spacingY={4}
                 width="100%"
                 alignItems="start"
             >
-                <GridItem colSpan={{ base: 1, sm: 2 }} mb={4}>
+                <GridItem colSpan={{ base: 1, md: 2 }} mb={4}>
                     <Text
                         fontSize="xl"
                         lineHeight={1.4}

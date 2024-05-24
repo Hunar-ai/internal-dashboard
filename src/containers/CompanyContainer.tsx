@@ -1,12 +1,9 @@
 import React from 'react';
 import { Navigate, useSearchParams } from 'react-router-dom';
 
-import { Box, Flex, VStack, Text } from '@chakra-ui/react';
+import { VStack, Grid, GridItem } from '@chakra-ui/react';
 
 import { CompanyAddForm, CompanyDomainStatus } from '@components/company';
-
-import GoogleIconImage from 'assets/google.png';
-import NetlifyIconImage from 'assets/netlify.png';
 
 import { useAddDNSRecord } from 'hooks/apiHooks/company/useAddDNSRecord';
 import { useAddDomainAlias } from 'hooks/apiHooks/company/useAddDomainAlias';
@@ -107,60 +104,37 @@ export const CompanyContainer = () => {
     }
 
     return (
-        <Flex justifyContent="center" alignItems="center" my={6}>
-            {isCreationStatusVisible ? (
-                <Box
-                    px={8}
-                    py={6}
-                    borderWidth={{ base: 0, sm: 1 }}
-                    borderRadius="lg"
-                    width="lg"
-                >
-                    <VStack spacing={6}>
-                        <Text
-                            fontSize="xl"
-                            lineHeight={1.4}
-                            width="100%"
-                            fontWeight={600}
-                        >
-                            {addDNSRecord.isError || addDomainAlias.isError
-                                ? 'Company domain creation failed'
-                                : 'Company created successfully!'}
-                        </Text>
+        <Grid templateColumns={{ base: 'auto', sm: '7fr 5fr' }}>
+            <GridItem rowStart={{ base: 2, sm: 1 }}>
+                <CompanyAddForm
+                    isCreateBtnLoading={isCreatingCompany}
+                    handleCompanyCreation={onSubmitClick}
+                />
+            </GridItem>
+            <GridItem borderLeftWidth={{ base: 0, sm: 1 }}>
+                {isCreationStatusVisible && (
+                    <VStack spacing={6} px={8} pt={6}>
                         <CompanyDomainStatus
-                            iconSrc={GoogleIconImage}
                             title="Google DNS"
                             isRetrying={addDNSRecord.isLoading}
                             isSuccessful={addDNSRecord.isSuccess}
                             isRetryVisible={dnsRetryCount <= RETRY_LIMIT}
-                            errorMessage={
-                                addDNSRecord.error?.errors.displayError
-                            }
                             onRetryClick={() => createDNSRecord(formCompanyId)}
                         />
                         <CompanyDomainStatus
-                            iconSrc={NetlifyIconImage}
                             title="Netlify"
                             isRetrying={addDomainAlias.isLoading}
                             isSuccessful={addDomainAlias.isSuccess}
                             isRetryVisible={
                                 domainAliasRetryCount <= RETRY_LIMIT
                             }
-                            errorMessage={
-                                addDomainAlias.error?.errors.displayError
-                            }
                             onRetryClick={() =>
                                 createDomainAlias(formCompanyId)
                             }
                         />
                     </VStack>
-                </Box>
-            ) : (
-                <CompanyAddForm
-                    isCreateBtnLoading={isCreatingCompany}
-                    handleCompanyCreation={onSubmitClick}
-                />
-            )}
-        </Flex>
+                )}
+            </GridItem>
+        </Grid>
     );
 };

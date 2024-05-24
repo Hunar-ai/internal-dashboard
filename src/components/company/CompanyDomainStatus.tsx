@@ -1,74 +1,57 @@
-import { Button, Flex, HStack, Text, VStack } from '@chakra-ui/react';
+import { Button, Flex, HStack, Text } from '@chakra-ui/react';
 
 import RetryIcon from 'assets/retry.svg?react';
-import React from 'react';
-import { CompanyDomainStatusText } from './CompanyDomainStatusText';
+
+import { CheckCircleIcon, InfoIcon } from '@chakra-ui/icons';
 
 interface CompanyDomainStatusProps {
-    iconSrc: string;
     title: string;
     isSuccessful: boolean;
     isRetrying: boolean;
     isRetryVisible: boolean;
-    errorMessage?: string;
     onRetryClick: VoidFunction;
 }
 
 export const CompanyDomainStatus = ({
-    iconSrc,
     title,
     isSuccessful,
     isRetrying,
     isRetryVisible,
-    errorMessage = '',
     onRetryClick
 }: CompanyDomainStatusProps) => {
-    const errorMsg = React.useMemo(() => {
-        return isRetryVisible
-            ? errorMessage
-            : errorMessage +
-                  ' Please reach out to the dev team to resolve the issue.';
-    }, [errorMessage, isRetryVisible]);
-
     return (
-        <VStack width="100%" spacing={4}>
-            <Flex width="100%" justifyContent="space-between">
-                <HStack spacing={3}>
-                    <img src={iconSrc} alt={title} />
-                    <Text fontSize="md" fontWeight={700}>
-                        {title}
-                    </Text>
-                </HStack>
-                <HStack spacing={1}>
-                    <CompanyDomainStatusText isSuccessful={isSuccessful} />
-                </HStack>
-            </Flex>
-            {!isSuccessful && (
-                <Flex
-                    p={3}
-                    width="100%"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    gap={6}
-                    bgColor="gray.50"
-                    borderRadius="base"
-                    minHeight={12}
+        <Flex
+            alignItems="center"
+            justifyContent="space-between"
+            bgColor={isSuccessful ? 'green.100' : 'red.100'}
+            width="100%"
+            borderLeft="5px solid"
+            borderLeftColor={isSuccessful ? 'green.500' : 'red.500'}
+            px={1}
+            py={1}
+            minHeight={10}
+            borderRadius="md"
+        >
+            <HStack>
+                <Text>{title}</Text>
+                {isSuccessful ? (
+                    <CheckCircleIcon color="green.500" />
+                ) : (
+                    <InfoIcon color="red.500" />
+                )}
+            </HStack>
+            {isRetryVisible && !isSuccessful && (
+                <Button
+                    colorScheme="blue"
+                    size="sm"
+                    isLoading={isRetrying}
+                    rightIcon={<RetryIcon />}
+                    onClick={onRetryClick}
+                    minWidth="84px"
                 >
-                    <Text color="gray.600">{errorMsg}</Text>
-                    {isRetryVisible && (
-                        <Button
-                            colorScheme="blue"
-                            size="sm"
-                            isLoading={isRetrying}
-                            rightIcon={<RetryIcon />}
-                            onClick={onRetryClick}
-                            minWidth="84px"
-                        >
-                            Retry
-                        </Button>
-                    )}
-                </Flex>
+                    Retry
+                </Button>
             )}
-        </VStack>
+        </Flex>
     );
 };
