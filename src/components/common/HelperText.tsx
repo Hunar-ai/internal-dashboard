@@ -4,11 +4,13 @@ import {
     FormHelperText
 } from '@chakra-ui/react';
 
-interface HelperTextProps {
+type HelperTextMsgProps =
+    | { msg: string; errorMsg?: string }
+    | { msg?: string; errorMsg: string };
+
+type HelperTextProps = HelperTextMsgProps & {
     hasError?: boolean;
-    errorMsg?: string;
-    msg?: string;
-}
+};
 
 export const HelperText = ({
     hasError = false,
