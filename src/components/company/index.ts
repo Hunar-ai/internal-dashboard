@@ -1,2 +1,2 @@
 export { CompanyAddForm } from './CompanyAddForm';
-export { DomainStatus } from './DomainStatus';
+export { CompanyDomainStatus } from './CompanyDomainStatus';

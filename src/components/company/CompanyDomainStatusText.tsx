@@ -1,11 +1,13 @@
 import { Text } from '@chakra-ui/react';
 import { CheckCircleIcon, InfoIcon } from '@chakra-ui/icons';
 
-interface DomainStatusTextProps {
+interface CompanyDomainStatusTextProps {
     isSuccessful: boolean;
 }
 
-export const DomainStatusText = ({ isSuccessful }: DomainStatusTextProps) => {
+export const CompanyDomainStatusText = ({
+    isSuccessful
+}: CompanyDomainStatusTextProps) => {
     return (
         <>
             {isSuccessful ? (

@@ -3,7 +3,7 @@ import { Navigate, useSearchParams } from 'react-router-dom';
 
 import { Box, Flex, VStack, Text } from '@chakra-ui/react';
 
-import { CompanyAddForm, DomainStatus } from '@components/company';
+import { CompanyAddForm, CompanyDomainStatus } from '@components/company';
 
 import GoogleIconImage from 'assets/google.png';
 import NetlifyIconImage from 'assets/netlify.png';
@@ -127,7 +127,7 @@ export const CompanyContainer = () => {
                                 ? 'Company domain creation failed'
                                 : 'Company created successfully!'}
                         </Text>
-                        <DomainStatus
+                        <CompanyDomainStatus
                             iconSrc={GoogleIconImage}
                             title="Google DNS"
                             isRetrying={addDNSRecord.isLoading}
@@ -138,7 +138,7 @@ export const CompanyContainer = () => {
                             }
                             onRetryClick={() => createDNSRecord(formCompanyId)}
                         />
-                        <DomainStatus
+                        <CompanyDomainStatus
                             iconSrc={NetlifyIconImage}
                             title="Netlify"
                             isRetrying={addDomainAlias.isLoading}

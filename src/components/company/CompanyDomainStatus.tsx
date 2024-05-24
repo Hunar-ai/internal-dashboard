@@ -2,9 +2,9 @@ import { Button, Flex, HStack, Text, VStack } from '@chakra-ui/react';
 
 import RetryIcon from 'assets/retry.svg?react';
 import React from 'react';
-import { DomainStatusText } from './DomainStatusText';
+import { CompanyDomainStatusText } from './CompanyDomainStatusText';
 
-interface DomainStatusProps {
+interface CompanyDomainStatusProps {
     iconSrc: string;
     title: string;
     isSuccessful: boolean;
@@ -14,7 +14,7 @@ interface DomainStatusProps {
     onRetryClick: VoidFunction;
 }
 
-export const DomainStatus = ({
+export const CompanyDomainStatus = ({
     iconSrc,
     title,
     isSuccessful,
@@ -22,7 +22,7 @@ export const DomainStatus = ({
     isRetryVisible,
     errorMessage = '',
     onRetryClick
-}: DomainStatusProps) => {
+}: CompanyDomainStatusProps) => {
     const errorMsg = React.useMemo(() => {
         return isRetryVisible
             ? errorMessage
@@ -40,7 +40,7 @@ export const DomainStatus = ({
                     </Text>
                 </HStack>
                 <HStack spacing={1}>
-                    <DomainStatusText isSuccessful={isSuccessful} />
+                    <CompanyDomainStatusText isSuccessful={isSuccessful} />
                 </HStack>
             </Flex>
             {!isSuccessful && (
