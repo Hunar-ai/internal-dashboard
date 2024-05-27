@@ -7,6 +7,8 @@ import { CompanyAddForm, CompanyDomainStatus } from '@components/company';
 import { useAddDNSRecord } from 'hooks/apiHooks/company/useAddDNSRecord';
 import { useAddDomainAlias } from 'hooks/apiHooks/company/useAddDomainAlias';
 
+import { NAVBAR_HEIGHT } from 'Constants';
+
 const RETRY_LIMIT = 3;
 
 export const CompanyAddView = () => {
@@ -72,7 +74,10 @@ export const CompanyAddView = () => {
     };
 
     return (
-        <Grid templateColumns={{ base: 'auto', sm: '7fr 5fr' }}>
+        <Grid
+            templateColumns={{ base: 'auto', sm: '7fr 5fr' }}
+            height={`calc(100vh - ${NAVBAR_HEIGHT})`}
+        >
             <GridItem rowStart={{ base: 2, sm: 1 }}>
                 <CompanyAddForm
                     isCreateBtnLoading={isAddingDomain}

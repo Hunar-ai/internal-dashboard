@@ -5,6 +5,8 @@ import type {
     LmsSettingsProps
 } from 'interfaces';
 
+export const NAVBAR_HEIGHT = '56px';
+
 export const DEFAULT_LMS_SETTINGS: LmsSettingsProps = {
     blockMessaging: false,
     checkInterestProvider: CHECK_INTEREST_PROVIDER.WATI
