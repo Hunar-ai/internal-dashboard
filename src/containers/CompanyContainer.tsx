@@ -7,20 +7,13 @@ import { CompanyAddForm, CompanyDomainStatus } from '@components/company';
 
 import { useAddDNSRecord } from 'hooks/apiHooks/company/useAddDNSRecord';
 import { useAddDomainAlias } from 'hooks/apiHooks/company/useAddDomainAlias';
-import { useCreateCompany } from 'hooks/apiHooks/company/useCreateCompany';
-import { useToast } from 'hooks/useToast';
-
-import type { CompanyFormProps } from 'interfaces';
 
 const RETRY_LIMIT = 3;
 
 export const CompanyContainer = () => {
-    const createCompany = useCreateCompany();
     const addDNSRecord = useAddDNSRecord();
     const addDomainAlias = useAddDomainAlias();
     const [searchParams] = useSearchParams();
-
-    const { showError } = useToast();
 
     const [formCompanyId, setFormCompanyId] = React.useState('');
     const [showDNSStatus, setShowDNSStatus] = React.useState(false);
@@ -30,22 +23,15 @@ export const CompanyContainer = () => {
     const [domainAliasRetryCount, setDomainAliasRetryCount] = React.useState(0);
 
     const isCreationStatusVisible = React.useMemo(() => {
-        return (
-            createCompany.isSuccess && showDNSStatus && showDomainAliasStatus
-        );
-    }, [createCompany.isSuccess, showDNSStatus, showDomainAliasStatus]);
+        return formCompanyId && showDNSStatus && showDomainAliasStatus;
+    }, [formCompanyId, showDNSStatus, showDomainAliasStatus]);
 
-    const isCreatingCompany = React.useMemo(() => {
+    const isAddingDomain = React.useMemo(() => {
         return (
-            createCompany.isLoading ||
-            addDNSRecord.isLoading ||
-            addDomainAlias.isLoading
+            !formCompanyId &&
+            (addDNSRecord.isLoading || addDomainAlias.isLoading)
         );
-    }, [
-        addDNSRecord.isLoading,
-        addDomainAlias.isLoading,
-        createCompany.isLoading
-    ]);
+    }, [addDNSRecord.isLoading, addDomainAlias.isLoading, formCompanyId]);
 
     const createDNSRecord = (companyId: string) => {
         addDNSRecord.mutate(
@@ -77,26 +63,10 @@ export const CompanyContainer = () => {
         );
     };
 
-    const onSubmitClick = (form: CompanyFormProps) => {
-        createCompany.mutate(
-            {
-                params: { companyId: form.companyId },
-                requestBody: form
-            },
-            {
-                onSuccess: () => {
-                    setFormCompanyId(form.companyId);
-                    createDNSRecord(form.companyId);
-                    createDomainAlias(form.companyId);
-                },
-                onError: error => {
-                    showError({
-                        title: 'Failed to create company',
-                        description: error.errors.displayError
-                    });
-                }
-            }
-        );
+    const onCompanyCreate = (companyId: string) => {
+        setFormCompanyId(companyId);
+        createDNSRecord(companyId);
+        createDomainAlias(companyId);
     };
 
     if (!searchParams.has('add')) {
@@ -107,8 +77,8 @@ export const CompanyContainer = () => {
         <Grid templateColumns={{ base: 'auto', sm: '7fr 5fr' }}>
             <GridItem rowStart={{ base: 2, sm: 1 }}>
                 <CompanyAddForm
-                    isCreateBtnLoading={isCreatingCompany}
-                    handleCompanyCreation={onSubmitClick}
+                    isCreateBtnLoading={isAddingDomain}
+                    onCreate={onCompanyCreate}
                 />
             </GridItem>
             <GridItem borderLeftWidth={{ base: 0, sm: 1 }}>

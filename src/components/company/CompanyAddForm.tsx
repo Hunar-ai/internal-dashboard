@@ -17,6 +17,8 @@ import { HelperText } from '@components/common';
 
 import { useValidationHelper } from 'hooks';
 import { useCompanyHelper } from './useCompanyHelper';
+import { useCreateCompany } from 'hooks/apiHooks/company/useCreateCompany';
+import { useToast } from 'hooks/useToast';
 
 import { ErrorMsg, RegExUtil } from 'utils';
 import type {
@@ -61,13 +63,15 @@ const formErrorStateInitialValues: FormErrorProps<
 
 interface CompanyAddFormProps {
     isCreateBtnLoading: boolean;
-    handleCompanyCreation: (_: CompanyFormProps) => void;
+    onCreate: (_: string) => void;
 }
 
 export const CompanyAddForm = ({
     isCreateBtnLoading,
-    handleCompanyCreation
+    onCreate
 }: CompanyAddFormProps) => {
+    const createCompany = useCreateCompany();
+    const { showError } = useToast();
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
     const { generateRandomGSTIN } = useCompanyHelper();
@@ -151,6 +155,26 @@ export const CompanyAddForm = ({
         }));
     };
 
+    const addCompany = () => {
+        createCompany.mutate(
+            {
+                params: { companyId: form.companyId },
+                requestBody: form
+            },
+            {
+                onSuccess: () => {
+                    onCreate(form.companyId);
+                },
+                onError: error => {
+                    showError({
+                        title: 'Failed to create company',
+                        description: error.errors.displayError
+                    });
+                }
+            }
+        );
+    };
+
     const onCreateClick = () => {
         const { errorState: modifiedErrorState, hasFormError } =
             getFormErrorData({
@@ -167,7 +191,7 @@ export const CompanyAddForm = ({
             return;
         }
 
-        handleCompanyCreation(form);
+        addCompany();
     };
 
     return (
@@ -287,7 +311,10 @@ export const CompanyAddForm = ({
                         width="100%"
                         colorScheme="blue"
                         onClick={onCreateClick}
-                        isLoading={isCreateBtnLoading}
+                        isDisabled={createCompany.isSuccess}
+                        isLoading={
+                            createCompany.isLoading || isCreateBtnLoading
+                        }
                     >
                         CREATE COMPANY
                     </Button>
