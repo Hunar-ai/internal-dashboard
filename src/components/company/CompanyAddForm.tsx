@@ -175,8 +175,9 @@ export const CompanyAddForm = () => {
             },
             {
                 onSuccess: () => {
-                    createDNSRecord();
-                    createDomainAlias();
+                    // TODO: enable this after testing
+                    // createDNSRecord();
+                    // createDomainAlias();
                 },
                 onError: error => {
                     showError({
