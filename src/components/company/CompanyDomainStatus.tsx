@@ -9,6 +9,7 @@ interface CompanyDomainStatusProps {
     isSuccessful: boolean;
     isRetrying: boolean;
     isRetryBtnVisible: boolean;
+    isDefaultView: boolean;
     onRetryClick: VoidFunction;
 }
 
@@ -17,16 +18,29 @@ export const CompanyDomainStatus = ({
     isSuccessful,
     isRetrying,
     isRetryBtnVisible,
+    isDefaultView,
     onRetryClick
 }: CompanyDomainStatusProps) => {
     return (
         <Flex
             alignItems="center"
             justifyContent="space-between"
-            bgColor={isSuccessful ? 'green.100' : 'red.100'}
+            bgColor={
+                isDefaultView
+                    ? 'gray.100'
+                    : isSuccessful
+                    ? 'green.100'
+                    : 'red.100'
+            }
             width="100%"
             borderLeft="5px solid"
-            borderLeftColor={isSuccessful ? 'green.500' : 'red.500'}
+            borderLeftColor={
+                isDefaultView
+                    ? 'gray.500'
+                    : isSuccessful
+                    ? 'green.500'
+                    : 'red.500'
+            }
             px={1}
             py={1}
             minHeight={10}
@@ -34,23 +48,33 @@ export const CompanyDomainStatus = ({
         >
             <HStack>
                 <Text>{title}</Text>
-                {isSuccessful ? (
+
+                {isDefaultView ? (
+                    <></>
+                ) : isSuccessful ? (
                     <CheckCircleIcon color="green.500" />
                 ) : (
                     <InfoIcon color="red.500" />
                 )}
             </HStack>
-            {isRetryBtnVisible && !isSuccessful && (
-                <Button
-                    colorScheme="blue"
-                    size="sm"
-                    isLoading={isRetrying}
-                    rightIcon={<RetryIcon />}
-                    onClick={onRetryClick}
-                    minWidth="84px"
-                >
-                    Retry
-                </Button>
+            {isDefaultView ? (
+                <Text fontSize="xs">
+                    Status will be updated once you try creating a company
+                </Text>
+            ) : (
+                isRetryBtnVisible &&
+                !isSuccessful && (
+                    <Button
+                        colorScheme="blue"
+                        size="sm"
+                        isLoading={isRetrying}
+                        rightIcon={<RetryIcon />}
+                        onClick={onRetryClick}
+                        minWidth="84px"
+                    >
+                        Retry
+                    </Button>
+                )
             )}
         </Flex>
     );

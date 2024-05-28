@@ -1,14 +1,5 @@
 import React from 'react';
 
-import { Text, SimpleGrid, Button, GridItem, VStack } from '@chakra-ui/react';
-
-import {
-    CompanyAddDetailsForm,
-    CompanyAddFormWrapper,
-    CompanyAddSettingsForm,
-    CompanyDomainStatus
-} from '@components/company';
-
 import { useValidationHelper } from 'hooks';
 import { useCompanyHelper } from './useCompanyHelper';
 import { useCreateCompany } from 'hooks/apiHooks/company/useCreateCompany';
@@ -16,14 +7,32 @@ import { useToast } from 'hooks/useToast';
 import { useAddDNSRecord } from 'hooks/apiHooks/company/useAddDNSRecord';
 import { useAddDomainAlias } from 'hooks/apiHooks/company/useAddDomainAlias';
 
-import { RegExUtil } from 'utils';
+import { ErrorMsg, RegExUtil } from 'utils';
 import type {
     CompanyDetailsFormProps,
     CompanyFormProps,
     FormErrorProps,
     ValidationMapProps
 } from 'interfaces';
-import { DEFAULT_COMPANY_ADDRESS, DEFAULT_COMPANY_SETTINGS } from 'Constants';
+import {
+    DEFAULT_COMPANY_ADDRESS,
+    DEFAULT_COMPANY_SETTINGS,
+    DEFAULT_LMS_SETTINGS,
+    NAVBAR_HEIGHT
+} from 'Constants';
+import { FormWrapper } from '@components/common/FormWrapper';
+import { CompanyAddStatusView } from './CompanyAddStatusView';
+import {
+    FormControl,
+    FormLabel,
+    Grid,
+    Input,
+    Switch,
+    Textarea
+} from '@chakra-ui/react';
+import { HelperText } from '@components/common';
+import { LeftPanel } from '@components/common/LeftPanel';
+import { RightPanel } from '@components/common/RightPanel';
 
 const validationMap: ValidationMapProps = {
     companyId: (companyId: string) => RegExUtil.isId(companyId),
@@ -95,6 +104,7 @@ export const CompanyAddForm = () => {
         React.useState(false);
     const [dnsRetryCount, setDnsRetryCount] = React.useState(0);
     const [domainAliasRetryCount, setDomainAliasRetryCount] = React.useState(0);
+    const [isDefaultView, setIsDefaultView] = React.useState(true);
 
     const isDomainStatusVisible = React.useMemo(() => {
         return (
@@ -210,83 +220,174 @@ export const CompanyAddForm = () => {
         addCompany();
     };
 
+    const onFormFieldChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        const fieldName = e.target.name as keyof CompanyDetailsFormProps;
+        const fieldValue = e.target.value;
+
+        updateForm({ [fieldName]: fieldValue });
+        updateFieldErrorState({ fieldName, fieldValue });
+
+        if (fieldName === 'name') {
+            const companyId = RegExUtil.conformToId(fieldValue);
+            updateForm({ companyId, description: fieldValue });
+            updateFieldErrorState({
+                fieldName: 'companyId',
+                fieldValue: companyId
+            });
+            updateFieldErrorState({ fieldName: 'description', fieldValue });
+        }
+    };
+
+    const onBlockMessagingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const isMessagingBlocked = !e.target.checked;
+        const modifiedLmsSettings = isMessagingBlocked
+            ? {
+                  blockMessaging: true
+              }
+            : { ...DEFAULT_LMS_SETTINGS };
+
+        updateForm({
+            settings: { ...form.settings, lmsSettings: modifiedLmsSettings }
+        });
+    };
+
     return (
-        <CompanyAddFormWrapper
-            statusPanel={
-                isDomainStatusVisible && (
-                    <VStack spacing={6}>
-                        <CompanyDomainStatus
-                            title="Google DNS"
-                            isRetrying={addDNSRecord.isLoading}
-                            isSuccessful={addDNSRecord.isSuccess}
-                            isRetryBtnVisible={
-                                dnsRetryCount < DOMAIN_RETRY_LIMIT
-                            }
-                            onRetryClick={createDNSRecord}
-                        />
-                        <CompanyDomainStatus
-                            title="Netlify"
-                            isRetrying={addDomainAlias.isLoading}
-                            isSuccessful={addDomainAlias.isSuccess}
-                            isRetryBtnVisible={
-                                domainAliasRetryCount < DOMAIN_RETRY_LIMIT
-                            }
-                            onRetryClick={createDomainAlias}
-                        />
-                    </VStack>
-                )
-            }
+        <Grid
+            templateColumns={{ base: 'auto', sm: '8fr 4fr' }}
+            height={`calc(100vh - ${NAVBAR_HEIGHT})`}
+            overflow={{ base: 'auto', sm: 'unset' }}
         >
-            <>
-                <SimpleGrid
-                    columns={{ base: 1, md: 2 }}
-                    spacingX={6}
-                    spacingY={4}
-                    width="100%"
-                    alignItems="start"
+            <LeftPanel>
+                <FormWrapper
+                    formTitle="Create Company"
+                    isFormDisabled={createCompany.isSuccess}
+                    isLoading={isCreateBtnLoading}
+                    onSubmit={onCreateClick}
                 >
-                    <GridItem colSpan={{ base: 1, md: 2 }} mb={4}>
-                        <Text
-                            fontSize="xl"
-                            lineHeight={1.4}
-                            width="100%"
-                            fontWeight={600}
-                        >
-                            Create Company
-                        </Text>
-                    </GridItem>
-                    <CompanyAddDetailsForm
-                        companyId={form.companyId}
-                        description={form.description}
-                        email={form.email}
-                        mobileNumber={form.mobileNumber}
-                        name={form.name}
-                        rawAddress={form.rawAddress}
-                        formErrorState={formErrorState}
-                        isDisabled={createCompany.isSuccess}
-                        updateForm={updateForm}
-                        updateFieldErrorState={updateFieldErrorState}
-                    />
-                    <CompanyAddSettingsForm
-                        isDisabled={createCompany.isSuccess}
-                        settings={form.settings}
-                        updateForm={updateForm}
-                    />
-                </SimpleGrid>
-                <SimpleGrid columns={{ base: 1, sm: 2 }} spacingX={6} mt={8}>
-                    <GridItem colStart={{ base: 1, sm: 2 }} textAlign="end">
-                        <Button
-                            width="100%"
-                            colorScheme="blue"
-                            onClick={onCreateClick}
-                            isDisabled={createCompany.isSuccess}
-                            isLoading={isCreateBtnLoading}
-                        >
-                            CREATE COMPANY
-                        </Button>
-                    </GridItem>
-                </SimpleGrid>
-            </>
-        </CompanyAddFormWrapper>
+                    <FormControl isInvalid={formErrorState.name} isRequired>
+                        <FormLabel>Company Name</FormLabel>
+                        <Input
+                            placeholder="Enter Company Name"
+                            name="name"
+                            value={form.name}
+                            onChange={onFormFieldChange}
+                        />
+                        <HelperText
+                            hasError={formErrorState.name}
+                            errorMsg={ErrorMsg.alphaNumeric()}
+                        />
+                    </FormControl>
+                    <FormControl
+                        isInvalid={formErrorState.companyId}
+                        isRequired
+                    >
+                        <FormLabel>Company ID</FormLabel>
+                        <Input
+                            placeholder="Enter Company ID"
+                            name="companyId"
+                            value={form.companyId}
+                            onChange={onFormFieldChange}
+                        />
+                        <HelperText
+                            hasError={formErrorState.companyId}
+                            errorMsg={ErrorMsg.id()}
+                            msg="Please keep it short (upto 15 characters)"
+                        />
+                    </FormControl>
+                    <FormControl isInvalid={formErrorState.email} isRequired>
+                        <FormLabel>Email ID of Company POC</FormLabel>
+                        <Input
+                            placeholder="Enter Email ID"
+                            name="email"
+                            value={form.email}
+                            onChange={onFormFieldChange}
+                        />
+                        <HelperText
+                            hasError={formErrorState.email}
+                            errorMsg={ErrorMsg.email()}
+                        />
+                    </FormControl>
+                    <FormControl
+                        isInvalid={formErrorState.mobileNumber}
+                        isRequired
+                    >
+                        <FormLabel>Phone Number of Company POC</FormLabel>
+                        <Input
+                            placeholder="Enter Phone Number"
+                            name="mobileNumber"
+                            value={form.mobileNumber}
+                            onChange={onFormFieldChange}
+                        />
+                        <HelperText
+                            hasError={formErrorState.mobileNumber}
+                            errorMsg={ErrorMsg.mobileNumber()}
+                        />
+                    </FormControl>
+                    <FormControl
+                        isInvalid={formErrorState.rawAddress}
+                        isRequired
+                    >
+                        <FormLabel>Address</FormLabel>
+                        <Textarea
+                            placeholder="Enter Address"
+                            name="rawAddress"
+                            value={form.rawAddress}
+                            onChange={onFormFieldChange}
+                        />
+                        <HelperText
+                            hasError={formErrorState.rawAddress}
+                            errorMsg={ErrorMsg.characterLength()}
+                        />
+                    </FormControl>
+                    <FormControl
+                        isInvalid={formErrorState.description}
+                        isRequired
+                    >
+                        <FormLabel>Description</FormLabel>
+                        <Textarea
+                            placeholder="Enter Description"
+                            name="description"
+                            value={form.description}
+                            onChange={onFormFieldChange}
+                        />
+                        <HelperText
+                            hasError={formErrorState.description}
+                            errorMsg={ErrorMsg.characterLength()}
+                        />
+                    </FormControl>
+                    <FormControl
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+                        <FormLabel>Allow Messaging</FormLabel>
+                        <Switch
+                            name="blockMessaging"
+                            isChecked={
+                                !form.settings.lmsSettings.blockMessaging
+                            }
+                            onChange={onBlockMessagingChange}
+                        />
+                    </FormControl>
+                </FormWrapper>
+            </LeftPanel>
+            <RightPanel>
+                <CompanyAddStatusView
+                    isDefaultView={isDefaultView}
+                    isDNSLoading={addDNSRecord.isLoading}
+                    isDNSSuccessful={addDNSRecord.isSuccess}
+                    isDNSRetryVisible={dnsRetryCount < DOMAIN_RETRY_LIMIT}
+                    onDNDRetryClick={createDNSRecord}
+                    isDomainAddLoading={addDomainAlias.isLoading}
+                    isDomainAddSuccessful={addDomainAlias.isSuccess}
+                    isDomainRetryVisible={
+                        domainAliasRetryCount < DOMAIN_RETRY_LIMIT
+                    }
+                    onDomainRetryClick={createDomainAlias}
+                />
+            </RightPanel>
+        </Grid>
     );
 };
