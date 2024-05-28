@@ -18,6 +18,7 @@ import { useAddDomainAlias } from 'hooks/apiHooks/company/useAddDomainAlias';
 
 import { RegExUtil } from 'utils';
 import type {
+    CompanyDetailsFormProps,
     CompanyFormProps,
     FormErrorProps,
     ValidationMapProps
@@ -42,9 +43,7 @@ const requiredFields: (keyof CompanyFormProps)[] = [
     'mobileNumber'
 ];
 
-const formErrorStateInitialValues: FormErrorProps<
-    Omit<CompanyFormProps, 'settings' | 'governmentIdentifiers'>
-> = {
+const formErrorStateInitialValues: FormErrorProps<CompanyDetailsFormProps> = {
     companyId: false,
     name: false,
     description: false,
@@ -54,7 +53,7 @@ const formErrorStateInitialValues: FormErrorProps<
 };
 
 interface UpdateFieldErrorStateProps {
-    fieldName: keyof CompanyFormProps;
+    fieldName: keyof CompanyDetailsFormProps;
     fieldValue: string;
 }
 

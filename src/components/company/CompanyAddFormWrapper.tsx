@@ -28,7 +28,7 @@ export const CompanyAddFormWrapper = ({
             <GridItem
                 borderLeftWidth={{ base: 0, sm: 1 }}
                 px={8}
-                pt={6}
+                pt={{ base: statusPanel ? 6 : undefined, sm: 6 }}
                 overflow={{ base: 'unset', sm: 'auto' }}
             >
                 {statusPanel}

@@ -29,3 +29,8 @@ export interface CompanyFormProps {
     };
     settings: CompanySettingsProps;
 }
+
+export type CompanyDetailsFormProps = Omit<
+    CompanyFormProps,
+    'settings' | 'governmentIdentifiers'
+>;

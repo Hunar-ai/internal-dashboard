@@ -2,20 +2,19 @@ import { FormControl, FormLabel, Input, Textarea } from '@chakra-ui/react';
 
 import { HelperText } from '@components/common';
 
-import type { CompanyFormProps, FormErrorProps } from 'interfaces';
-import { ErrorMsg, RegExUtil } from 'utils';
-
-type CompanyDetailsFormProps = Omit<
+import type {
+    CompanyDetailsFormProps,
     CompanyFormProps,
-    'settings' | 'governmentIdentifiers'
->;
+    FormErrorProps
+} from 'interfaces';
+import { ErrorMsg, RegExUtil } from 'utils';
 
 interface CompanyAddDetailsFormProps extends CompanyDetailsFormProps {
     isDisabled: boolean;
     formErrorState: FormErrorProps<CompanyDetailsFormProps>;
     updateForm: (modifiedForm: Partial<CompanyFormProps>) => void;
     updateFieldErrorState: (_: {
-        fieldName: keyof CompanyFormProps;
+        fieldName: keyof CompanyDetailsFormProps;
         fieldValue: string;
     }) => void;
 }
@@ -30,8 +29,8 @@ export const CompanyAddDetailsForm = ({
     const onFormFieldChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-        const fieldName = e.target.name as keyof CompanyFormProps;
-        const fieldValue = e.target.value as string;
+        const fieldName = e.target.name as keyof CompanyDetailsFormProps;
+        const fieldValue = e.target.value;
 
         updateForm({ [fieldName]: fieldValue });
         updateFieldErrorState({ fieldName, fieldValue });

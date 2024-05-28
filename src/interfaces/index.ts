@@ -50,6 +50,7 @@ export { type QueryResult } from './react-query.interface';
 
 export type {
     CompanyFormProps,
+    CompanyDetailsFormProps,
     CompanySettingsProps,
     LeadSettingsProps,
     LmsSettingsProps
