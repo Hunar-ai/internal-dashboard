@@ -41,13 +41,15 @@ export const CompanyDomainStatus = ({
                     ? 'green.500'
                     : 'red.500'
             }
-            px={1}
+            px={2}
             py={1}
             minHeight={10}
             borderRadius="md"
         >
             <HStack>
-                <Text>{title}</Text>
+                <Text fontSize="sm" fontWeight={600}>
+                    {title}
+                </Text>
 
                 {isDefaultView ? (
                     <></>

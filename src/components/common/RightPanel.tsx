@@ -5,7 +5,7 @@ export const RightPanel = ({ children }: { children: React.ReactNode }) => {
         <GridItem
             borderLeftWidth={{ base: 0, sm: 1 }}
             px={8}
-            pt={{ base: 4, sm: 4 }}
+            py={6}
             overflow={{ base: 'unset', sm: 'auto' }}
         >
             {children}
