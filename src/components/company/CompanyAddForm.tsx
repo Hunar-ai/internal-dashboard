@@ -99,22 +99,26 @@ export const CompanyAddForm = () => {
     const [formErrorState, setFormErrorState] = React.useState({
         ...formErrorStateInitialValues
     });
-    // const [showDNSStatus, setShowDNSStatus] = React.useState(false);
-    // const [showDomainAliasStatus, setShowDomainAliasStatus] =
-    //     React.useState(false);
     const [dnsRetryCount, setDnsRetryCount] = React.useState(-1);
     const [domainAliasRetryCount, setDomainAliasRetryCount] =
         React.useState(-1);
-    const [isDefaultView, setIsDefaultView] = React.useState(true);
+
+    const isDefaultView = React.useMemo(() => {
+        return dnsRetryCount === -1 || domainAliasRetryCount == -1;
+    }, [dnsRetryCount, domainAliasRetryCount]);
 
     const isCreateBtnLoading = React.useMemo(() => {
         if (createCompany.isLoading) return true;
 
-        return addDNSRecord.isLoading || addDomainAlias.isLoading;
+        return (
+            isDefaultView &&
+            (addDNSRecord.isLoading || addDomainAlias.isLoading)
+        );
     }, [
         addDNSRecord.isLoading,
         addDomainAlias.isLoading,
-        createCompany.isLoading
+        createCompany.isLoading,
+        isDefaultView
     ]);
 
     const updateForm = (modifiedForm: Partial<CompanyFormProps>) => {
