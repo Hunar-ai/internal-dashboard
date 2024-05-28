@@ -1,6 +1,6 @@
 import { Navigate, useSearchParams } from 'react-router-dom';
 
-import { CompanyAddView } from '@components/company';
+import { CompanyAddForm } from '@components/company';
 
 export const CompanyContainer = () => {
     const [searchParams] = useSearchParams();
@@ -9,5 +9,5 @@ export const CompanyContainer = () => {
         return <Navigate to="/not-found" replace />;
     }
 
-    return <CompanyAddView />;
+    return <CompanyAddForm />;
 };

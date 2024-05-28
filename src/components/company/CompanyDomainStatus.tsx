@@ -8,7 +8,7 @@ interface CompanyDomainStatusProps {
     title: string;
     isSuccessful: boolean;
     isRetrying: boolean;
-    isRetryVisible: boolean;
+    isRetryBtnVisible: boolean;
     onRetryClick: VoidFunction;
 }
 
@@ -16,7 +16,7 @@ export const CompanyDomainStatus = ({
     title,
     isSuccessful,
     isRetrying,
-    isRetryVisible,
+    isRetryBtnVisible,
     onRetryClick
 }: CompanyDomainStatusProps) => {
     return (
@@ -40,7 +40,7 @@ export const CompanyDomainStatus = ({
                     <InfoIcon color="red.500" />
                 )}
             </HStack>
-            {isRetryVisible && !isSuccessful && (
+            {isRetryBtnVisible && !isSuccessful && (
                 <Button
                     colorScheme="blue"
                     size="sm"

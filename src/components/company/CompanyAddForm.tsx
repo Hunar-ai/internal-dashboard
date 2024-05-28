@@ -1,36 +1,28 @@
 import React from 'react';
 
-import {
-    Box,
-    Text,
-    FormControl,
-    FormLabel,
-    Input,
-    Textarea,
-    Switch,
-    SimpleGrid,
-    Button,
-    GridItem
-} from '@chakra-ui/react';
+import { Text, SimpleGrid, Button, GridItem, VStack } from '@chakra-ui/react';
 
-import { HelperText } from '@components/common';
+import {
+    CompanyAddDetailsForm,
+    CompanyAddFormWrapper,
+    CompanyAddSettingsForm,
+    CompanyDomainStatus
+} from '@components/company';
 
 import { useValidationHelper } from 'hooks';
 import { useCompanyHelper } from './useCompanyHelper';
 import { useCreateCompany } from 'hooks/apiHooks/company/useCreateCompany';
 import { useToast } from 'hooks/useToast';
+import { useAddDNSRecord } from 'hooks/apiHooks/company/useAddDNSRecord';
+import { useAddDomainAlias } from 'hooks/apiHooks/company/useAddDomainAlias';
 
-import { ErrorMsg, RegExUtil } from 'utils';
+import { RegExUtil } from 'utils';
 import type {
     CompanyFormProps,
     FormErrorProps,
     ValidationMapProps
 } from 'interfaces';
-import {
-    DEFAULT_COMPANY_ADDRESS,
-    DEFAULT_COMPANY_SETTINGS,
-    DEFAULT_LMS_SETTINGS
-} from 'Constants';
+import { DEFAULT_COMPANY_ADDRESS, DEFAULT_COMPANY_SETTINGS } from 'Constants';
 
 const validationMap: ValidationMapProps = {
     companyId: (companyId: string) => RegExUtil.isId(companyId),
@@ -61,16 +53,17 @@ const formErrorStateInitialValues: FormErrorProps<
     mobileNumber: false
 };
 
-interface CompanyAddFormProps {
-    isCreateBtnLoading: boolean;
-    onCreate: (_: string) => void;
+interface UpdateFieldErrorStateProps {
+    fieldName: keyof CompanyFormProps;
+    fieldValue: string;
 }
 
-export const CompanyAddForm = ({
-    isCreateBtnLoading,
-    onCreate
-}: CompanyAddFormProps) => {
+const DOMAIN_RETRY_LIMIT = 3;
+
+export const CompanyAddForm = () => {
     const createCompany = useCreateCompany();
+    const addDNSRecord = useAddDNSRecord();
+    const addDomainAlias = useAddDomainAlias();
     const { showError } = useToast();
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
@@ -98,14 +91,40 @@ export const CompanyAddForm = ({
     const [formErrorState, setFormErrorState] = React.useState({
         ...formErrorStateInitialValues
     });
+    const [showDNSStatus, setShowDNSStatus] = React.useState(false);
+    const [showDomainAliasStatus, setShowDomainAliasStatus] =
+        React.useState(false);
+    const [dnsRetryCount, setDnsRetryCount] = React.useState(0);
+    const [domainAliasRetryCount, setDomainAliasRetryCount] = React.useState(0);
 
-    const onFormFieldChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-        const fieldName = e.target.name as keyof CompanyFormProps;
-        const fieldValue = e.target.value;
+    const isDomainStatusVisible = React.useMemo(() => {
+        return (
+            createCompany.isSuccess && showDNSStatus && showDomainAliasStatus
+        );
+    }, [createCompany.isSuccess, showDNSStatus, showDomainAliasStatus]);
 
-        setForm(oldForm => ({ ...oldForm, [fieldName]: fieldValue }));
+    const isCreateBtnLoading = React.useMemo(() => {
+        if (createCompany.isLoading) return true;
+
+        return (
+            !isDomainStatusVisible &&
+            (addDNSRecord.isLoading || addDomainAlias.isLoading)
+        );
+    }, [
+        addDNSRecord.isLoading,
+        addDomainAlias.isLoading,
+        createCompany.isLoading,
+        isDomainStatusVisible
+    ]);
+
+    const updateForm = (modifiedForm: Partial<CompanyFormProps>) => {
+        setForm(oldForm => ({ ...oldForm, ...modifiedForm }));
+    };
+
+    const updateFieldErrorState = ({
+        fieldName,
+        fieldValue
+    }: UpdateFieldErrorStateProps) => {
         setFormErrorState(prevErrorState => ({
             ...prevErrorState,
             [fieldName]: hasFormFieldError({
@@ -114,45 +133,42 @@ export const CompanyAddForm = ({
                 isRequired: requiredFields.indexOf(fieldName) > -1
             })
         }));
-
-        if (fieldName === 'name') {
-            const companyId = RegExUtil.conformToId(fieldValue);
-            setForm(oldForm => ({
-                ...oldForm,
-                companyId,
-                description: fieldValue
-            }));
-            setFormErrorState(prevErrorState => ({
-                ...prevErrorState,
-                companyId: hasFormFieldError({
-                    fieldName: 'companyId',
-                    fieldValue: companyId,
-                    isRequired: requiredFields.indexOf('companyId') > -1
-                }),
-                description: hasFormFieldError({
-                    fieldName: 'description',
-                    fieldValue,
-                    isRequired: requiredFields.indexOf('description') > -1
-                })
-            }));
-        }
     };
 
-    const onBlockMessagingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const isMessagingBlocked = !e.target.checked;
-        const modifiedLmsSettings = isMessagingBlocked
-            ? {
-                  blockMessaging: true
-              }
-            : { ...DEFAULT_LMS_SETTINGS };
-
-        setForm(oldForm => ({
-            ...oldForm,
-            settings: {
-                ...oldForm.settings,
-                lmsSettings: modifiedLmsSettings
+    const createDNSRecord = () => {
+        addDNSRecord.mutate(
+            {
+                params: { companyId: form.companyId },
+                requestBody: { name: `${form.companyId}.hunar.ai` }
+            },
+            {
+                onSettled: () => {
+                    if (showDNSStatus) {
+                        setDnsRetryCount(count => count + 1);
+                    } else {
+                        setShowDNSStatus(true);
+                    }
+                }
             }
-        }));
+        );
+    };
+
+    const createDomainAlias = () => {
+        addDomainAlias.mutate(
+            {
+                params: { companyId: form.companyId },
+                requestBody: { domainAlias: `${form.companyId}.hunar.ai` }
+            },
+            {
+                onSettled: () => {
+                    if (showDomainAliasStatus) {
+                        setDomainAliasRetryCount(count => count + 1);
+                    } else {
+                        setShowDomainAliasStatus(true);
+                    }
+                }
+            }
+        );
     };
 
     const addCompany = () => {
@@ -163,7 +179,8 @@ export const CompanyAddForm = ({
             },
             {
                 onSuccess: () => {
-                    onCreate(form.companyId);
+                    createDNSRecord();
+                    createDomainAlias();
                 },
                 onError: error => {
                     showError({
@@ -195,131 +212,82 @@ export const CompanyAddForm = ({
     };
 
     return (
-        <Box px={8} py={6}>
-            <SimpleGrid
-                columns={{ base: 1, md: 2 }}
-                spacingX={6}
-                spacingY={4}
-                width="100%"
-                alignItems="start"
-            >
-                <GridItem colSpan={{ base: 1, md: 2 }} mb={4}>
-                    <Text
-                        fontSize="xl"
-                        lineHeight={1.4}
-                        width="100%"
-                        fontWeight={600}
-                    >
-                        Create Company
-                    </Text>
-                </GridItem>
-                <FormControl isInvalid={formErrorState.name} isRequired>
-                    <FormLabel>Company Name</FormLabel>
-                    <Input
-                        placeholder="Enter Company Name"
-                        name="name"
-                        value={form.name}
-                        onChange={onFormFieldChange}
-                    />
-                    <HelperText
-                        hasError={formErrorState.name}
-                        errorMsg={ErrorMsg.alphaNumeric()}
-                    />
-                </FormControl>
-                <FormControl isInvalid={formErrorState.companyId} isRequired>
-                    <FormLabel>Company ID</FormLabel>
-                    <Input
-                        placeholder="Enter Company ID"
-                        name="companyId"
-                        value={form.companyId}
-                        onChange={onFormFieldChange}
-                    />
-                    <HelperText
-                        hasError={formErrorState.companyId}
-                        errorMsg={ErrorMsg.id()}
-                        msg="Please keep it short (upto 15 characters)"
-                    />
-                </FormControl>
-                <FormControl isInvalid={formErrorState.email} isRequired>
-                    <FormLabel>Email ID of Company POC</FormLabel>
-                    <Input
-                        placeholder="Enter Email ID"
-                        name="email"
-                        value={form.email}
-                        onChange={onFormFieldChange}
-                    />
-                    <HelperText
-                        hasError={formErrorState.email}
-                        errorMsg={ErrorMsg.email()}
-                    />
-                </FormControl>
-                <FormControl isInvalid={formErrorState.mobileNumber} isRequired>
-                    <FormLabel>Phone Number of Company POC</FormLabel>
-                    <Input
-                        placeholder="Enter Phone Number"
-                        name="mobileNumber"
-                        value={form.mobileNumber}
-                        onChange={onFormFieldChange}
-                    />
-                    <HelperText
-                        hasError={formErrorState.mobileNumber}
-                        errorMsg={ErrorMsg.mobileNumber()}
-                    />
-                </FormControl>
-                <FormControl isInvalid={formErrorState.rawAddress} isRequired>
-                    <FormLabel>Address</FormLabel>
-                    <Textarea
-                        placeholder="Enter Address"
-                        name="rawAddress"
-                        value={form.rawAddress}
-                        onChange={onFormFieldChange}
-                    />
-                    <HelperText
-                        hasError={formErrorState.rawAddress}
-                        errorMsg={ErrorMsg.characterLength()}
-                    />
-                </FormControl>
-                <FormControl isInvalid={formErrorState.description} isRequired>
-                    <FormLabel>Description</FormLabel>
-                    <Textarea
-                        placeholder="Enter Description"
-                        name="description"
-                        value={form.description}
-                        onChange={onFormFieldChange}
-                    />
-                    <HelperText
-                        hasError={formErrorState.description}
-                        errorMsg={ErrorMsg.characterLength()}
-                    />
-                </FormControl>
-                <FormControl
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
+        <CompanyAddFormWrapper
+            statusPanel={
+                isDomainStatusVisible && (
+                    <VStack spacing={6}>
+                        <CompanyDomainStatus
+                            title="Google DNS"
+                            isRetrying={addDNSRecord.isLoading}
+                            isSuccessful={addDNSRecord.isSuccess}
+                            isRetryBtnVisible={
+                                dnsRetryCount < DOMAIN_RETRY_LIMIT
+                            }
+                            onRetryClick={createDNSRecord}
+                        />
+                        <CompanyDomainStatus
+                            title="Netlify"
+                            isRetrying={addDomainAlias.isLoading}
+                            isSuccessful={addDomainAlias.isSuccess}
+                            isRetryBtnVisible={
+                                domainAliasRetryCount < DOMAIN_RETRY_LIMIT
+                            }
+                            onRetryClick={createDomainAlias}
+                        />
+                    </VStack>
+                )
+            }
+        >
+            <>
+                <SimpleGrid
+                    columns={{ base: 1, md: 2 }}
+                    spacingX={6}
+                    spacingY={4}
+                    width="100%"
+                    alignItems="start"
                 >
-                    <FormLabel>Allow Messaging</FormLabel>
-                    <Switch
-                        name="blockMessaging"
-                        isChecked={!form.settings.lmsSettings.blockMessaging}
-                        onChange={onBlockMessagingChange}
-                    />
-                </FormControl>
-            </SimpleGrid>
-            <SimpleGrid columns={{ base: 1, sm: 2 }} spacingX={6} mt={8}>
-                <GridItem colStart={{ base: 1, sm: 2 }} textAlign="end">
-                    <Button
-                        width="100%"
-                        colorScheme="blue"
-                        onClick={onCreateClick}
+                    <GridItem colSpan={{ base: 1, md: 2 }} mb={4}>
+                        <Text
+                            fontSize="xl"
+                            lineHeight={1.4}
+                            width="100%"
+                            fontWeight={600}
+                        >
+                            Create Company
+                        </Text>
+                    </GridItem>
+                    <CompanyAddDetailsForm
+                        companyId={form.companyId}
+                        description={form.description}
+                        email={form.email}
+                        mobileNumber={form.mobileNumber}
+                        name={form.name}
+                        rawAddress={form.rawAddress}
+                        formErrorState={formErrorState}
                         isDisabled={createCompany.isSuccess}
-                        isLoading={
-                            createCompany.isLoading || isCreateBtnLoading
-                        }
-                    >
-                        CREATE COMPANY
-                    </Button>
-                </GridItem>
-            </SimpleGrid>
-        </Box>
+                        updateForm={updateForm}
+                        updateFieldErrorState={updateFieldErrorState}
+                    />
+                    <CompanyAddSettingsForm
+                        isDisabled={createCompany.isSuccess}
+                        settings={form.settings}
+                        updateForm={updateForm}
+                    />
+                </SimpleGrid>
+                <SimpleGrid columns={{ base: 1, sm: 2 }} spacingX={6} mt={8}>
+                    <GridItem colStart={{ base: 1, sm: 2 }} textAlign="end">
+                        <Button
+                            width="100%"
+                            colorScheme="blue"
+                            onClick={onCreateClick}
+                            isDisabled={createCompany.isSuccess}
+                            isLoading={isCreateBtnLoading}
+                        >
+                            CREATE COMPANY
+                        </Button>
+                    </GridItem>
+                </SimpleGrid>
+            </>
+        </CompanyAddFormWrapper>
     );
 };
