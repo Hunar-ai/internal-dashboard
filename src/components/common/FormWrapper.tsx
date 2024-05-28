@@ -39,13 +39,12 @@ export const FormWrapper = ({
             <SimpleGrid columns={{ base: 1, sm: 2 }} spacingX={6} mt={8}>
                 <GridItem colStart={{ base: 1, sm: 2 }} textAlign="end">
                     <Button
-                        width="100%"
                         colorScheme="blue"
                         onClick={onSubmit}
                         isDisabled={isFormDisabled}
                         isLoading={isLoading}
                     >
-                        CREATE COMPANY
+                        SAVE AND PUBLISH
                     </Button>
                 </GridItem>
             </SimpleGrid>
