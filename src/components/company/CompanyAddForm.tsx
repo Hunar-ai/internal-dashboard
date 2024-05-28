@@ -99,31 +99,22 @@ export const CompanyAddForm = () => {
     const [formErrorState, setFormErrorState] = React.useState({
         ...formErrorStateInitialValues
     });
-    const [showDNSStatus, setShowDNSStatus] = React.useState(false);
-    const [showDomainAliasStatus, setShowDomainAliasStatus] =
-        React.useState(false);
-    const [dnsRetryCount, setDnsRetryCount] = React.useState(0);
-    const [domainAliasRetryCount, setDomainAliasRetryCount] = React.useState(0);
+    // const [showDNSStatus, setShowDNSStatus] = React.useState(false);
+    // const [showDomainAliasStatus, setShowDomainAliasStatus] =
+    //     React.useState(false);
+    const [dnsRetryCount, setDnsRetryCount] = React.useState(-1);
+    const [domainAliasRetryCount, setDomainAliasRetryCount] =
+        React.useState(-1);
     const [isDefaultView, setIsDefaultView] = React.useState(true);
-
-    const isDomainStatusVisible = React.useMemo(() => {
-        return (
-            createCompany.isSuccess && showDNSStatus && showDomainAliasStatus
-        );
-    }, [createCompany.isSuccess, showDNSStatus, showDomainAliasStatus]);
 
     const isCreateBtnLoading = React.useMemo(() => {
         if (createCompany.isLoading) return true;
 
-        return (
-            !isDomainStatusVisible &&
-            (addDNSRecord.isLoading || addDomainAlias.isLoading)
-        );
+        return addDNSRecord.isLoading || addDomainAlias.isLoading;
     }, [
         addDNSRecord.isLoading,
         addDomainAlias.isLoading,
-        createCompany.isLoading,
-        isDomainStatusVisible
+        createCompany.isLoading
     ]);
 
     const updateForm = (modifiedForm: Partial<CompanyFormProps>) => {
@@ -152,11 +143,7 @@ export const CompanyAddForm = () => {
             },
             {
                 onSettled: () => {
-                    if (showDNSStatus) {
-                        setDnsRetryCount(count => count + 1);
-                    } else {
-                        setShowDNSStatus(true);
-                    }
+                    setDnsRetryCount(count => count + 1);
                 }
             }
         );
@@ -170,11 +157,7 @@ export const CompanyAddForm = () => {
             },
             {
                 onSettled: () => {
-                    if (showDomainAliasStatus) {
-                        setDomainAliasRetryCount(count => count + 1);
-                    } else {
-                        setShowDomainAliasStatus(true);
-                    }
+                    setDomainAliasRetryCount(count => count + 1);
                 }
             }
         );
