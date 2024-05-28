@@ -9,7 +9,7 @@ interface CompanyAddStatusViewProps {
     isDomainAddLoading: boolean;
     isDomainAddSuccessful: boolean;
     isDomainRetryVisible: boolean;
-    onDNDRetryClick: VoidFunction;
+    onDNSRetryClick: VoidFunction;
     onDomainRetryClick: VoidFunction;
 }
 
@@ -21,7 +21,7 @@ export const CompanyAddStatusView = ({
     isDomainAddLoading,
     isDomainAddSuccessful,
     isDomainRetryVisible,
-    onDNDRetryClick,
+    onDNSRetryClick,
     onDomainRetryClick
 }: CompanyAddStatusViewProps) => {
     return (
@@ -32,7 +32,7 @@ export const CompanyAddStatusView = ({
                 isRetrying={isDNSLoading}
                 isSuccessful={isDNSSuccessful}
                 isRetryBtnVisible={isDNSRetryVisible}
-                onRetryClick={onDNDRetryClick}
+                onRetryClick={onDNSRetryClick}
             />
             <CompanyDomainStatus
                 isDefaultView={isDefaultView}

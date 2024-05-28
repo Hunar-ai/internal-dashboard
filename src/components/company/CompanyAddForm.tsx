@@ -379,7 +379,7 @@ export const CompanyAddForm = () => {
                     isDNSLoading={addDNSRecord.isLoading}
                     isDNSSuccessful={addDNSRecord.isSuccess}
                     isDNSRetryVisible={dnsRetryCount < DOMAIN_RETRY_LIMIT}
-                    onDNDRetryClick={createDNSRecord}
+                    onDNSRetryClick={createDNSRecord}
                     isDomainAddLoading={addDomainAlias.isLoading}
                     isDomainAddSuccessful={addDomainAlias.isSuccess}
                     isDomainRetryVisible={
