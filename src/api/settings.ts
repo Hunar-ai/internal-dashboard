@@ -8,6 +8,14 @@ export const company = ApiClient({
     url: `/v1/company/{companyId}`
 });
 
+export const companyDNS = ApiClient({
+    url: `/v1/company/{companyId}/dns`
+});
+
+export const companyDomainAlias = ApiClient({
+    url: `/v1/company/{companyId}/domain-alias`
+});
+
 export const inputFields = ApiClient({
     url: `/v1/input-fields`
 });

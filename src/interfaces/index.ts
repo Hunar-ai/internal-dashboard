@@ -5,6 +5,12 @@ export {
     type MappedField
 } from './formFields.interface';
 
+export type {
+    ValidationMapProps,
+    FormErrorProps,
+    ErrorStateProps
+} from './form.interface';
+
 export { type Error, type ApiError } from './error.interface';
 
 export {
@@ -41,3 +47,11 @@ export {
 } from './table.interface';
 
 export { type QueryResult } from './react-query.interface';
+
+export type {
+    CompanyFormProps,
+    CompanyDetailsFormProps,
+    CompanySettingsProps,
+    LeadSettingsProps,
+    LmsSettingsProps
+} from './company.interface';

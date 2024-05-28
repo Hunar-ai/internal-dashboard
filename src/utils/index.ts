@@ -6,3 +6,4 @@ export * from './StringUtils';
 export * from './NumberUtils';
 export { sessionStorage } from './SessionStorage';
 export * from './ErrorTracker';
+export * from './ErrorMsgUtil';

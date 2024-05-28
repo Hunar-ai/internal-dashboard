@@ -13,6 +13,11 @@ export const useNavbarMenuConfig = () => {
                 id: 'client-reset-password',
                 title: 'Reset Password',
                 link: '/client-reset-password'
+            },
+            {
+                id: 'company',
+                title: 'Create Company',
+                link: '/company?add'
             }
         ];
     }, []);

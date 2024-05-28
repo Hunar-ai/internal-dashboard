@@ -15,3 +15,11 @@ export interface AuditMetadata {
 export interface ValidationMapProps {
     [key: string]: (_: string) => boolean;
 }
+
+export type FormErrorProps<TForm extends Record<string, any>> = {
+    [key in keyof TForm]: boolean;
+};
+
+export interface ErrorStateProps {
+    [key: string]: boolean;
+}
