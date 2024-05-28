@@ -242,9 +242,9 @@ export const CompanyAddForm = () => {
 
     return (
         <Grid
-            templateColumns={{ base: 'auto', sm: '8fr 4fr' }}
+            templateColumns={{ base: 'auto', md: '8fr 4fr' }}
             height={`calc(100vh - ${NAVBAR_HEIGHT})`}
-            overflow={{ base: 'auto', sm: 'unset' }}
+            overflow={{ base: 'auto', md: 'unset' }}
         >
             <LeftPanel>
                 <FormWrapper

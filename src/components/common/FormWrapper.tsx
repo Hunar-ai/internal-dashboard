@@ -2,7 +2,7 @@ import { Box, Button, GridItem, SimpleGrid, Text } from '@chakra-ui/react';
 
 interface FormWrapperProps {
     formTitle: string;
-    children: any;
+    children: React.ReactNode;
     isFormDisabled: boolean;
     isLoading: boolean;
     onSubmit: VoidFunction;
@@ -14,7 +14,7 @@ export const FormWrapper = ({
     isFormDisabled,
     isLoading,
     onSubmit
-}: any) => {
+}: FormWrapperProps) => {
     return (
         <>
             <Box
@@ -42,8 +42,8 @@ export const FormWrapper = ({
                     </GridItem>
                     {children}
                 </SimpleGrid>
-                <SimpleGrid columns={{ base: 1, sm: 2 }} spacingX={6} mt={8}>
-                    <GridItem colStart={{ base: 1, sm: 2 }} textAlign="end">
+                <SimpleGrid columns={{ base: 1, md: 2 }} spacingX={6} mt={8}>
+                    <GridItem colStart={{ base: 1, md: 2 }} textAlign="end">
                         <Button
                             colorScheme="blue"
                             onClick={onSubmit}
