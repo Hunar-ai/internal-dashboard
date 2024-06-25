@@ -30,7 +30,7 @@ import {
     Switch,
     Textarea
 } from '@chakra-ui/react';
-import { HelperText } from '@components/common';
+import { AppLoader, HelperText } from '@components/common';
 import { LeftPanel } from '@components/common/LeftPanel';
 import { RightPanel } from '@components/common/RightPanel';
 
@@ -247,13 +247,18 @@ export const CompanyAddForm = () => {
             overflow={{ base: 'auto', md: 'unset' }}
         >
             <LeftPanel>
+                {isCreateBtnLoading && <AppLoader />}
                 <FormWrapper
                     formTitle="Create Company"
                     isFormDisabled={createCompany.isSuccess}
                     isLoading={isCreateBtnLoading}
                     onSubmit={onCreateClick}
                 >
-                    <FormControl isInvalid={formErrorState.name} isRequired>
+                    <FormControl
+                        isInvalid={formErrorState.name}
+                        isRequired
+                        isDisabled={createCompany.isSuccess}
+                    >
                         <FormLabel>Company Name</FormLabel>
                         <Input
                             placeholder="Enter Company Name"
@@ -269,6 +274,7 @@ export const CompanyAddForm = () => {
                     <FormControl
                         isInvalid={formErrorState.companyId}
                         isRequired
+                        isDisabled={createCompany.isSuccess}
                     >
                         <FormLabel>Company ID</FormLabel>
                         <Input
@@ -283,7 +289,11 @@ export const CompanyAddForm = () => {
                             msg="Please keep it short (upto 15 characters)"
                         />
                     </FormControl>
-                    <FormControl isInvalid={formErrorState.email} isRequired>
+                    <FormControl
+                        isInvalid={formErrorState.email}
+                        isRequired
+                        isDisabled={createCompany.isSuccess}
+                    >
                         <FormLabel>Email ID of Company POC</FormLabel>
                         <Input
                             placeholder="Enter Email ID"
@@ -299,6 +309,7 @@ export const CompanyAddForm = () => {
                     <FormControl
                         isInvalid={formErrorState.mobileNumber}
                         isRequired
+                        isDisabled={createCompany.isSuccess}
                     >
                         <FormLabel>Phone Number of Company POC</FormLabel>
                         <Input
@@ -315,6 +326,7 @@ export const CompanyAddForm = () => {
                     <FormControl
                         isInvalid={formErrorState.rawAddress}
                         isRequired
+                        isDisabled={createCompany.isSuccess}
                     >
                         <FormLabel>Address</FormLabel>
                         <Textarea
@@ -331,6 +343,7 @@ export const CompanyAddForm = () => {
                     <FormControl
                         isInvalid={formErrorState.description}
                         isRequired
+                        isDisabled={createCompany.isSuccess}
                     >
                         <FormLabel>Description</FormLabel>
                         <Textarea
@@ -348,6 +361,7 @@ export const CompanyAddForm = () => {
                         display="flex"
                         justifyContent="space-between"
                         alignItems="center"
+                        isDisabled={createCompany.isSuccess}
                     >
                         <FormLabel>Allow Messaging</FormLabel>
                         <Switch
