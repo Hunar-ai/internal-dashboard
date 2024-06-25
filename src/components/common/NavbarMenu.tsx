@@ -1,17 +1,28 @@
 import { Link as RouterLink } from 'react-router-dom';
 
-import { Button, Flex } from '@chakra-ui/react';
+import {
+    Button,
+    Flex,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList
+} from '@chakra-ui/react';
+
+import type { MenuProps } from 'interfaces';
 
 interface NavbarMenuProps {
     isActive: boolean;
-    menuLink: string;
+    menuLink?: string;
     menuTitle: string;
+    subMenus?: MenuProps['subMenus'];
 }
 
 export const NavbarMenu = ({
     isActive,
     menuLink,
-    menuTitle
+    menuTitle,
+    subMenus
 }: NavbarMenuProps) => {
     return (
         <Flex
@@ -35,20 +46,41 @@ export const NavbarMenu = ({
                     : {}
             }}
         >
-            <Button
-                as={RouterLink}
-                to={menuLink}
-                fontSize={14}
-                variant="ghost"
-                color={isActive ? 'blue.600' : undefined}
-                sx={{
-                    '&:hover': {
-                        color: 'inherit'
-                    }
-                }}
-            >
-                {menuTitle}
-            </Button>
+            {subMenus ? (
+                <Menu gutter={3} autoSelect={false}>
+                    <MenuButton
+                        as={Button}
+                        fontSize={14}
+                        variant="ghost"
+                        color={isActive ? 'blue.600' : undefined}
+                        sx={{ '&:hover': { color: 'inherit' } }}
+                    >
+                        {menuTitle}
+                    </MenuButton>
+                    <MenuList>
+                        {subMenus.map(subMenu => (
+                            <MenuItem
+                                key={subMenu.id}
+                                as={RouterLink}
+                                to={subMenu.link}
+                            >
+                                {subMenu.title}
+                            </MenuItem>
+                        ))}
+                    </MenuList>
+                </Menu>
+            ) : (
+                <Button
+                    as={RouterLink}
+                    to={menuLink}
+                    fontSize={14}
+                    variant="ghost"
+                    color={isActive ? 'blue.600' : undefined}
+                    sx={{ '&:hover': { color: 'inherit' } }}
+                >
+                    {menuTitle}
+                </Button>
+            )}
         </Flex>
     );
 };
