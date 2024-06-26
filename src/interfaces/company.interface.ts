@@ -12,9 +12,15 @@ export interface LeadSettingsProps {
     singleWorkerRequiredFields: string[];
 }
 
+export interface OnboardingSettingsProps {
+    enableWorkerSourceAffinity: boolean;
+    workerSourceAffinityPeriod?: number;
+}
+
 export interface CompanySettingsProps {
     lmsSettings: LmsSettingsProps;
     workerSettings: LeadSettingsProps;
+    onboardingSettings: OnboardingSettingsProps;
 }
 
 export interface CompanyFormProps {

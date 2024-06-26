@@ -11,13 +11,16 @@ import { ErrorMsg, RegExUtil } from 'utils';
 import type {
     CompanyDetailsFormProps,
     CompanyFormProps,
+    CompanySettingsProps,
     FormErrorProps,
+    OnboardingSettingsProps,
     ValidationMapProps
 } from 'interfaces';
 import {
     DEFAULT_COMPANY_ADDRESS,
     DEFAULT_COMPANY_SETTINGS,
     DEFAULT_LMS_SETTINGS,
+    DEFAULT_ONBOARDING_SETTINGS,
     NAVBAR_HEIGHT
 } from 'Constants';
 import { FormWrapper } from '@components/common/FormWrapper';
@@ -52,6 +55,12 @@ const requiredFields: (keyof CompanyFormProps)[] = [
     'mobileNumber'
 ];
 
+const settingsValidationMap: ValidationMapProps = {
+    workerSourceAffinityPeriod: (period: string) => RegExUtil.isNumber(period)
+};
+
+const settingsRequiredFields = ['workerSourceAffinityPeriod'];
+
 const formErrorStateInitialValues: FormErrorProps<CompanyDetailsFormProps> = {
     companyId: false,
     name: false,
@@ -59,6 +68,10 @@ const formErrorStateInitialValues: FormErrorProps<CompanyDetailsFormProps> = {
     rawAddress: false,
     email: false,
     mobileNumber: false
+};
+
+const settingsFormErrorStateInitialValues = {
+    workerSourceAffinityPeriod: false
 };
 
 interface UpdateFieldErrorStateProps {
@@ -75,6 +88,10 @@ export const CompanyAddForm = () => {
     const { showError } = useToast();
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
+    const {
+        hasFormFieldError: hasSettingsFormFieldError,
+        getFormErrorData: getSettingsFormErrorData
+    } = useValidationHelper(settingsValidationMap);
     const { generateRandomGSTIN } = useCompanyHelper();
 
     const companyFormInitialState = React.useMemo(
@@ -98,6 +115,9 @@ export const CompanyAddForm = () => {
     });
     const [formErrorState, setFormErrorState] = React.useState({
         ...formErrorStateInitialValues
+    });
+    const [settingsFormErrorState, setSettingsFormErrorState] = React.useState({
+        ...settingsFormErrorStateInitialValues
     });
     const [dnsRetryCount, setDnsRetryCount] = React.useState(-1);
     const [domainAliasRetryCount, setDomainAliasRetryCount] =
@@ -200,7 +220,23 @@ export const CompanyAddForm = () => {
             ...modifiedErrorState
         }));
 
-        if (hasFormError) {
+        const {
+            errorState: modifiedSettingsErrorState,
+            hasFormError: hasSettingsFormError
+        } = getSettingsFormErrorData({
+            form: form.settings.onboardingSettings,
+            requiredFields: form.settings.onboardingSettings
+                .enableWorkerSourceAffinity
+                ? settingsRequiredFields
+                : []
+        });
+
+        setSettingsFormErrorState(prevErrorState => ({
+            ...prevErrorState,
+            ...modifiedSettingsErrorState
+        }));
+
+        if (hasFormError || hasSettingsFormError) {
             return;
         }
 
@@ -238,6 +274,51 @@ export const CompanyAddForm = () => {
         updateForm({
             settings: { ...form.settings, lmsSettings: modifiedLmsSettings }
         });
+    };
+
+    const onCoolOffPeriodToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const isEnabled = e.target.checked;
+        const modifiedOnboardingSettings: OnboardingSettingsProps = isEnabled
+            ? {
+                  enableWorkerSourceAffinity: true,
+                  workerSourceAffinityPeriod: 30
+              }
+            : { ...DEFAULT_ONBOARDING_SETTINGS };
+        updateForm({
+            settings: {
+                ...form.settings,
+                onboardingSettings: modifiedOnboardingSettings
+            }
+        });
+        setSettingsFormErrorState(prevErrorState => ({
+            ...prevErrorState,
+            workerSourceAffinityPeriod: false
+        }));
+    };
+
+    const onCoolOffDurationChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        const fieldName = e.target.name as keyof OnboardingSettingsProps;
+        const fieldValue = e.target.value;
+
+        const modifiedSettings: CompanySettingsProps = {
+            ...form.settings,
+            onboardingSettings: {
+                ...form.settings.onboardingSettings,
+                workerSourceAffinityPeriod: parseInt(fieldValue)
+            }
+        };
+
+        updateForm({ settings: { ...modifiedSettings } });
+        setSettingsFormErrorState(prevErrorState => ({
+            ...prevErrorState,
+            [fieldName]: hasSettingsFormFieldError({
+                fieldName,
+                fieldValue,
+                isRequired: true
+            })
+        }));
     };
 
     return (
@@ -355,6 +436,54 @@ export const CompanyAddForm = () => {
                         <HelperText
                             hasError={formErrorState.description}
                             errorMsg={ErrorMsg.characterLength()}
+                        />
+                    </FormControl>
+                    <FormControl
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        isDisabled={createCompany.isSuccess}
+                    >
+                        <FormLabel>Enable Cool-off Period</FormLabel>
+                        <Switch
+                            name="enableWorkerSourceAffinity"
+                            isChecked={
+                                form.settings.onboardingSettings
+                                    .enableWorkerSourceAffinity
+                            }
+                            onChange={onCoolOffPeriodToggle}
+                        />
+                    </FormControl>
+                    <FormControl
+                        isInvalid={
+                            settingsFormErrorState.workerSourceAffinityPeriod
+                        }
+                        isRequired={
+                            form.settings.onboardingSettings
+                                .enableWorkerSourceAffinity
+                        }
+                        isDisabled={
+                            createCompany.isSuccess ||
+                            !form.settings.onboardingSettings
+                                .enableWorkerSourceAffinity
+                        }
+                    >
+                        <FormLabel>Cool-off Period Duration</FormLabel>
+                        <Input
+                            placeholder="E.g. 30"
+                            name="workerSourceAffinityPeriod"
+                            value={
+                                form.settings.onboardingSettings
+                                    .workerSourceAffinityPeriod || ''
+                            }
+                            onChange={onCoolOffDurationChange}
+                        />
+                        <HelperText
+                            hasError={
+                                settingsFormErrorState.workerSourceAffinityPeriod
+                            }
+                            errorMsg={ErrorMsg.number()}
+                            msg="Number of days"
                         />
                     </FormControl>
                     <FormControl
