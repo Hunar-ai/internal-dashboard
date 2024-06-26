@@ -24,5 +24,6 @@ export const ErrorMsg = {
     invalid: (label = '') => `Invalid ${label}`,
     date: (format: string) => `Must be a valid date in format ${format}`,
     minDate: (minDate: string) => `Must be a date on or after ${minDate}`,
-    time: (format: string) => `Must be a valid time in format ${format}`
+    time: (format: string) => `Must be a valid time in format ${format}`,
+    hexColor: () => `Must be a valid hex color`
 } as const;

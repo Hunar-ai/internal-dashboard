@@ -17,10 +17,19 @@ export interface OnboardingSettingsProps {
     workerSourceAffinityPeriod?: number;
 }
 
+export interface CareerPageSettingsProps {
+    logo1: string;
+    logo2?: string;
+    bannerImg: string;
+    primaryColor: string;
+    description: string;
+}
+
 export interface CompanySettingsProps {
     lmsSettings: LmsSettingsProps;
     workerSettings: LeadSettingsProps;
     onboardingSettings: OnboardingSettingsProps;
+    careerPageSettings: CareerPageSettingsProps;
 }
 
 export interface CompanyFormProps {

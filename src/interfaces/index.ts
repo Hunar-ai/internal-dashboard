@@ -54,7 +54,8 @@ export type {
     CompanySettingsProps,
     LeadSettingsProps,
     LmsSettingsProps,
-    OnboardingSettingsProps
+    OnboardingSettingsProps,
+    CareerPageSettingsProps
 } from './company.interface';
 
 export type { MenuProps } from './menu.interface';
