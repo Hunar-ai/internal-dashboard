@@ -298,11 +298,8 @@ export const CompanyAddForm = () => {
     const onCoolOffPeriodToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
         const isEnabled = e.target.checked;
         const modifiedOnboardingSettings: OnboardingSettingsProps = isEnabled
-            ? {
-                  enableWorkerSourceAffinity: true,
-                  workerSourceAffinityPeriod: 30
-              }
-            : { ...DEFAULT_ONBOARDING_SETTINGS };
+            ? DEFAULT_ONBOARDING_SETTINGS
+            : { enableWorkerSourceAffinity: false };
         updateForm({
             settings: {
                 ...form.settings,
@@ -357,15 +354,11 @@ export const CompanyAddForm = () => {
                 {isCreateBtnLoading && <AppLoader />}
                 <FormWrapper
                     formTitle="Create Company"
-                    isFormDisabled={createCompany.isSuccess}
+                    isFormDisabled={createCompany.isSuccess && !isDefaultView}
                     isLoading={isCreateBtnLoading}
                     onSubmit={onCreateClick}
                 >
-                    <FormControl
-                        isInvalid={formErrorState.name}
-                        isRequired
-                        isDisabled={createCompany.isSuccess}
-                    >
+                    <FormControl isInvalid={formErrorState.name} isRequired>
                         <FormLabel>Company Name</FormLabel>
                         <Input
                             placeholder="Enter Company Name"
@@ -381,7 +374,6 @@ export const CompanyAddForm = () => {
                     <FormControl
                         isInvalid={formErrorState.companyId}
                         isRequired
-                        isDisabled={createCompany.isSuccess}
                     >
                         <FormLabel>Company ID</FormLabel>
                         <Input
@@ -396,11 +388,7 @@ export const CompanyAddForm = () => {
                             msg="Please keep it short (upto 15 characters)"
                         />
                     </FormControl>
-                    <FormControl
-                        isInvalid={formErrorState.email}
-                        isRequired
-                        isDisabled={createCompany.isSuccess}
-                    >
+                    <FormControl isInvalid={formErrorState.email} isRequired>
                         <FormLabel>Email ID of Company POC</FormLabel>
                         <Input
                             placeholder="Enter Email ID"
@@ -416,7 +404,6 @@ export const CompanyAddForm = () => {
                     <FormControl
                         isInvalid={formErrorState.mobileNumber}
                         isRequired
-                        isDisabled={createCompany.isSuccess}
                     >
                         <FormLabel>Phone Number of Company POC</FormLabel>
                         <Input
@@ -433,7 +420,6 @@ export const CompanyAddForm = () => {
                     <FormControl
                         isInvalid={formErrorState.rawAddress}
                         isRequired
-                        isDisabled={createCompany.isSuccess}
                     >
                         <FormLabel>Address</FormLabel>
                         <Textarea
@@ -450,7 +436,6 @@ export const CompanyAddForm = () => {
                     <FormControl
                         isInvalid={formErrorState.description}
                         isRequired
-                        isDisabled={createCompany.isSuccess}
                     >
                         <FormLabel>Description</FormLabel>
                         <Textarea
@@ -468,7 +453,6 @@ export const CompanyAddForm = () => {
                         display="flex"
                         justifyContent="space-between"
                         alignItems="center"
-                        isDisabled={createCompany.isSuccess}
                     >
                         <FormLabel>Enable Cool-off Period</FormLabel>
                         <Switch
@@ -516,7 +500,6 @@ export const CompanyAddForm = () => {
                         display="flex"
                         justifyContent="space-between"
                         alignItems="center"
-                        isDisabled={createCompany.isSuccess}
                     >
                         <FormLabel>Allow Messaging</FormLabel>
                         <Switch
