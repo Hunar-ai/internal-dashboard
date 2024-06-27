@@ -19,6 +19,7 @@ import {
     RightPanel,
     UploadButton
 } from '@components/common';
+import { CareerPagePreview } from './CareerPagePreview';
 
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useUploadCareerPageAsset } from 'hooks/apiHooks/careerPage/useUploadCareerPageAsset';
@@ -106,6 +107,14 @@ export const CompanyCareerPageForm = () => {
     const [formErrorValue, setFormErrorValue] = React.useState({
         ...formErrorValueInitialState
     });
+
+    const companyName = React.useMemo(
+        () =>
+            companiesResponse?.data.find(
+                company => company.companyId === form.companyId
+            )?.name || '',
+        [companiesResponse?.data, form.companyId]
+    );
 
     const updateForm = (modifiedForm: Partial<CareerPageFormProps>) => {
         setForm(oldForm => ({ ...oldForm, ...modifiedForm }));
@@ -441,7 +450,16 @@ export const CompanyCareerPageForm = () => {
                     </FormControl>
                 </FormWrapper>
             </LeftPanel>
-            <RightPanel>Preview Here</RightPanel>
+            <RightPanel>
+                <CareerPagePreview
+                    logo1={form.logo1}
+                    logo2={form.logo2 || ''}
+                    bannerImg={form.bannerImg}
+                    primaryColor={form.primaryColor}
+                    description={form.description}
+                    companyName={companyName}
+                />
+            </RightPanel>
         </Grid>
     );
 };
