@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 
 import {
+    AppLoader,
     FormWrapper,
     HelperText,
     LeftPanel,
@@ -60,7 +61,8 @@ const formErrorValueInitialState: Record<keyof CareerPageFormProps, string> = {
 
 export const CompanyCareerPageForm = () => {
     const uploadCareerPageAsset = useUploadCareerPageAsset();
-    const { data: companiesResponse } = useGetCompanies();
+    const { data: companiesResponse, isLoading: isCompaniesLoading } =
+        useGetCompanies();
 
     const [companyId, setCompanyId] = React.useState('');
     const [form, setForm] = React.useState({ ...formInitialState });
@@ -130,6 +132,9 @@ export const CompanyCareerPageForm = () => {
             height={`calc(100vh - ${NAVBAR_HEIGHT})`}
             overflow={{ base: 'auto', md: 'unset' }}
         >
+            {(isCompaniesLoading || uploadCareerPageAsset.isLoading) && (
+                <AppLoader />
+            )}
             <LeftPanel>
                 <FormWrapper
                     formTitle="Career Page Settings"
@@ -156,6 +161,7 @@ export const CompanyCareerPageForm = () => {
                     <FormControl
                         isInvalid={formErrorState.primaryColor}
                         isRequired
+                        isDisabled={!companyId}
                     >
                         <FormLabel>Primary Colour</FormLabel>
                         {/* TODO: Add Input left addon of # */}
@@ -174,6 +180,7 @@ export const CompanyCareerPageForm = () => {
                         <FormControl
                             isInvalid={formErrorState.description}
                             isRequired
+                            isDisabled={!companyId}
                         >
                             <FormLabel>Description</FormLabel>
                             <Textarea
@@ -193,13 +200,15 @@ export const CompanyCareerPageForm = () => {
                         justifyContent="space-between"
                         alignItems="center"
                         isRequired
+                        isDisabled={!companyId}
                     >
-                        <FormLabel>Logo 1</FormLabel>
+                        <FormLabel flexGrow={1}>Logo 1</FormLabel>
                         <UploadButton
                             title="UPLOAD"
                             name="logo1"
                             value={form.logo1}
                             acceptFileType={allowedImageExtensions}
+                            isDisabled={!companyId}
                             onChange={onFileUpload}
                             onRemove={onFileRemove}
                         />
@@ -212,13 +221,15 @@ export const CompanyCareerPageForm = () => {
                         display="flex"
                         justifyContent="space-between"
                         alignItems="center"
+                        isDisabled={!companyId}
                     >
-                        <FormLabel>Logo 2</FormLabel>
+                        <FormLabel flexGrow={1}>Logo 2</FormLabel>
                         <UploadButton
                             title="UPLOAD"
                             name="logo2"
                             value={form.logo2 ?? ''}
                             acceptFileType={allowedImageExtensions}
+                            isDisabled={!companyId}
                             onChange={onFileUpload}
                             onRemove={onFileRemove}
                         />
@@ -232,13 +243,15 @@ export const CompanyCareerPageForm = () => {
                         justifyContent="space-between"
                         alignItems="center"
                         isRequired
+                        isDisabled={!companyId}
                     >
-                        <FormLabel>Banner Image</FormLabel>
+                        <FormLabel flexGrow={1}>Banner Image</FormLabel>
                         <UploadButton
                             title="UPLOAD"
                             name="bannerImg"
                             value={form.bannerImg}
                             acceptFileType={allowedImageExtensions}
+                            isDisabled={!companyId}
                             onChange={onFileUpload}
                             onRemove={onFileRemove}
                         />

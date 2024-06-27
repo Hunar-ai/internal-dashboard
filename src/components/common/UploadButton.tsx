@@ -9,9 +9,8 @@ interface UploadButtonProps {
     value: string;
     title: string;
     acceptFileType: Array<ALLOWED_EXTENSION>;
-    size?: string;
+    size?: FIELD_SIZE;
     isLoading?: boolean;
-    isRequired?: boolean;
     isDisabled?: boolean;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onRemove: (_: string) => void;
@@ -24,18 +23,28 @@ export const UploadButton = ({
     acceptFileType,
     size = FIELD_SIZE.sm,
     isLoading = false,
-    isRequired = false,
     isDisabled = false,
     onChange,
     onRemove
 }: UploadButtonProps) => {
-    // TODO: Handle isRequired logic
-    // TODO: handle filename truncation logic
+    const getFormattedFilename = (filename: string, maxLength: number) => {
+        if (filename.length <= maxLength) return filename;
+
+        const extension = filename.slice(
+            filename.lastIndexOf('.'),
+            filename.length
+        );
+        const shortenedFilename = filename.slice(
+            filename.lastIndexOf('/') + 1,
+            filename.lastIndexOf('/') + maxLength - extension.length - 1
+        );
+        const formattedFilename = `${shortenedFilename}...${extension}`;
+        return formattedFilename;
+    };
 
     return value ? (
         <UploadInputPreview
-            inputValue={value}
-            isRequired={isRequired}
+            inputValue={getFormattedFilename(value, 15)}
             onRemove={() => onRemove(name)}
         />
     ) : (

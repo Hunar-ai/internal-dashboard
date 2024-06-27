@@ -3,13 +3,11 @@ import { CloseIcon } from '@chakra-ui/icons';
 
 interface UploadInputPreviewProps {
     inputValue: string;
-    isRequired: boolean;
     onRemove: VoidFunction;
 }
 
 export const UploadInputPreview = ({
     inputValue,
-    // isRequired,
     onRemove
 }: UploadInputPreviewProps) => {
     return (
