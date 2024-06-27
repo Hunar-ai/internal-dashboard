@@ -6,7 +6,8 @@ import {
     Menu,
     MenuButton,
     MenuItem,
-    MenuList
+    MenuList,
+    Portal
 } from '@chakra-ui/react';
 
 import type { MenuProps } from 'interfaces';
@@ -57,17 +58,19 @@ export const NavbarMenu = ({
                     >
                         {menuTitle}
                     </MenuButton>
-                    <MenuList>
-                        {subMenus.map(subMenu => (
-                            <MenuItem
-                                key={subMenu.id}
-                                as={RouterLink}
-                                to={subMenu.link}
-                            >
-                                {subMenu.title}
-                            </MenuItem>
-                        ))}
-                    </MenuList>
+                    <Portal>
+                        <MenuList>
+                            {subMenus.map(subMenu => (
+                                <MenuItem
+                                    key={subMenu.id}
+                                    as={RouterLink}
+                                    to={subMenu.link}
+                                >
+                                    {subMenu.title}
+                                </MenuItem>
+                            ))}
+                        </MenuList>
+                    </Portal>
                 </Menu>
             ) : (
                 <Button
