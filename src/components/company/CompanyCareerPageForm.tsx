@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+    Flex,
     FormControl,
     FormLabel,
     Grid,
@@ -21,18 +22,37 @@ import {
 
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useUploadCareerPageAsset } from 'hooks/apiHooks/careerPage/useUploadCareerPageAsset';
+import { useValidationHelper } from 'hooks';
 
 import type { CareerPageSettingsProps, FormErrorProps } from 'interfaces';
 import { ALLOWED_EXTENSION } from 'Enum';
-import { ErrorMsg } from 'utils';
+import { ErrorMsg, RegExUtil } from 'utils';
 import { NAVBAR_HEIGHT } from 'Constants';
 
 type CareerPageFormProps = CareerPageSettingsProps;
+
+interface UpdateFieldErrorStateProps {
+    fieldName: keyof CareerPageFormProps;
+    fieldValue: string;
+}
 
 const allowedImageExtensions = [
     ALLOWED_EXTENSION.PNG,
     ALLOWED_EXTENSION.JPG,
     ALLOWED_EXTENSION.JPEG
+];
+
+const validationMap = {
+    primaryColor: (primaryColor: string) => RegExUtil.isHexColor(primaryColor),
+    description: (description: string) =>
+        RegExUtil.isDescription(description, 300)
+};
+
+const requiredFields: (keyof CareerPageFormProps)[] = [
+    'primaryColor',
+    'description',
+    'logo1',
+    'bannerImg'
 ];
 
 const formInitialState: CareerPageFormProps = {
@@ -61,11 +81,14 @@ const formErrorValueInitialState: Record<keyof CareerPageFormProps, string> = {
 
 export const CompanyCareerPageForm = () => {
     const uploadCareerPageAsset = useUploadCareerPageAsset();
+    const { hasFormFieldError } = useValidationHelper(validationMap);
     const { data: companiesResponse, isLoading: isCompaniesLoading } =
         useGetCompanies();
 
     const [companyId, setCompanyId] = React.useState('');
-    const [form, setForm] = React.useState({ ...formInitialState });
+    const [form, setForm] = React.useState<CareerPageFormProps>({
+        ...formInitialState
+    });
     const [formErrorState, setFormErrorState] = React.useState({
         ...formErrorStateInitialValues
     });
@@ -77,13 +100,28 @@ export const CompanyCareerPageForm = () => {
         setForm(oldForm => ({ ...oldForm, ...modifiedForm }));
     };
 
+    const updateFieldErrorState = ({
+        fieldName,
+        fieldValue
+    }: UpdateFieldErrorStateProps) => {
+        setFormErrorState(prevErrorState => ({
+            ...prevErrorState,
+            [fieldName]: hasFormFieldError({
+                fieldName,
+                fieldValue,
+                isRequired: requiredFields.indexOf(fieldName) > -1
+            })
+        }));
+    };
+
     const onFormFieldChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-        const fieldName = e.target.name;
+        const fieldName = e.target.name as keyof CareerPageFormProps;
         const fieldValue = e.target.value;
 
         updateForm({ [fieldName]: fieldValue });
+        updateFieldErrorState({ fieldName, fieldValue });
     };
 
     const uploadFile = (fieldName: keyof CareerPageFormProps, file: File) => {
@@ -95,6 +133,11 @@ export const CompanyCareerPageForm = () => {
             {
                 onSuccess: ({ assetUrl }) => {
                     updateForm({ [fieldName]: assetUrl });
+                    updateFieldErrorState({ fieldName, fieldValue: assetUrl });
+                    setFormErrorValue(prevErrorValue => ({
+                        ...prevErrorValue,
+                        [fieldName]: ''
+                    }));
                 },
                 onError: ({ errors }) => {
                     setFormErrorState(prevErrorState => ({
@@ -115,7 +158,10 @@ export const CompanyCareerPageForm = () => {
         const file = event.target.files?.[0];
 
         if (!file) {
-            // TODO: show error here
+            setFormErrorValue(prevErrorValue => ({
+                ...prevErrorValue,
+                [fieldName]: 'File not found. Please upload again'
+            }));
             return;
         }
 
@@ -124,6 +170,10 @@ export const CompanyCareerPageForm = () => {
 
     const onFileRemove = (fieldName: string) => {
         updateForm({ [fieldName]: '' });
+        updateFieldErrorState({
+            fieldName: fieldName as keyof CareerPageFormProps,
+            fieldValue: ''
+        });
     };
 
     return (
@@ -164,7 +214,6 @@ export const CompanyCareerPageForm = () => {
                         isDisabled={!companyId}
                     >
                         <FormLabel>Primary Colour</FormLabel>
-                        {/* TODO: Add Input left addon of # */}
                         <Input
                             placeholder="Enter Primary Colour"
                             name="primaryColor"
@@ -191,73 +240,108 @@ export const CompanyCareerPageForm = () => {
                             />
                             <HelperText
                                 hasError={formErrorState.description}
-                                errorMsg={ErrorMsg.characterLength()}
+                                errorMsg={ErrorMsg.characterLength({
+                                    max: 300
+                                })}
                             />
                         </FormControl>
                     </GridItem>
                     <FormControl
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
                         isRequired
+                        isInvalid={
+                            formErrorState.logo1 || !!formErrorValue.logo1
+                        }
                         isDisabled={!companyId}
                     >
-                        <FormLabel flexGrow={1}>Logo 1</FormLabel>
-                        <UploadButton
-                            title="UPLOAD"
-                            name="logo1"
-                            value={form.logo1}
-                            acceptFileType={allowedImageExtensions}
-                            isDisabled={!companyId}
-                            onChange={onFileUpload}
-                            onRemove={onFileRemove}
-                        />
+                        <Flex
+                            justifyContent="space-between"
+                            alignItems="center"
+                        >
+                            <FormLabel flexGrow={1} sx={{ mb: 0 }}>
+                                Logo 1
+                            </FormLabel>
+                            <UploadButton
+                                title="UPLOAD"
+                                name="logo1"
+                                value={form.logo1}
+                                acceptFileType={allowedImageExtensions}
+                                isDisabled={!companyId}
+                                onChange={onFileUpload}
+                                onRemove={onFileRemove}
+                            />
+                        </Flex>
                         <HelperText
-                            hasError={formErrorState.logo1}
-                            errorMsg={formErrorValue.logo1}
+                            hasError={
+                                formErrorState.logo1 || !!formErrorValue.logo1
+                            }
+                            errorMsg={
+                                formErrorValue.logo1 || ErrorMsg.required()
+                            }
                         />
                     </FormControl>
                     <FormControl
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
+                        isInvalid={
+                            formErrorState.logo2 || !!formErrorValue.logo2
+                        }
                         isDisabled={!companyId}
                     >
-                        <FormLabel flexGrow={1}>Logo 2</FormLabel>
-                        <UploadButton
-                            title="UPLOAD"
-                            name="logo2"
-                            value={form.logo2 ?? ''}
-                            acceptFileType={allowedImageExtensions}
-                            isDisabled={!companyId}
-                            onChange={onFileUpload}
-                            onRemove={onFileRemove}
-                        />
+                        <Flex
+                            justifyContent="space-between"
+                            alignItems="center"
+                        >
+                            <FormLabel flexGrow={1} sx={{ mb: 0 }}>
+                                Logo 2
+                            </FormLabel>
+                            <UploadButton
+                                title="UPLOAD"
+                                name="logo2"
+                                value={form.logo2 ?? ''}
+                                acceptFileType={allowedImageExtensions}
+                                isDisabled={!companyId}
+                                onChange={onFileUpload}
+                                onRemove={onFileRemove}
+                            />
+                        </Flex>
                         <HelperText
-                            hasError={formErrorState.logo2}
+                            hasError={
+                                formErrorState.logo2 || !!formErrorValue.logo2
+                            }
                             errorMsg={formErrorValue.logo2}
                         />
                     </FormControl>
                     <FormControl
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
                         isRequired
+                        isInvalid={
+                            formErrorState.bannerImg ||
+                            !!formErrorValue.bannerImg
+                        }
                         isDisabled={!companyId}
                     >
-                        <FormLabel flexGrow={1}>Banner Image</FormLabel>
-                        <UploadButton
-                            title="UPLOAD"
-                            name="bannerImg"
-                            value={form.bannerImg}
-                            acceptFileType={allowedImageExtensions}
-                            isDisabled={!companyId}
-                            onChange={onFileUpload}
-                            onRemove={onFileRemove}
-                        />
+                        <Flex
+                            justifyContent="space-between"
+                            alignItems="center"
+                        >
+                            <FormLabel flexGrow={1} sx={{ mb: 0 }}>
+                                Banner Image
+                            </FormLabel>
+                            <UploadButton
+                                title="UPLOAD"
+                                name="bannerImg"
+                                value={form.bannerImg}
+                                acceptFileType={allowedImageExtensions}
+                                isDisabled={!companyId}
+                                onChange={onFileUpload}
+                                onRemove={onFileRemove}
+                            />
+                        </Flex>
                         <HelperText
-                            hasError={formErrorState.bannerImg}
-                            errorMsg={formErrorValue.bannerImg}
+                            hasError={
+                                formErrorState.bannerImg ||
+                                !!formErrorValue.bannerImg
+                            }
+                            errorMsg={
+                                formErrorValue.bannerImg || ErrorMsg.required()
+                            }
                         />
                     </FormControl>
                 </FormWrapper>

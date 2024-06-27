@@ -1,13 +1,16 @@
 import { Flex, IconButton, Text } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
+import { FIELD_SIZE } from 'Enum';
 
 interface UploadInputPreviewProps {
     inputValue: string;
+    size: FIELD_SIZE;
     onRemove: VoidFunction;
 }
 
 export const UploadInputPreview = ({
     inputValue,
+    size,
     onRemove
 }: UploadInputPreviewProps) => {
     return (
@@ -17,7 +20,7 @@ export const UploadInputPreview = ({
             </Text>
             <IconButton
                 onClick={onRemove}
-                size="xs"
+                size={size}
                 aria-label="Remove"
                 variant="ghost"
                 icon={<CloseIcon fontSize="small" />}

@@ -45,6 +45,7 @@ export const UploadButton = ({
     return value ? (
         <UploadInputPreview
             inputValue={getFormattedFilename(value, 15)}
+            size={size}
             onRemove={() => onRemove(name)}
         />
     ) : (
