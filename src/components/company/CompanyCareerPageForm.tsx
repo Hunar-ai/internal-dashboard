@@ -282,7 +282,6 @@ export const CompanyCareerPageForm = () => {
                     <FormControl
                         isRequired
                         isInvalid={formErrorState.companyId}
-                        isDisabled={addCareerPageSettings.isSuccess}
                     >
                         <FormLabel>Company Id</FormLabel>
                         <Select
@@ -309,9 +308,7 @@ export const CompanyCareerPageForm = () => {
                     <FormControl
                         isInvalid={formErrorState.companyName}
                         isRequired
-                        isDisabled={
-                            !form.companyId || addCareerPageSettings.isSuccess
-                        }
+                        isDisabled={!form.companyId}
                     >
                         <FormLabel>Company Name</FormLabel>
                         <Input
@@ -328,9 +325,7 @@ export const CompanyCareerPageForm = () => {
                     <FormControl
                         isInvalid={formErrorState.primaryColor}
                         isRequired
-                        isDisabled={
-                            !form.companyId || addCareerPageSettings.isSuccess
-                        }
+                        isDisabled={!form.companyId}
                     >
                         <FormLabel>Primary Color</FormLabel>
                         <Input
@@ -347,9 +342,7 @@ export const CompanyCareerPageForm = () => {
                     <FormControl
                         isInvalid={formErrorState.bannerTextColor}
                         isRequired
-                        isDisabled={
-                            !form.companyId || addCareerPageSettings.isSuccess
-                        }
+                        isDisabled={!form.companyId}
                     >
                         <FormLabel>Banner Text Color</FormLabel>
                         <Input
@@ -366,9 +359,7 @@ export const CompanyCareerPageForm = () => {
                     <FormControl
                         isInvalid={formErrorState.learnMoreLink}
                         isRequired
-                        isDisabled={
-                            !form.companyId || addCareerPageSettings.isSuccess
-                        }
+                        isDisabled={!form.companyId}
                     >
                         <FormLabel>Learn More Link</FormLabel>
                         <Input
@@ -385,9 +376,7 @@ export const CompanyCareerPageForm = () => {
                     <FormControl
                         isInvalid={formErrorState.description}
                         isRequired
-                        isDisabled={
-                            !form.companyId || addCareerPageSettings.isSuccess
-                        }
+                        isDisabled={!form.companyId}
                     >
                         <FormLabel>Description</FormLabel>
                         <Textarea
@@ -409,9 +398,7 @@ export const CompanyCareerPageForm = () => {
                             formErrorState.primaryLogo ||
                             !!uploadErrorMap.primaryLogo
                         }
-                        isDisabled={
-                            !form.companyId || addCareerPageSettings.isSuccess
-                        }
+                        isDisabled={!form.companyId}
                     >
                         <Flex
                             justifyContent="space-between"
@@ -446,9 +433,7 @@ export const CompanyCareerPageForm = () => {
                             formErrorState.secondaryLogo ||
                             !!uploadErrorMap.secondaryLogo
                         }
-                        isDisabled={
-                            !form.companyId || addCareerPageSettings.isSuccess
-                        }
+                        isDisabled={!form.companyId}
                     >
                         <Flex
                             justifyContent="space-between"
@@ -484,9 +469,7 @@ export const CompanyCareerPageForm = () => {
                             formErrorState.bannerImg ||
                             !!uploadErrorMap.bannerImg
                         }
-                        isDisabled={
-                            !form.companyId || addCareerPageSettings.isSuccess
-                        }
+                        isDisabled={!form.companyId}
                     >
                         <Flex
                             justifyContent="space-between"
