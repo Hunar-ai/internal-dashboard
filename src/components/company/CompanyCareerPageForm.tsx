@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import {
     Accordion,
@@ -99,6 +100,7 @@ export const CompanyCareerPageForm = () => {
     const { showError, showSuccess } = useToast();
     const uploadCareerPageAsset = useUploadCareerPageAsset();
     const addCareerPageSettings = useAddCareerPageSettings();
+    const [searchParams] = useSearchParams();
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
 
@@ -122,6 +124,13 @@ export const CompanyCareerPageForm = () => {
             )?.name || '',
         [companiesResponse?.data, form.companyId]
     );
+
+    React.useEffect(() => {
+        const companyId = searchParams.get('companyId');
+        if (companyId) {
+            updateForm({ companyId });
+        }
+    }, [searchParams]);
 
     const updateForm = (modifiedForm: Partial<CareerPageFormProps>) => {
         setForm(oldForm => ({ ...oldForm, ...modifiedForm }));
@@ -286,6 +295,8 @@ export const CompanyCareerPageForm = () => {
                         <Select
                             placeholder="Select Company Id"
                             name="companyId"
+                            isDisabled={searchParams.has('companyId')}
+                            value={form.companyId}
                             onChange={onFormFieldChange}
                         >
                             {companiesResponse?.data.map(company => (

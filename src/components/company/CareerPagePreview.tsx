@@ -26,8 +26,8 @@ export const CareerPagePreview = ({
                 height="72px"
                 px={2}
             >
-                <Box as="img" src={logo1} height="40px" alt="Logo 1" />
-                <Box as="img" src={logo2} height="40px" alt="Logo 2" />
+                <Box as="img" src={logo1} height="32px" alt="Logo 1" />
+                <Box as="img" src={logo2} height="32px" alt="Logo 2" />
             </Flex>
             <Flex
                 position="relative"
@@ -35,7 +35,7 @@ export const CareerPagePreview = ({
                 justifyContent="center"
                 alignItems="center"
             >
-                <Text>Apply for job at {companyName}</Text>
+                <Text fontWeight={700}>Apply for job at {companyName}</Text>
                 <Box
                     position="absolute"
                     as="img"
