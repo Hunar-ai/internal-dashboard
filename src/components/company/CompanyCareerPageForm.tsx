@@ -18,6 +18,8 @@ import {
     UploadButton
 } from '@components/common';
 
+import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
+
 import type { CareerPageSettingsProps, FormErrorProps } from 'interfaces';
 import { ALLOWED_EXTENSION } from 'Enum';
 import { ErrorMsg } from 'utils';
@@ -48,6 +50,8 @@ const formErrorStateInitialValues: FormErrorProps<CareerPageFormProps> = {
 };
 
 export const CompanyCareerPageForm = () => {
+    const { data: companiesResponse } = useGetCompanies();
+
     const [form, setForm] = React.useState({ ...formInitialState });
     const [formErrorState, setFormErrorState] = React.useState({
         ...formErrorStateInitialValues
@@ -103,9 +107,14 @@ export const CompanyCareerPageForm = () => {
                                 console.log('"', e.target.value, '"')
                             }
                         >
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
+                            {companiesResponse?.data.map(company => (
+                                <option
+                                    value={company.companyId}
+                                    key={company.companyId}
+                                >
+                                    {company.companyId}
+                                </option>
+                            ))}
                         </Select>
                     </FormControl>
                     <FormControl

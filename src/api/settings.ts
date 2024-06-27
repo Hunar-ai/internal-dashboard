@@ -23,3 +23,7 @@ export const inputFields = ApiClient({
 export const companyDetails = ApiClient({
     url: `/v1/company/{companyId}/details`
 });
+
+export const companies = ApiClient({
+    url: `/v1/company`
+});

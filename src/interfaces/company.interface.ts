@@ -1,5 +1,7 @@
 import { CHECK_INTEREST_PROVIDER } from 'Enum';
 
+import type { PaginationInfo } from 'interfaces';
+
 export interface LmsSettingsProps {
     blockMessaging: boolean;
     checkInterestProvider?: CHECK_INTEREST_PROVIDER;
@@ -49,3 +51,8 @@ export type CompanyDetailsFormProps = Omit<
     CompanyFormProps,
     'settings' | 'governmentIdentifiers'
 >;
+
+export interface GetCompaniesResponse {
+    data: CompanyFormProps[];
+    paginationInfo: PaginationInfo;
+}
