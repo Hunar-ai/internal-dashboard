@@ -1,6 +1,11 @@
 import React from 'react';
 
 import {
+    Accordion,
+    AccordionButton,
+    AccordionIcon,
+    AccordionItem,
+    AccordionPanel,
     Flex,
     FormControl,
     FormLabel,
@@ -8,7 +13,8 @@ import {
     GridItem,
     Input,
     Select,
-    Textarea
+    Textarea,
+    Text
 } from '@chakra-ui/react';
 
 import {
@@ -95,8 +101,6 @@ export const CompanyCareerPageForm = () => {
     const addCareerPageSettings = useAddCareerPageSettings();
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
-    const { data: companiesResponse, isLoading: isCompaniesLoading } =
-        useGetCompanies();
 
     const [form, setForm] = React.useState<CareerPageFormProps>({
         ...formInitialState
@@ -107,6 +111,9 @@ export const CompanyCareerPageForm = () => {
     const [formErrorValue, setFormErrorValue] = React.useState({
         ...formErrorValueInitialState
     });
+
+    const { data: companiesResponse, isLoading: isCompaniesLoading } =
+        useGetCompanies();
 
     const companyName = React.useMemo(
         () =>
@@ -451,14 +458,26 @@ export const CompanyCareerPageForm = () => {
                 </FormWrapper>
             </LeftPanel>
             <RightPanel>
-                <CareerPagePreview
-                    logo1={form.logo1}
-                    logo2={form.logo2 || ''}
-                    bannerImg={form.bannerImg}
-                    primaryColor={form.primaryColor}
-                    description={form.description}
-                    companyName={companyName}
-                />
+                <Accordion allowToggle height="100%" defaultIndex={0}>
+                    <AccordionItem>
+                        <AccordionButton>
+                            <Text as="span" flex="1" textAlign="left">
+                                PREVIEW
+                            </Text>
+                            <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel>
+                            <CareerPagePreview
+                                logo1={form.logo1}
+                                logo2={form.logo2 || ''}
+                                bannerImg={form.bannerImg}
+                                primaryColor={form.primaryColor}
+                                description={form.description}
+                                companyName={companyName}
+                            />
+                        </AccordionPanel>
+                    </AccordionItem>
+                </Accordion>
             </RightPanel>
         </Grid>
     );
