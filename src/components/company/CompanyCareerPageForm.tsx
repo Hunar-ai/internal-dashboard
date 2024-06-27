@@ -22,6 +22,8 @@ import {
 
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useUploadCareerPageAsset } from 'hooks/apiHooks/careerPage/useUploadCareerPageAsset';
+import { useAddCareerPageSettings } from 'hooks/apiHooks/careerPage/useAddCareerPageSettings';
+import { useToast } from 'hooks/useToast';
 import { useValidationHelper } from 'hooks';
 
 import type { CareerPageSettingsProps, FormErrorProps } from 'interfaces';
@@ -29,7 +31,9 @@ import { ALLOWED_EXTENSION } from 'Enum';
 import { ErrorMsg, RegExUtil } from 'utils';
 import { NAVBAR_HEIGHT } from 'Constants';
 
-type CareerPageFormProps = CareerPageSettingsProps;
+type CareerPageFormProps = CareerPageSettingsProps & {
+    companyId: string;
+};
 
 interface UpdateFieldErrorStateProps {
     fieldName: keyof CareerPageFormProps;
@@ -49,6 +53,7 @@ const validationMap = {
 };
 
 const requiredFields: (keyof CareerPageFormProps)[] = [
+    'companyId',
     'primaryColor',
     'description',
     'logo1',
@@ -56,6 +61,7 @@ const requiredFields: (keyof CareerPageFormProps)[] = [
 ];
 
 const formInitialState: CareerPageFormProps = {
+    companyId: '',
     logo1: '',
     logo2: '',
     bannerImg: '',
@@ -64,6 +70,7 @@ const formInitialState: CareerPageFormProps = {
 };
 
 const formErrorStateInitialValues: FormErrorProps<CareerPageFormProps> = {
+    companyId: false,
     logo1: false,
     logo2: false,
     bannerImg: false,
@@ -71,7 +78,9 @@ const formErrorStateInitialValues: FormErrorProps<CareerPageFormProps> = {
     primaryColor: false
 };
 
+// TODO: keep only upload fields
 const formErrorValueInitialState: Record<keyof CareerPageFormProps, string> = {
+    companyId: '',
     logo1: '',
     logo2: '',
     bannerImg: '',
@@ -80,12 +89,14 @@ const formErrorValueInitialState: Record<keyof CareerPageFormProps, string> = {
 };
 
 export const CompanyCareerPageForm = () => {
+    const { showError, showSuccess } = useToast();
     const uploadCareerPageAsset = useUploadCareerPageAsset();
-    const { hasFormFieldError } = useValidationHelper(validationMap);
+    const addCareerPageSettings = useAddCareerPageSettings();
+    const { hasFormFieldError, getFormErrorData } =
+        useValidationHelper(validationMap);
     const { data: companiesResponse, isLoading: isCompaniesLoading } =
         useGetCompanies();
 
-    const [companyId, setCompanyId] = React.useState('');
     const [form, setForm] = React.useState<CareerPageFormProps>({
         ...formInitialState
     });
@@ -115,7 +126,9 @@ export const CompanyCareerPageForm = () => {
     };
 
     const onFormFieldChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
     ) => {
         const fieldName = e.target.name as keyof CareerPageFormProps;
         const fieldValue = e.target.value;
@@ -127,7 +140,7 @@ export const CompanyCareerPageForm = () => {
     const uploadFile = (fieldName: keyof CareerPageFormProps, file: File) => {
         uploadCareerPageAsset.mutate(
             {
-                params: { companyId },
+                params: { companyId: form.companyId },
                 requestBody: { file }
             },
             {
@@ -176,27 +189,88 @@ export const CompanyCareerPageForm = () => {
         });
     };
 
+    const addSettings = () => {
+        const { companyId, ...restForm } = form;
+        addCareerPageSettings.mutate(
+            {
+                params: { companyId },
+                requestBody: restForm
+            },
+            {
+                onSuccess: () => {
+                    showSuccess({
+                        title: 'Success',
+                        description: 'Successfully added settings!'
+                    });
+                },
+                onError: ({ errors }) => {
+                    showError({
+                        title: 'Error',
+                        description: errors.displayError
+                    });
+                }
+            }
+        );
+    };
+
+    const onSubmit = () => {
+        const hasCompanyIdError = hasFormFieldError({
+            fieldName: 'companyId',
+            fieldValue: form.companyId,
+            isRequired: true
+        });
+
+        if (hasCompanyIdError) {
+            updateFieldErrorState({
+                fieldName: 'companyId',
+                fieldValue: form.companyId
+            });
+            return;
+        }
+
+        const { errorState, hasFormError } = getFormErrorData({
+            form,
+            requiredFields
+        });
+
+        setFormErrorState(prevErrorState => ({
+            ...prevErrorState,
+            ...errorState
+        }));
+
+        if (hasFormError) {
+            return;
+        }
+
+        addSettings();
+    };
+
     return (
         <Grid
             templateColumns={{ base: 'auto', md: '8fr 4fr' }}
             height={`calc(100vh - ${NAVBAR_HEIGHT})`}
             overflow={{ base: 'auto', md: 'unset' }}
         >
-            {(isCompaniesLoading || uploadCareerPageAsset.isLoading) && (
-                <AppLoader />
-            )}
+            {(isCompaniesLoading ||
+                uploadCareerPageAsset.isLoading ||
+                addCareerPageSettings.isLoading) && <AppLoader />}
             <LeftPanel>
                 <FormWrapper
                     formTitle="Career Page Settings"
                     isFormDisabled={false}
                     isLoading={false}
-                    onSubmit={() => console.log('TODO')}
+                    onSubmit={onSubmit}
                 >
-                    <FormControl isRequired>
+                    <FormControl
+                        isRequired
+                        isInvalid={formErrorState.companyId}
+                        isDisabled={addCareerPageSettings.isSuccess}
+                    >
                         <FormLabel>Company Id</FormLabel>
                         <Select
                             placeholder="Select Company Id"
-                            onChange={e => setCompanyId(e.target.value)}
+                            name="companyId"
+                            onChange={onFormFieldChange}
                         >
                             {companiesResponse?.data.map(company => (
                                 <option
@@ -207,11 +281,17 @@ export const CompanyCareerPageForm = () => {
                                 </option>
                             ))}
                         </Select>
+                        <HelperText
+                            hasError={formErrorState.companyId}
+                            errorMsg={ErrorMsg.required()}
+                        />
                     </FormControl>
                     <FormControl
                         isInvalid={formErrorState.primaryColor}
                         isRequired
-                        isDisabled={!companyId}
+                        isDisabled={
+                            !form.companyId || addCareerPageSettings.isSuccess
+                        }
                     >
                         <FormLabel>Primary Colour</FormLabel>
                         <Input
@@ -229,7 +309,10 @@ export const CompanyCareerPageForm = () => {
                         <FormControl
                             isInvalid={formErrorState.description}
                             isRequired
-                            isDisabled={!companyId}
+                            isDisabled={
+                                !form.companyId ||
+                                addCareerPageSettings.isSuccess
+                            }
                         >
                             <FormLabel>Description</FormLabel>
                             <Textarea
@@ -251,7 +334,9 @@ export const CompanyCareerPageForm = () => {
                         isInvalid={
                             formErrorState.logo1 || !!formErrorValue.logo1
                         }
-                        isDisabled={!companyId}
+                        isDisabled={
+                            !form.companyId || addCareerPageSettings.isSuccess
+                        }
                     >
                         <Flex
                             justifyContent="space-between"
@@ -265,7 +350,7 @@ export const CompanyCareerPageForm = () => {
                                 name="logo1"
                                 value={form.logo1}
                                 acceptFileType={allowedImageExtensions}
-                                isDisabled={!companyId}
+                                isDisabled={!form.companyId}
                                 onChange={onFileUpload}
                                 onRemove={onFileRemove}
                             />
@@ -283,7 +368,9 @@ export const CompanyCareerPageForm = () => {
                         isInvalid={
                             formErrorState.logo2 || !!formErrorValue.logo2
                         }
-                        isDisabled={!companyId}
+                        isDisabled={
+                            !form.companyId || addCareerPageSettings.isSuccess
+                        }
                     >
                         <Flex
                             justifyContent="space-between"
@@ -297,7 +384,10 @@ export const CompanyCareerPageForm = () => {
                                 name="logo2"
                                 value={form.logo2 ?? ''}
                                 acceptFileType={allowedImageExtensions}
-                                isDisabled={!companyId}
+                                isDisabled={
+                                    !form.companyId ||
+                                    addCareerPageSettings.isSuccess
+                                }
                                 onChange={onFileUpload}
                                 onRemove={onFileRemove}
                             />
@@ -315,7 +405,9 @@ export const CompanyCareerPageForm = () => {
                             formErrorState.bannerImg ||
                             !!formErrorValue.bannerImg
                         }
-                        isDisabled={!companyId}
+                        isDisabled={
+                            !form.companyId || addCareerPageSettings.isSuccess
+                        }
                     >
                         <Flex
                             justifyContent="space-between"
@@ -329,7 +421,10 @@ export const CompanyCareerPageForm = () => {
                                 name="bannerImg"
                                 value={form.bannerImg}
                                 acceptFileType={allowedImageExtensions}
-                                isDisabled={!companyId}
+                                isDisabled={
+                                    !form.companyId ||
+                                    addCareerPageSettings.isSuccess
+                                }
                                 onChange={onFileUpload}
                                 onRemove={onFileRemove}
                             />

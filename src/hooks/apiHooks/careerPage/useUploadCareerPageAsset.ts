@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { careerPageUpload } from 'api/careerPage';
+import { upload } from 'api/careerPage';
 
 import type { ApiError } from 'interfaces';
 
@@ -20,7 +20,7 @@ interface Response {
 export const useUploadCareerPageAsset = () => {
     return useMutation<Response, ApiError, UploadCareerPageAssetProps>(
         ({ params, requestBody }: UploadCareerPageAssetProps) => {
-            return careerPageUpload
+            return upload
                 .postForm({
                     params,
                     body: requestBody
