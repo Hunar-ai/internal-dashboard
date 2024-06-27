@@ -19,6 +19,7 @@ import {
 } from '@components/common';
 
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
+import { useUploadCareerPageAsset } from 'hooks/apiHooks/careerPage/useUploadCareerPageAsset';
 
 import type { CareerPageSettingsProps, FormErrorProps } from 'interfaces';
 import { ALLOWED_EXTENSION } from 'Enum';
@@ -49,12 +50,25 @@ const formErrorStateInitialValues: FormErrorProps<CareerPageFormProps> = {
     primaryColor: false
 };
 
+const formErrorValueInitialState: Record<keyof CareerPageFormProps, string> = {
+    logo1: '',
+    logo2: '',
+    bannerImg: '',
+    primaryColor: '',
+    description: ''
+};
+
 export const CompanyCareerPageForm = () => {
+    const uploadCareerPageAsset = useUploadCareerPageAsset();
     const { data: companiesResponse } = useGetCompanies();
 
+    const [companyId, setCompanyId] = React.useState('');
     const [form, setForm] = React.useState({ ...formInitialState });
     const [formErrorState, setFormErrorState] = React.useState({
         ...formErrorStateInitialValues
+    });
+    const [formErrorValue, setFormErrorValue] = React.useState({
+        ...formErrorValueInitialState
     });
 
     const updateForm = (modifiedForm: Partial<CareerPageFormProps>) => {
@@ -70,8 +84,32 @@ export const CompanyCareerPageForm = () => {
         updateForm({ [fieldName]: fieldValue });
     };
 
-    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const fieldName = event.target.name;
+    const uploadFile = (fieldName: keyof CareerPageFormProps, file: File) => {
+        uploadCareerPageAsset.mutate(
+            {
+                params: { companyId },
+                requestBody: { file }
+            },
+            {
+                onSuccess: ({ assetUrl }) => {
+                    updateForm({ [fieldName]: assetUrl });
+                },
+                onError: ({ errors }) => {
+                    setFormErrorState(prevErrorState => ({
+                        ...prevErrorState,
+                        [fieldName]: true
+                    }));
+                    setFormErrorValue(prevErrorValue => ({
+                        ...prevErrorValue,
+                        [fieldName]: errors.displayError
+                    }));
+                }
+            }
+        );
+    };
+
+    const onFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const fieldName = event.target.name as keyof CareerPageFormProps;
         const file = event.target.files?.[0];
 
         if (!file) {
@@ -79,10 +117,10 @@ export const CompanyCareerPageForm = () => {
             return;
         }
 
-        updateForm({ [fieldName]: file.name });
+        uploadFile(fieldName, file);
     };
 
-    const handleFileRemove = (fieldName: string) => {
+    const onFileRemove = (fieldName: string) => {
         updateForm({ [fieldName]: '' });
     };
 
@@ -103,9 +141,7 @@ export const CompanyCareerPageForm = () => {
                         <FormLabel>Company Id</FormLabel>
                         <Select
                             placeholder="Select Company Id"
-                            onChange={e =>
-                                console.log('"', e.target.value, '"')
-                            }
+                            onChange={e => setCompanyId(e.target.value)}
                         >
                             {companiesResponse?.data.map(company => (
                                 <option
@@ -164,8 +200,12 @@ export const CompanyCareerPageForm = () => {
                             name="logo1"
                             value={form.logo1}
                             acceptFileType={allowedImageExtensions}
-                            onChange={handleFileUpload}
-                            onRemove={handleFileRemove}
+                            onChange={onFileUpload}
+                            onRemove={onFileRemove}
+                        />
+                        <HelperText
+                            hasError={formErrorState.logo1}
+                            errorMsg={formErrorValue.logo1}
                         />
                     </FormControl>
                     <FormControl
@@ -179,8 +219,12 @@ export const CompanyCareerPageForm = () => {
                             name="logo2"
                             value={form.logo2 ?? ''}
                             acceptFileType={allowedImageExtensions}
-                            onChange={handleFileUpload}
-                            onRemove={handleFileRemove}
+                            onChange={onFileUpload}
+                            onRemove={onFileRemove}
+                        />
+                        <HelperText
+                            hasError={formErrorState.logo2}
+                            errorMsg={formErrorValue.logo2}
                         />
                     </FormControl>
                     <FormControl
@@ -195,8 +239,12 @@ export const CompanyCareerPageForm = () => {
                             name="bannerImg"
                             value={form.bannerImg}
                             acceptFileType={allowedImageExtensions}
-                            onChange={handleFileUpload}
-                            onRemove={handleFileRemove}
+                            onChange={onFileUpload}
+                            onRemove={onFileRemove}
+                        />
+                        <HelperText
+                            hasError={formErrorState.bannerImg}
+                            errorMsg={formErrorValue.bannerImg}
                         />
                     </FormControl>
                 </FormWrapper>
