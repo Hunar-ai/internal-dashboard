@@ -11,7 +11,6 @@ import {
     FormControl,
     FormLabel,
     Grid,
-    GridItem,
     Input,
     Select,
     Textarea,
@@ -34,14 +33,10 @@ import { useAddCareerPageSettings } from 'hooks/apiHooks/careerPage/useAddCareer
 import { useToast } from 'hooks/useToast';
 import { useValidationHelper } from 'hooks';
 
-import type { CareerPageSettingsProps, FormErrorProps } from 'interfaces';
+import type { CareerPageFormProps, FormErrorProps } from 'interfaces';
 import { ALLOWED_EXTENSION } from 'Enum';
-import { ErrorMsg, RegExUtil } from 'utils';
+import { ErrorMsg, RegExUtil, StringUtils } from 'utils';
 import { NAVBAR_HEIGHT } from 'Constants';
-
-type CareerPageFormProps = CareerPageSettingsProps & {
-    companyId: string;
-};
 
 interface UpdateFieldErrorStateProps {
     fieldName: keyof CareerPageFormProps;
@@ -55,6 +50,10 @@ const allowedImageExtensions = [
 ];
 
 const validationMap = {
+    companyName: (companyName: string) => RegExUtil.isName(companyName),
+    bannerTextColor: (bannerTextColor: string) =>
+        RegExUtil.isHexColor(bannerTextColor),
+    learnMoreLink: (learnMoreLink: string) => StringUtils.isUrl(learnMoreLink),
     primaryColor: (primaryColor: string) => RegExUtil.isHexColor(primaryColor),
     description: (description: string) =>
         RegExUtil.isDescription(description, 300)
@@ -62,37 +61,49 @@ const validationMap = {
 
 const requiredFields: (keyof CareerPageFormProps)[] = [
     'companyId',
+    'companyName',
     'primaryColor',
+    'bannerTextColor',
+    'learnMoreLink',
     'description',
-    'logo1',
+    'primaryLogo',
     'bannerImg'
 ];
 
 const formInitialState: CareerPageFormProps = {
     companyId: '',
-    logo1: '',
-    logo2: '',
+    primaryLogo: '',
+    secondaryLogo: '',
     bannerImg: '',
+    companyName: '',
     primaryColor: '',
+    bannerTextColor: '',
+    learnMoreLink: '',
     description: ''
 };
 
 const formErrorStateInitialValues: FormErrorProps<CareerPageFormProps> = {
     companyId: false,
-    logo1: false,
-    logo2: false,
+    primaryLogo: false,
+    secondaryLogo: false,
     bannerImg: false,
-    description: false,
-    primaryColor: false
+    companyName: false,
+    primaryColor: false,
+    bannerTextColor: false,
+    learnMoreLink: false,
+    description: false
 };
 
 // TODO: keep only upload fields
 const formErrorValueInitialState: Record<keyof CareerPageFormProps, string> = {
     companyId: '',
-    logo1: '',
-    logo2: '',
+    primaryLogo: '',
+    secondaryLogo: '',
     bannerImg: '',
+    companyName: '',
     primaryColor: '',
+    bannerTextColor: '',
+    learnMoreLink: '',
     description: ''
 };
 
@@ -116,14 +127,6 @@ export const CompanyCareerPageForm = () => {
 
     const { data: companiesResponse, isLoading: isCompaniesLoading } =
         useGetCompanies();
-
-    const companyName = React.useMemo(
-        () =>
-            companiesResponse?.data.find(
-                company => company.companyId === form.companyId
-            )?.name || '',
-        [companiesResponse?.data, form.companyId]
-    );
 
     React.useEffect(() => {
         const companyId = searchParams.get('companyId');
@@ -314,15 +317,34 @@ export const CompanyCareerPageForm = () => {
                         />
                     </FormControl>
                     <FormControl
+                        isInvalid={formErrorState.companyName}
+                        isRequired
+                        isDisabled={
+                            !form.companyId || addCareerPageSettings.isSuccess
+                        }
+                    >
+                        <FormLabel>Company Name</FormLabel>
+                        <Input
+                            placeholder="Enter Company Name"
+                            name="companyName"
+                            value={form.companyName}
+                            onChange={onFormFieldChange}
+                        />
+                        <HelperText
+                            hasError={formErrorState.companyName}
+                            errorMsg={ErrorMsg.alphaNumeric()}
+                        />
+                    </FormControl>
+                    <FormControl
                         isInvalid={formErrorState.primaryColor}
                         isRequired
                         isDisabled={
                             !form.companyId || addCareerPageSettings.isSuccess
                         }
                     >
-                        <FormLabel>Primary Colour</FormLabel>
+                        <FormLabel>Primary Color</FormLabel>
                         <Input
-                            placeholder="Enter Primary Colour"
+                            placeholder="Enter Primary Color"
                             name="primaryColor"
                             value={form.primaryColor}
                             onChange={onFormFieldChange}
@@ -332,34 +354,70 @@ export const CompanyCareerPageForm = () => {
                             errorMsg={ErrorMsg.hexColor()}
                         />
                     </FormControl>
-                    <GridItem colSpan={{ base: 1, md: 2 }}>
-                        <FormControl
-                            isInvalid={formErrorState.description}
-                            isRequired
-                            isDisabled={
-                                !form.companyId ||
-                                addCareerPageSettings.isSuccess
-                            }
-                        >
-                            <FormLabel>Description</FormLabel>
-                            <Textarea
-                                placeholder="Description"
-                                name="description"
-                                value={form.description}
-                                onChange={onFormFieldChange}
-                            />
-                            <HelperText
-                                hasError={formErrorState.description}
-                                errorMsg={ErrorMsg.characterLength({
-                                    max: 300
-                                })}
-                            />
-                        </FormControl>
-                    </GridItem>
+                    <FormControl
+                        isInvalid={formErrorState.bannerTextColor}
+                        isRequired
+                        isDisabled={
+                            !form.companyId || addCareerPageSettings.isSuccess
+                        }
+                    >
+                        <FormLabel>Banner Text Color</FormLabel>
+                        <Input
+                            placeholder="Enter Banner Text Color"
+                            name="bannerTextColor"
+                            value={form.bannerTextColor}
+                            onChange={onFormFieldChange}
+                        />
+                        <HelperText
+                            hasError={formErrorState.bannerTextColor}
+                            errorMsg={ErrorMsg.hexColor()}
+                        />
+                    </FormControl>
+                    <FormControl
+                        isInvalid={formErrorState.learnMoreLink}
+                        isRequired
+                        isDisabled={
+                            !form.companyId || addCareerPageSettings.isSuccess
+                        }
+                    >
+                        <FormLabel>Learn More Link</FormLabel>
+                        <Input
+                            placeholder="Enter Learn More Link"
+                            name="learnMoreLink"
+                            value={form.learnMoreLink}
+                            onChange={onFormFieldChange}
+                        />
+                        <HelperText
+                            hasError={formErrorState.learnMoreLink}
+                            errorMsg={ErrorMsg.url()}
+                        />
+                    </FormControl>
+                    <FormControl
+                        isInvalid={formErrorState.description}
+                        isRequired
+                        isDisabled={
+                            !form.companyId || addCareerPageSettings.isSuccess
+                        }
+                    >
+                        <FormLabel>Description</FormLabel>
+                        <Textarea
+                            placeholder="Description"
+                            name="description"
+                            value={form.description}
+                            onChange={onFormFieldChange}
+                        />
+                        <HelperText
+                            hasError={formErrorState.description}
+                            errorMsg={ErrorMsg.characterLength({
+                                max: 300
+                            })}
+                        />
+                    </FormControl>
                     <FormControl
                         isRequired
                         isInvalid={
-                            formErrorState.logo1 || !!formErrorValue.logo1
+                            formErrorState.primaryLogo ||
+                            !!formErrorValue.primaryLogo
                         }
                         isDisabled={
                             !form.companyId || addCareerPageSettings.isSuccess
@@ -374,8 +432,8 @@ export const CompanyCareerPageForm = () => {
                             </FormLabel>
                             <UploadButton
                                 title="UPLOAD"
-                                name="logo1"
-                                value={form.logo1}
+                                name="primaryLogo"
+                                value={form.primaryLogo}
                                 acceptFileType={allowedImageExtensions}
                                 isDisabled={!form.companyId}
                                 onChange={onFileUpload}
@@ -384,16 +442,19 @@ export const CompanyCareerPageForm = () => {
                         </Flex>
                         <HelperText
                             hasError={
-                                formErrorState.logo1 || !!formErrorValue.logo1
+                                formErrorState.primaryLogo ||
+                                !!formErrorValue.primaryLogo
                             }
                             errorMsg={
-                                formErrorValue.logo1 || ErrorMsg.required()
+                                formErrorValue.primaryLogo ||
+                                ErrorMsg.required()
                             }
                         />
                     </FormControl>
                     <FormControl
                         isInvalid={
-                            formErrorState.logo2 || !!formErrorValue.logo2
+                            formErrorState.secondaryLogo ||
+                            !!formErrorValue.secondaryLogo
                         }
                         isDisabled={
                             !form.companyId || addCareerPageSettings.isSuccess
@@ -408,8 +469,8 @@ export const CompanyCareerPageForm = () => {
                             </FormLabel>
                             <UploadButton
                                 title="UPLOAD"
-                                name="logo2"
-                                value={form.logo2 ?? ''}
+                                name="secondaryLogo"
+                                value={form.secondaryLogo ?? ''}
                                 acceptFileType={allowedImageExtensions}
                                 isDisabled={
                                     !form.companyId ||
@@ -421,9 +482,10 @@ export const CompanyCareerPageForm = () => {
                         </Flex>
                         <HelperText
                             hasError={
-                                formErrorState.logo2 || !!formErrorValue.logo2
+                                formErrorState.secondaryLogo ||
+                                !!formErrorValue.secondaryLogo
                             }
-                            errorMsg={formErrorValue.logo2}
+                            errorMsg={formErrorValue.secondaryLogo}
                         />
                     </FormControl>
                     <FormControl
@@ -479,12 +541,14 @@ export const CompanyCareerPageForm = () => {
                         </AccordionButton>
                         <AccordionPanel>
                             <CareerPagePreview
-                                logo1={form.logo1}
-                                logo2={form.logo2 || ''}
+                                primaryLogo={form.primaryLogo}
+                                secondaryLogo={form.secondaryLogo || ''}
                                 bannerImg={form.bannerImg}
                                 primaryColor={form.primaryColor}
                                 description={form.description}
-                                companyName={companyName}
+                                companyName={form.companyName}
+                                learnMoreLink={form.learnMoreLink}
+                                bannerTextColor={form.bannerTextColor}
                             />
                         </AccordionPanel>
                     </AccordionItem>

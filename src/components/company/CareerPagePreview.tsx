@@ -1,22 +1,20 @@
 import { Box, Flex, Select, Text } from '@chakra-ui/react';
+
 import { CareerPageJQCardPreview } from './CareerPageJQCardPreview';
 
-interface CareerPagePreviewProps {
-    logo1: string;
-    logo2: string;
-    bannerImg: string;
-    primaryColor: string;
-    description: string;
-    companyName: string;
-}
+import type { CareerPageFormProps } from 'interfaces';
+
+type CareerPagePreviewProps = Omit<CareerPageFormProps, 'companyId'>;
 
 export const CareerPagePreview = ({
-    logo1,
-    logo2,
+    primaryLogo,
+    secondaryLogo,
     bannerImg,
     primaryColor,
+    bannerTextColor,
     description,
-    companyName
+    companyName,
+    learnMoreLink
 }: CareerPagePreviewProps) => {
     return (
         <Box borderWidth="1px" overflow="auto" maxHeight="100%">
@@ -26,8 +24,8 @@ export const CareerPagePreview = ({
                 height="72px"
                 px={2}
             >
-                <Box as="img" src={logo1} height="32px" alt="Logo 1" />
-                <Box as="img" src={logo2} height="32px" alt="Logo 2" />
+                <Box as="img" src={primaryLogo} height="32px" alt="Logo 1" />
+                <Box as="img" src={secondaryLogo} height="32px" alt="Logo 2" />
             </Flex>
             <Flex
                 position="relative"
@@ -35,7 +33,9 @@ export const CareerPagePreview = ({
                 justifyContent="center"
                 alignItems="center"
             >
-                <Text fontWeight={700}>Apply for job at {companyName}</Text>
+                <Text fontWeight={700} color={bannerTextColor || 'gray'}>
+                    Apply for job at {companyName}
+                </Text>
                 <Box
                     position="absolute"
                     as="img"
@@ -58,6 +58,23 @@ export const CareerPagePreview = ({
                 >
                     {description}
                 </Text>
+                {learnMoreLink && (
+                    <Text
+                        color={primaryColor}
+                        fontSize={16}
+                        fontWeight={700}
+                        width="100%"
+                        textAlign="end"
+                    >
+                        <a
+                            href={learnMoreLink}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            Learn More
+                        </a>
+                    </Text>
+                )}
                 <Box py={2}>
                     <Text py={2}>Showing 4 job vacancies</Text>
                     <Flex gap={2}>

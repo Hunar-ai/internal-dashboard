@@ -23,7 +23,10 @@ export interface CareerPageSettingsProps {
     logo1: string;
     logo2?: string;
     bannerImg: string;
+    companyName: string;
     primaryColor: string;
+    bannerTextColor: string;
+    learnMoreLink: string;
     description: string;
 }
 
@@ -56,3 +59,12 @@ export interface GetCompaniesResponse {
     data: CompanyFormProps[];
     paginationInfo: PaginationInfo;
 }
+
+export type CareerPageFormProps = Omit<
+    CareerPageSettingsProps,
+    'logo1' | 'logo2'
+> & {
+    primaryLogo: string;
+    secondaryLogo: string;
+    companyId: string;
+};

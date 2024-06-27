@@ -2,13 +2,17 @@ import { useMutation } from '@tanstack/react-query';
 
 import { settings } from 'api/careerPage';
 
-import type { ApiError, CareerPageSettingsProps } from 'interfaces';
+import type {
+    ApiError,
+    CareerPageFormProps,
+    CareerPageSettingsProps
+} from 'interfaces';
 
 interface AddCareerPageSettingsProps {
     params: {
         companyId: string;
     };
-    requestBody: CareerPageSettingsProps;
+    requestBody: Omit<CareerPageFormProps, 'companyId'>;
 }
 
 type AddCareerPageSettingsResponse = CareerPageSettingsProps;
