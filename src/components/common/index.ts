@@ -8,3 +8,6 @@ export { Navbar } from './Navbar';
 export { HelperText } from './HelperText';
 export { LoaderBackdrop } from './LoaderBackdrop';
 export { AppLoader } from './AppLoader';
+export { FormWrapper } from './FormWrapper';
+export { LeftPanel } from './LeftPanel';
+export { RightPanel } from './RightPanel';
