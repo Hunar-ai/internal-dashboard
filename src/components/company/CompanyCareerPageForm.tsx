@@ -2,19 +2,13 @@ import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import {
-    Accordion,
-    AccordionButton,
-    AccordionIcon,
-    AccordionItem,
-    AccordionPanel,
     Flex,
     FormControl,
     FormLabel,
     Grid,
     Input,
     Select,
-    Textarea,
-    Text
+    Textarea
 } from '@chakra-ui/react';
 
 import {
@@ -94,17 +88,13 @@ const formErrorStateInitialValues: FormErrorProps<CareerPageFormProps> = {
     description: false
 };
 
-// TODO: keep only upload fields
-const formErrorValueInitialState: Record<keyof CareerPageFormProps, string> = {
-    companyId: '',
+const uploadErrorMapInitialState: Pick<
+    CareerPageFormProps,
+    'bannerImg' | 'primaryLogo' | 'secondaryLogo'
+> = {
     primaryLogo: '',
     secondaryLogo: '',
-    bannerImg: '',
-    companyName: '',
-    primaryColor: '',
-    bannerTextColor: '',
-    learnMoreLink: '',
-    description: ''
+    bannerImg: ''
 };
 
 export const CompanyCareerPageForm = () => {
@@ -121,8 +111,8 @@ export const CompanyCareerPageForm = () => {
     const [formErrorState, setFormErrorState] = React.useState({
         ...formErrorStateInitialValues
     });
-    const [formErrorValue, setFormErrorValue] = React.useState({
-        ...formErrorValueInitialState
+    const [uploadErrorMap, setUploadErrorMap] = React.useState({
+        ...uploadErrorMapInitialState
     });
 
     const { data: companiesResponse, isLoading: isCompaniesLoading } =
@@ -175,7 +165,7 @@ export const CompanyCareerPageForm = () => {
                 onSuccess: ({ assetUrl }) => {
                     updateForm({ [fieldName]: assetUrl });
                     updateFieldErrorState({ fieldName, fieldValue: assetUrl });
-                    setFormErrorValue(prevErrorValue => ({
+                    setUploadErrorMap(prevErrorValue => ({
                         ...prevErrorValue,
                         [fieldName]: ''
                     }));
@@ -185,7 +175,7 @@ export const CompanyCareerPageForm = () => {
                         ...prevErrorState,
                         [fieldName]: true
                     }));
-                    setFormErrorValue(prevErrorValue => ({
+                    setUploadErrorMap(prevErrorValue => ({
                         ...prevErrorValue,
                         [fieldName]: errors.displayError
                     }));
@@ -199,7 +189,7 @@ export const CompanyCareerPageForm = () => {
         const file = event.target.files?.[0];
 
         if (!file) {
-            setFormErrorValue(prevErrorValue => ({
+            setUploadErrorMap(prevErrorValue => ({
                 ...prevErrorValue,
                 [fieldName]: 'File not found. Please upload again'
             }));
@@ -285,8 +275,8 @@ export const CompanyCareerPageForm = () => {
             <LeftPanel>
                 <FormWrapper
                     formTitle="Career Page Settings"
-                    isFormDisabled={false}
-                    isLoading={false}
+                    isFormDisabled={addCareerPageSettings.isSuccess}
+                    isLoading={addCareerPageSettings.isLoading}
                     onSubmit={onSubmit}
                 >
                     <FormControl
@@ -417,7 +407,7 @@ export const CompanyCareerPageForm = () => {
                         isRequired
                         isInvalid={
                             formErrorState.primaryLogo ||
-                            !!formErrorValue.primaryLogo
+                            !!uploadErrorMap.primaryLogo
                         }
                         isDisabled={
                             !form.companyId || addCareerPageSettings.isSuccess
@@ -443,10 +433,10 @@ export const CompanyCareerPageForm = () => {
                         <HelperText
                             hasError={
                                 formErrorState.primaryLogo ||
-                                !!formErrorValue.primaryLogo
+                                !!uploadErrorMap.primaryLogo
                             }
                             errorMsg={
-                                formErrorValue.primaryLogo ||
+                                uploadErrorMap.primaryLogo ||
                                 ErrorMsg.required()
                             }
                         />
@@ -454,7 +444,7 @@ export const CompanyCareerPageForm = () => {
                     <FormControl
                         isInvalid={
                             formErrorState.secondaryLogo ||
-                            !!formErrorValue.secondaryLogo
+                            !!uploadErrorMap.secondaryLogo
                         }
                         isDisabled={
                             !form.companyId || addCareerPageSettings.isSuccess
@@ -483,16 +473,16 @@ export const CompanyCareerPageForm = () => {
                         <HelperText
                             hasError={
                                 formErrorState.secondaryLogo ||
-                                !!formErrorValue.secondaryLogo
+                                !!uploadErrorMap.secondaryLogo
                             }
-                            errorMsg={formErrorValue.secondaryLogo}
+                            errorMsg={uploadErrorMap.secondaryLogo}
                         />
                     </FormControl>
                     <FormControl
                         isRequired
                         isInvalid={
                             formErrorState.bannerImg ||
-                            !!formErrorValue.bannerImg
+                            !!uploadErrorMap.bannerImg
                         }
                         isDisabled={
                             !form.companyId || addCareerPageSettings.isSuccess
@@ -521,38 +511,26 @@ export const CompanyCareerPageForm = () => {
                         <HelperText
                             hasError={
                                 formErrorState.bannerImg ||
-                                !!formErrorValue.bannerImg
+                                !!uploadErrorMap.bannerImg
                             }
                             errorMsg={
-                                formErrorValue.bannerImg || ErrorMsg.required()
+                                uploadErrorMap.bannerImg || ErrorMsg.required()
                             }
                         />
                     </FormControl>
                 </FormWrapper>
             </LeftPanel>
             <RightPanel>
-                <Accordion allowToggle height="100%" defaultIndex={0}>
-                    <AccordionItem>
-                        <AccordionButton>
-                            <Text as="span" flex="1" textAlign="left">
-                                PREVIEW
-                            </Text>
-                            <AccordionIcon />
-                        </AccordionButton>
-                        <AccordionPanel>
-                            <CareerPagePreview
-                                primaryLogo={form.primaryLogo}
-                                secondaryLogo={form.secondaryLogo || ''}
-                                bannerImg={form.bannerImg}
-                                primaryColor={form.primaryColor}
-                                description={form.description}
-                                companyName={form.companyName}
-                                learnMoreLink={form.learnMoreLink}
-                                bannerTextColor={form.bannerTextColor}
-                            />
-                        </AccordionPanel>
-                    </AccordionItem>
-                </Accordion>
+                <CareerPagePreview
+                    primaryLogo={form.primaryLogo}
+                    secondaryLogo={form.secondaryLogo || ''}
+                    bannerImg={form.bannerImg}
+                    primaryColor={form.primaryColor}
+                    description={form.description}
+                    companyName={form.companyName}
+                    learnMoreLink={form.learnMoreLink}
+                    bannerTextColor={form.bannerTextColor}
+                />
             </RightPanel>
         </Grid>
     );

@@ -63,7 +63,7 @@ export const UploadButton = ({
                 hidden
                 onChange={onChange}
                 value={value}
-                name={`${name}`}
+                name={name}
                 accept={acceptFileType?.join(',')}
             />
         </Button>

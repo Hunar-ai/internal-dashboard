@@ -1,5 +1,6 @@
 import { Flex, IconButton, Text } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
+
 import { FIELD_SIZE } from 'Enum';
 
 interface UploadInputPreviewProps {
