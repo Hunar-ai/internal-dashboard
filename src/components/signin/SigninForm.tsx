@@ -14,8 +14,11 @@ import {
     VStack,
     Button,
     FormLabel,
-    Text
+    Text,
+    FormControl
 } from '@chakra-ui/react';
+
+import AthenaLogo from 'assets/athena-logo.svg?react';
 
 export interface ValidationMapProps {
     [key: string]: (_: string) => boolean;
@@ -76,53 +79,56 @@ export const SigninForm = ({ apiError, handleSubmit, isLoading }: Props) => {
 
     return (
         <Flex
-            color="white"
-            bg="#1E2442"
+            color="grey.700"
+            bg="blue.900"
             justifyContent="center"
             height="100vh"
-            p={10}
+            pt={{ base: 0, sm: 14 }}
         >
-            <VStack bg="#242b4d" width={'30%'} p={10} spacing={6}>
-                <Flex alignItems="baseline">
-                    <>
-                        <Text fontWeight={500} fontSize={20} mr={2}>
-                            Athena -
-                        </Text>
-                        <Text fontSize={11}>{`   All things internal`}</Text>
-                    </>
+            <VStack
+                bg="white"
+                width={{ base: '100%', sm: '424px' }}
+                height={{ base: '100%', sm: '535px' }}
+                pt={8}
+                px={9}
+                borderRadius={{ base: 0, sm: 16 }}
+                spacing={6}
+            >
+                <Flex flexDirection="column" alignItems="center" gap={1}>
+                    <AthenaLogo />
+                    <Text fontWeight={600} fontSize="xl">
+                        Athena
+                    </Text>
+                    <Text fontSize="xs">{`All things internal`}</Text>
                 </Flex>
-                <Box width={300}>
-                    <FormLabel fontSize={12}>Email address</FormLabel>
+                <FormControl isRequired width="100%">
+                    <FormLabel color="gray.700">Email address</FormLabel>
                     <Input
-                        placeholder="Enter your email address"
-                        size="sm"
-                        bg="#393f5c"
-                        border="none"
+                        placeholder="Enter Email ID"
+                        size="md"
                         name="email"
                         onChange={updateForm}
                     />
-                </Box>
-                <Box width={300}>
-                    <FormLabel fontSize={12}>Password</FormLabel>
+                </FormControl>
+                <FormControl isRequired width="100%">
+                    <FormLabel color="gray.700">Password</FormLabel>
                     <Input
-                        bg="#393f5c"
-                        size="sm"
-                        border="none"
+                        placeholder="Enter Password"
+                        size="md"
                         name="password"
                         onChange={updateForm}
                         type="password"
                     />
-                </Box>
-                <Box width={300}>
+                </FormControl>
+                <Box width="100%">
                     <Button
-                        bg="#5a99e8"
-                        size="sm"
+                        size="md"
                         width={'100%'}
-                        color="white"
+                        colorScheme="blue"
                         onClick={() => handleSubmit(form)}
+                        isDisabled={hasFormError}
                         isLoading={isLoading}
                         loadingText="Submitting"
-                        fontSize={12}
                     >
                         LOGIN
                     </Button>
