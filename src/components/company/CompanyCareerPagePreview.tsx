@@ -10,13 +10,13 @@ import {
     Text
 } from '@chakra-ui/react';
 
-import { CareerPageJQCardPreview } from './CareerPageJQCardPreview';
+import { CompanyCareerJQCardPreview } from './CompanyCareerJQCardPreview';
 
 import type { CareerPageFormProps } from 'interfaces';
 
-type CareerPagePreviewProps = Omit<CareerPageFormProps, 'companyId'>;
+type CompanyCareerPagePreviewProps = Omit<CareerPageFormProps, 'companyId'>;
 
-export const CareerPagePreview = ({
+export const CompanyCareerPagePreview = ({
     primaryLogo,
     secondaryLogo,
     bannerImg,
@@ -25,7 +25,7 @@ export const CareerPagePreview = ({
     description,
     companyName,
     learnMoreLink
-}: CareerPagePreviewProps) => {
+}: CompanyCareerPagePreviewProps) => {
     return (
         <Accordion allowToggle height="100%" defaultIndex={0}>
             <AccordionItem>
@@ -114,10 +114,10 @@ export const CareerPagePreview = ({
                                     <Select placeholder="SELECT LOCALITY"></Select>
                                 </Flex>
                                 <Flex py={5} rowGap={4} flexDirection="column">
-                                    <CareerPageJQCardPreview
+                                    <CompanyCareerJQCardPreview
                                         primaryColor={primaryColor}
                                     />
-                                    <CareerPageJQCardPreview
+                                    <CompanyCareerJQCardPreview
                                         primaryColor={primaryColor}
                                     />
                                 </Flex>

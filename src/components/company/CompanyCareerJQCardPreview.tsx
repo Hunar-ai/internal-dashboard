@@ -1,12 +1,12 @@
 import { Card, Flex, Text, Box, Button } from '@chakra-ui/react';
 
-interface CareerPageJQCardPreviewProps {
+interface CompanyCareerJQCardPreviewProps {
     primaryColor: string;
 }
 
-export const CareerPageJQCardPreview = ({
+export const CompanyCareerJQCardPreview = ({
     primaryColor
-}: CareerPageJQCardPreviewProps) => {
+}: CompanyCareerJQCardPreviewProps) => {
     return (
         <Card width="100%" p={4}>
             <Flex flexDirection="column" rowGap={3}>

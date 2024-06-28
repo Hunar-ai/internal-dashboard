@@ -19,7 +19,7 @@ import {
     RightPanel,
     UploadButton
 } from '@components/common';
-import { CareerPagePreview } from './CareerPagePreview';
+import { CompanyCareerPagePreview } from './CompanyCareerPagePreview';
 
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useUploadCareerPageAsset } from 'hooks/apiHooks/careerPage/useUploadCareerPageAsset';
@@ -504,7 +504,7 @@ export const CompanyCareerPageForm = () => {
                 </FormWrapper>
             </LeftPanel>
             <RightPanel>
-                <CareerPagePreview
+                <CompanyCareerPagePreview
                     primaryLogo={form.primaryLogo}
                     secondaryLogo={form.secondaryLogo || ''}
                     bannerImg={form.bannerImg}
