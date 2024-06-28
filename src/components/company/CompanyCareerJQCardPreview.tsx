@@ -13,7 +13,12 @@ export const CompanyCareerJQCardPreview = ({
                 <Text fontSize="sm">Punjab & Haryana</Text>
                 <Box>
                     <Text fontSize="lg">Field Assitant Trainee</Text>
-                    <Text fontSize="sm">Field Assitant Trainee</Text>
+                    <Text fontSize="sm" as="span" fontWeight={700}>
+                        {'Salary: '}
+                    </Text>
+                    <Text fontSize="sm" as="span">
+                        Negotiable
+                    </Text>
                 </Box>
                 <Text
                     fontSize="sm"
