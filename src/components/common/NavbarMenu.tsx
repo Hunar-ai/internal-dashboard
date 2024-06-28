@@ -14,8 +14,8 @@ import type { MenuProps } from 'interfaces';
 
 interface NavbarMenuProps {
     isActive: boolean;
-    menuLink?: string;
     menuTitle: string;
+    menuLink?: string;
     subMenus?: MenuProps['subMenus'];
 }
 

@@ -447,7 +447,6 @@ export const CompanyAddForm = () => {
                                 .enableWorkerSourceAffinity
                         }
                         isDisabled={
-                            createCompany.isSuccess ||
                             !form.settings.onboardingSettings
                                 .enableWorkerSourceAffinity
                         }
