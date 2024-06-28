@@ -46,6 +46,7 @@ export const UploadButton = ({
         <UploadInputPreview
             inputValue={getFormattedFilename(value, 15)}
             size={size}
+            isDisabled={isDisabled}
             onRemove={() => onRemove(name)}
         />
     ) : (
@@ -55,12 +56,14 @@ export const UploadButton = ({
             size={size}
             isLoading={isLoading}
             isDisabled={isDisabled}
+            cursor="pointer"
             as="label"
         >
             {title}
             <input
                 type="file"
                 hidden
+                disabled={isDisabled}
                 onChange={onChange}
                 value={value}
                 name={name}
