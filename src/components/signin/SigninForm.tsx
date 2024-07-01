@@ -91,42 +91,38 @@ export const SigninForm = ({ handleSubmit, isLoading }: Props) => {
                 pt={8}
                 px={9}
                 borderRadius={{ base: 0, sm: 16 }}
-                spacing={6}
+                spacing="14px"
             >
-                <Flex
-                    flexDirection="column"
-                    alignItems="center"
-                    gap={1}
-                    mb={'-10px'}
-                >
+                <Flex flexDirection="column" alignItems="center" gap={1}>
                     <AthenaLogo />
                     <Text fontWeight={600} fontSize="xl">
                         Athena
                     </Text>
                     <Text fontSize="xs">{`All things internal`}</Text>
                 </Flex>
-                <FormControl isRequired width="100%">
-                    <FormLabel color="gray.700">Email address</FormLabel>
-                    <Input
-                        placeholder="Enter Email ID"
-                        size="md"
-                        name="email"
-                        onChange={updateForm}
-                    />
-                </FormControl>
-                <FormControl isRequired width="100%">
-                    <FormLabel color="gray.700">Password</FormLabel>
-                    <Input
-                        placeholder="Enter Password"
-                        size="md"
-                        name="password"
-                        onChange={updateForm}
-                        type="password"
-                    />
-                </FormControl>
-                <Box width="100%">
+                <VStack width="100%" spacing={6}>
+                    <FormControl isRequired width="100%">
+                        <FormLabel color="gray.700" fontWeight={400}>
+                            Email address
+                        </FormLabel>
+                        <Input
+                            placeholder="Enter Email ID"
+                            name="email"
+                            onChange={updateForm}
+                        />
+                    </FormControl>
+                    <FormControl isRequired width="100%">
+                        <FormLabel color="gray.700" fontWeight={400}>
+                            Password
+                        </FormLabel>
+                        <Input
+                            placeholder="Enter Password"
+                            name="password"
+                            onChange={updateForm}
+                            type="password"
+                        />
+                    </FormControl>
                     <Button
-                        size="md"
                         width={'100%'}
                         colorScheme="blue"
                         onClick={() => handleSubmit(form)}
@@ -136,7 +132,7 @@ export const SigninForm = ({ handleSubmit, isLoading }: Props) => {
                     >
                         LOGIN
                     </Button>
-                </Box>
+                </VStack>
             </VStack>
         </Flex>
         // <Container
