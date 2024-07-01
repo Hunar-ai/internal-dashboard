@@ -17,6 +17,7 @@ import {
     Text,
     FormControl
 } from '@chakra-ui/react';
+
 import { AppLoader } from '@components/common';
 
 import AthenaLogo from 'assets/athena-logo.svg?react';
