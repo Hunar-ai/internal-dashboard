@@ -17,6 +17,7 @@ import {
     Text,
     FormControl
 } from '@chakra-ui/react';
+import { AppLoader } from '@components/common';
 
 import AthenaLogo from 'assets/athena-logo.svg?react';
 
@@ -92,7 +93,9 @@ export const SigninForm = ({ handleSubmit, isLoading }: Props) => {
                 px={9}
                 borderRadius={{ base: 0, sm: 16 }}
                 spacing="14px"
+                position="relative"
             >
+                {isLoading && <AppLoader isFullScreen={false} />}
                 <Flex flexDirection="column" alignItems="center" gap={1}>
                     <AthenaLogo />
                     <Text fontWeight={600} fontSize="xl">
