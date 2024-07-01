@@ -55,3 +55,5 @@ export type {
     LeadSettingsProps,
     LmsSettingsProps
 } from './company.interface';
+
+export type { MenuProps } from './menu.interface';

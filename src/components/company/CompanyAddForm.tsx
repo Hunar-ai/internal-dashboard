@@ -30,7 +30,7 @@ import {
     Switch,
     Textarea
 } from '@chakra-ui/react';
-import { HelperText } from '@components/common';
+import { AppLoader, HelperText } from '@components/common';
 import { LeftPanel } from '@components/common/LeftPanel';
 import { RightPanel } from '@components/common/RightPanel';
 
@@ -247,9 +247,10 @@ export const CompanyAddForm = () => {
             overflow={{ base: 'auto', md: 'unset' }}
         >
             <LeftPanel>
+                {isCreateBtnLoading && <AppLoader />}
                 <FormWrapper
                     formTitle="Create Company"
-                    isFormDisabled={createCompany.isSuccess}
+                    isFormDisabled={createCompany.isSuccess && !isDefaultView}
                     isLoading={isCreateBtnLoading}
                     onSubmit={onCreateClick}
                 >

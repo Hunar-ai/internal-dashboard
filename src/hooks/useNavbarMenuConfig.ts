@@ -1,10 +1,6 @@
 import React from 'react';
 
-export interface MenuProps {
-    id: string;
-    title: string;
-    link: string;
-}
+import type { MenuProps } from 'interfaces';
 
 export const useNavbarMenuConfig = () => {
     const menuConfig: MenuProps[] = React.useMemo(() => {
@@ -16,8 +12,14 @@ export const useNavbarMenuConfig = () => {
             },
             {
                 id: 'company',
-                title: 'Create Company',
-                link: '/company?add'
+                title: 'Company',
+                subMenus: [
+                    {
+                        id: 'company/add',
+                        title: 'Add',
+                        link: '/company?add=true'
+                    }
+                ]
             }
         ];
     }, []);

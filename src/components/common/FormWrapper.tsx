@@ -1,5 +1,7 @@
 import { Box, Button, GridItem, SimpleGrid, Text } from '@chakra-ui/react';
 
+import { LoaderBackdrop } from './LoaderBackdrop';
+
 interface FormWrapperProps {
     formTitle: string;
     children: React.ReactNode;
@@ -22,7 +24,11 @@ export const FormWrapper = ({
                 borderRadius="lg"
                 overflow="hidden"
                 padding={4}
+                position="relative"
             >
+                {isFormDisabled && (
+                    <LoaderBackdrop isFullScreen={false} zIndex={1} />
+                )}
                 <SimpleGrid
                     columns={{ base: 1, md: 2 }}
                     spacingX={6}
