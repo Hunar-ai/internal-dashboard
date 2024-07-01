@@ -21,9 +21,17 @@ export const Navbar = () => {
     }>(
         () =>
             menuConfig.reduce((activeState, menu) => {
+                const isSubMenuActive =
+                    menu.subMenus?.some(
+                        subMenu =>
+                            pathname.indexOf(subMenu.id.split('/')[0]) > -1
+                    ) ?? false;
+
                 return {
                     ...activeState,
-                    [menu.id]: pathname.indexOf(menu.id) > -1
+                    [menu.id]: menu.subMenus
+                        ? isSubMenuActive
+                        : pathname.indexOf(menu.id) > -1
                 };
             }, {}),
         [menuConfig, pathname]
@@ -58,6 +66,7 @@ export const Navbar = () => {
                             isActive={isMenuActive[menu.id]}
                             menuLink={menu.link}
                             menuTitle={menu.title}
+                            subMenus={menu.subMenus}
                         />
                     ))}
                 </Flex>
