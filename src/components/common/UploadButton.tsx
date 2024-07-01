@@ -1,8 +1,12 @@
+import React from 'react';
+
 import { Button } from '@chakra-ui/react';
 
 import { UploadInputPreview } from './UploadInputPreview';
 
 import { ALLOWED_EXTENSION, FIELD_SIZE } from 'Enum';
+
+const FILENAME_LENGTH_LIMIT = 15;
 
 interface UploadButtonProps {
     name: string;
@@ -42,9 +46,13 @@ export const UploadButton = ({
         return formattedFilename;
     };
 
+    const filename = React.useMemo(() => {
+        return getFormattedFilename(value, FILENAME_LENGTH_LIMIT);
+    }, [value]);
+
     return value ? (
         <UploadInputPreview
-            inputValue={getFormattedFilename(value, 15)}
+            inputValue={filename}
             size={size}
             isDisabled={isDisabled}
             onRemove={() => onRemove(name)}

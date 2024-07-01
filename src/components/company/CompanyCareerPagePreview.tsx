@@ -49,12 +49,14 @@ export const CompanyCareerPagePreview = ({
                                 height="32px"
                                 alt="Logo 1"
                             />
-                            <Box
-                                as="img"
-                                src={secondaryLogo}
-                                height="32px"
-                                alt="Logo 2"
-                            />
+                            {secondaryLogo && (
+                                <Box
+                                    as="img"
+                                    src={secondaryLogo}
+                                    height="32px"
+                                    alt="Logo 2"
+                                />
+                            )}
                         </Flex>
                         <Flex
                             position="relative"

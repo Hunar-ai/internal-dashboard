@@ -120,6 +120,7 @@ export const CompanyCareerPageForm = () => {
 
     React.useEffect(() => {
         const companyId = searchParams.get('companyId');
+
         if (companyId) {
             updateForm({ companyId });
         }
@@ -447,10 +448,7 @@ export const CompanyCareerPageForm = () => {
                                 name="secondaryLogo"
                                 value={form.secondaryLogo ?? ''}
                                 acceptFileType={allowedImageExtensions}
-                                isDisabled={
-                                    !form.companyId ||
-                                    addCareerPageSettings.isSuccess
-                                }
+                                isDisabled={!form.companyId}
                                 onChange={onFileUpload}
                                 onRemove={onFileRemove}
                             />
@@ -483,10 +481,7 @@ export const CompanyCareerPageForm = () => {
                                 name="bannerImg"
                                 value={form.bannerImg}
                                 acceptFileType={allowedImageExtensions}
-                                isDisabled={
-                                    !form.companyId ||
-                                    addCareerPageSettings.isSuccess
-                                }
+                                isDisabled={!form.companyId}
                                 onChange={onFileUpload}
                                 onRemove={onFileRemove}
                             />

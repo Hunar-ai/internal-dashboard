@@ -126,7 +126,7 @@ export const CompanyAddForm = () => {
     const [dnsRetryCount, setDnsRetryCount] = React.useState(-1);
     const [domainAliasRetryCount, setDomainAliasRetryCount] =
         React.useState(-1);
-    const [isOpen, setIsOpen] = React.useState(false);
+    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
     const isDefaultView = React.useMemo(() => {
         return dnsRetryCount === -1 || domainAliasRetryCount == -1;
@@ -152,7 +152,7 @@ export const CompanyAddForm = () => {
             addDNSRecord.isSuccess &&
             addDomainAlias.isSuccess
         ) {
-            setIsOpen(true);
+            setIsDialogOpen(true);
         }
     }, [
         addDNSRecord.isSuccess,
@@ -526,8 +526,8 @@ export const CompanyAddForm = () => {
                     onDomainRetryClick={createDomainAlias}
                 />
                 <CareerPageSetupDialog
-                    isOpen={isOpen}
-                    onCloseClick={() => setIsOpen(false)}
+                    isOpen={isDialogOpen}
+                    onCloseClick={() => setIsDialogOpen(false)}
                     onProceedClick={onCareerSetupProceedClick}
                 />
             </RightPanel>
