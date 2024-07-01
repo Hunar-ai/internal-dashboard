@@ -34,7 +34,6 @@ export type SignInFormErrorProps = {
 };
 
 interface Props {
-    apiError: string;
     handleSubmit: (_: SigninFormProps) => void;
     isLoading: boolean;
 }
@@ -43,7 +42,7 @@ const validationMap: ValidationMapProps = {
     email: email => RegExUtil.isEmail(email)
 };
 
-export const SigninForm = ({ apiError, handleSubmit, isLoading }: Props) => {
+export const SigninForm = ({ handleSubmit, isLoading }: Props) => {
     const [form, setForm] = React.useState<SigninFormProps>({
         email: '',
         password: ''
@@ -94,7 +93,12 @@ export const SigninForm = ({ apiError, handleSubmit, isLoading }: Props) => {
                 borderRadius={{ base: 0, sm: 16 }}
                 spacing={6}
             >
-                <Flex flexDirection="column" alignItems="center" gap={1}>
+                <Flex
+                    flexDirection="column"
+                    alignItems="center"
+                    gap={1}
+                    mb={'-10px'}
+                >
                     <AthenaLogo />
                     <Text fontWeight={600} fontSize="xl">
                         Athena
