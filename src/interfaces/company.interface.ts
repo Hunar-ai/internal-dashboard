@@ -20,7 +20,7 @@ export interface OnboardingSettingsProps {
 export interface CompanySettingsProps {
     lmsSettings: LmsSettingsProps;
     workerSettings: LeadSettingsProps;
-    onboardingSettings: OnboardingSettingsProps;
+    onboardingSettings?: OnboardingSettingsProps;
 }
 
 export interface CompanyFormProps {
