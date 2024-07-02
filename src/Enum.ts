@@ -148,3 +148,10 @@ export enum DOCUMENT_TYPE {
 export enum CHECK_INTEREST_PROVIDER {
     WATI = 'WATI'
 }
+
+export enum FIELD_SIZE {
+    'xs' = 'xs',
+    'sm' = 'sm',
+    'md' = 'md',
+    'lg' = 'lg'
+}

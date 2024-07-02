@@ -1,27 +1,5 @@
 import React from 'react';
 
-import { useValidationHelper } from 'hooks';
-import { useCompanyHelper } from './useCompanyHelper';
-import { useCreateCompany } from 'hooks/apiHooks/company/useCreateCompany';
-import { useToast } from 'hooks/useToast';
-import { useAddDNSRecord } from 'hooks/apiHooks/company/useAddDNSRecord';
-import { useAddDomainAlias } from 'hooks/apiHooks/company/useAddDomainAlias';
-
-import { ErrorMsg, RegExUtil } from 'utils';
-import type {
-    CompanyDetailsFormProps,
-    CompanyFormProps,
-    FormErrorProps,
-    ValidationMapProps
-} from 'interfaces';
-import {
-    DEFAULT_COMPANY_ADDRESS,
-    DEFAULT_COMPANY_SETTINGS,
-    DEFAULT_LMS_SETTINGS,
-    NAVBAR_HEIGHT
-} from 'Constants';
-import { FormWrapper } from '@components/common/FormWrapper';
-import { CompanyAddStatusView } from './CompanyAddStatusView';
 import {
     FormControl,
     FormLabel,
@@ -30,9 +8,40 @@ import {
     Switch,
     Textarea
 } from '@chakra-ui/react';
-import { AppLoader, HelperText } from '@components/common';
-import { LeftPanel } from '@components/common/LeftPanel';
-import { RightPanel } from '@components/common/RightPanel';
+
+import {
+    AppLoader,
+    HelperText,
+    NumberField,
+    FormWrapper,
+    LeftPanel,
+    RightPanel
+} from '@components/common';
+import { CompanyAddStatusView } from './CompanyAddStatusView';
+
+import { useValidationHelper } from 'hooks';
+import { useCompanyHelper } from './useCompanyHelper';
+import { useCreateCompany } from 'hooks/apiHooks/company/useCreateCompany';
+import { useToast } from 'hooks/useToast';
+import { useAddDNSRecord } from 'hooks/apiHooks/company/useAddDNSRecord';
+import { useAddDomainAlias } from 'hooks/apiHooks/company/useAddDomainAlias';
+
+import { ErrorMsg, NumberUtils, RegExUtil } from 'utils';
+import type {
+    CompanyDetailsFormProps,
+    CompanyFormProps,
+    CompanySettingsProps,
+    FormErrorProps,
+    OnboardingSettingsProps,
+    ValidationMapProps
+} from 'interfaces';
+import {
+    DEFAULT_COMPANY_ADDRESS,
+    DEFAULT_COMPANY_SETTINGS,
+    DEFAULT_LMS_SETTINGS,
+    DEFAULT_ONBOARDING_SETTINGS,
+    NAVBAR_HEIGHT
+} from 'Constants';
 
 const validationMap: ValidationMapProps = {
     companyId: (companyId: string) => RegExUtil.isId(companyId),
@@ -52,6 +61,15 @@ const requiredFields: (keyof CompanyFormProps)[] = [
     'mobileNumber'
 ];
 
+const settingsValidationMap: ValidationMapProps = {
+    workerSourceAffinityPeriod: (period: string) =>
+        RegExUtil.isNumber(period) &&
+        NumberUtils.isNumericRange(NumberUtils.toNumber(period), {
+            min: 1,
+            max: 9999
+        })
+};
+
 const formErrorStateInitialValues: FormErrorProps<CompanyDetailsFormProps> = {
     companyId: false,
     name: false,
@@ -59,6 +77,10 @@ const formErrorStateInitialValues: FormErrorProps<CompanyDetailsFormProps> = {
     rawAddress: false,
     email: false,
     mobileNumber: false
+};
+
+const settingsFormErrorStateInitialValues = {
+    workerSourceAffinityPeriod: false
 };
 
 interface UpdateFieldErrorStateProps {
@@ -75,6 +97,10 @@ export const CompanyAddForm = () => {
     const { showError } = useToast();
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
+    const {
+        hasFormFieldError: hasSettingsFormFieldError,
+        getFormErrorData: getSettingsFormErrorData
+    } = useValidationHelper(settingsValidationMap);
     const { generateRandomGSTIN } = useCompanyHelper();
 
     const companyFormInitialState = React.useMemo(
@@ -98,6 +124,9 @@ export const CompanyAddForm = () => {
     });
     const [formErrorState, setFormErrorState] = React.useState({
         ...formErrorStateInitialValues
+    });
+    const [settingsFormErrorState, setSettingsFormErrorState] = React.useState({
+        ...settingsFormErrorStateInitialValues
     });
     const [dnsRetryCount, setDnsRetryCount] = React.useState(-1);
     const [domainAliasRetryCount, setDomainAliasRetryCount] =
@@ -200,7 +229,20 @@ export const CompanyAddForm = () => {
             ...modifiedErrorState
         }));
 
-        if (hasFormError) {
+        const {
+            errorState: modifiedSettingsErrorState,
+            hasFormError: hasSettingsFormError
+        } = getSettingsFormErrorData({
+            form: form.settings.onboardingSettings ?? {},
+            requiredFields: []
+        });
+
+        setSettingsFormErrorState(prevErrorState => ({
+            ...prevErrorState,
+            ...modifiedSettingsErrorState
+        }));
+
+        if (hasFormError || hasSettingsFormError) {
             return;
         }
 
@@ -238,6 +280,37 @@ export const CompanyAddForm = () => {
         updateForm({
             settings: { ...form.settings, lmsSettings: modifiedLmsSettings }
         });
+    };
+
+    const onCoolOffDurationChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        const fieldName = e.target.name as keyof OnboardingSettingsProps;
+        const fieldValue = parseInt(e.target.value);
+
+        const onboardingSettings: OnboardingSettingsProps | undefined = isNaN(
+            fieldValue
+        )
+            ? undefined
+            : {
+                  ...DEFAULT_ONBOARDING_SETTINGS,
+                  workerSourceAffinityPeriod: fieldValue
+              };
+        const modifiedSettings: CompanySettingsProps = {
+            ...form.settings,
+            onboardingSettings
+        };
+
+        updateForm({ settings: { ...modifiedSettings } });
+        setSettingsFormErrorState(prevErrorState => ({
+            ...prevErrorState,
+            [fieldName]: hasSettingsFormFieldError({
+                fieldName,
+                fieldValue:
+                    onboardingSettings?.workerSourceAffinityPeriod ?? '',
+                isRequired: false
+            })
+        }));
     };
 
     return (
@@ -343,6 +416,32 @@ export const CompanyAddForm = () => {
                         <HelperText
                             hasError={formErrorState.description}
                             errorMsg={ErrorMsg.characterLength()}
+                        />
+                    </FormControl>
+                    <FormControl
+                        isInvalid={
+                            settingsFormErrorState.workerSourceAffinityPeriod
+                        }
+                    >
+                        <FormLabel>Cool-off Period Duration</FormLabel>
+                        <NumberField
+                            placeholder="E.g. 30"
+                            name="workerSourceAffinityPeriod"
+                            value={
+                                form.settings.onboardingSettings
+                                    ?.workerSourceAffinityPeriod ?? ''
+                            }
+                            onChange={onCoolOffDurationChange}
+                        />
+                        <HelperText
+                            hasError={
+                                settingsFormErrorState.workerSourceAffinityPeriod
+                            }
+                            errorMsg={ErrorMsg.numberRange({
+                                min: 1,
+                                max: 10000
+                            })}
+                            msg="Number of days"
                         />
                     </FormControl>
                     <FormControl
