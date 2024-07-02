@@ -3,6 +3,7 @@ export { Select } from './Select';
 export { UploadButton } from './UploadButton';
 export { DatePicker } from './DatePicker';
 export { TextArea } from './TextArea';
+export { NumberField } from './NumberField';
 export { ProtectedRoute } from './ProtectedRoute';
 export { Navbar } from './Navbar';
 export { HelperText } from './HelperText';

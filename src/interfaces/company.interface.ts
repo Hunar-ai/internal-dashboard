@@ -33,7 +33,7 @@ export interface CareerPageSettingsProps {
 export interface CompanySettingsProps {
     lmsSettings: LmsSettingsProps;
     workerSettings: LeadSettingsProps;
-    onboardingSettings: OnboardingSettingsProps;
+    onboardingSettings?: OnboardingSettingsProps;
     careerPageSettings: CareerPageSettingsProps;
 }
 

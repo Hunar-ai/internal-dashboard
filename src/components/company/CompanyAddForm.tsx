@@ -3,6 +3,25 @@ import { useSearchParams } from 'react-router-dom';
 
 import { CareerPageSetupDialog } from './CareerPageSetupDialog';
 
+import {
+    FormControl,
+    FormLabel,
+    Grid,
+    Input,
+    Switch,
+    Textarea
+} from '@chakra-ui/react';
+
+import {
+    AppLoader,
+    HelperText,
+    NumberField,
+    FormWrapper,
+    LeftPanel,
+    RightPanel
+} from '@components/common';
+import { CompanyAddStatusView } from './CompanyAddStatusView';
+
 import { useValidationHelper } from 'hooks';
 import { useCompanyHelper } from './useCompanyHelper';
 import { useCreateCompany } from 'hooks/apiHooks/company/useCreateCompany';
@@ -10,7 +29,7 @@ import { useToast } from 'hooks/useToast';
 import { useAddDNSRecord } from 'hooks/apiHooks/company/useAddDNSRecord';
 import { useAddDomainAlias } from 'hooks/apiHooks/company/useAddDomainAlias';
 
-import { ErrorMsg, RegExUtil } from 'utils';
+import { ErrorMsg, NumberUtils, RegExUtil } from 'utils';
 import type {
     CompanyDetailsFormProps,
     CompanyFormProps,
@@ -26,19 +45,6 @@ import {
     DEFAULT_ONBOARDING_SETTINGS,
     NAVBAR_HEIGHT
 } from 'Constants';
-import { FormWrapper } from '@components/common/FormWrapper';
-import { CompanyAddStatusView } from './CompanyAddStatusView';
-import {
-    FormControl,
-    FormLabel,
-    Grid,
-    Input,
-    Switch,
-    Textarea
-} from '@chakra-ui/react';
-import { AppLoader, HelperText } from '@components/common';
-import { LeftPanel } from '@components/common/LeftPanel';
-import { RightPanel } from '@components/common/RightPanel';
 
 const validationMap: ValidationMapProps = {
     companyId: (companyId: string) => RegExUtil.isId(companyId),
@@ -59,10 +65,13 @@ const requiredFields: (keyof CompanyFormProps)[] = [
 ];
 
 const settingsValidationMap: ValidationMapProps = {
-    workerSourceAffinityPeriod: (period: string) => RegExUtil.isNumber(period)
+    workerSourceAffinityPeriod: (period: string) =>
+        RegExUtil.isNumber(period) &&
+        NumberUtils.isNumericRange(NumberUtils.toNumber(period), {
+            min: 1,
+            max: 9999
+        })
 };
-
-const settingsRequiredFields = ['workerSourceAffinityPeriod'];
 
 const formErrorStateInitialValues: FormErrorProps<CompanyDetailsFormProps> = {
     companyId: false,
@@ -243,11 +252,8 @@ export const CompanyAddForm = () => {
             errorState: modifiedSettingsErrorState,
             hasFormError: hasSettingsFormError
         } = getSettingsFormErrorData({
-            form: form.settings.onboardingSettings,
-            requiredFields: form.settings.onboardingSettings
-                .enableWorkerSourceAffinity
-                ? settingsRequiredFields
-                : []
+            form: form.settings.onboardingSettings ?? {},
+            requiredFields: []
         });
 
         setSettingsFormErrorState(prevErrorState => ({
@@ -295,35 +301,23 @@ export const CompanyAddForm = () => {
         });
     };
 
-    const onCoolOffPeriodToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const isEnabled = e.target.checked;
-        const modifiedOnboardingSettings: OnboardingSettingsProps = isEnabled
-            ? DEFAULT_ONBOARDING_SETTINGS
-            : { enableWorkerSourceAffinity: false };
-        updateForm({
-            settings: {
-                ...form.settings,
-                onboardingSettings: modifiedOnboardingSettings
-            }
-        });
-        setSettingsFormErrorState(prevErrorState => ({
-            ...prevErrorState,
-            workerSourceAffinityPeriod: false
-        }));
-    };
-
     const onCoolOffDurationChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const fieldName = e.target.name as keyof OnboardingSettingsProps;
-        const fieldValue = e.target.value;
+        const fieldValue = parseInt(e.target.value);
 
+        const onboardingSettings: OnboardingSettingsProps | undefined = isNaN(
+            fieldValue
+        )
+            ? undefined
+            : {
+                  ...DEFAULT_ONBOARDING_SETTINGS,
+                  workerSourceAffinityPeriod: fieldValue
+              };
         const modifiedSettings: CompanySettingsProps = {
             ...form.settings,
-            onboardingSettings: {
-                ...form.settings.onboardingSettings,
-                workerSourceAffinityPeriod: parseInt(fieldValue)
-            }
+            onboardingSettings
         };
 
         updateForm({ settings: { ...modifiedSettings } });
@@ -331,8 +325,9 @@ export const CompanyAddForm = () => {
             ...prevErrorState,
             [fieldName]: hasSettingsFormFieldError({
                 fieldName,
-                fieldValue,
-                isRequired: true
+                fieldValue:
+                    onboardingSettings?.workerSourceAffinityPeriod ?? '',
+                isRequired: false
             })
         }));
     };
@@ -450,40 +445,17 @@ export const CompanyAddForm = () => {
                         />
                     </FormControl>
                     <FormControl
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
-                    >
-                        <FormLabel>Enable Cool-off Period</FormLabel>
-                        <Switch
-                            name="enableWorkerSourceAffinity"
-                            isChecked={
-                                form.settings.onboardingSettings
-                                    .enableWorkerSourceAffinity
-                            }
-                            onChange={onCoolOffPeriodToggle}
-                        />
-                    </FormControl>
-                    <FormControl
                         isInvalid={
                             settingsFormErrorState.workerSourceAffinityPeriod
                         }
-                        isRequired={
-                            form.settings.onboardingSettings
-                                .enableWorkerSourceAffinity
-                        }
-                        isDisabled={
-                            !form.settings.onboardingSettings
-                                .enableWorkerSourceAffinity
-                        }
                     >
                         <FormLabel>Cool-off Period Duration</FormLabel>
-                        <Input
+                        <NumberField
                             placeholder="E.g. 30"
                             name="workerSourceAffinityPeriod"
                             value={
                                 form.settings.onboardingSettings
-                                    .workerSourceAffinityPeriod || ''
+                                    ?.workerSourceAffinityPeriod ?? ''
                             }
                             onChange={onCoolOffDurationChange}
                         />
@@ -491,7 +463,10 @@ export const CompanyAddForm = () => {
                             hasError={
                                 settingsFormErrorState.workerSourceAffinityPeriod
                             }
-                            errorMsg={ErrorMsg.number()}
+                            errorMsg={ErrorMsg.numberRange({
+                                min: 1,
+                                max: 10000
+                            })}
                             msg="Number of days"
                         />
                     </FormControl>
