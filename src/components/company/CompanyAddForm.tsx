@@ -68,7 +68,7 @@ const settingsValidationMap: ValidationMapProps = {
     workerSourceAffinityPeriod: (period: string) =>
         RegExUtil.isNumber(period) &&
         NumberUtils.isNumericRange(NumberUtils.toNumber(period), {
-            min: 1,
+            min: 0,
             max: 9999
         })
 };
@@ -307,10 +307,8 @@ export const CompanyAddForm = () => {
         const fieldName = e.target.name as keyof OnboardingSettingsProps;
         const fieldValue = parseInt(e.target.value);
 
-        const onboardingSettings: OnboardingSettingsProps | undefined = isNaN(
-            fieldValue
-        )
-            ? undefined
+        const onboardingSettings: OnboardingSettingsProps = isNaN(fieldValue)
+            ? { enableWorkerSourceAffinity: false }
             : {
                   ...DEFAULT_ONBOARDING_SETTINGS,
                   workerSourceAffinityPeriod: fieldValue
@@ -464,7 +462,7 @@ export const CompanyAddForm = () => {
                                 settingsFormErrorState.workerSourceAffinityPeriod
                             }
                             errorMsg={ErrorMsg.numberRange({
-                                min: 1,
+                                min: 0,
                                 max: 10000
                             })}
                             msg="Number of days"
