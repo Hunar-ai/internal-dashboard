@@ -22,6 +22,8 @@ import { AppLoader } from '@components/common';
 
 import AthenaLogo from 'assets/athena-logo.svg?react';
 
+import { HUNAR_BG_COLOR } from 'Constants';
+
 export interface ValidationMapProps {
     [key: string]: (_: string) => boolean;
 }
@@ -81,7 +83,7 @@ export const SigninForm = ({ handleSubmit, isLoading }: Props) => {
     return (
         <Flex
             color="grey.700"
-            bg="blue.900"
+            bg={HUNAR_BG_COLOR}
             justifyContent="center"
             height="100vh"
             pt={{ base: 0, sm: 14 }}

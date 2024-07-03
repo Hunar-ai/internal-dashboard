@@ -39,3 +39,5 @@ export const DEFAULT_COMPANY_SETTINGS: CompanySettingsProps = {
 };
 
 export const DEFAULT_COMPANY_ADDRESS = 'Plot in Gurgaon, Haryana';
+
+export const HUNAR_BG_COLOR = '#061E40';
