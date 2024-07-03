@@ -36,7 +36,7 @@ export const DEFAULT_LEAD_SETTINGS: LeadSettingsProps = {
 
 export const DEFAULT_ONBOARDING_SETTINGS: OnboardingSettingsProps = {
     enableWorkerSourceAffinity: true,
-    workerSourceAffinityPeriod: 9999
+    workerSourceAffinityPeriod: 0
 };
 
 export const DEFAULT_COMPANY_SETTINGS: CompanySettingsProps = {
