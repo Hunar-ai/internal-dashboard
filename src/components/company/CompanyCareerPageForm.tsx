@@ -18,10 +18,10 @@ export const CompanyCareerPageForm = () => {
                     isLoading={false}
                     onSubmit={() => console.log('TODO')}
                 >
-                    Form Here
+                    {`Form Here`}
                 </FormWrapper>
             </LeftPanel>
-            <RightPanel>Preview Here</RightPanel>
+            <RightPanel>{`Preview Here`}</RightPanel>
         </Grid>
     );
 };

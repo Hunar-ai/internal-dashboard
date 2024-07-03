@@ -421,7 +421,7 @@ export const CompanyAddForm = () => {
                             settingsFormErrorState.workerSourceAffinityPeriod
                         }
                     >
-                        <FormLabel>Cool-off Period Duration</FormLabel>
+                        <FormLabel>{`Cool-off Period Duration`}</FormLabel>
                         <NumberField
                             placeholder="E.g. 30"
                             name="workerSourceAffinityPeriod"
