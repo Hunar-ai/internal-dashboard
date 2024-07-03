@@ -12,3 +12,4 @@ export { AppLoader } from './AppLoader';
 export { FormWrapper } from './FormWrapper';
 export { LeftPanel } from './LeftPanel';
 export { RightPanel } from './RightPanel';
+export { ConfirmationDialog } from './ConfirmationDialog';

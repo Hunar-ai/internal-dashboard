@@ -284,7 +284,7 @@ export const CompanyCareerPageForm = () => {
                         isRequired
                         isInvalid={formErrorState.companyId}
                     >
-                        <FormLabel>Company Id</FormLabel>
+                        <FormLabel>{`Company Id`}</FormLabel>
                         <Select
                             placeholder="Select Company Id"
                             name="companyId"
@@ -311,7 +311,7 @@ export const CompanyCareerPageForm = () => {
                         isRequired
                         isDisabled={!form.companyId}
                     >
-                        <FormLabel>Company Name</FormLabel>
+                        <FormLabel>{`Company Name`}</FormLabel>
                         <Input
                             placeholder="Enter Company Name"
                             name="companyName"
@@ -328,7 +328,7 @@ export const CompanyCareerPageForm = () => {
                         isRequired
                         isDisabled={!form.companyId}
                     >
-                        <FormLabel>Primary Color</FormLabel>
+                        <FormLabel>{`Primary Color`}</FormLabel>
                         <Input
                             placeholder="Enter Primary Color"
                             name="primaryColor"
@@ -345,7 +345,7 @@ export const CompanyCareerPageForm = () => {
                         isRequired
                         isDisabled={!form.companyId}
                     >
-                        <FormLabel>Banner Text Color</FormLabel>
+                        <FormLabel>{`Banner Text Color`}</FormLabel>
                         <Input
                             placeholder="Enter Banner Text Color"
                             name="bannerTextColor"
@@ -362,7 +362,7 @@ export const CompanyCareerPageForm = () => {
                         isRequired
                         isDisabled={!form.companyId}
                     >
-                        <FormLabel>Learn More Link</FormLabel>
+                        <FormLabel>{`Learn More Link`}</FormLabel>
                         <Input
                             placeholder="Enter Learn More Link"
                             name="learnMoreLink"
@@ -379,7 +379,7 @@ export const CompanyCareerPageForm = () => {
                         isRequired
                         isDisabled={!form.companyId}
                     >
-                        <FormLabel>Description</FormLabel>
+                        <FormLabel>{`Description`}</FormLabel>
                         <Textarea
                             placeholder="Description"
                             name="description"
@@ -406,7 +406,7 @@ export const CompanyCareerPageForm = () => {
                             alignItems="center"
                         >
                             <FormLabel flexGrow={1} sx={{ mb: 0 }}>
-                                Logo 1
+                                {`Logo 1`}
                             </FormLabel>
                             <UploadButton
                                 title="UPLOAD"
@@ -441,7 +441,7 @@ export const CompanyCareerPageForm = () => {
                             alignItems="center"
                         >
                             <FormLabel flexGrow={1} sx={{ mb: 0 }}>
-                                Logo 2
+                                {`Logo 2`}
                             </FormLabel>
                             <UploadButton
                                 title="UPLOAD"
@@ -474,7 +474,7 @@ export const CompanyCareerPageForm = () => {
                             alignItems="center"
                         >
                             <FormLabel flexGrow={1} sx={{ mb: 0 }}>
-                                Banner Image
+                                {`Banner Image`}
                             </FormLabel>
                             <UploadButton
                                 title="UPLOAD"

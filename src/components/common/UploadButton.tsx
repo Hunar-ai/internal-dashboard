@@ -50,33 +50,37 @@ export const UploadButton = ({
         return getFormattedFilename(value, FILENAME_LENGTH_LIMIT);
     }, [value]);
 
-    return value ? (
-        <UploadInputPreview
-            inputValue={filename}
-            size={size}
-            isDisabled={isDisabled}
-            onRemove={() => onRemove(name)}
-        />
-    ) : (
-        <Button
-            colorScheme="blue"
-            variant="outline"
-            size={size}
-            isLoading={isLoading}
-            isDisabled={isDisabled}
-            cursor="pointer"
-            as="label"
-        >
-            {title}
-            <input
-                type="file"
-                hidden
-                disabled={isDisabled}
-                onChange={onChange}
-                value={value}
-                name={name}
-                accept={acceptFileType?.join(',')}
-            />
-        </Button>
+    return (
+        <>
+            {value ? (
+                <UploadInputPreview
+                    inputValue={filename}
+                    size={size}
+                    isDisabled={isDisabled}
+                    onRemove={() => onRemove(name)}
+                />
+            ) : (
+                <Button
+                    colorScheme="blue"
+                    variant="outline"
+                    size={size}
+                    isLoading={isLoading}
+                    isDisabled={isDisabled}
+                    cursor="pointer"
+                    as="label"
+                >
+                    {title}
+                    <input
+                        type="file"
+                        hidden
+                        disabled={isDisabled}
+                        onChange={onChange}
+                        value={value}
+                        name={name}
+                        accept={acceptFileType?.join(',')}
+                    />
+                </Button>
+            )}
+        </>
     );
 };

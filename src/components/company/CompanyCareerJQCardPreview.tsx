@@ -10,14 +10,14 @@ export const CompanyCareerJQCardPreview = ({
     return (
         <Card width="100%" p={4}>
             <Flex flexDirection="column" rowGap={3}>
-                <Text fontSize="sm">Punjab & Haryana</Text>
+                <Text fontSize="sm">{`Punjab & Haryana`}</Text>
                 <Box>
-                    <Text fontSize="lg">Field Assitant Trainee</Text>
+                    <Text fontSize="lg">{`Field Assistant Trainee`}</Text>
                     <Text fontSize="sm" as="span" fontWeight={700}>
                         {'Salary: '}
                     </Text>
                     <Text fontSize="sm" as="span">
-                        Negotiable
+                        {`Negotiable`}
                     </Text>
                 </Box>
                 <Text
@@ -30,9 +30,8 @@ export const CompanyCareerJQCardPreview = ({
                         WebkitBoxOrient: 'vertical'
                     }}
                 >
-                    Age - 18 - 28 Years Education Qualification - Minimum 12th
-                    Pass Experience - More than 06 months in MFI/BFSI,
-                    Microfinance
+                    {`Age - 18 - 28 Years Education Qualification - Minimum 12th Pass Experience -
+                    More than 06 months in MFI/BFSI, Microfinance`}
                 </Text>
                 <Box>
                     <Button
@@ -40,7 +39,7 @@ export const CompanyCareerJQCardPreview = ({
                         colorScheme={primaryColor}
                         color="white"
                     >
-                        APPLY NOW
+                        {`APPLY NOW`}
                     </Button>
                 </Box>
             </Flex>

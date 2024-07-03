@@ -31,7 +31,7 @@ export const CompanyCareerPagePreview = ({
             <AccordionItem>
                 <AccordionButton>
                     <Text as="span" flex="1" textAlign="left">
-                        PREVIEW
+                        {`PREVIEW`}
                     </Text>
                     <AccordionIcon />
                 </AccordionButton>
@@ -68,7 +68,7 @@ export const CompanyCareerPagePreview = ({
                                 fontWeight={700}
                                 color={bannerTextColor || 'gray'}
                             >
-                                Apply for job at {companyName}
+                                {`Apply for job at ${companyName}`}
                             </Text>
                             <Box
                                 position="absolute"
@@ -105,12 +105,12 @@ export const CompanyCareerPagePreview = ({
                                         target="_blank"
                                         rel="noreferrer"
                                     >
-                                        Learn More
+                                        {`Learn More`}
                                     </a>
                                 </Text>
                             )}
                             <Box py={2}>
-                                <Text py={2}>Showing 2 job vacancies</Text>
+                                <Text py={2}>{`Showing 2 job vacancies`}</Text>
                                 <Flex gap={2}>
                                     <Select placeholder="SELECT CITY"></Select>
                                     <Select placeholder="SELECT LOCALITY"></Select>
