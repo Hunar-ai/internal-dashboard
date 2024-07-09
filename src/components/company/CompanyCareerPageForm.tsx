@@ -1,15 +1,7 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import {
-    Flex,
-    FormControl,
-    FormLabel,
-    Grid,
-    Input,
-    Select,
-    Textarea
-} from '@chakra-ui/react';
+import { Flex, FormControl, FormLabel, Grid } from '@chakra-ui/react';
 
 import {
     AppLoader,
@@ -17,6 +9,9 @@ import {
     HelperText,
     LeftPanel,
     RightPanel,
+    SelectField,
+    TextAreaField,
+    TextField,
     UploadButton
 } from '@components/common';
 import { CompanyCareerPagePreview } from './CompanyCareerPagePreview';
@@ -27,7 +22,11 @@ import { useAddCareerPageSettings } from 'hooks/apiHooks/careerPage/useAddCareer
 import { useToast } from 'hooks/useToast';
 import { useValidationHelper } from 'hooks';
 
-import type { CareerPageFormProps, FormErrorProps } from 'interfaces';
+import type {
+    CareerPageFormProps,
+    FormErrorProps,
+    OptionsProps
+} from 'interfaces';
 import { ALLOWED_EXTENSION } from 'Enum';
 import { ErrorMsg, RegExUtil, StringUtils } from 'utils';
 import { NAVBAR_HEIGHT } from 'Constants';
@@ -118,13 +117,25 @@ export const CompanyCareerPageForm = () => {
     const { data: companiesResponse, isLoading: isCompaniesLoading } =
         useGetCompanies();
 
-    React.useEffect(() => {
-        const companyId = searchParams.get('companyId');
+    const searchParamCompanyId = React.useMemo(
+        () => searchParams.get('companyId'),
+        [searchParams]
+    );
 
-        if (companyId) {
-            updateForm({ companyId });
+    const companyIdOptions: OptionsProps = React.useMemo(() => {
+        return (
+            companiesResponse?.data.map(company => ({
+                value: company.companyId,
+                label: company.companyId
+            })) ?? []
+        );
+    }, [companiesResponse?.data]);
+
+    React.useEffect(() => {
+        if (searchParamCompanyId) {
+            updateForm({ companyId: searchParamCompanyId });
         }
-    }, [searchParams]);
+    }, [searchParamCompanyId]);
 
     const updateForm = (modifiedForm: Partial<CareerPageFormProps>) => {
         setForm(oldForm => ({ ...oldForm, ...modifiedForm }));
@@ -156,7 +167,7 @@ export const CompanyCareerPageForm = () => {
         updateFieldErrorState({ fieldName, fieldValue });
     };
 
-    const uploadFile = (fieldName: keyof CareerPageFormProps, file: File) => {
+    const saveFile = (fieldName: keyof CareerPageFormProps, file: File) => {
         uploadCareerPageAsset.mutate(
             {
                 params: { companyId: form.companyId },
@@ -197,7 +208,7 @@ export const CompanyCareerPageForm = () => {
             return;
         }
 
-        uploadFile(fieldName, file);
+        saveFile(fieldName, file);
     };
 
     const onFileRemove = (fieldName: string) => {
@@ -208,7 +219,7 @@ export const CompanyCareerPageForm = () => {
         });
     };
 
-    const addSettings = () => {
+    const submitSettings = () => {
         const { companyId, ...restForm } = form;
         addCareerPageSettings.mutate(
             {
@@ -261,7 +272,7 @@ export const CompanyCareerPageForm = () => {
             return;
         }
 
-        addSettings();
+        submitSettings();
     };
 
     return (
@@ -280,119 +291,105 @@ export const CompanyCareerPageForm = () => {
                     isLoading={addCareerPageSettings.isLoading}
                     onSubmit={onSubmit}
                 >
-                    <FormControl
+                    <SelectField
+                        label="Company Id"
+                        name="companyId"
+                        placeholder="Select Company Id"
+                        options={companyIdOptions}
+                        value={form.companyId}
+                        onChange={onFormFieldChange}
                         isRequired
                         isInvalid={formErrorState.companyId}
-                    >
-                        <FormLabel>{`Company Id`}</FormLabel>
-                        <Select
-                            placeholder="Select Company Id"
-                            name="companyId"
-                            isDisabled={searchParams.has('companyId')}
-                            value={form.companyId}
-                            onChange={onFormFieldChange}
-                        >
-                            {companiesResponse?.data.map(company => (
-                                <option
-                                    value={company.companyId}
-                                    key={company.companyId}
-                                >
-                                    {company.companyId}
-                                </option>
-                            ))}
-                        </Select>
-                        <HelperText
-                            hasError={formErrorState.companyId}
-                            errorMsg={ErrorMsg.required()}
-                        />
-                    </FormControl>
-                    <FormControl
+                        isDisabled={searchParams.has('companyId')}
+                        helperText={
+                            <HelperText
+                                hasError={formErrorState.companyId}
+                                errorMsg={ErrorMsg.required()}
+                            />
+                        }
+                    />
+                    <TextField
+                        label="Company Name"
+                        name="companyName"
+                        placeholder="Enter Company Name"
+                        value={form.companyName}
+                        onChange={onFormFieldChange}
+                        isRequired
+                        isDisabled={!form.companyId}
                         isInvalid={formErrorState.companyName}
+                        helperText={
+                            <HelperText
+                                hasError={formErrorState.companyName}
+                                errorMsg={ErrorMsg.alphaNumeric()}
+                            />
+                        }
+                    />
+                    <TextField
+                        label="Primary Color"
+                        name="primaryColor"
+                        placeholder="Enter Primary Color"
+                        value={form.primaryColor}
+                        onChange={onFormFieldChange}
                         isRequired
-                        isDisabled={!form.companyId}
-                    >
-                        <FormLabel>{`Company Name`}</FormLabel>
-                        <Input
-                            placeholder="Enter Company Name"
-                            name="companyName"
-                            value={form.companyName}
-                            onChange={onFormFieldChange}
-                        />
-                        <HelperText
-                            hasError={formErrorState.companyName}
-                            errorMsg={ErrorMsg.alphaNumeric()}
-                        />
-                    </FormControl>
-                    <FormControl
                         isInvalid={formErrorState.primaryColor}
-                        isRequired
                         isDisabled={!form.companyId}
-                    >
-                        <FormLabel>{`Primary Color`}</FormLabel>
-                        <Input
-                            placeholder="Enter Primary Color"
-                            name="primaryColor"
-                            value={form.primaryColor}
-                            onChange={onFormFieldChange}
-                        />
-                        <HelperText
-                            hasError={formErrorState.primaryColor}
-                            errorMsg={ErrorMsg.hexColor()}
-                        />
-                    </FormControl>
-                    <FormControl
+                        helperText={
+                            <HelperText
+                                hasError={formErrorState.primaryColor}
+                                errorMsg={ErrorMsg.hexColor()}
+                            />
+                        }
+                    />
+                    <TextField
+                        label="Banner Text Color"
+                        name="bannerTextColor"
+                        placeholder="Enter Banner Text Color"
+                        value={form.bannerTextColor}
+                        onChange={onFormFieldChange}
+                        isRequired
                         isInvalid={formErrorState.bannerTextColor}
-                        isRequired
                         isDisabled={!form.companyId}
-                    >
-                        <FormLabel>{`Banner Text Color`}</FormLabel>
-                        <Input
-                            placeholder="Enter Banner Text Color"
-                            name="bannerTextColor"
-                            value={form.bannerTextColor}
-                            onChange={onFormFieldChange}
-                        />
-                        <HelperText
-                            hasError={formErrorState.bannerTextColor}
-                            errorMsg={ErrorMsg.hexColor()}
-                        />
-                    </FormControl>
-                    <FormControl
+                        helperText={
+                            <HelperText
+                                hasError={formErrorState.bannerTextColor}
+                                errorMsg={ErrorMsg.hexColor()}
+                            />
+                        }
+                    />
+                    <TextField
+                        label="Learn More Link"
+                        name="learnMoreLink"
+                        placeholder="Enter Learn More Link"
+                        value={form.learnMoreLink}
+                        onChange={onFormFieldChange}
+                        isRequired
                         isInvalid={formErrorState.learnMoreLink}
-                        isRequired
                         isDisabled={!form.companyId}
-                    >
-                        <FormLabel>{`Learn More Link`}</FormLabel>
-                        <Input
-                            placeholder="Enter Learn More Link"
-                            name="learnMoreLink"
-                            value={form.learnMoreLink}
-                            onChange={onFormFieldChange}
-                        />
-                        <HelperText
-                            hasError={formErrorState.learnMoreLink}
-                            errorMsg={ErrorMsg.url()}
-                        />
-                    </FormControl>
-                    <FormControl
+                        helperText={
+                            <HelperText
+                                hasError={formErrorState.learnMoreLink}
+                                errorMsg={ErrorMsg.url()}
+                            />
+                        }
+                    />
+                    <TextAreaField
+                        label="Description"
+                        name="description"
+                        placeholder="Description"
+                        value={form.description}
+                        onChange={onFormFieldChange}
+                        isRequired
                         isInvalid={formErrorState.description}
-                        isRequired
                         isDisabled={!form.companyId}
-                    >
-                        <FormLabel>{`Description`}</FormLabel>
-                        <Textarea
-                            placeholder="Description"
-                            name="description"
-                            value={form.description}
-                            onChange={onFormFieldChange}
-                        />
-                        <HelperText
-                            hasError={formErrorState.description}
-                            errorMsg={ErrorMsg.characterLength({
-                                max: 300
-                            })}
-                        />
-                    </FormControl>
+                        helperText={
+                            <HelperText
+                                hasError={formErrorState.description}
+                                errorMsg={ErrorMsg.characterLength({
+                                    max: 300
+                                })}
+                            />
+                        }
+                    />
                     <FormControl
                         isRequired
                         isInvalid={
