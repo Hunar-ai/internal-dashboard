@@ -167,34 +167,31 @@ export const CompanyCareerPageForm = () => {
         updateFieldErrorState({ fieldName, fieldValue });
     };
 
-    const saveFile = async (
-        fieldName: keyof CareerPageFormProps,
-        file: File
-    ) => {
-        return await uploadCareerPageAsset.mutateAsync(
+    const saveFile = (fieldName: keyof CareerPageFormProps, file: File) => {
+        uploadCareerPageAsset.mutate(
             {
                 params: { companyId: form.companyId },
                 requestBody: { file }
             },
             {
-                // onSuccess: ({ assetUrl }) => {
-                //     updateForm({ [fieldName]: assetUrl });
-                //     updateFieldErrorState({ fieldName, fieldValue: assetUrl });
-                //     setUploadErrorMap(prevErrorValue => ({
-                //         ...prevErrorValue,
-                //         [fieldName]: ''
-                //     }));
-                // },
-                // onError: ({ errors }) => {
-                //     setFormErrorState(prevErrorState => ({
-                //         ...prevErrorState,
-                //         [fieldName]: true
-                //     }));
-                //     setUploadErrorMap(prevErrorValue => ({
-                //         ...prevErrorValue,
-                //         [fieldName]: errors.displayError
-                //     }));
-                // }
+                onSuccess: ({ assetUrl }) => {
+                    updateForm({ [fieldName]: assetUrl });
+                    updateFieldErrorState({ fieldName, fieldValue: assetUrl });
+                    setUploadErrorMap(prevErrorValue => ({
+                        ...prevErrorValue,
+                        [fieldName]: ''
+                    }));
+                },
+                onError: ({ errors }) => {
+                    setFormErrorState(prevErrorState => ({
+                        ...prevErrorState,
+                        [fieldName]: true
+                    }));
+                    setUploadErrorMap(prevErrorValue => ({
+                        ...prevErrorValue,
+                        [fieldName]: errors.displayError
+                    }));
+                }
             }
         );
     };
@@ -211,25 +208,7 @@ export const CompanyCareerPageForm = () => {
             return;
         }
 
-        saveFile(fieldName, file)
-            .then(({ assetUrl }) => {
-                updateForm({ [fieldName]: assetUrl });
-                updateFieldErrorState({ fieldName, fieldValue: assetUrl });
-                setUploadErrorMap(prevErrorValue => ({
-                    ...prevErrorValue,
-                    [fieldName]: ''
-                }));
-            })
-            .catch(({ errors }) => {
-                setFormErrorState(prevErrorState => ({
-                    ...prevErrorState,
-                    [fieldName]: true
-                }));
-                setUploadErrorMap(prevErrorValue => ({
-                    ...prevErrorValue,
-                    [fieldName]: errors.displayError
-                }));
-            });
+        saveFile(fieldName, file);
     };
 
     const onFileRemove = (fieldName: string) => {
@@ -240,27 +219,27 @@ export const CompanyCareerPageForm = () => {
         });
     };
 
-    const submitSettings = async () => {
+    const submitSettings = () => {
         const { companyId, ...restForm } = form;
-        return await addCareerPageSettings.mutateAsync(
+        addCareerPageSettings.mutate(
             {
                 params: { companyId },
                 requestBody: restForm
+            },
+            {
+                onSuccess: () => {
+                    showSuccess({
+                        title: 'Success',
+                        description: 'Successfully added settings!'
+                    });
+                },
+                onError: ({ errors }) => {
+                    showError({
+                        title: 'Error',
+                        description: errors.displayError
+                    });
+                }
             }
-            // {
-            //     onSuccess: () => {
-            //         showSuccess({
-            //             title: 'Success',
-            //             description: 'Successfully added settings!'
-            //         });
-            //     },
-            //     onError: ({ errors }) => {
-            //         showError({
-            //             title: 'Error',
-            //             description: errors.displayError
-            //         });
-            //     }
-            // }
         );
     };
 
@@ -293,19 +272,7 @@ export const CompanyCareerPageForm = () => {
             return;
         }
 
-        submitSettings()
-            .then(() => {
-                showSuccess({
-                    title: 'Success',
-                    description: 'Successfully added settings!'
-                });
-            })
-            .catch(({ errors }) => {
-                showError({
-                    title: 'Error',
-                    description: errors.displayError
-                });
-            });
+        submitSettings();
     };
 
     return (
