@@ -1,4 +1,7 @@
 import React from 'react';
+import { useSearchParams } from 'react-router-dom';
+
+import { CareerPageSetupDialog } from './CareerPageSetupDialog';
 
 import {
     FormControl,
@@ -95,6 +98,7 @@ export const CompanyAddForm = () => {
     const addDNSRecord = useAddDNSRecord();
     const addDomainAlias = useAddDomainAlias();
     const { showError } = useToast();
+    const [searchParams, setSearchParams] = useSearchParams();
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
     const {
@@ -131,6 +135,7 @@ export const CompanyAddForm = () => {
     const [dnsRetryCount, setDnsRetryCount] = React.useState(-1);
     const [domainAliasRetryCount, setDomainAliasRetryCount] =
         React.useState(-1);
+    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
     const isDefaultView = React.useMemo(() => {
         return dnsRetryCount === -1 || domainAliasRetryCount == -1;
@@ -148,6 +153,20 @@ export const CompanyAddForm = () => {
         addDomainAlias.isLoading,
         createCompany.isLoading,
         isDefaultView
+    ]);
+
+    React.useEffect(() => {
+        if (
+            createCompany.isSuccess &&
+            addDNSRecord.isSuccess &&
+            addDomainAlias.isSuccess
+        ) {
+            setIsDialogOpen(true);
+        }
+    }, [
+        addDNSRecord.isSuccess,
+        addDomainAlias.isSuccess,
+        createCompany.isSuccess
     ]);
 
     const updateForm = (modifiedForm: Partial<CompanyFormProps>) => {
@@ -311,6 +330,13 @@ export const CompanyAddForm = () => {
         }));
     };
 
+    const onCareerSetupProceedClick = () => {
+        searchParams.delete('add');
+        searchParams.set('career', 'true');
+        searchParams.set('companyId', form.companyId);
+        setSearchParams(searchParams);
+    };
+
     return (
         <Grid
             templateColumns={{ base: 'auto', md: '8fr 4fr' }}
@@ -471,6 +497,11 @@ export const CompanyAddForm = () => {
                         domainAliasRetryCount < DOMAIN_RETRY_LIMIT
                     }
                     onDomainRetryClick={createDomainAlias}
+                />
+                <CareerPageSetupDialog
+                    isOpen={isDialogOpen}
+                    onCloseClick={() => setIsDialogOpen(false)}
+                    onProceedClick={onCareerSetupProceedClick}
                 />
             </RightPanel>
         </Grid>

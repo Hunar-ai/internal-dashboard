@@ -1,202 +1,85 @@
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import React from 'react';
 
-import LoadingButton from '@mui/lab/LoadingButton';
-import Typography from '@mui/material/Typography';
+import { Button } from '@chakra-ui/react';
 
-import styled from '@emotion/styled';
-import { SxProps, useTheme } from '@mui/material/styles';
-import ClearIcon from '@mui/icons-material/Clear';
-import IconButton from '@mui/material/IconButton';
-import { grey } from '@mui/material/colors';
-import { ALLOWED_EXTENSION } from 'Enum';
+import { UploadInputPreview } from './UploadInputPreview';
+
+import { ALLOWED_EXTENSION, FIELD_SIZE } from 'Enum';
+
+const FILENAME_LENGTH_LIMIT = 15;
 
 interface UploadButtonProps {
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    isLoading?: boolean;
-    color?: string;
-    title?: string;
     name: string;
-    value?: string;
-    required?: boolean;
-    onRemove?: (_: string) => void;
-    disabled?: boolean;
-    acceptFileType?: Array<ALLOWED_EXTENSION>;
-    sx?: SxProps;
+    value: string;
+    title: string;
+    acceptFileType: Array<ALLOWED_EXTENSION>;
+    size?: FIELD_SIZE;
+    isLoading?: boolean;
+    isDisabled?: boolean;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onRemove: (_: string) => void;
 }
 
 export const UploadButton = ({
-    onChange,
-    isLoading = false,
-    title = 'UPLOAD',
-    color,
     name,
     value,
-    required = false,
-    onRemove,
-    disabled = false,
-    acceptFileType
+    title,
+    acceptFileType,
+    size = FIELD_SIZE.sm,
+    isLoading = false,
+    isDisabled = false,
+    onChange,
+    onRemove
 }: UploadButtonProps) => {
-    const Input = styled('input')({
-        display: 'none'
-    });
-    const theme = useTheme();
-    color = color ?? theme.palette.primary.main;
+    const getFormattedFilename = (filename: string, maxLength: number) => {
+        if (filename.length <= maxLength) return filename;
 
-    const getFormattedValue = (value: string, requiredLength: number) => {
-        const firstPart = value?.slice(
-            value?.lastIndexOf('/') + 1,
-            value?.lastIndexOf('/') + requiredLength
+        const extension = filename.slice(
+            filename.lastIndexOf('.'),
+            filename.length
         );
-        const shortOfFirstPart = firstPart?.length || 0;
-        let formattedFirstPart =
-            shortOfFirstPart < requiredLength - 1 && shortOfFirstPart > 0
-                ? `${requiredLength - 1 - shortOfFirstPart}`
-                : firstPart;
-        if (shortOfFirstPart < requiredLength - 1 && shortOfFirstPart > 0) {
-            for (let i = 0; i < requiredLength - 1 - shortOfFirstPart; i++) {
-                formattedFirstPart += '.';
-            }
-        }
-        const extension = value?.slice(value?.lastIndexOf('.'), value?.length);
-        const formattedValue = `${formattedFirstPart}...${extension}`;
-        return formattedValue;
+        const shortenedFilename = filename.slice(
+            filename.lastIndexOf('/') + 1,
+            filename.lastIndexOf('/') + maxLength - extension.length - 1
+        );
+        const formattedFilename = `${shortenedFilename}...${extension}`;
+        return formattedFilename;
     };
+
+    const filename = React.useMemo(() => {
+        return getFormattedFilename(value, FILENAME_LENGTH_LIMIT);
+    }, [value]);
 
     return (
         <>
-            {isLoading ? (
-                <LoadingButton variant="contained" loading>
-                    Uploading...
-                </LoadingButton>
+            {value ? (
+                <UploadInputPreview
+                    inputValue={filename}
+                    size={size}
+                    isDisabled={isDisabled}
+                    onRemove={() => onRemove(name)}
+                />
             ) : (
-                <>
-                    {value ? (
-                        required ? (
-                            <Box
-                                sx={{
-                                    ' > label': {
-                                        borderRadius: '15px',
-                                        display: 'inline-block',
-                                        cursor: 'pointer',
-                                        width: '100%'
-                                    },
-                                    borderRadius: '15px'
-                                }}
-                            >
-                                <label htmlFor={`${name}-button-file`}>
-                                    <Input
-                                        name={`${name}`}
-                                        id={`${name}-button-file`}
-                                        type="file"
-                                        onChange={onChange}
-                                        accept={acceptFileType?.join(',')}
-                                    />
-                                    <Grid
-                                        borderRadius={15}
-                                        container
-                                        alignItems="center"
-                                        justifyContent="start"
-                                        sx={{
-                                            py: 1,
-                                            borderRadius: '15px'
-                                        }}
-                                    >
-                                        <>
-                                            <Typography
-                                                variant="body2"
-                                                noWrap
-                                                component="div"
-                                                color={'primary'}
-                                            >
-                                                {getFormattedValue(value, 15)}
-                                            </Typography>
-                                        </>
-                                    </Grid>
-                                </label>
-                            </Box>
-                        ) : (
-                            <Grid
-                                borderRadius={15}
-                                container
-                                justifyContent="space-between"
-                                alignItems="center"
-                            >
-                                <Grid
-                                    item
-                                    md={11}
-                                    display="flex"
-                                    justifyContent="end"
-                                >
-                                    <Typography
-                                        variant="body2"
-                                        noWrap
-                                        component="div"
-                                    >
-                                        {getFormattedValue(value, 9)}
-                                    </Typography>
-                                </Grid>
-                                <Grid item md={1}>
-                                    <IconButton
-                                        onClick={() => onRemove?.(name)}
-                                        size="small"
-                                    >
-                                        <ClearIcon fontSize="small" />
-                                    </IconButton>
-                                </Grid>
-                            </Grid>
-                        )
-                    ) : (
-                        <Box
-                            sx={{
-                                ' > label': {
-                                    display: 'inline-block',
-                                    cursor: disabled ? '' : 'pointer',
-                                    width: '100%'
-                                }
-                            }}
-                        >
-                            <label htmlFor={`${name}-button-file`}>
-                                <Input
-                                    name={`${name}`}
-                                    id={`${name}-button-file`}
-                                    type="file"
-                                    onChange={onChange}
-                                    disabled={disabled}
-                                    accept={acceptFileType?.join(',')}
-                                />
-                                <Grid
-                                    container
-                                    justifyContent="center"
-                                    alignItems="center"
-                                    sx={{
-                                        border: disabled ? 'none' : '1px solid',
-                                        borderColor: disabled
-                                            ? 'disabled'
-                                            : color,
-                                        textTransform: 'uppercase',
-                                        py: 1,
-                                        px: 2,
-                                        borderRadius: 15,
-                                        backgroundColor: disabled
-                                            ? grey[300]
-                                            : 'inherit'
-                                    }}
-                                >
-                                    <Typography
-                                        fontWeight={500}
-                                        variant="body2"
-                                        noWrap
-                                        component="div"
-                                        color={disabled ? grey[500] : color}
-                                    >
-                                        {title}
-                                    </Typography>
-                                </Grid>
-                            </label>
-                        </Box>
-                    )}
-                </>
+                <Button
+                    colorScheme="blue"
+                    variant="outline"
+                    size={size}
+                    isLoading={isLoading}
+                    isDisabled={isDisabled}
+                    cursor="pointer"
+                    as="label"
+                >
+                    {title}
+                    <input
+                        type="file"
+                        hidden
+                        disabled={isDisabled}
+                        onChange={onChange}
+                        value={value}
+                        name={name}
+                        accept={acceptFileType?.join(',')}
+                    />
+                </Button>
             )}
         </>
     );
