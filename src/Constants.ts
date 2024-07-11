@@ -2,7 +2,8 @@ import { CHECK_INTEREST_PROVIDER } from 'Enum';
 import type {
     CompanySettingsProps,
     LeadSettingsProps,
-    LmsSettingsProps
+    LmsSettingsProps,
+    OnboardingSettingsProps
 } from 'interfaces';
 
 export const NAVBAR_HEIGHT = '56px';
@@ -33,9 +34,15 @@ export const DEFAULT_LEAD_SETTINGS: LeadSettingsProps = {
     ]
 };
 
+export const DEFAULT_ONBOARDING_SETTINGS: OnboardingSettingsProps = {
+    enableWorkerSourceAffinity: true,
+    workerSourceAffinityPeriod: 0
+};
+
 export const DEFAULT_COMPANY_SETTINGS: CompanySettingsProps = {
     lmsSettings: DEFAULT_LMS_SETTINGS,
-    workerSettings: DEFAULT_LEAD_SETTINGS
+    workerSettings: DEFAULT_LEAD_SETTINGS,
+    onboardingSettings: DEFAULT_ONBOARDING_SETTINGS
 };
 
 export const DEFAULT_COMPANY_ADDRESS = 'Plot in Gurgaon, Haryana';

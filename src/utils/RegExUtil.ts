@@ -38,8 +38,8 @@ export const RegExUtil = {
         const re = /\S+@\S+\.\S+/;
         return !!email && re.test(email);
     },
-    isDescription(description: string | null) {
-        return (description || '')?.length < 200;
+    isDescription(description: string | null, limit?: number) {
+        return (description || '')?.length <= (limit || 200);
     },
     isNumber(str: string): boolean {
         const regex = /^[0-9]*$/;
@@ -47,6 +47,10 @@ export const RegExUtil = {
     },
     isAlphaNumeric(str: string): boolean {
         const regex = /^[a-zA-Z0-9]*$/;
+        return regex.test(str);
+    },
+    isHexColor(str: string): boolean {
+        const regex = /^#[0-9a-fA-F]{6}$/;
         return regex.test(str);
     }
 };

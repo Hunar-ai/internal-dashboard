@@ -1,9 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 
-import type { ApiError, FormFields, PersonnelProps } from 'interfaces';
+import type {
+    ApiError,
+    FormFields,
+    GetCompaniesResponse,
+    PersonnelProps
+} from 'interfaces';
 import ErrorTracker from 'utils/ErrorTracker';
 
-type SuccessDataProps = FormFields | PersonnelProps;
+type SuccessDataProps = FormFields | PersonnelProps | GetCompaniesResponse;
 
 interface GetReactQueryProps<ResponseProps> {
     queryKey: string[];

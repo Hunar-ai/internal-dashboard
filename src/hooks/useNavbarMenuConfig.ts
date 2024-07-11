@@ -18,6 +18,11 @@ export const useNavbarMenuConfig = () => {
                         id: 'company/add',
                         title: 'Add',
                         link: '/company?add=true'
+                    },
+                    {
+                        id: 'company/career-page',
+                        title: 'Career Page',
+                        link: '/company?career=true'
                     }
                 ]
             }
