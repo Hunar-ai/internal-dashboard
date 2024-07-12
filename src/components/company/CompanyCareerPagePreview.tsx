@@ -19,7 +19,12 @@ export const CompanyCareerPagePreview = ({
 }: CompanyCareerPagePreviewProps) => {
     return (
         <CompanyCareerPagePreviewWrapper>
-            <Box borderWidth="1px" overflow="auto" maxHeight="100%">
+            <Box
+                borderWidth="1px"
+                borderRadius="lg"
+                overflow="auto"
+                maxHeight="100%"
+            >
                 <Flex
                     justifyContent="space-between"
                     alignItems="center"
