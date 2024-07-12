@@ -428,7 +428,7 @@ export const CompanyCareerPageForm = () => {
                                 uploadErrorMap.primaryLogo ||
                                 ErrorMsg.required()
                             }
-                            msg={'PNG or JPG of 128x60px'}
+                            msg={'Dimension: 128x60px'}
                         />
                     </FormControl>
                     <FormControl
@@ -461,7 +461,7 @@ export const CompanyCareerPageForm = () => {
                                 !!uploadErrorMap.secondaryLogo
                             }
                             errorMsg={uploadErrorMap.secondaryLogo}
-                            msg={'PNG or JPG of 128x60px'}
+                            msg={'Dimension: 128x60px'}
                         />
                     </FormControl>
                     <FormControl
@@ -497,7 +497,7 @@ export const CompanyCareerPageForm = () => {
                             errorMsg={
                                 uploadErrorMap.bannerImg || ErrorMsg.required()
                             }
-                            msg={'PNG or JPG of 1440x108px'}
+                            msg={'Dimension: 1440x108px'}
                         />
                     </FormControl>
                 </FormWrapper>
