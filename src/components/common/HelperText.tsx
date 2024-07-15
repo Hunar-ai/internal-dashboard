@@ -18,11 +18,11 @@ export const HelperText = ({
     msg = ''
 }: HelperTextProps) => {
     if (!hasError) {
-        return <FormHelperText>{msg}</FormHelperText>;
+        return <FormHelperText fontSize="xs">{msg}</FormHelperText>;
     }
 
     return (
-        <FormErrorMessage>
+        <FormErrorMessage fontSize="xs">
             <FormErrorIcon /> {errorMsg}
         </FormErrorMessage>
     );

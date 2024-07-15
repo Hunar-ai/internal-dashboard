@@ -327,7 +327,7 @@ export const CompanyCareerPageForm = () => {
                     <TextField
                         label="Primary Color"
                         name="primaryColor"
-                        placeholder="Enter Primary Color"
+                        placeholder="#97262A"
                         value={form.primaryColor}
                         onChange={onFormFieldChange}
                         isRequired
@@ -337,13 +337,14 @@ export const CompanyCareerPageForm = () => {
                             <HelperText
                                 hasError={formErrorState.primaryColor}
                                 errorMsg={ErrorMsg.hexColor()}
+                                msg="E.g. #97262A"
                             />
                         }
                     />
                     <TextField
                         label="Banner Text Color"
                         name="bannerTextColor"
-                        placeholder="Enter Banner Text Color"
+                        placeholder="#FFFFFF"
                         value={form.bannerTextColor}
                         onChange={onFormFieldChange}
                         isRequired
@@ -353,13 +354,14 @@ export const CompanyCareerPageForm = () => {
                             <HelperText
                                 hasError={formErrorState.bannerTextColor}
                                 errorMsg={ErrorMsg.hexColor()}
+                                msg="E.g. #FFFFFF"
                             />
                         }
                     />
                     <TextField
                         label="Learn More Link"
                         name="learnMoreLink"
-                        placeholder="Enter Learn More Link"
+                        placeholder="https://en.wikipedia.org"
                         value={form.learnMoreLink}
                         onChange={onFormFieldChange}
                         isRequired
@@ -369,6 +371,7 @@ export const CompanyCareerPageForm = () => {
                             <HelperText
                                 hasError={formErrorState.learnMoreLink}
                                 errorMsg={ErrorMsg.url()}
+                                msg="E.g. https://en.wikipedia.org"
                             />
                         }
                     />
@@ -381,6 +384,7 @@ export const CompanyCareerPageForm = () => {
                         isRequired
                         isInvalid={formErrorState.description}
                         isDisabled={!form.companyId}
+                        maxLength={300}
                         helperText={
                             <HelperText
                                 hasError={formErrorState.description}
@@ -424,6 +428,7 @@ export const CompanyCareerPageForm = () => {
                                 uploadErrorMap.primaryLogo ||
                                 ErrorMsg.required()
                             }
+                            msg={'Dimension: 128x60px'}
                         />
                     </FormControl>
                     <FormControl
@@ -456,6 +461,7 @@ export const CompanyCareerPageForm = () => {
                                 !!uploadErrorMap.secondaryLogo
                             }
                             errorMsg={uploadErrorMap.secondaryLogo}
+                            msg={'Dimension: 128x60px'}
                         />
                     </FormControl>
                     <FormControl
@@ -491,6 +497,7 @@ export const CompanyCareerPageForm = () => {
                             errorMsg={
                                 uploadErrorMap.bannerImg || ErrorMsg.required()
                             }
+                            msg={'Dimension: 1440x108px'}
                         />
                     </FormControl>
                 </FormWrapper>

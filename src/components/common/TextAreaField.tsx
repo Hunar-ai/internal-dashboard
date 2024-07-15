@@ -1,10 +1,20 @@
-import { FormControl, FormLabel, Textarea } from '@chakra-ui/react';
+import {
+    Flex,
+    FormControl,
+    FormErrorMessage,
+    FormHelperText,
+    FormLabel,
+    Textarea
+} from '@chakra-ui/react';
+import React from 'react';
 
 interface TextAreaFieldProps {
     label: string;
     name: string;
     value: string;
     placeholder?: string;
+    minLength?: number;
+    maxLength?: number;
     isInvalid?: boolean;
     isRequired?: boolean;
     isDisabled?: boolean;
@@ -17,12 +27,32 @@ export const TextAreaField = ({
     name,
     value,
     placeholder = '',
+    minLength = 0,
+    maxLength = 200,
     isInvalid = false,
     isRequired = false,
     isDisabled = false,
     helperText = '',
     onChange
 }: TextAreaFieldProps) => {
+    const characterCountText = React.useMemo(() => {
+        const numberOfCharacters = value ? value.length : 0;
+        const remainingCharacters = maxLength - numberOfCharacters;
+
+        if (numberOfCharacters < minLength) {
+            const requiredCharacters = minLength - numberOfCharacters;
+            const suffix = numberOfCharacters
+                ? 'more character required'
+                : 'characters required';
+            return `${requiredCharacters} ${suffix}`;
+        }
+
+        const suffix = numberOfCharacters
+            ? 'characters remaining'
+            : 'characters';
+        return numberOfCharacters > 3 ? `${remainingCharacters} ${suffix}` : '';
+    }, [maxLength, minLength, value]);
+
     return (
         <FormControl
             isInvalid={isInvalid}
@@ -36,7 +66,18 @@ export const TextAreaField = ({
                 value={value}
                 onChange={onChange}
             />
-            {helperText}
+            <Flex justifyContent="space-between">
+                {helperText}
+                {isInvalid ? (
+                    <FormErrorMessage fontSize="xs">
+                        {characterCountText}
+                    </FormErrorMessage>
+                ) : (
+                    <FormHelperText fontSize="xs">
+                        {characterCountText}
+                    </FormHelperText>
+                )}
+            </Flex>
         </FormControl>
     );
 };
