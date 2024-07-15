@@ -52,7 +52,11 @@ export const CompanyCareerPagePreview = ({
                     justifyContent="center"
                     alignItems="center"
                 >
-                    <Text fontWeight={700} color={bannerTextColor || 'gray'}>
+                    <Text
+                        fontWeight={700}
+                        color={bannerTextColor || 'gray'}
+                        textAlign="center"
+                    >
                         {`Apply for job at ${companyName}`}
                     </Text>
                     <Box
