@@ -69,9 +69,13 @@ export const TextAreaField = ({
             <Flex justifyContent="space-between">
                 {helperText}
                 {isInvalid ? (
-                    <FormErrorMessage>{characterCountText}</FormErrorMessage>
+                    <FormErrorMessage fontSize="xs">
+                        {characterCountText}
+                    </FormErrorMessage>
                 ) : (
-                    <FormHelperText>{characterCountText}</FormHelperText>
+                    <FormHelperText fontSize="xs">
+                        {characterCountText}
+                    </FormHelperText>
                 )}
             </Flex>
         </FormControl>
