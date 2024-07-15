@@ -57,7 +57,7 @@ export const CompanyCareerPagePreview = ({
                         color={bannerTextColor || 'gray'}
                         textAlign="center"
                     >
-                        {`Apply for job at ${companyName}`}
+                        {`Apply for Job at ${companyName}`}
                     </Text>
                     <Box
                         position="absolute"
