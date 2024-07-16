@@ -155,6 +155,21 @@ export const CompanyCareerPageForm = () => {
         }));
     };
 
+    const getFormErrorState = () => {
+        const hasCompanyIdError = hasFormFieldError({
+            fieldName: 'companyId',
+            fieldValue: form.companyId,
+            isRequired: true
+        });
+
+        const { errorState: formErrorState, hasFormError } = getFormErrorData({
+            form,
+            requiredFields
+        });
+
+        return { hasCompanyIdError, formErrorState, hasFormError };
+    };
+
     const onFormFieldChange = (
         e: React.ChangeEvent<
             HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -167,33 +182,11 @@ export const CompanyCareerPageForm = () => {
         updateFieldErrorState({ fieldName, fieldValue });
     };
 
-    const saveFile = (fieldName: keyof CareerPageFormProps, file: File) => {
-        uploadCareerPageAsset.mutate(
-            {
-                params: { companyId: form.companyId },
-                requestBody: { file }
-            },
-            {
-                onSuccess: ({ assetUrl }) => {
-                    updateForm({ [fieldName]: assetUrl });
-                    updateFieldErrorState({ fieldName, fieldValue: assetUrl });
-                    setUploadErrorMap(prevErrorValue => ({
-                        ...prevErrorValue,
-                        [fieldName]: ''
-                    }));
-                },
-                onError: ({ errors }) => {
-                    setFormErrorState(prevErrorState => ({
-                        ...prevErrorState,
-                        [fieldName]: true
-                    }));
-                    setUploadErrorMap(prevErrorValue => ({
-                        ...prevErrorValue,
-                        [fieldName]: errors.displayError
-                    }));
-                }
-            }
-        );
+    const saveFile = async (file: File) => {
+        return await uploadCareerPageAsset.mutateAsync({
+            params: { companyId: form.companyId },
+            requestBody: { file }
+        });
     };
 
     const onFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -208,7 +201,25 @@ export const CompanyCareerPageForm = () => {
             return;
         }
 
-        saveFile(fieldName, file);
+        saveFile(file)
+            .then(({ assetUrl }) => {
+                updateForm({ [fieldName]: assetUrl });
+                updateFieldErrorState({ fieldName, fieldValue: assetUrl });
+                setUploadErrorMap(prevErrorValue => ({
+                    ...prevErrorValue,
+                    [fieldName]: ''
+                }));
+            })
+            .catch(({ errors }) => {
+                setFormErrorState(prevErrorState => ({
+                    ...prevErrorState,
+                    [fieldName]: true
+                }));
+                setUploadErrorMap(prevErrorValue => ({
+                    ...prevErrorValue,
+                    [fieldName]: errors.displayError
+                }));
+            });
     };
 
     const onFileRemove = (fieldName: string) => {
@@ -219,36 +230,17 @@ export const CompanyCareerPageForm = () => {
         });
     };
 
-    const submitSettings = () => {
+    const submitSettings = async () => {
         const { companyId, ...restForm } = form;
-        addCareerPageSettings.mutate(
-            {
-                params: { companyId },
-                requestBody: restForm
-            },
-            {
-                onSuccess: () => {
-                    showSuccess({
-                        title: 'Success',
-                        description: 'Successfully added settings!'
-                    });
-                },
-                onError: ({ errors }) => {
-                    showError({
-                        title: 'Error',
-                        description: errors.displayError
-                    });
-                }
-            }
-        );
+        return await addCareerPageSettings.mutateAsync({
+            params: { companyId },
+            requestBody: restForm
+        });
     };
 
     const onSubmit = () => {
-        const hasCompanyIdError = hasFormFieldError({
-            fieldName: 'companyId',
-            fieldValue: form.companyId,
-            isRequired: true
-        });
+        const { hasCompanyIdError, formErrorState, hasFormError } =
+            getFormErrorState();
 
         if (hasCompanyIdError) {
             updateFieldErrorState({
@@ -258,21 +250,28 @@ export const CompanyCareerPageForm = () => {
             return;
         }
 
-        const { errorState, hasFormError } = getFormErrorData({
-            form,
-            requiredFields
-        });
-
         setFormErrorState(prevErrorState => ({
             ...prevErrorState,
-            ...errorState
+            ...formErrorState
         }));
 
         if (hasFormError) {
             return;
         }
 
-        submitSettings();
+        submitSettings()
+            .then(() => {
+                showSuccess({
+                    title: 'Success',
+                    description: 'Successfully added settings!'
+                });
+            })
+            .catch(({ errors }) => {
+                showError({
+                    title: 'Error',
+                    description: errors.displayError
+                });
+            });
     };
 
     return (
