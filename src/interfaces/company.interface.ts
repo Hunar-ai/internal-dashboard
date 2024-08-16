@@ -30,11 +30,21 @@ export interface CareerPageSettingsProps {
     description: string;
 }
 
+export interface ReferralPageSettingsProps {
+    logo: string;
+    companyName: string;
+    primaryColor: string;
+    bannerBgColor: string;
+    bannerTextColor: string;
+    learnMoreLink: string;
+}
+
 export interface CompanySettingsProps {
     lmsSettings: LmsSettingsProps;
     workerSettings: LeadSettingsProps;
     onboardingSettings?: OnboardingSettingsProps;
     careerPageSettings?: CareerPageSettingsProps;
+    referralPageSettings?: ReferralPageSettingsProps;
 }
 
 export interface CompanyFormProps {
@@ -66,5 +76,9 @@ export type CareerPageFormProps = Omit<
 > & {
     primaryLogo: string;
     secondaryLogo: string;
+    companyId: string;
+};
+
+export type ReferralPageFormProps = ReferralPageSettingsProps & {
     companyId: string;
 };

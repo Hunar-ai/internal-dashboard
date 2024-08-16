@@ -23,6 +23,11 @@ export const useNavbarMenuConfig = () => {
                         id: 'company/career-page',
                         title: 'Career Page',
                         link: '/company?career=true'
+                    },
+                    {
+                        id: 'company/referral-page',
+                        title: 'Referral Page',
+                        link: '/company?referral=true'
                     }
                 ]
             }

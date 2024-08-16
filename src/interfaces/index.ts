@@ -57,7 +57,9 @@ export type {
     OnboardingSettingsProps,
     CareerPageSettingsProps,
     GetCompaniesResponse,
-    CareerPageFormProps
+    CareerPageFormProps,
+    ReferralPageSettingsProps,
+    ReferralPageFormProps
 } from './company.interface';
 
 export type { MenuProps } from './menu.interface';
