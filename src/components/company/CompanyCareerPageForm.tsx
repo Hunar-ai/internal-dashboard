@@ -27,20 +27,13 @@ import type {
     FormErrorProps,
     OptionsProps
 } from 'interfaces';
-import { ALLOWED_EXTENSION } from 'Enum';
 import { ErrorMsg, RegExUtil, StringUtils } from 'utils';
-import { NAVBAR_HEIGHT } from 'Constants';
+import { ALLOWED_IMAGE_EXTENSIONS, NAVBAR_HEIGHT } from 'Constants';
 
 interface UpdateFieldErrorStateProps {
     fieldName: keyof CareerPageFormProps;
     fieldValue: string;
 }
-
-const allowedImageExtensions = [
-    ALLOWED_EXTENSION.PNG,
-    ALLOWED_EXTENSION.JPG,
-    ALLOWED_EXTENSION.JPEG
-];
 
 const validationMap = {
     companyName: (companyName: string) =>
@@ -436,7 +429,7 @@ export const CompanyCareerPageForm = () => {
                                 title="UPLOAD"
                                 name="primaryLogo"
                                 value={form.primaryLogo}
-                                acceptFileType={allowedImageExtensions}
+                                acceptFileType={ALLOWED_IMAGE_EXTENSIONS}
                                 isDisabled={!form.companyId}
                                 onChange={onFileUpload}
                                 onRemove={onFileRemove}
@@ -472,7 +465,7 @@ export const CompanyCareerPageForm = () => {
                                 title="UPLOAD"
                                 name="secondaryLogo"
                                 value={form.secondaryLogo ?? ''}
-                                acceptFileType={allowedImageExtensions}
+                                acceptFileType={ALLOWED_IMAGE_EXTENSIONS}
                                 isDisabled={!form.companyId}
                                 onChange={onFileUpload}
                                 onRemove={onFileRemove}

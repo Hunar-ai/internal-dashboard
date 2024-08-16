@@ -1,4 +1,4 @@
-import { CHECK_INTEREST_PROVIDER } from 'Enum';
+import { ALLOWED_EXTENSION, CHECK_INTEREST_PROVIDER } from 'Enum';
 import type {
     CompanySettingsProps,
     LeadSettingsProps,
@@ -48,3 +48,9 @@ export const DEFAULT_COMPANY_SETTINGS: CompanySettingsProps = {
 export const DEFAULT_COMPANY_ADDRESS = 'Plot in Gurgaon, Haryana';
 
 export const HUNAR_BG_COLOR = '#061E40';
+
+export const ALLOWED_IMAGE_EXTENSIONS = [
+    ALLOWED_EXTENSION.PNG,
+    ALLOWED_EXTENSION.JPG,
+    ALLOWED_EXTENSION.JPEG
+];

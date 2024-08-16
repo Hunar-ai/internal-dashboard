@@ -16,6 +16,8 @@ import {
 import { CompanyCareerPagePreview } from './CompanyCareerPagePreview';
 
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
+import { useAddReferralPageSettings } from 'hooks/apiHooks/referralPage/useAddReferralPageSettings';
+import { useUploadReferralPageAsset } from 'hooks/apiHooks/referralPage/useUploadReferralPageAsset';
 import { useToast } from 'hooks/useToast';
 import { useValidationHelper } from 'hooks';
 
@@ -24,22 +26,13 @@ import type {
     FormErrorProps,
     OptionsProps
 } from 'interfaces';
-import { ALLOWED_EXTENSION } from 'Enum';
 import { ErrorMsg, RegExUtil, StringUtils } from 'utils';
-import { NAVBAR_HEIGHT } from 'Constants';
-import { useAddReferralPageSettings } from 'hooks/apiHooks/referralPage/useAddReferralPageSettings';
-import { useUploadReferralPageAsset } from 'hooks/apiHooks/referralPage/useUploadReferralPageAsset';
+import { ALLOWED_IMAGE_EXTENSIONS, NAVBAR_HEIGHT } from 'Constants';
 
 interface UpdateFieldErrorStateProps {
     fieldName: keyof ReferralPageFormProps;
     fieldValue: string;
 }
-
-const allowedImageExtensions = [
-    ALLOWED_EXTENSION.PNG,
-    ALLOWED_EXTENSION.JPG,
-    ALLOWED_EXTENSION.JPEG
-];
 
 const validationMap = {
     companyName: (companyName: string) =>
@@ -400,7 +393,7 @@ export const CompanyReferralPageForm = () => {
                                 title="UPLOAD"
                                 name="logo"
                                 value={form.logo}
-                                acceptFileType={allowedImageExtensions}
+                                acceptFileType={ALLOWED_IMAGE_EXTENSIONS}
                                 isDisabled={!form.companyId}
                                 onChange={onFileUpload}
                                 onRemove={onFileRemove}
