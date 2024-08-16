@@ -22,9 +22,9 @@ export interface OnboardingSettingsProps {
 export interface CareerPageSettingsProps {
     logo1: string;
     logo2?: string;
-    bannerImg: string;
     companyName: string;
     primaryColor: string;
+    bannerBgColor: string;
     bannerTextColor: string;
     learnMoreLink: string;
     description: string;
@@ -34,7 +34,7 @@ export interface CompanySettingsProps {
     lmsSettings: LmsSettingsProps;
     workerSettings: LeadSettingsProps;
     onboardingSettings?: OnboardingSettingsProps;
-    careerPageSettings: CareerPageSettingsProps;
+    careerPageSettings?: CareerPageSettingsProps;
 }
 
 export interface CompanyFormProps {

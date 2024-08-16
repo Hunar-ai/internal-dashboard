@@ -10,7 +10,7 @@ type CompanyCareerPagePreviewProps = Omit<CareerPageFormProps, 'companyId'>;
 export const CompanyCareerPagePreview = ({
     primaryLogo,
     secondaryLogo,
-    bannerImg,
+    bannerBgColor,
     primaryColor,
     bannerTextColor,
     description,
@@ -61,9 +61,7 @@ export const CompanyCareerPagePreview = ({
                     </Text>
                     <Box
                         position="absolute"
-                        as="img"
-                        src={bannerImg}
-                        alt="Banner Image"
+                        bgColor={bannerBgColor}
                         width="100%"
                         height={100}
                         zIndex={-1}

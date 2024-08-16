@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { Flex, FormControl, FormLabel, Grid } from '@chakra-ui/react';
+import { Flex, FormControl, FormLabel, Grid, GridItem } from '@chakra-ui/react';
 
 import {
     AppLoader,
@@ -43,8 +43,11 @@ const allowedImageExtensions = [
 ];
 
 const validationMap = {
-    companyName: (companyName: string) => RegExUtil.isName(companyName),
+    companyName: (companyName: string) =>
+        RegExUtil.isDescription(companyName, 100),
     bannerTextColor: (bannerTextColor: string) =>
+        RegExUtil.isHexColor(bannerTextColor),
+    bannerBgColor: (bannerTextColor: string) =>
         RegExUtil.isHexColor(bannerTextColor),
     learnMoreLink: (learnMoreLink: string) => StringUtils.isUrl(learnMoreLink),
     primaryColor: (primaryColor: string) => RegExUtil.isHexColor(primaryColor),
@@ -60,14 +63,14 @@ const requiredFields: (keyof CareerPageFormProps)[] = [
     'learnMoreLink',
     'description',
     'primaryLogo',
-    'bannerImg'
+    'bannerBgColor'
 ];
 
 const formInitialState: CareerPageFormProps = {
     companyId: '',
     primaryLogo: '',
     secondaryLogo: '',
-    bannerImg: '',
+    bannerBgColor: '',
     companyName: '',
     primaryColor: '',
     bannerTextColor: '',
@@ -79,7 +82,7 @@ const formErrorStateInitialValues: FormErrorProps<CareerPageFormProps> = {
     companyId: false,
     primaryLogo: false,
     secondaryLogo: false,
-    bannerImg: false,
+    bannerBgColor: false,
     companyName: false,
     primaryColor: false,
     bannerTextColor: false,
@@ -89,11 +92,10 @@ const formErrorStateInitialValues: FormErrorProps<CareerPageFormProps> = {
 
 const uploadErrorMapInitialState: Pick<
     CareerPageFormProps,
-    'bannerImg' | 'primaryLogo' | 'secondaryLogo'
+    'primaryLogo' | 'secondaryLogo'
 > = {
     primaryLogo: '',
-    secondaryLogo: '',
-    bannerImg: ''
+    secondaryLogo: ''
 };
 
 export const CompanyCareerPageForm = () => {
@@ -320,7 +322,9 @@ export const CompanyCareerPageForm = () => {
                         helperText={
                             <HelperText
                                 hasError={formErrorState.companyName}
-                                errorMsg={ErrorMsg.alphaNumeric()}
+                                errorMsg={ErrorMsg.characterLength({
+                                    max: 100
+                                })}
                             />
                         }
                     />
@@ -336,6 +340,23 @@ export const CompanyCareerPageForm = () => {
                         helperText={
                             <HelperText
                                 hasError={formErrorState.primaryColor}
+                                errorMsg={ErrorMsg.hexColor()}
+                                msg="E.g. #97262A"
+                            />
+                        }
+                    />
+                    <TextField
+                        label="Banner BG Color"
+                        name="bannerBgColor"
+                        placeholder="#97262A"
+                        value={form.bannerBgColor}
+                        onChange={onFormFieldChange}
+                        isRequired
+                        isInvalid={formErrorState.bannerBgColor}
+                        isDisabled={!form.companyId}
+                        helperText={
+                            <HelperText
+                                hasError={formErrorState.bannerBgColor}
                                 errorMsg={ErrorMsg.hexColor()}
                                 msg="E.g. #97262A"
                             />
@@ -375,25 +396,27 @@ export const CompanyCareerPageForm = () => {
                             />
                         }
                     />
-                    <TextAreaField
-                        label="Description"
-                        name="description"
-                        placeholder="Description"
-                        value={form.description}
-                        onChange={onFormFieldChange}
-                        isRequired
-                        isInvalid={formErrorState.description}
-                        isDisabled={!form.companyId}
-                        maxLength={300}
-                        helperText={
-                            <HelperText
-                                hasError={formErrorState.description}
-                                errorMsg={ErrorMsg.characterLength({
-                                    max: 300
-                                })}
-                            />
-                        }
-                    />
+                    <GridItem colSpan={2}>
+                        <TextAreaField
+                            label="Description"
+                            name="description"
+                            placeholder="Description"
+                            value={form.description}
+                            onChange={onFormFieldChange}
+                            isRequired
+                            isInvalid={formErrorState.description}
+                            isDisabled={!form.companyId}
+                            maxLength={300}
+                            helperText={
+                                <HelperText
+                                    hasError={formErrorState.description}
+                                    errorMsg={ErrorMsg.characterLength({
+                                        max: 300
+                                    })}
+                                />
+                            }
+                        />
+                    </GridItem>
                     <FormControl
                         isRequired
                         isInvalid={
@@ -464,49 +487,13 @@ export const CompanyCareerPageForm = () => {
                             msg={'Dimension: 128x60px'}
                         />
                     </FormControl>
-                    <FormControl
-                        isRequired
-                        isInvalid={
-                            formErrorState.bannerImg ||
-                            !!uploadErrorMap.bannerImg
-                        }
-                        isDisabled={!form.companyId}
-                    >
-                        <Flex
-                            justifyContent="space-between"
-                            alignItems="center"
-                        >
-                            <FormLabel flexGrow={1} sx={{ mb: 0 }}>
-                                {`Banner Image`}
-                            </FormLabel>
-                            <UploadButton
-                                title="UPLOAD"
-                                name="bannerImg"
-                                value={form.bannerImg}
-                                acceptFileType={allowedImageExtensions}
-                                isDisabled={!form.companyId}
-                                onChange={onFileUpload}
-                                onRemove={onFileRemove}
-                            />
-                        </Flex>
-                        <HelperText
-                            hasError={
-                                formErrorState.bannerImg ||
-                                !!uploadErrorMap.bannerImg
-                            }
-                            errorMsg={
-                                uploadErrorMap.bannerImg || ErrorMsg.required()
-                            }
-                            msg={'Dimension: 1440x108px'}
-                        />
-                    </FormControl>
                 </FormWrapper>
             </LeftPanel>
             <RightPanel>
                 <CompanyCareerPagePreview
                     primaryLogo={form.primaryLogo}
                     secondaryLogo={form.secondaryLogo || ''}
-                    bannerImg={form.bannerImg}
+                    bannerBgColor={form.bannerBgColor}
                     primaryColor={form.primaryColor}
                     description={form.description}
                     companyName={form.companyName}

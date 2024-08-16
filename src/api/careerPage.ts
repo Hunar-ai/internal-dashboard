@@ -1,9 +1,9 @@
 import { ApiClient } from 'middleware';
 
 export const settings = ApiClient({
-    url: `/v1/company/{companyId}/career-page-settings`
+    url: `/v1/company/{companyId}/page/career/settings`
 });
 
 export const upload = ApiClient({
-    url: `/v1/company/{companyId}/career-page/upload`
+    url: `/v1/company/{companyId}/page/career/asset-upload`
 });
