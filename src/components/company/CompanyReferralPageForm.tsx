@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { Flex, FormControl, FormLabel, Grid, GridItem } from '@chakra-ui/react';
+import { Flex, FormControl, FormLabel, Grid } from '@chakra-ui/react';
 
 import {
     AppLoader,
@@ -10,20 +10,19 @@ import {
     LeftPanel,
     RightPanel,
     SelectField,
-    TextAreaField,
     TextField,
     UploadButton
 } from '@components/common';
 import { CompanyCareerPagePreview } from './CompanyCareerPagePreview';
 
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
-import { useUploadCareerPageAsset } from 'hooks/apiHooks/careerPage/useUploadCareerPageAsset';
-import { useAddCareerPageSettings } from 'hooks/apiHooks/careerPage/useAddCareerPageSettings';
+import { useAddReferralPageSettings } from 'hooks/apiHooks/referralPage/useAddReferralPageSettings';
+import { useUploadReferralPageAsset } from 'hooks/apiHooks/referralPage/useUploadReferralPageAsset';
 import { useToast } from 'hooks/useToast';
 import { useValidationHelper } from 'hooks';
 
 import type {
-    CareerPageFormProps,
+    ReferralPageFormProps,
     FormErrorProps,
     OptionsProps
 } from 'interfaces';
@@ -31,7 +30,7 @@ import { ErrorMsg, RegExUtil, StringUtils } from 'utils';
 import { ALLOWED_IMAGE_EXTENSIONS, NAVBAR_HEIGHT } from 'Constants';
 
 interface UpdateFieldErrorStateProps {
-    fieldName: keyof CareerPageFormProps;
+    fieldName: keyof ReferralPageFormProps;
     fieldValue: string;
 }
 
@@ -40,66 +39,55 @@ const validationMap = {
         RegExUtil.isDescription(companyName, 100),
     bannerTextColor: (bannerTextColor: string) =>
         RegExUtil.isHexColor(bannerTextColor),
-    bannerBgColor: (bannerTextColor: string) =>
-        RegExUtil.isHexColor(bannerTextColor),
+    bannerBgColor: (bannerBgColor: string) =>
+        RegExUtil.isHexColor(bannerBgColor),
     learnMoreLink: (learnMoreLink: string) => StringUtils.isUrl(learnMoreLink),
-    primaryColor: (primaryColor: string) => RegExUtil.isHexColor(primaryColor),
-    description: (description: string) =>
-        RegExUtil.isDescription(description, 300)
+    primaryColor: (primaryColor: string) => RegExUtil.isHexColor(primaryColor)
 };
 
-const requiredFields: (keyof CareerPageFormProps)[] = [
+const requiredFields: (keyof ReferralPageFormProps)[] = [
     'companyId',
     'companyName',
     'primaryColor',
     'bannerTextColor',
     'learnMoreLink',
-    'description',
-    'primaryLogo',
+    'logo',
     'bannerBgColor'
 ];
 
-const formInitialState: CareerPageFormProps = {
+const formInitialState: ReferralPageFormProps = {
     companyId: '',
-    primaryLogo: '',
-    secondaryLogo: '',
+    logo: '',
     bannerBgColor: '',
     companyName: '',
     primaryColor: '',
     bannerTextColor: '',
-    learnMoreLink: '',
-    description: ''
+    learnMoreLink: ''
 };
 
-const formErrorStateInitialValues: FormErrorProps<CareerPageFormProps> = {
+const formErrorStateInitialValues: FormErrorProps<ReferralPageFormProps> = {
     companyId: false,
-    primaryLogo: false,
-    secondaryLogo: false,
+    logo: false,
     bannerBgColor: false,
     companyName: false,
     primaryColor: false,
     bannerTextColor: false,
-    learnMoreLink: false,
-    description: false
+    learnMoreLink: false
 };
 
-const uploadErrorMapInitialState: Pick<
-    CareerPageFormProps,
-    'primaryLogo' | 'secondaryLogo'
-> = {
-    primaryLogo: '',
-    secondaryLogo: ''
+const uploadErrorMapInitialState: Pick<ReferralPageFormProps, 'logo'> = {
+    logo: ''
 };
 
-export const CompanyCareerPageForm = () => {
+export const CompanyReferralPageForm = () => {
     const { showError, showSuccess } = useToast();
-    const uploadCareerPageAsset = useUploadCareerPageAsset();
-    const addCareerPageSettings = useAddCareerPageSettings();
+    const uploadReferralPageAsset = useUploadReferralPageAsset();
+    const addReferralPageSettings = useAddReferralPageSettings();
     const [searchParams] = useSearchParams();
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
 
-    const [form, setForm] = React.useState<CareerPageFormProps>({
+    const [form, setForm] = React.useState<ReferralPageFormProps>({
         ...formInitialState
     });
     const [formErrorState, setFormErrorState] = React.useState({
@@ -132,7 +120,7 @@ export const CompanyCareerPageForm = () => {
         }
     }, [searchParamCompanyId]);
 
-    const updateForm = (modifiedForm: Partial<CareerPageFormProps>) => {
+    const updateForm = (modifiedForm: Partial<ReferralPageFormProps>) => {
         setForm(oldForm => ({ ...oldForm, ...modifiedForm }));
     };
 
@@ -155,15 +143,15 @@ export const CompanyCareerPageForm = () => {
             HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
         >
     ) => {
-        const fieldName = e.target.name as keyof CareerPageFormProps;
+        const fieldName = e.target.name as keyof ReferralPageFormProps;
         const fieldValue = e.target.value;
 
         updateForm({ [fieldName]: fieldValue });
         updateFieldErrorState({ fieldName, fieldValue });
     };
 
-    const saveFile = (fieldName: keyof CareerPageFormProps, file: File) => {
-        uploadCareerPageAsset.mutate(
+    const saveFile = (fieldName: keyof ReferralPageFormProps, file: File) => {
+        uploadReferralPageAsset.mutate(
             {
                 params: { companyId: form.companyId },
                 requestBody: { file }
@@ -192,7 +180,7 @@ export const CompanyCareerPageForm = () => {
     };
 
     const onFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const fieldName = event.target.name as keyof CareerPageFormProps;
+        const fieldName = event.target.name as keyof ReferralPageFormProps;
         const file = event.target.files?.[0];
 
         if (!file) {
@@ -209,14 +197,14 @@ export const CompanyCareerPageForm = () => {
     const onFileRemove = (fieldName: string) => {
         updateForm({ [fieldName]: '' });
         updateFieldErrorState({
-            fieldName: fieldName as keyof CareerPageFormProps,
+            fieldName: fieldName as keyof ReferralPageFormProps,
             fieldValue: ''
         });
     };
 
     const submitSettings = () => {
         const { companyId, ...restForm } = form;
-        addCareerPageSettings.mutate(
+        addReferralPageSettings.mutate(
             {
                 params: { companyId },
                 requestBody: restForm
@@ -277,13 +265,13 @@ export const CompanyCareerPageForm = () => {
             overflow={{ base: 'auto', md: 'unset' }}
         >
             {(isCompaniesLoading ||
-                uploadCareerPageAsset.isLoading ||
-                addCareerPageSettings.isLoading) && <AppLoader />}
+                uploadReferralPageAsset.isLoading ||
+                addReferralPageSettings.isLoading) && <AppLoader />}
             <LeftPanel>
                 <FormWrapper
-                    formTitle="Career Page Settings"
-                    isFormDisabled={addCareerPageSettings.isSuccess}
-                    isLoading={addCareerPageSettings.isLoading}
+                    formTitle="Referral Page Settings"
+                    isFormDisabled={addReferralPageSettings.isSuccess}
+                    isLoading={addReferralPageSettings.isLoading}
                     onSubmit={onSubmit}
                 >
                     <SelectField
@@ -341,7 +329,7 @@ export const CompanyCareerPageForm = () => {
                     <TextField
                         label="Banner BG Color"
                         name="bannerBgColor"
-                        placeholder="#97262A"
+                        placeholder="#FFFFFF"
                         value={form.bannerBgColor}
                         onChange={onFormFieldChange}
                         isRequired
@@ -351,7 +339,7 @@ export const CompanyCareerPageForm = () => {
                             <HelperText
                                 hasError={formErrorState.bannerBgColor}
                                 errorMsg={ErrorMsg.hexColor()}
-                                msg="E.g. #97262A"
+                                msg="E.g. #FFFFFF"
                             />
                         }
                     />
@@ -389,33 +377,9 @@ export const CompanyCareerPageForm = () => {
                             />
                         }
                     />
-                    <GridItem colSpan={2}>
-                        <TextAreaField
-                            label="Description"
-                            name="description"
-                            placeholder="Description"
-                            value={form.description}
-                            onChange={onFormFieldChange}
-                            isRequired
-                            isInvalid={formErrorState.description}
-                            isDisabled={!form.companyId}
-                            maxLength={300}
-                            helperText={
-                                <HelperText
-                                    hasError={formErrorState.description}
-                                    errorMsg={ErrorMsg.characterLength({
-                                        max: 300
-                                    })}
-                                />
-                            }
-                        />
-                    </GridItem>
                     <FormControl
                         isRequired
-                        isInvalid={
-                            formErrorState.primaryLogo ||
-                            !!uploadErrorMap.primaryLogo
-                        }
+                        isInvalid={formErrorState.logo || !!uploadErrorMap.logo}
                         isDisabled={!form.companyId}
                     >
                         <Flex
@@ -423,12 +387,12 @@ export const CompanyCareerPageForm = () => {
                             alignItems="center"
                         >
                             <FormLabel flexGrow={1} sx={{ mb: 0 }}>
-                                {`Logo 1`}
+                                {`Logo`}
                             </FormLabel>
                             <UploadButton
                                 title="UPLOAD"
-                                name="primaryLogo"
-                                value={form.primaryLogo}
+                                name="logo"
+                                value={form.logo}
                                 acceptFileType={ALLOWED_IMAGE_EXTENSIONS}
                                 isDisabled={!form.companyId}
                                 onChange={onFileUpload}
@@ -437,46 +401,11 @@ export const CompanyCareerPageForm = () => {
                         </Flex>
                         <HelperText
                             hasError={
-                                formErrorState.primaryLogo ||
-                                !!uploadErrorMap.primaryLogo
+                                formErrorState.logo || !!uploadErrorMap.logo
                             }
                             errorMsg={
-                                uploadErrorMap.primaryLogo ||
-                                ErrorMsg.required()
+                                uploadErrorMap.logo || ErrorMsg.required()
                             }
-                            msg={'Dimension: 128x60px'}
-                        />
-                    </FormControl>
-                    <FormControl
-                        isInvalid={
-                            formErrorState.secondaryLogo ||
-                            !!uploadErrorMap.secondaryLogo
-                        }
-                        isDisabled={!form.companyId}
-                    >
-                        <Flex
-                            justifyContent="space-between"
-                            alignItems="center"
-                        >
-                            <FormLabel flexGrow={1} sx={{ mb: 0 }}>
-                                {`Logo 2`}
-                            </FormLabel>
-                            <UploadButton
-                                title="UPLOAD"
-                                name="secondaryLogo"
-                                value={form.secondaryLogo ?? ''}
-                                acceptFileType={ALLOWED_IMAGE_EXTENSIONS}
-                                isDisabled={!form.companyId}
-                                onChange={onFileUpload}
-                                onRemove={onFileRemove}
-                            />
-                        </Flex>
-                        <HelperText
-                            hasError={
-                                formErrorState.secondaryLogo ||
-                                !!uploadErrorMap.secondaryLogo
-                            }
-                            errorMsg={uploadErrorMap.secondaryLogo}
                             msg={'Dimension: 128x60px'}
                         />
                     </FormControl>
@@ -484,11 +413,11 @@ export const CompanyCareerPageForm = () => {
             </LeftPanel>
             <RightPanel>
                 <CompanyCareerPagePreview
-                    primaryLogo={form.primaryLogo}
-                    secondaryLogo={form.secondaryLogo || ''}
+                    primaryLogo={form.logo}
+                    secondaryLogo={''}
                     bannerBgColor={form.bannerBgColor}
                     primaryColor={form.primaryColor}
-                    description={form.description}
+                    description={''}
                     companyName={form.companyName}
                     learnMoreLink={form.learnMoreLink}
                     bannerTextColor={form.bannerTextColor}
