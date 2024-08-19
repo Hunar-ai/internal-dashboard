@@ -14,7 +14,7 @@ import {
     TextField,
     UploadButton
 } from '@components/common';
-import { CompanyCareerPagePreview } from './CompanyCareerPagePreview';
+import { CompanyBrandedPagePreview } from './CompanyBrandedPagePreview';
 
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useUploadCareerPageAsset } from 'hooks/apiHooks/careerPage/useUploadCareerPageAsset';
@@ -389,7 +389,7 @@ export const CompanyCareerPageForm = () => {
                             />
                         }
                     />
-                    <GridItem colSpan={2}>
+                    <GridItem colSpan={{ base: 1, md: 2 }}>
                         <TextAreaField
                             label="Description"
                             name="description"
@@ -483,7 +483,7 @@ export const CompanyCareerPageForm = () => {
                 </FormWrapper>
             </LeftPanel>
             <RightPanel>
-                <CompanyCareerPagePreview
+                <CompanyBrandedPagePreview
                     primaryLogo={form.primaryLogo}
                     secondaryLogo={form.secondaryLogo || ''}
                     bannerBgColor={form.bannerBgColor}

@@ -1,23 +1,30 @@
 import { Card, Flex, Text, Box, Button } from '@chakra-ui/react';
 
-interface CompanyCareerJQCardPreviewProps {
+interface CompanyBrandedJQCardPreviewProps {
     primaryColor: string;
 }
 
-export const CompanyCareerJQCardPreview = ({
+export const CompanyBrandedJQCardPreview = ({
     primaryColor
-}: CompanyCareerJQCardPreviewProps) => {
+}: CompanyBrandedJQCardPreviewProps) => {
     return (
         <Card width="100%" p={4}>
             <Flex flexDirection="column" rowGap={3}>
-                <Text fontSize="sm">{`Punjab & Haryana`}</Text>
+                <Text fontSize="sm" fontWeight={500}>{`Punjab & Haryana`}</Text>
                 <Box>
-                    <Text fontSize="lg">{`Field Assistant Trainee`}</Text>
-                    <Text fontSize="sm" as="span" fontWeight={700}>
-                        {'Salary: '}
-                    </Text>
+                    <Text
+                        fontSize="xl"
+                        fontWeight={600}
+                        sx={{
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            display: '-webkit-box',
+                            WebkitLineClamp: '1',
+                            WebkitBoxOrient: 'vertical'
+                        }}
+                    >{`Field Assistant Trainee`}</Text>
                     <Text fontSize="sm" as="span">
-                        {`Negotiable`}
+                        {`Salary: Negotiable`}
                     </Text>
                 </Box>
                 <Text
@@ -29,6 +36,7 @@ export const CompanyCareerJQCardPreview = ({
                         WebkitLineClamp: '2',
                         WebkitBoxOrient: 'vertical'
                     }}
+                    color="gray.600"
                 >
                     {`Age - 18 - 28 Years Education Qualification - Minimum 12th Pass Experience -
                     More than 06 months in MFI/BFSI, Microfinance`}
