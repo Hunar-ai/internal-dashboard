@@ -15,6 +15,7 @@ import {
     UploadButton
 } from '@components/common';
 import { CompanyBrandedPagePreview } from './CompanyBrandedPagePreview';
+import { ReferralPageSetupDialog } from './ReferralPageSetupDialog';
 
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useUploadCareerPageAsset } from 'hooks/apiHooks/careerPage/useUploadCareerPageAsset';
@@ -95,7 +96,7 @@ export const CompanyCareerPageForm = () => {
     const { showError, showSuccess } = useToast();
     const uploadCareerPageAsset = useUploadCareerPageAsset();
     const addCareerPageSettings = useAddCareerPageSettings();
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
 
@@ -108,6 +109,7 @@ export const CompanyCareerPageForm = () => {
     const [uploadErrorMap, setUploadErrorMap] = React.useState({
         ...uploadErrorMapInitialState
     });
+    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
     const { data: companiesResponse, isLoading: isCompaniesLoading } =
         useGetCompanies();
@@ -227,6 +229,7 @@ export const CompanyCareerPageForm = () => {
                         title: 'Success',
                         description: 'Successfully added settings!'
                     });
+                    setIsDialogOpen(true);
                 },
                 onError: ({ errors }) => {
                     showError({
@@ -268,6 +271,13 @@ export const CompanyCareerPageForm = () => {
         }
 
         submitSettings();
+    };
+
+    const onReferralSetupProceedClick = () => {
+        searchParams.delete('career');
+        searchParams.set('referral', 'true');
+        searchParams.set('companyId', form.companyId);
+        setSearchParams(searchParams);
     };
 
     return (
@@ -494,6 +504,11 @@ export const CompanyCareerPageForm = () => {
                     bannerTextColor={form.bannerTextColor}
                 />
             </RightPanel>
+            <ReferralPageSetupDialog
+                isOpen={isDialogOpen}
+                onCloseClick={() => setIsDialogOpen(false)}
+                onProceedClick={onReferralSetupProceedClick}
+            />
         </Grid>
     );
 };
