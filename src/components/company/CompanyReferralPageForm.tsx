@@ -13,7 +13,7 @@ import {
     TextField,
     UploadButton
 } from '@components/common';
-import { CompanyCareerPagePreview } from './CompanyCareerPagePreview';
+import { CompanyBrandedPagePreview } from './CompanyBrandedPagePreview';
 
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useAddReferralPageSettings } from 'hooks/apiHooks/referralPage/useAddReferralPageSettings';
@@ -412,14 +412,11 @@ export const CompanyReferralPageForm = () => {
                 </FormWrapper>
             </LeftPanel>
             <RightPanel>
-                <CompanyCareerPagePreview
+                <CompanyBrandedPagePreview
                     primaryLogo={form.logo}
-                    secondaryLogo={''}
                     bannerBgColor={form.bannerBgColor}
                     primaryColor={form.primaryColor}
-                    description={''}
                     companyName={form.companyName}
-                    learnMoreLink={form.learnMoreLink}
                     bannerTextColor={form.bannerTextColor}
                 />
             </RightPanel>

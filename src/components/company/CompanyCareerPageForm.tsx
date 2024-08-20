@@ -1,7 +1,14 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { Flex, FormControl, FormLabel, Grid, GridItem } from '@chakra-ui/react';
+import {
+    Flex,
+    FormControl,
+    FormLabel,
+    Grid,
+    GridItem,
+    Switch
+} from '@chakra-ui/react';
 
 import {
     AppLoader,
@@ -14,11 +21,13 @@ import {
     TextField,
     UploadButton
 } from '@components/common';
-import { CompanyCareerPagePreview } from './CompanyCareerPagePreview';
+import { CompanyBrandedPagePreview } from './CompanyBrandedPagePreview';
+import { ReferralPageSetupDialog } from './ReferralPageSetupDialog';
 
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useUploadCareerPageAsset } from 'hooks/apiHooks/careerPage/useUploadCareerPageAsset';
 import { useAddCareerPageSettings } from 'hooks/apiHooks/careerPage/useAddCareerPageSettings';
+import { useAddReferralPageSettings } from 'hooks/apiHooks/referralPage/useAddReferralPageSettings';
 import { useToast } from 'hooks/useToast';
 import { useValidationHelper } from 'hooks';
 
@@ -95,7 +104,8 @@ export const CompanyCareerPageForm = () => {
     const { showError, showSuccess } = useToast();
     const uploadCareerPageAsset = useUploadCareerPageAsset();
     const addCareerPageSettings = useAddCareerPageSettings();
-    const [searchParams] = useSearchParams();
+    const addReferralPageSettings = useAddReferralPageSettings();
+    const [searchParams, setSearchParams] = useSearchParams();
     const { hasFormFieldError, getFormErrorData } =
         useValidationHelper(validationMap);
 
@@ -108,6 +118,9 @@ export const CompanyCareerPageForm = () => {
     const [uploadErrorMap, setUploadErrorMap] = React.useState({
         ...uploadErrorMapInitialState
     });
+    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+    const [isReferralPageSettingsSame, setIsReferralPageSettingsSame] =
+        React.useState(true);
 
     const { data: companiesResponse, isLoading: isCompaniesLoading } =
         useGetCompanies();
@@ -214,7 +227,38 @@ export const CompanyCareerPageForm = () => {
         });
     };
 
-    const submitSettings = () => {
+    const submitReferralPageSettings = () => {
+        addReferralPageSettings.mutate(
+            {
+                params: { companyId: form.companyId },
+                requestBody: {
+                    logo: form.primaryLogo,
+                    bannerBgColor: form.bannerBgColor,
+                    bannerTextColor: form.bannerTextColor,
+                    companyName: form.companyName,
+                    learnMoreLink: form.learnMoreLink,
+                    primaryColor: form.primaryColor
+                }
+            },
+            {
+                onSuccess: () => {
+                    showSuccess({
+                        title: 'Success',
+                        description:
+                            'Successfully added Career Page and Referral Page settings!'
+                    });
+                },
+                onError: ({ errors }) => {
+                    showError({
+                        title: 'Error',
+                        description: errors.displayError
+                    });
+                }
+            }
+        );
+    };
+
+    const submitCareerPageSettings = () => {
         const { companyId, ...restForm } = form;
         addCareerPageSettings.mutate(
             {
@@ -223,10 +267,16 @@ export const CompanyCareerPageForm = () => {
             },
             {
                 onSuccess: () => {
-                    showSuccess({
-                        title: 'Success',
-                        description: 'Successfully added settings!'
-                    });
+                    if (isReferralPageSettingsSame) {
+                        submitReferralPageSettings();
+                    } else {
+                        showSuccess({
+                            title: 'Success',
+                            description:
+                                'Successfully added Career Page settings!'
+                        });
+                        setIsDialogOpen(true);
+                    }
                 },
                 onError: ({ errors }) => {
                     showError({
@@ -267,7 +317,14 @@ export const CompanyCareerPageForm = () => {
             return;
         }
 
-        submitSettings();
+        submitCareerPageSettings();
+    };
+
+    const onReferralSetupProceedClick = () => {
+        searchParams.delete('career');
+        searchParams.set('referral', 'true');
+        searchParams.set('companyId', form.companyId);
+        setSearchParams(searchParams);
     };
 
     return (
@@ -389,7 +446,7 @@ export const CompanyCareerPageForm = () => {
                             />
                         }
                     />
-                    <GridItem colSpan={2}>
+                    <GridItem colSpan={{ base: 1, md: 2 }}>
                         <TextAreaField
                             label="Description"
                             name="description"
@@ -480,10 +537,32 @@ export const CompanyCareerPageForm = () => {
                             msg={'Dimension: 128x60px'}
                         />
                     </FormControl>
+                    <GridItem colSpan={{ base: 1, md: 2, lg: 1 }}>
+                        <FormControl
+                            display="flex"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            isDisabled={!form.companyId}
+                            pt={2}
+                        >
+                            <FormLabel>
+                                Add same settings to Referral Page
+                            </FormLabel>
+                            <Switch
+                                name="blockMessaging"
+                                isChecked={isReferralPageSettingsSame}
+                                onChange={e =>
+                                    setIsReferralPageSettingsSame(
+                                        e.target.checked
+                                    )
+                                }
+                            />
+                        </FormControl>
+                    </GridItem>
                 </FormWrapper>
             </LeftPanel>
             <RightPanel>
-                <CompanyCareerPagePreview
+                <CompanyBrandedPagePreview
                     primaryLogo={form.primaryLogo}
                     secondaryLogo={form.secondaryLogo || ''}
                     bannerBgColor={form.bannerBgColor}
@@ -494,6 +573,11 @@ export const CompanyCareerPageForm = () => {
                     bannerTextColor={form.bannerTextColor}
                 />
             </RightPanel>
+            <ReferralPageSetupDialog
+                isOpen={isDialogOpen}
+                onCloseClick={() => setIsDialogOpen(false)}
+                onProceedClick={onReferralSetupProceedClick}
+            />
         </Grid>
     );
 };

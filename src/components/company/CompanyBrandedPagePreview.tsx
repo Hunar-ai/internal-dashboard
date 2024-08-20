@@ -1,22 +1,29 @@
-import { Box, Flex, Select, Text } from '@chakra-ui/react';
+import { Box, Flex, Input, Select, SimpleGrid, Text } from '@chakra-ui/react';
 
-import { CompanyCareerJQCardPreview } from './CompanyCareerJQCardPreview';
+import { CompanyBrandedJQCardPreview } from './CompanyBrandedJQCardPreview';
 import { CompanyCareerPagePreviewWrapper } from './CompanyCareerPagePreviewWrapper';
 
-import type { CareerPageFormProps } from 'interfaces';
+interface CompanyBrandedPagePreviewProps {
+    primaryLogo: string;
+    companyName: string;
+    primaryColor: string;
+    bannerBgColor: string;
+    bannerTextColor: string;
+    secondaryLogo?: string;
+    description?: string;
+    learnMoreLink?: string;
+}
 
-type CompanyCareerPagePreviewProps = Omit<CareerPageFormProps, 'companyId'>;
-
-export const CompanyCareerPagePreview = ({
+export const CompanyBrandedPagePreview = ({
     primaryLogo,
-    secondaryLogo,
     bannerBgColor,
     primaryColor,
     bannerTextColor,
-    description,
     companyName,
-    learnMoreLink
-}: CompanyCareerPagePreviewProps) => {
+    secondaryLogo = '',
+    description = '',
+    learnMoreLink = ''
+}: CompanyBrandedPagePreviewProps) => {
     return (
         <CompanyCareerPagePreviewWrapper>
             <Box
@@ -29,7 +36,7 @@ export const CompanyCareerPagePreview = ({
                     justifyContent="space-between"
                     alignItems="center"
                     height="72px"
-                    px={2}
+                    px={4}
                 >
                     <Box
                         as="img"
@@ -48,7 +55,7 @@ export const CompanyCareerPagePreview = ({
                 </Flex>
                 <Flex
                     position="relative"
-                    height="100px"
+                    height="72px"
                     justifyContent="center"
                     alignItems="center"
                 >
@@ -63,29 +70,33 @@ export const CompanyCareerPagePreview = ({
                         position="absolute"
                         bgColor={bannerBgColor}
                         width="100%"
-                        height={100}
+                        height="100%"
                         zIndex={-1}
                     />
                 </Flex>
                 <Box p={4}>
-                    <Text
-                        sx={{
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            display: '-webkit-box',
-                            WebkitLineClamp: '2',
-                            WebkitBoxOrient: 'vertical'
-                        }}
-                    >
-                        {description}
-                    </Text>
+                    {description && (
+                        <Text
+                            fontSize="sm"
+                            sx={{
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                display: '-webkit-box',
+                                WebkitLineClamp: '2',
+                                WebkitBoxOrient: 'vertical'
+                            }}
+                        >
+                            {description}
+                        </Text>
+                    )}
                     {learnMoreLink && (
                         <Text
                             color={primaryColor}
-                            fontSize={16}
+                            fontSize="sm"
                             fontWeight={700}
                             width="100%"
                             textAlign="end"
+                            mb={6}
                         >
                             <a
                                 href={learnMoreLink}
@@ -96,20 +107,25 @@ export const CompanyCareerPagePreview = ({
                             </a>
                         </Text>
                     )}
-                    <Box py={2}>
-                        <Text py={2}>{`Showing 3 job vacancies`}</Text>
-                        <Flex gap={2}>
-                            <Select placeholder="SELECT CITY"></Select>
-                            <Select placeholder="SELECT LOCALITY"></Select>
-                        </Flex>
-                        <Flex py={5} rowGap={4} flexDirection="column">
-                            <CompanyCareerJQCardPreview
+                    <Box>
+                        <Input placeholder="Search here..." sx={{ mb: 4 }} />
+                        <SimpleGrid gap={2} columns={2}>
+                            <Select placeholder="CITY"></Select>
+                            <Select placeholder="LOCALITY"></Select>
+                            <Select placeholder="LOCALITY"></Select>
+                        </SimpleGrid>
+                        <Text
+                            fontSize="sm"
+                            py={2}
+                        >{`Showing 3 job vacancies`}</Text>
+                        <Flex py={1.5} rowGap={4} flexDirection="column">
+                            <CompanyBrandedJQCardPreview
                                 primaryColor={primaryColor}
                             />
-                            <CompanyCareerJQCardPreview
+                            <CompanyBrandedJQCardPreview
                                 primaryColor={primaryColor}
                             />
-                            <CompanyCareerJQCardPreview
+                            <CompanyBrandedJQCardPreview
                                 primaryColor={primaryColor}
                             />
                         </Flex>
