@@ -1,8 +1,8 @@
 export const RegExUtil = {
     alphaNumericWithUnderscoreAndDash: '^[a-zA-Z0-9_-]*$',
-    conformToId: (psuedoId: string): string => {
+    conformToId: (psuedoId: string, limit = 33): string => {
         const id = psuedoId.replace(/[^a-zA-Z0-9_]/g, '-');
-        return id.slice(0, 33).toLowerCase();
+        return id.slice(0, limit).toLowerCase();
     },
     isId: (id: string, limit = 25): boolean => {
         const re = /^[a-zA-Z0-9_-]*$/;
