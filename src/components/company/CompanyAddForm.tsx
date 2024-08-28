@@ -46,8 +46,11 @@ import {
     NAVBAR_HEIGHT
 } from 'Constants';
 
+const COMPANY_ID_LIMIT = 15;
+
 const validationMap: ValidationMapProps = {
-    companyId: (companyId: string) => RegExUtil.isId(companyId),
+    companyId: (companyId: string) =>
+        RegExUtil.isId(companyId, COMPANY_ID_LIMIT),
     name: (name: string) => RegExUtil.isName(name),
     description: (description: string) => RegExUtil.isDescription(description),
     rawAddress: (address: string) => RegExUtil.isDescription(address),
@@ -277,8 +280,23 @@ export const CompanyAddForm = () => {
         updateForm({ [fieldName]: fieldValue });
         updateFieldErrorState({ fieldName, fieldValue });
 
+        if (fieldName === 'companyId') {
+            const formattedCompanyId = RegExUtil.conformToId(
+                fieldValue,
+                COMPANY_ID_LIMIT
+            );
+            updateForm({ companyId: formattedCompanyId });
+            updateFieldErrorState({
+                fieldName,
+                fieldValue: formattedCompanyId
+            });
+        }
+
         if (fieldName === 'name') {
-            const companyId = RegExUtil.conformToId(fieldValue);
+            const companyId = RegExUtil.conformToId(
+                fieldValue,
+                COMPANY_ID_LIMIT
+            );
             updateForm({ companyId, description: fieldValue });
             updateFieldErrorState({
                 fieldName: 'companyId',
@@ -377,7 +395,7 @@ export const CompanyAddForm = () => {
                         />
                         <HelperText
                             hasError={formErrorState.companyId}
-                            errorMsg={ErrorMsg.id()}
+                            errorMsg={ErrorMsg.id({ max: COMPANY_ID_LIMIT })}
                             msg="Please keep it short (upto 15 characters)"
                         />
                     </FormControl>
