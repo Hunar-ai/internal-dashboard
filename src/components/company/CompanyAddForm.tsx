@@ -49,7 +49,8 @@ import {
 const COMPANY_ID_LIMIT = 15;
 
 const validationMap: ValidationMapProps = {
-    companyId: (companyId: string) => RegExUtil.isId(companyId),
+    companyId: (companyId: string) =>
+        RegExUtil.isId(companyId, COMPANY_ID_LIMIT),
     name: (name: string) => RegExUtil.isName(name),
     description: (description: string) => RegExUtil.isDescription(description),
     rawAddress: (address: string) => RegExUtil.isDescription(address),
