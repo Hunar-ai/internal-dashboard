@@ -39,7 +39,7 @@ export const useSearchPersonnels = ({
     const toast = useToast();
 
     return usePostReactQuery({
-        queryKey: ['useSearchPersonnels', page],
+        queryKey: ['useSearchPersonnels', companyId, page],
         requestUrl: search,
         params: { companyId },
         body: {
