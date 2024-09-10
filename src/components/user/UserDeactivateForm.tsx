@@ -5,26 +5,38 @@ import {
     Button,
     Flex,
     FormControl,
-    FormLabel,
     Input,
     InputGroup,
     InputRightElement,
-    Select,
     Text,
     VStack
 } from '@chakra-ui/react';
 
-import { LoaderBackdrop } from '@components/common';
+import { HelperText, LoaderBackdrop, TextField } from '@components/common';
+import { UserDeactivateDialog } from './UserDeactivateDialog';
 
 import { useToast } from 'hooks/useToast';
 import { useRemovePersonnel } from 'hooks/apiHooks/useRemovePersonnel';
 import { useSearchPersonnels } from 'hooks/apiHooks/useSearchPersonnels';
+import { useValidationHelper } from 'hooks';
 
-import type { PersonnelProps } from 'interfaces';
+import type { PersonnelProps, ValidationMapProps } from 'interfaces';
+import { ErrorMsg, RegExUtil } from 'utils';
+
+const validationMap: ValidationMapProps = {
+    companyId: (companyId: string) => RegExUtil.isId(companyId),
+    personnelId: (personnelId: string) => RegExUtil.isId(personnelId)
+};
+
+const formErrorStateInitialValues = {
+    companyId: false,
+    personnelId: false
+};
 
 export const UserDeactivateForm = () => {
     const removePersonnel = useRemovePersonnel();
     const { showError, showSuccess } = useToast();
+    const { hasFormFieldError } = useValidationHelper(validationMap);
 
     const [companyId, setCompanyId] = React.useState<string | undefined>(
         undefined
@@ -34,9 +46,13 @@ export const UserDeactivateForm = () => {
     );
     const [isSearchPersonnelsEnabled, setIsSearchPersonnelsEnabled] =
         React.useState(false);
-    const [personnelOptions, setPersonnelOptions] = React.useState<
-        PersonnelProps[]
-    >([]);
+    const [formErrorState, setFormErrorState] = React.useState({
+        ...formErrorStateInitialValues
+    });
+    const [selectedPersonnel, setSelectedPersonnel] = React.useState<
+        PersonnelProps | undefined
+    >(undefined);
+    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
     const { data: searchPersonnelResponse, isFetching } = useSearchPersonnels({
         params: { companyId },
@@ -44,14 +60,36 @@ export const UserDeactivateForm = () => {
         enabled: !!isSearchPersonnelsEnabled
     });
 
-    React.useEffect(() => {
-        setPersonnelOptions(searchPersonnelResponse?.data ?? []);
-    }, [searchPersonnelResponse?.data]);
+    const isDeactivateBtnDisabled = React.useMemo(
+        () => !companyId || !personnelId || removePersonnel.isSuccess,
+        [companyId, personnelId, removePersonnel.isSuccess]
+    );
 
     const onCompanyIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPersonnelOptions([]);
+        const modifiedCompanyId = e.target.value.trimStart();
         setPersonnelId(undefined);
-        setCompanyId(e.target.value);
+        setCompanyId(modifiedCompanyId);
+        setFormErrorState(prevErrorState => ({
+            ...prevErrorState,
+            companyId: hasFormFieldError({
+                fieldName: 'companyId',
+                fieldValue: modifiedCompanyId,
+                isRequired: false
+            })
+        }));
+    };
+
+    const onPersonnelIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const modifiedPersonnelId = e.target.value.trimStart();
+        setPersonnelId(modifiedPersonnelId);
+        setFormErrorState(prevErrorState => ({
+            ...prevErrorState,
+            personnelId: hasFormFieldError({
+                fieldName: 'personnelId',
+                fieldValue: modifiedPersonnelId,
+                isRequired: false
+            })
+        }));
     };
 
     const onCompanyIdSubmit = () => {
@@ -66,7 +104,19 @@ export const UserDeactivateForm = () => {
             datum => datum.personnelId === personnelId
         );
 
-        if (companyId && personnel && personnelId)
+        if (personnel) {
+            setSelectedPersonnel(personnel);
+            setIsDialogOpen(true);
+        } else {
+            showError({
+                title: 'Not Found',
+                description: 'No personnel found with the provided personnel id'
+            });
+        }
+    };
+
+    const onDialogSubmitClick = () => {
+        if (companyId && personnelId)
             removePersonnel.mutate(
                 {
                     params: { companyId, personnelId }
@@ -77,6 +127,7 @@ export const UserDeactivateForm = () => {
                             title: 'Success',
                             description: 'User deactivated successfully!'
                         });
+                        setIsDialogOpen(false);
                     },
                     onError: apiError => {
                         showError({
@@ -112,45 +163,56 @@ export const UserDeactivateForm = () => {
                         >
                             {`Deactivate User`}
                         </Text>
-                        <InputGroup>
-                            <Input
-                                placeholder={'Enter Company Id'}
-                                type="text"
-                                name="companyId"
-                                isDisabled={removePersonnel.isSuccess}
-                                onChange={onCompanyIdChange}
-                            />
-                            <InputRightElement width="4.5rem">
-                                <Button
-                                    h="1.75rem"
-                                    size="xs"
-                                    onClick={onCompanyIdSubmit}
-                                    isLoading={isFetching}
-                                    isDisabled={
-                                        !companyId || removePersonnel.isSuccess
-                                    }
-                                >
-                                    {`SUBMIT`}
-                                </Button>
-                            </InputRightElement>
-                        </InputGroup>
-                        <FormControl isDisabled={removePersonnel.isSuccess}>
-                            <FormLabel>Personnels</FormLabel>
-                            <Select
-                                value={personnelId}
-                                placeholder="Select personnel"
-                                onChange={e => setPersonnelId(e.target.value)}
-                            >
-                                {personnelOptions.map(datum => (
-                                    <option
-                                        value={datum.personnelId}
-                                        key={datum.personnelId}
+                        <FormControl
+                            isDisabled={removePersonnel.isSuccess}
+                            isInvalid={formErrorState.companyId}
+                        >
+                            <InputGroup>
+                                <Input
+                                    placeholder={'Enter Company Id'}
+                                    type="text"
+                                    name="companyId"
+                                    value={companyId || ''}
+                                    onChange={onCompanyIdChange}
+                                />
+                                <InputRightElement width="4.5rem">
+                                    <Button
+                                        h="1.75rem"
+                                        size="xs"
+                                        onClick={onCompanyIdSubmit}
+                                        isLoading={isFetching}
+                                        isDisabled={
+                                            !companyId ||
+                                            removePersonnel.isSuccess
+                                        }
                                     >
-                                        {datum.fullName} - {datum.email}
-                                    </option>
-                                ))}
-                            </Select>
+                                        {`SUBMIT`}
+                                    </Button>
+                                </InputRightElement>
+                                <HelperText
+                                    hasError={formErrorState.companyId}
+                                    errorMsg={ErrorMsg.id()}
+                                />
+                            </InputGroup>
                         </FormControl>
+                        <TextField
+                            isDisabled={
+                                removePersonnel.isSuccess ||
+                                !searchPersonnelResponse
+                            }
+                            label="Personnel Id"
+                            placeholder="Enter Personnel Id"
+                            name="personnelId"
+                            value={personnelId || ''}
+                            onChange={onPersonnelIdChange}
+                            isInvalid={formErrorState.personnelId}
+                            helperText={
+                                <HelperText
+                                    hasError={formErrorState.personnelId}
+                                    errorMsg={ErrorMsg.id()}
+                                />
+                            }
+                        />
                         <FormControl>
                             <Button
                                 colorScheme="blue"
@@ -160,15 +222,24 @@ export const UserDeactivateForm = () => {
                                 isLoading={removePersonnel.isLoading}
                                 loadingText="Submitting"
                                 fontSize={12}
-                                isDisabled={
-                                    !companyId ||
-                                    !personnelId ||
-                                    removePersonnel.isSuccess
-                                }
+                                isDisabled={isDeactivateBtnDisabled}
                             >
                                 {`DEACTIVATE`}
                             </Button>
                         </FormControl>
+                        {selectedPersonnel && (
+                            <UserDeactivateDialog
+                                isOpen={isDialogOpen}
+                                personnelId={selectedPersonnel.personnelId}
+                                personnelName={selectedPersonnel.fullName}
+                                personnelEmail={selectedPersonnel.email}
+                                personnelMobileNumber={
+                                    selectedPersonnel.mobileNumber
+                                }
+                                onSubmitClick={onDialogSubmitClick}
+                                onCancelClick={() => setIsDialogOpen(false)}
+                            />
+                        )}
                     </VStack>
                 </Box>
             </Flex>
