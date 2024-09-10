@@ -1,0 +1,1 @@
+export { UserDeactivateForm } from './UserDeactivateForm';

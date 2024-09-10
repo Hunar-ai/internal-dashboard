@@ -6,9 +6,20 @@ export const useNavbarMenuConfig = () => {
     const menuConfig: MenuProps[] = React.useMemo(() => {
         return [
             {
-                id: 'client-reset-password',
-                title: 'Reset Password',
-                link: '/client-reset-password'
+                id: 'user',
+                title: 'User',
+                subMenus: [
+                    {
+                        id: 'client-reset-password',
+                        title: 'Reset Password',
+                        link: '/client-reset-password'
+                    },
+                    {
+                        id: 'user/deactivate',
+                        title: 'Deactivate User',
+                        link: '/user?deactivate=true'
+                    }
+                ]
             },
             {
                 id: 'company',

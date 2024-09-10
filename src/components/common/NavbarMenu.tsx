@@ -9,6 +9,7 @@ import {
     MenuList,
     Portal
 } from '@chakra-ui/react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 
 import type { MenuProps } from 'interfaces';
 
@@ -55,6 +56,7 @@ export const NavbarMenu = ({
                         variant="ghost"
                         color={isActive ? 'blue.600' : undefined}
                         sx={{ '&:hover': { color: 'inherit' } }}
+                        rightIcon={<ChevronDownIcon fontSize="lg" />}
                     >
                         {menuTitle}
                     </MenuButton>

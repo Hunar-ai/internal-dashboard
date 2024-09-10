@@ -15,3 +15,7 @@ export const personnel = ApiClient({
 export const loggedInPersonnel = ApiClient({
     url: `/v1/me`
 });
+
+export const removePersonnel = ApiClient({
+    url: `/v1/company/{companyId}/personnel/{personnelId}/remove`
+});
