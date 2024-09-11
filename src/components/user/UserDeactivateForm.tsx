@@ -12,7 +12,7 @@ import {
     VStack
 } from '@chakra-ui/react';
 
-import { HelperText, LoaderBackdrop, TextField } from '@components/common';
+import { AppLoader, HelperText, TextField } from '@components/common';
 import { UserDeactivateDialog } from './UserDeactivateDialog';
 
 import { useToast } from 'hooks/useToast';
@@ -128,6 +128,9 @@ export const UserDeactivateForm = () => {
                             description: 'User deactivated successfully!'
                         });
                         setIsDialogOpen(false);
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
                     },
                     onError: apiError => {
                         showError({
@@ -151,9 +154,7 @@ export const UserDeactivateForm = () => {
                     width="50%"
                     position="relative"
                 >
-                    {removePersonnel.isSuccess && (
-                        <LoaderBackdrop isFullScreen={false} zIndex={1} />
-                    )}
+                    {removePersonnel.isLoading && <AppLoader zIndex={1410} />}
                     <VStack spacing={5}>
                         <Text
                             fontSize="xl"
@@ -163,10 +164,7 @@ export const UserDeactivateForm = () => {
                         >
                             {`Deactivate User`}
                         </Text>
-                        <FormControl
-                            isDisabled={removePersonnel.isSuccess}
-                            isInvalid={formErrorState.companyId}
-                        >
+                        <FormControl isInvalid={formErrorState.companyId}>
                             <InputGroup>
                                 <Input
                                     placeholder={'Enter Company Id'}
@@ -181,10 +179,7 @@ export const UserDeactivateForm = () => {
                                         size="xs"
                                         onClick={onCompanyIdSubmit}
                                         isLoading={isFetching}
-                                        isDisabled={
-                                            !companyId ||
-                                            removePersonnel.isSuccess
-                                        }
+                                        isDisabled={!companyId}
                                     >
                                         {`SUBMIT`}
                                     </Button>
@@ -196,10 +191,7 @@ export const UserDeactivateForm = () => {
                             </InputGroup>
                         </FormControl>
                         <TextField
-                            isDisabled={
-                                removePersonnel.isSuccess ||
-                                !searchPersonnelResponse
-                            }
+                            isDisabled={!searchPersonnelResponse}
                             label="Personnel Id"
                             placeholder="Enter Personnel Id"
                             name="personnelId"
