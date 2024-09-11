@@ -23,8 +23,7 @@ import { useValidationHelper } from 'hooks';
 import type { PersonnelProps, ValidationMapProps } from 'interfaces';
 import { ErrorMsg, RegExUtil } from 'utils';
 
-const DEACTIVATION_BLOCKED_USERS: string[] =
-    import.meta.env.VITE_DEACTIVATION_BLOCKED_USERS.split(',');
+const SUPER_USERS: string[] = import.meta.env.VITE_SUPER_USERS.split(',');
 
 const validationMap: ValidationMapProps = {
     companyId: (companyId: string) => RegExUtil.isId(companyId),
@@ -112,7 +111,7 @@ export const UserDeactivateForm = () => {
                 title: 'Not Found',
                 description: 'No personnel found with the provided personnel id'
             });
-        } else if (DEACTIVATION_BLOCKED_USERS.indexOf(personnel.email) > -1) {
+        } else if (SUPER_USERS.indexOf(personnel.email) > -1) {
             showError({
                 title: 'Unauthorized!',
                 description: 'You are not allowed to deactivate this personnel!'
