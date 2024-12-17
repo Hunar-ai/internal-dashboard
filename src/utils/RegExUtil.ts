@@ -52,5 +52,10 @@ export const RegExUtil = {
     isHexColor(str: string): boolean {
         const regex = /^#[0-9a-fA-F]{6}$/;
         return regex.test(str);
+    },
+    isWithoutExtraSpaces(str: string): boolean {
+        const regex = /(^\S$)|(^\S+(.|\n)*\S$)/;
+        const isSpacesCorrect = str ? regex.test(str) : true;
+        return isSpacesCorrect;
     }
 };

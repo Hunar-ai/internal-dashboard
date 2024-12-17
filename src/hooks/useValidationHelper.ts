@@ -1,4 +1,5 @@
 import type { ErrorStateProps, ValidationMapProps } from 'interfaces';
+import { ErrorMsgUtil, ValidationUtil } from 'utils';
 
 interface HasFormFieldErrorProps {
     fieldName: string;
@@ -9,6 +10,11 @@ interface HasFormFieldErrorProps {
 interface GetFormErrorStateProps {
     form: Record<string, any>;
     requiredFields?: string[];
+}
+
+export interface ValidatorReturnProps {
+    hasError: boolean;
+    errorMsg: string | undefined;
 }
 
 export const useValidationHelper = (validationMap: ValidationMapProps = {}) => {
@@ -72,10 +78,27 @@ export const useValidationHelper = (validationMap: ValidationMapProps = {}) => {
         };
     };
 
+    const getStandardFieldValidity = (
+        str: string | null,
+        required?: boolean,
+        meta?: { min?: number; max?: number }
+    ): ValidatorReturnProps => {
+        const errorCode = ValidationUtil.isStandardInputField(
+            str,
+            required,
+            meta
+        );
+        return {
+            hasError: !!errorCode,
+            errorMsg: ErrorMsgUtil[errorCode]?.(meta)
+        };
+    };
+
     return {
         hasFormFieldError,
         getFormErrorState,
         getFormErrorData,
-        hasError
+        hasError,
+        getStandardFieldValidity
     };
 };

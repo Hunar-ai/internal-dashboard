@@ -14,7 +14,7 @@ interface FormWrapperProps {
     children: React.ReactNode;
     isFormDisabled: boolean;
     isLoading: boolean;
-    width?: string | number;
+    width?: ResponsiveValue<string | number>;
     gridColumns?: ResponsiveValue<number>;
     onSubmit: VoidFunction;
 }

@@ -8,7 +8,8 @@ export {
 export type {
     ValidationMapProps,
     FormErrorProps,
-    ErrorStateProps
+    ErrorStateProps,
+    FormErrorStateProps
 } from './form.interface';
 
 export { type Error, type ApiError } from './error.interface';

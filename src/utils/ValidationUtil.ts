@@ -2,6 +2,7 @@ import { RegExUtil } from './RegExUtil';
 import { DataUtils } from './DataUtils';
 import { StringUtils } from './StringUtils';
 import { NumberUtils } from './NumberUtils';
+import { ERROR_CODE } from './ErrorMsgUtil';
 
 interface FormType<T> {
     [key: string]: T;
@@ -191,5 +192,37 @@ export const ValidationUtil = {
             }
         }
         return { isValid, message };
+    },
+    isStandardInputField(
+        value: string | null,
+        isRequired = true,
+        meta?: { min?: number; max?: number }
+    ): ERROR_CODE {
+        if (isRequired && !value) return ERROR_CODE.REQUIRED;
+
+        if (value) {
+            if (!RegExUtil.isWithoutExtraSpaces(value))
+                return ERROR_CODE.BLANK_SPACES;
+
+            const isValidLength = StringUtils.isValidLength(value, {
+                min: meta?.min ?? 3,
+                max: meta?.max ?? 100
+            });
+            if (!isValidLength) return ERROR_CODE.CHARACTER_LENGTH;
+        }
+
+        return ERROR_CODE.NONE;
+    },
+    isMobileInputField(value: string | null, isRequired = true): ERROR_CODE {
+        if (isRequired && !value) return ERROR_CODE.REQUIRED;
+
+        if (value) {
+            if (!RegExUtil.isWithoutExtraSpaces(value))
+                return ERROR_CODE.BLANK_SPACES;
+            if (!RegExUtil.isMobileNumber(value))
+                return ERROR_CODE.MOBILE_NUMBER;
+        }
+
+        return ERROR_CODE.NONE;
     }
 };

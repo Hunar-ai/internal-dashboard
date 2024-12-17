@@ -15,22 +15,26 @@ import {
 import { ChecklistQuestionList } from './ChecklistQuestionList';
 import { useCompanyHelper } from '@components/company/useCompanyHelper';
 
+import { useToast } from 'hooks/useToast';
+import { useValidationHelper } from 'hooks';
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useSaveChecklist } from 'hooks/apiHooks/useSaveChecklist';
-import { useToast } from 'hooks/useToast';
 
 import { ErrorMsg } from 'utils';
-import type { ChecklistFormProps } from 'interfaces';
+import { ChecklistFormProps, FormErrorStateProps } from 'interfaces';
 
 const MAX_CHECKLIST_QUESTION = 15;
 
 export const ChecklistEditForm = () => {
     const { showError, showSuccess } = useToast();
+    const { getStandardFieldValidity } = useValidationHelper();
     const saveChecklist = useSaveChecklist();
 
     const [companyId, setCompanyId] = React.useState('');
     const [checklistForm, setChecklistForm] =
         React.useState<ChecklistFormProps>({});
+    const [checklistFormErrorState, setChecklistFormErrorState] =
+        React.useState<FormErrorStateProps>({});
     const [hasCompanyIdError, setHasCompanyIdError] = React.useState(false);
 
     const { data: companiesResponse, isLoading: isCompaniesLoading } =
@@ -41,6 +45,34 @@ export const ChecklistEditForm = () => {
 
     const isAddDisabled =
         Object.keys(checklistForm).length >= MAX_CHECKLIST_QUESTION;
+
+    const getFormErrorState = () => {
+        let hasFormError = false;
+        const modifiedFormErrorState = Object.values(checklistForm).reduce(
+            (errorState, question) => {
+                const { errorMsg, hasError } = getStandardFieldValidity(
+                    checklistForm[question.key].question,
+                    true,
+                    { max: 200 }
+                );
+
+                if (hasError) {
+                    hasFormError = true;
+                }
+
+                return {
+                    ...errorState,
+                    [question.key]: { error: hasError, errorMsg }
+                };
+            },
+            {} as FormErrorStateProps
+        );
+
+        return {
+            hasFormError,
+            modifiedFormErrorState
+        };
+    };
 
     const onQuestionAddClick = () => {
         const checklistQuestionCount = Object.keys(checklistForm).length;
@@ -65,6 +97,14 @@ export const ChecklistEditForm = () => {
             [name]: { key: name, question: value }
         };
         setChecklistForm(modifiedChecklistForm);
+
+        const { hasError, errorMsg } = getStandardFieldValidity(value, true, {
+            max: 200
+        });
+        setChecklistFormErrorState(prevErrorState => ({
+            ...prevErrorState,
+            [name]: { error: hasError, errorMsg }
+        }));
     };
 
     const onCompanyIdChange = ({
@@ -124,6 +164,13 @@ export const ChecklistEditForm = () => {
             return;
         }
 
+        const { hasFormError, modifiedFormErrorState } = getFormErrorState();
+        setChecklistFormErrorState(modifiedFormErrorState);
+
+        if (hasFormError) {
+            return;
+        }
+
         submitChecklist();
     };
 
@@ -135,7 +182,7 @@ export const ChecklistEditForm = () => {
                 isLoading={saveChecklist.isLoading}
                 onSubmit={onSubmitClick}
                 gridColumns={1}
-                width="xl"
+                width={{ base: 'xl', lg: '60%' }}
             >
                 {(isCompaniesLoading || saveChecklist.isLoading) && (
                     <AppLoader />
@@ -163,6 +210,7 @@ export const ChecklistEditForm = () => {
                         >{`Selection Checklist Questions`}</Text>
                         <ChecklistQuestionList
                             checklistForm={checklistForm}
+                            checklistFormErrorState={checklistFormErrorState}
                             onQuestionChange={onQuestionFieldChange}
                             onQuestionDelete={onQuestionDeleteClick}
                         />
