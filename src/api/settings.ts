@@ -29,5 +29,5 @@ export const companies = ApiClient({
 });
 
 export const checklist = ApiClient({
-    url: `/v1/company/{companyId}/selection-checklist`
+    url: `/v1/company/{companyId}/settings/selection-checklist`
 });

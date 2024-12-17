@@ -14,7 +14,7 @@ interface SaveChecklistProps {
 }
 
 interface SaveChecklistResponse {
-    success: boolean;
+    selectionChecklist: ChecklistFieldProps[];
 }
 
 export const useSaveChecklist = () => {
