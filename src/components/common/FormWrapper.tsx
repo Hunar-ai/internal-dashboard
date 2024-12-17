@@ -1,4 +1,11 @@
-import { Box, Button, GridItem, SimpleGrid, Text } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    GridItem,
+    SimpleGrid,
+    Text,
+    type ResponsiveValue
+} from '@chakra-ui/react';
 
 import { LoaderBackdrop } from './LoaderBackdrop';
 
@@ -7,6 +14,8 @@ interface FormWrapperProps {
     children: React.ReactNode;
     isFormDisabled: boolean;
     isLoading: boolean;
+    width?: string | number;
+    gridColumns?: ResponsiveValue<number>;
     onSubmit: VoidFunction;
 }
 
@@ -15,8 +24,11 @@ export const FormWrapper = ({
     children,
     isFormDisabled,
     isLoading,
+    width = undefined,
+    gridColumns = undefined,
     onSubmit
 }: FormWrapperProps) => {
+    const columns = gridColumns ?? { base: 1, md: 2 };
     return (
         <>
             <Box
@@ -25,18 +37,19 @@ export const FormWrapper = ({
                 overflow="hidden"
                 padding={4}
                 position="relative"
+                width={width}
             >
                 {isFormDisabled && (
                     <LoaderBackdrop isFullScreen={false} zIndex={1} />
                 )}
                 <SimpleGrid
-                    columns={{ base: 1, md: 2 }}
+                    columns={columns}
                     spacingX={6}
                     spacingY={4}
                     width="100%"
                     alignItems="start"
                 >
-                    <GridItem colSpan={{ base: 1, md: 2 }} mb={4}>
+                    <GridItem colSpan={columns} mb={4}>
                         <Text
                             fontSize="xl"
                             lineHeight={1.4}
@@ -48,8 +61,8 @@ export const FormWrapper = ({
                     </GridItem>
                     {children}
                 </SimpleGrid>
-                <SimpleGrid columns={{ base: 1, md: 2 }} spacingX={6} mt={8}>
-                    <GridItem colStart={{ base: 1, md: 2 }} textAlign="end">
+                <SimpleGrid columns={columns} spacingX={6} mt={8}>
+                    <GridItem colStart={columns} textAlign="end">
                         <Button
                             colorScheme="blue"
                             onClick={onSubmit}

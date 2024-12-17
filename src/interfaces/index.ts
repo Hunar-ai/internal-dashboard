@@ -59,7 +59,13 @@ export type {
     GetCompaniesResponse,
     CareerPageFormProps,
     ReferralPageSettingsProps,
-    ReferralPageFormProps
+    ReferralPageFormProps,
+    DashboardSettingsProps
 } from './company.interface';
 
 export type { MenuProps } from './menu.interface';
+
+export type {
+    ChecklistFieldProps,
+    ChecklistFormProps
+} from './checklist.interface';

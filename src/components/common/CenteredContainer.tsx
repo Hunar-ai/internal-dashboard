@@ -1,4 +1,6 @@
-import Grid from '@mui/material/Grid';
+import { Box, Center } from '@chakra-ui/react';
+
+import { NAVBAR_HEIGHT } from 'Constants';
 
 interface CenteredContainerProps {
     children: React.ReactNode;
@@ -6,10 +8,10 @@ interface CenteredContainerProps {
 
 export const CenteredContainer = ({ children }: CenteredContainerProps) => {
     return (
-        <Grid id="parent" container justifyContent="center" height={'100vh'}>
-            <Grid item md={5} marginY={'auto'} xs={12}>
+        <Box height={`calc(100vh - ${NAVBAR_HEIGHT})`} overflow="scroll">
+            <Center py={6} px={8}>
                 {children}
-            </Grid>
-        </Grid>
+            </Center>
+        </Box>
     );
 };

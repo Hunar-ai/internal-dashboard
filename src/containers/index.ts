@@ -4,3 +4,4 @@ export { UserContainer } from './UserContainer';
 export { AppContainer } from './AppContainer';
 export { SigninContainer } from './SigninContainer';
 export { CompanyContainer } from './CompanyContainer';
+export { ChecklistContainer } from './ChecklistContainer';
