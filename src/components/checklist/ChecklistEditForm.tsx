@@ -7,7 +7,6 @@ import { AddIcon } from '@chakra-ui/icons';
 
 import {
     AppLoader,
-    CenteredContainer,
     FormWrapper,
     HelperText,
     SelectField
@@ -175,62 +174,57 @@ export const ChecklistEditForm = () => {
     };
 
     return (
-        <CenteredContainer>
-            <FormWrapper
-                formTitle="Selection Checklist Settings"
-                isFormDisabled={saveChecklist.isSuccess}
-                isLoading={saveChecklist.isLoading}
-                onSubmit={onSubmitClick}
-                gridColumns={1}
-                width={{ base: 'xl', lg: '60%' }}
-            >
-                {(isCompaniesLoading || saveChecklist.isLoading) && (
-                    <AppLoader />
-                )}
-                <SelectField
-                    label="Company Id"
-                    name="companyId"
-                    placeholder="Select Company Id"
-                    options={companyIdOptions}
-                    value={companyId}
-                    onChange={onCompanyIdChange}
-                    isRequired
-                    isInvalid={hasCompanyIdError}
-                    helperText={
-                        <HelperText
-                            hasError={hasCompanyIdError}
-                            errorMsg={ErrorMsg.required()}
-                        />
-                    }
-                />
-                {companyId && (
-                    <>
-                        <Text
-                            fontWeight={600}
-                        >{`Selection Checklist Questions`}</Text>
-                        <ChecklistQuestionList
-                            checklistForm={checklistForm}
-                            checklistFormErrorState={checklistFormErrorState}
-                            onQuestionChange={onQuestionFieldChange}
-                            onQuestionDelete={onQuestionDeleteClick}
-                        />
-
-                        <GridItem>
-                            <Button
-                                leftIcon={<AddIcon />}
-                                variant="outline"
-                                colorScheme="blue"
-                                onClick={onQuestionAddClick}
-                                isDisabled={isAddDisabled}
-                                isLoading={saveChecklist.isLoading}
-                            >
-                                {'ADD QUESTION'}
-                            </Button>
-                        </GridItem>
-                    </>
-                )}
-            </FormWrapper>
-        </CenteredContainer>
+        <FormWrapper
+            formTitle="Selection Checklist Settings"
+            isFormDisabled={saveChecklist.isSuccess}
+            isLoading={saveChecklist.isLoading}
+            onSubmit={onSubmitClick}
+            gridColumns={1}
+            width={{ base: 'xl', lg: '60%' }}
+        >
+            {(isCompaniesLoading || saveChecklist.isLoading) && <AppLoader />}
+            <SelectField
+                label="Company Id"
+                name="companyId"
+                placeholder="Select Company Id"
+                options={companyIdOptions}
+                value={companyId}
+                onChange={onCompanyIdChange}
+                isRequired
+                isInvalid={hasCompanyIdError}
+                helperText={
+                    <HelperText
+                        hasError={hasCompanyIdError}
+                        errorMsg={ErrorMsg.required()}
+                    />
+                }
+            />
+            {companyId && (
+                <>
+                    <Text
+                        fontWeight={600}
+                    >{`Selection Checklist Questions`}</Text>
+                    <ChecklistQuestionList
+                        checklistForm={checklistForm}
+                        checklistFormErrorState={checklistFormErrorState}
+                        onQuestionChange={onQuestionFieldChange}
+                        onQuestionDelete={onQuestionDeleteClick}
+                    />
+                    <GridItem>
+                        <Button
+                            leftIcon={<AddIcon />}
+                            variant="outline"
+                            colorScheme="blue"
+                            onClick={onQuestionAddClick}
+                            isDisabled={isAddDisabled}
+                            isLoading={saveChecklist.isLoading}
+                        >
+                            {'ADD QUESTION'}
+                        </Button>
+                    </GridItem>
+                </>
+            )}
+        </FormWrapper>
     );
 };
 

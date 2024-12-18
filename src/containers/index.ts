@@ -5,3 +5,4 @@ export { AppContainer } from './AppContainer';
 export { SigninContainer } from './SigninContainer';
 export { CompanyContainer } from './CompanyContainer';
 export { ChecklistContainer } from './ChecklistContainer';
+export { AssessmentContainer } from './AssessmentContainer';

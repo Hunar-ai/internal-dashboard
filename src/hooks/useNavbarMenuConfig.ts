@@ -42,7 +42,8 @@ export const useNavbarMenuConfig = () => {
                     }
                 ]
             },
-            { id: 'checklist', title: 'Checklist', link: '/checklist' }
+            { id: 'checklist', title: 'Checklist', link: '/checklist' },
+            { id: 'assessment', title: 'Assessment', link: '/assessment' }
         ];
     }, []);
 

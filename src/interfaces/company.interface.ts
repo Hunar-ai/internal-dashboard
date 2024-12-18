@@ -2,6 +2,13 @@ import { CHECK_INTEREST_PROVIDER } from 'Enum';
 
 import type { ChecklistFieldProps, PaginationInfo } from 'interfaces';
 
+export interface AssessmentSettingsProps {
+    emails: string[];
+    isAssessmentEnabled: boolean;
+    jobDescription: string;
+    prompt: string | null;
+}
+
 export interface LmsSettingsProps {
     blockMessaging: boolean;
     checkInterestProvider?: CHECK_INTEREST_PROVIDER;
@@ -44,6 +51,7 @@ export interface ReferralPageSettingsProps {
 }
 
 export interface CompanySettingsProps {
+    assessmentSettings?: AssessmentSettingsProps;
     lmsSettings: LmsSettingsProps;
     workerSettings: LeadSettingsProps;
     dashboardSettings?: DashboardSettingsProps;

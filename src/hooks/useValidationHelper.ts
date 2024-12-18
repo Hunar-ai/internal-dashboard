@@ -79,13 +79,13 @@ export const useValidationHelper = (validationMap: ValidationMapProps = {}) => {
     };
 
     const getStandardFieldValidity = (
-        str: string | null,
-        required?: boolean,
+        value: string | null,
+        isRequired?: boolean,
         meta?: { min?: number; max?: number }
     ): ValidatorReturnProps => {
         const errorCode = ValidationUtil.isStandardInputField(
-            str,
-            required,
+            value,
+            isRequired,
             meta
         );
         return {

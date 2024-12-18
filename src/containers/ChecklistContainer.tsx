@@ -1,5 +1,10 @@
+import { CenteredContainer } from '@components/common';
 import { ChecklistEditForm } from '@components/checklist';
 
 export const ChecklistContainer = () => {
-    return <ChecklistEditForm />;
+    return (
+        <CenteredContainer>
+            <ChecklistEditForm />
+        </CenteredContainer>
+    );
 };
