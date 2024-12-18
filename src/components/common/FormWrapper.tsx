@@ -10,6 +10,7 @@ import {
 import { LoaderBackdrop } from './LoaderBackdrop';
 
 interface FormWrapperProps {
+    id?: string;
     formTitle: string;
     children: React.ReactNode;
     isFormDisabled: boolean;
@@ -20,6 +21,7 @@ interface FormWrapperProps {
 }
 
 export const FormWrapper = ({
+    id,
     formTitle,
     children,
     isFormDisabled,
@@ -38,6 +40,7 @@ export const FormWrapper = ({
                 padding={4}
                 position="relative"
                 width={width}
+                id={id}
             >
                 {isFormDisabled && (
                     <LoaderBackdrop isFullScreen={false} zIndex={1} />

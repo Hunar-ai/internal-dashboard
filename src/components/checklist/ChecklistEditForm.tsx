@@ -175,6 +175,7 @@ export const ChecklistEditForm = () => {
 
     return (
         <FormWrapper
+            id="selection-checklist-form-container"
             formTitle="Selection Checklist Settings"
             isFormDisabled={saveChecklist.isSuccess}
             isLoading={saveChecklist.isLoading}

@@ -151,6 +151,7 @@ export const AssessmentSetupForm = () => {
             onSubmit={onSubmitClick}
             gridColumns={1}
             width={{ base: 'xl', lg: '60%' }}
+            id="assessment-setup-form-container"
         >
             {(isCompaniesLoading || saveAssessmentSettings.isLoading) && (
                 <AppLoader />
@@ -181,7 +182,8 @@ export const AssessmentSetupForm = () => {
                     >
                         <FormLabel>{'Enable Assessment'}</FormLabel>
                         <Switch
-                            name="isAssessmentEnabled"
+                            name="assessmentEnabledToggle"
+                            id="assessment-enabled-toggle"
                             isChecked={assessmentForm.isAssessmentEnabled}
                             onChange={onAssessmentEnableToggle}
                         />

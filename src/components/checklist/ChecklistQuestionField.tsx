@@ -40,6 +40,7 @@ export const ChecklistQuestionField = ({
                 />
             </Flex>
             <Input
+                id={fieldKey}
                 name={fieldKey}
                 value={question}
                 placeholder="Add your question here"
