@@ -20,7 +20,7 @@ import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useSaveChecklist } from 'hooks/apiHooks/useSaveChecklist';
 
 import { ErrorMsg } from 'utils';
-import { ChecklistFormProps, FormErrorStateProps } from 'interfaces';
+import type { ChecklistFormProps, FormErrorStateProps } from 'interfaces';
 
 const MAX_CHECKLIST_QUESTION = 15;
 
