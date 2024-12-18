@@ -67,6 +67,7 @@ export const Navbar = () => {
                             menuLink={menu.link}
                             menuTitle={menu.title}
                             subMenus={menu.subMenus}
+                            isNewFeature={menu.isNewFeature}
                         />
                     ))}
                 </Flex>

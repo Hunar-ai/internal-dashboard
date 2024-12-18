@@ -3,4 +3,5 @@ export interface MenuProps {
     title: string;
     link?: string;
     subMenus?: { id: string; title: string; link: string }[];
+    isNewFeature?: boolean;
 }
