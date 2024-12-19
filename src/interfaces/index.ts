@@ -8,7 +8,8 @@ export {
 export type {
     ValidationMapProps,
     FormErrorProps,
-    ErrorStateProps
+    ErrorStateProps,
+    FormErrorStateProps
 } from './form.interface';
 
 export { type Error, type ApiError } from './error.interface';
@@ -59,7 +60,14 @@ export type {
     GetCompaniesResponse,
     CareerPageFormProps,
     ReferralPageSettingsProps,
-    ReferralPageFormProps
+    ReferralPageFormProps,
+    DashboardSettingsProps,
+    AssessmentSettingsProps
 } from './company.interface';
 
 export type { MenuProps } from './menu.interface';
+
+export type {
+    ChecklistFieldProps,
+    ChecklistFormProps
+} from './checklist.interface';

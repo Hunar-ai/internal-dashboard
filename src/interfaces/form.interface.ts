@@ -23,3 +23,7 @@ export type FormErrorProps<TForm extends Record<string, any>> = {
 export interface ErrorStateProps {
     [key: string]: boolean;
 }
+
+export type FormErrorStateProps = {
+    [key: string]: { error: boolean; errorMsg?: string };
+};

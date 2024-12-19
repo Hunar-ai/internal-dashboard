@@ -1,6 +1,7 @@
 import { Link as RouterLink } from 'react-router-dom';
 
 import {
+    Badge,
     Button,
     Flex,
     Menu,
@@ -18,13 +19,15 @@ interface NavbarMenuProps {
     menuTitle: string;
     menuLink?: string;
     subMenus?: MenuProps['subMenus'];
+    isNewFeature?: boolean;
 }
 
 export const NavbarMenu = ({
     isActive,
     menuLink,
     menuTitle,
-    subMenus
+    subMenus,
+    isNewFeature
 }: NavbarMenuProps) => {
     return (
         <Flex
@@ -84,6 +87,11 @@ export const NavbarMenu = ({
                     sx={{ '&:hover': { color: 'inherit' } }}
                 >
                     {menuTitle}
+                    {isNewFeature && (
+                        <Badge colorScheme="green" sx={{ ml: 1, p: 1 }}>
+                            {'New'}
+                        </Badge>
+                    )}
                 </Button>
             )}
         </Flex>

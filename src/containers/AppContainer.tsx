@@ -4,7 +4,9 @@ import { Navbar, ProtectedRoute } from '@components/common';
 import {
     CompanyContainer,
     UserContainer,
-    ResetPasswordContainer
+    ResetPasswordContainer,
+    ChecklistContainer,
+    AssessmentContainer
 } from 'containers';
 
 import { SettingsContext } from 'contexts';
@@ -41,6 +43,11 @@ export const AppContainer = () => {
                     />
                     <Route path="/user" element={<UserContainer />} />
                     <Route path="/company" element={<CompanyContainer />} />
+                    <Route path="/checklist" element={<ChecklistContainer />} />
+                    <Route
+                        path="/assessment"
+                        element={<AssessmentContainer />}
+                    />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </ProtectedRoute>

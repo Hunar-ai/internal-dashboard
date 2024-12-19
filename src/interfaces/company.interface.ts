@@ -1,6 +1,13 @@
 import { CHECK_INTEREST_PROVIDER } from 'Enum';
 
-import type { PaginationInfo } from 'interfaces';
+import type { ChecklistFieldProps, PaginationInfo } from 'interfaces';
+
+export interface AssessmentSettingsProps {
+    emails: string[];
+    isAssessmentEnabled: boolean;
+    jobDescription: string;
+    prompt: string | null;
+}
 
 export interface LmsSettingsProps {
     blockMessaging: boolean;
@@ -12,6 +19,10 @@ export interface LeadSettingsProps {
     useJobQueryFields: boolean;
     onboardingRequiredFields: string[];
     singleWorkerRequiredFields: string[];
+}
+
+export interface DashboardSettingsProps {
+    selectionChecklist?: ChecklistFieldProps[];
 }
 
 export interface OnboardingSettingsProps {
@@ -40,8 +51,10 @@ export interface ReferralPageSettingsProps {
 }
 
 export interface CompanySettingsProps {
+    assessmentSettings?: AssessmentSettingsProps;
     lmsSettings: LmsSettingsProps;
     workerSettings: LeadSettingsProps;
+    dashboardSettings?: DashboardSettingsProps;
     onboardingSettings?: OnboardingSettingsProps;
     careerPageSettings?: CareerPageSettingsProps;
     referralPageSettings?: ReferralPageSettingsProps;

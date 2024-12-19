@@ -41,7 +41,14 @@ export const useNavbarMenuConfig = () => {
                         link: '/company?referral=true'
                     }
                 ]
-            }
+            },
+            {
+                id: 'checklist',
+                title: 'Checklist',
+                link: '/checklist',
+                isNewFeature: true
+            },
+            { id: 'assessment', title: 'Assessment', link: '/assessment' }
         ];
     }, []);
 

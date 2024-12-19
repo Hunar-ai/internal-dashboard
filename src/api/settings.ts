@@ -27,3 +27,11 @@ export const companyDetails = ApiClient({
 export const companies = ApiClient({
     url: `/v1/company`
 });
+
+export const checklist = ApiClient({
+    url: `/v1/company/{companyId}/settings/selection-checklist`
+});
+
+export const assessment = ApiClient({
+    url: `/v1/company/{companyId}/settings/assessment`
+});

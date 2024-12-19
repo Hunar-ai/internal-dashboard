@@ -23,5 +23,9 @@ export const StringUtils = {
         }
 
         return true;
+    },
+    isValidLength(str: string | null, range?: { min?: number; max?: number }) {
+        const length = str?.trimStart().length ?? 0;
+        return (range?.min || 0) <= length && length <= (range?.max || 200);
     }
 };
