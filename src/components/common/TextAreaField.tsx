@@ -18,6 +18,7 @@ interface TextAreaFieldProps {
     isInvalid?: boolean;
     isRequired?: boolean;
     isDisabled?: boolean;
+    isCharHelpTextEnabled?: boolean;
     helperText?: React.ReactNode;
     onChange: (_: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
@@ -32,6 +33,7 @@ export const TextAreaField = ({
     isInvalid = false,
     isRequired = false,
     isDisabled = false,
+    isCharHelpTextEnabled = false,
     helperText = '',
     onChange
 }: TextAreaFieldProps) => {
@@ -68,14 +70,18 @@ export const TextAreaField = ({
             />
             <Flex justifyContent="space-between">
                 {helperText}
-                {isInvalid ? (
-                    <FormErrorMessage fontSize="xs">
-                        {characterCountText}
-                    </FormErrorMessage>
-                ) : (
-                    <FormHelperText fontSize="xs">
-                        {characterCountText}
-                    </FormHelperText>
+                {isCharHelpTextEnabled && (
+                    <>
+                        {isInvalid ? (
+                            <FormErrorMessage fontSize="xs">
+                                {characterCountText}
+                            </FormErrorMessage>
+                        ) : (
+                            <FormHelperText fontSize="xs">
+                                {characterCountText}
+                            </FormHelperText>
+                        )}
+                    </>
                 )}
             </Flex>
         </FormControl>

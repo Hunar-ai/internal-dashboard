@@ -18,20 +18,12 @@ import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useSaveAssessmentSettings } from 'hooks/apiHooks/useSaveAssessmentSettings';
 
 import { ErrorMsg } from 'utils';
-import type {
-    AssessmentSettingsProps,
-    ErrorStateProps,
-    ValidationMapProps
-} from 'interfaces';
+import type { AssessmentSettingsProps, ErrorStateProps } from 'interfaces';
 
 interface AssessmentFormProps extends Omit<AssessmentSettingsProps, 'emails'> {
     emails: string;
 }
 
-const validationMap: ValidationMapProps = {
-    emails: (emails: string) => !!emails,
-    jobDescription: (description: string) => !!description
-};
 const requiredFields: (keyof AssessmentFormProps)[] = [
     'emails',
     'jobDescription'
@@ -50,8 +42,7 @@ const assessmentFormErrorStateInitialValues: ErrorStateProps = {
 
 export const AssessmentSetupForm = () => {
     const saveAssessmentSettings = useSaveAssessmentSettings();
-    const { hasFormFieldError, getFormErrorData } =
-        useValidationHelper(validationMap);
+    const { hasFormFieldError, getFormErrorData } = useValidationHelper();
     const { showError, showSuccess } = useToast();
 
     const [companyId, setCompanyId] = React.useState('');
@@ -76,6 +67,8 @@ export const AssessmentSetupForm = () => {
         if (assessmentSettings) {
             const { emails, ...restSettings } = assessmentSettings;
             setAssessmentForm({ ...restSettings, emails: emails.join(',') });
+        } else {
+            setAssessmentForm({ ...assessmentFormInitialValues });
         }
 
         setCompanyId(value);
