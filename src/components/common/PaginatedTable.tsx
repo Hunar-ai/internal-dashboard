@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTable, useBlockLayout, useFilters, HeaderGroup } from 'react-table';
+import { useTable, useBlockLayout, useFilters } from 'react-table';
 import { useSticky } from 'react-table-sticky';
 import MaUTable from '@mui/material/Table';
 import {
