@@ -85,12 +85,23 @@ export enum FORM_FIELD {
 
 export enum SORT_TYPE {
     'DEFAULT' = 'DEFAULT',
+    'DATE' = 'DATE',
     'NUMERIC' = 'NUMERIC'
 }
 
 export enum FILTER_TYPE {
     'MULTI_SELECT' = 'MULTI_SELECT',
+    'DATE_RANGE' = 'DATE_RANGE',
     'RANGE' = 'RANGE'
+}
+
+export enum DATE_FILTER_SELECT_TYPE {
+    'noFilter' = 'noFilter',
+    'yesterday' = 'yesterday',
+    'today' = 'today',
+    'past7Days' = 'past7Days',
+    'lastMonth' = 'lastMonth',
+    'dateRange' = 'dateRange'
 }
 
 export enum REFERRER_TYPE {
@@ -150,8 +161,15 @@ export enum CHECK_INTEREST_PROVIDER {
 }
 
 export enum FIELD_SIZE {
-    'xs' = 'xs',
+    'xs' = 'xs',    
     'sm' = 'sm',
+    'small' = 'small',
     'md' = 'md',
+    'medium' = 'medium',
     'lg' = 'lg'
+}
+
+export enum COLUMN_STICKY_TYPE {
+    LEFT = 'left',
+    RIGHT = 'right'
 }

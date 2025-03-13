@@ -48,7 +48,8 @@ export const useNavbarMenuConfig = () => {
                 link: '/checklist',
                 isNewFeature: true
             },
-            { id: 'assessment', title: 'Assessment', link: '/assessment' }
+            { id: 'assessment', title: 'Assessment', link: '/assessment' },
+            { id: 'neha', title: 'Neha', link: '/neha' }
         ];
     }, []);
 

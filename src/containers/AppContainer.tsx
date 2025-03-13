@@ -11,6 +11,7 @@ import {
 
 import { SettingsContext } from 'contexts';
 import { useGetLoggedInPersonnel, useToken } from 'hooks';
+import { NehaContainer } from './NehaContainer';
 
 export const AppContainer = () => {
     const { token } = useToken();
@@ -48,6 +49,7 @@ export const AppContainer = () => {
                         path="/assessment"
                         element={<AssessmentContainer />}
                     />
+                    <Route path="/neha" element={<NehaContainer />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </ProtectedRoute>

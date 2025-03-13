@@ -43,9 +43,11 @@ export {
     type Sort,
     type PaginationInfo,
     type HandleSortProps,
-    type DateRangeFilterKey,
+    type DateRangeFilterKeyProps,
     type SelectAllClickProps
 } from './table.interface';
+
+export { type ReactElement } from './reactNode.interface';
 
 export { type QueryResult } from './react-query.interface';
 
@@ -71,3 +73,10 @@ export type {
     ChecklistFieldProps,
     ChecklistFormProps
 } from './checklist.interface';
+
+export type {
+    DateFilterStateProps,
+    TableFiltersProps,
+    MultiSelectFilterKeyProps,
+    DateRangeFilterOptionProps
+} from './filter.interface';

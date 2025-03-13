@@ -50,51 +50,51 @@ export interface GetWorkerBody extends CreateWorkerFormBody {
     aadhaarDetails: AadhaarDetails | null;
 }
 
-export interface TableFiltersProps {
-    gender?: string[];
-    maritalStatus?: string[];
-    currentDistrict?: string[];
-    currentState?: string[];
-    permanentDistrict?: string[];
-    permanentState?: string[];
-    jobRoles?: string[];
-    preferredLanguages?: string[];
-    educationalQualificationType?: string[];
-    isAadhaarVerified?: string[];
-    isDifferentlyAbled?: string[];
-    hasOwnVehicle?: string[];
-    bankDetailsAvailable?: string[];
-    isDoubleVaccinated?: string[];
-    hasSkillCertification?: string[];
-    englishProficiency?: string[];
-    willingToMove?: string[];
-    workerStatus?: string[];
-    ownedVehicle?: string[];
-    jobQueryWorkerStatus?: string[];
-    isBankAccountVerified?: string[];
-    age?: {
-        min?: number;
-        max?: number;
-        none?: boolean;
-    };
-    yearsOfExperience?: {
-        min?: number;
-        max?: number;
-        none?: boolean;
-    };
-    currentSalary: {
-        min?: number;
-        max?: number;
-        none?: boolean;
-    };
-    expectedSalary: {
-        min?: number;
-        max?: number;
-        none?: boolean;
-    };
-    referrerType?: string[];
-    isCredentialsShared?: string[];
-}
+// export interface TableFiltersProps {
+//     gender?: string[];
+//     maritalStatus?: string[];
+//     currentDistrict?: string[];
+//     currentState?: string[];
+//     permanentDistrict?: string[];
+//     permanentState?: string[];
+//     jobRoles?: string[];
+//     preferredLanguages?: string[];
+//     educationalQualificationType?: string[];
+//     isAadhaarVerified?: string[];
+//     isDifferentlyAbled?: string[];
+//     hasOwnVehicle?: string[];
+//     bankDetailsAvailable?: string[];
+//     isDoubleVaccinated?: string[];
+//     hasSkillCertification?: string[];
+//     englishProficiency?: string[];
+//     willingToMove?: string[];
+//     workerStatus?: string[];
+//     ownedVehicle?: string[];
+//     jobQueryWorkerStatus?: string[];
+//     isBankAccountVerified?: string[];
+//     age?: {
+//         min?: number;
+//         max?: number;
+//         none?: boolean;
+//     };
+//     yearsOfExperience?: {
+//         min?: number;
+//         max?: number;
+//         none?: boolean;
+//     };
+//     currentSalary: {
+//         min?: number;
+//         max?: number;
+//         none?: boolean;
+//     };
+//     expectedSalary: {
+//         min?: number;
+//         max?: number;
+//         none?: boolean;
+//     };
+//     referrerType?: string[];
+//     isCredentialsShared?: string[];
+// }
 
 export type RangeFilterKey =
     | 'age'
