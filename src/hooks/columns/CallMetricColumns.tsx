@@ -21,6 +21,7 @@ export const CallMetricColumns = ({
     setTableFilters
 }: CallMetricColumnsProps) => {
     const { statusOptions } = useTableFilters();
+    // console.log('Called: ', tableFilters);
     const columns: Array<Column> = useMemo(() => {
         return [
             // {
@@ -200,6 +201,7 @@ export const CallMetricColumns = ({
                 }
             }
         ];
-    }, []);
+    }, [handleSort, setTableFilters, sort, statusOptions, tableFilters]);
+
     return columns;
 };

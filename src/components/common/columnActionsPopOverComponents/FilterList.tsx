@@ -17,44 +17,47 @@ const FilterList = ({ filteredOptions, onChange }: Props) => {
     React.useEffect(() => {
         startTransition(() => {
             setFilterUi(
-                filteredOptions.map((option: FilterOptionProps, index) => (
-                    <Grid
-                        item
-                        xs={12}
-                        key={option.value}
-                        borderBottom={
-                            filteredOptions.length - 1 === index
-                                ? undefined
-                                : `1px solid ${grey[200]}`
-                        }
-                    >
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={option.checked}
-                                    id={option.value}
-                                    onChange={onChange}
-                                    size="small"
-                                    value={option.value}
-                                    sx={{ p: 0.5, mr: 1.5 }}
-                                />
+                filteredOptions.map((option: FilterOptionProps, index) => {
+                    return (
+                        <Grid
+                            item
+                            xs={12}
+                            key={option.value}
+                            borderBottom={
+                                filteredOptions.length - 1 === index
+                                    ? undefined
+                                    : `1px solid ${grey[200]}`
                             }
-                            sx={{
-                                mx: 0,
-                                width: '100%',
-                                px: 2,
-                                py: 0.75,
-                                overflowWrap: 'anywhere',
-                                '&:hover': { bgcolor: grey[100] }
-                            }}
-                            slotProps={{ typography: { variant: 'body2' } }}
-                            label={option.label}
-                        />
-                    </Grid>
-                ))
+                        >
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={option?.checked ?? false}
+                                        id={option.value}
+                                        onChange={onChange}
+                                        size="small"
+                                        value={option.value}
+                                        sx={{ p: 0.5, mr: 1.5 }}
+                                    />
+                                }
+                                sx={{
+                                    mx: 0,
+                                    width: '100%',
+                                    px: 2,
+                                    py: 0.75,
+                                    overflowWrap: 'anywhere',
+                                    '&:hover': { bgcolor: grey[100] }
+                                }}
+                                slotProps={{ typography: { variant: 'body2' } }}
+                                label={option.label}
+                            />
+                        </Grid>
+                    );
+                })
             );
         });
-    }, [filteredOptions]);
+    }, [filteredOptions, onChange]);
+
     return <>{filterUi ? filterUi : <> Loding</>}</>;
 };
 

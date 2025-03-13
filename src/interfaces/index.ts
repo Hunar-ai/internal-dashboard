@@ -78,5 +78,7 @@ export type {
     DateFilterStateProps,
     TableFiltersProps,
     MultiSelectFilterKeyProps,
-    DateRangeFilterOptionProps
+    DateRangeFilterOptionProps,
+    FilterKeyProps,
+    ColumnFilterProps
 } from './filter.interface';

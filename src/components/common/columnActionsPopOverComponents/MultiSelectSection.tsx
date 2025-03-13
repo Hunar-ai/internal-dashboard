@@ -85,7 +85,7 @@ const MultiSelectSection = ({
             [id]: []
         };
         setTableFiltersState({ ...modifiedTableFilters } as TableFiltersProps);
-        setOptionsState(modifiedOptionsState);
+        // setOptionsState(modifiedOptionsState);
         setFilteredOptions([...modifiedOptionsState]);
     };
 
@@ -169,6 +169,8 @@ const MultiSelectSection = ({
         setSearchInput(modifiedSearchInput);
         setFilteredOptions(modifiedOptionsState);
     };
+
+    // console.log('Koko: ', filteredOptions);
 
     return (
         <>

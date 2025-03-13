@@ -19,7 +19,7 @@ export { FormWrapper } from './FormWrapper';
 export { LeftPanel } from './LeftPanel';
 export { RightPanel } from './RightPanel';
 export { ConfirmationDialog } from './ConfirmationDialog';
-export { PaginatedTable, type Cell } from './PaginatedTable';
+export { PaginatedTable, type Cell, type Column } from './PaginatedTable';
 export {
     ColumnActionsPopOver,
     type FilterOptionProps
