@@ -1,4 +1,5 @@
 import { Grid, Typography, Link } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import { Check as CheckIcon } from '@mui/icons-material';
 import { SORT_ORDER, SORT_TYPE } from 'Enum';
 import { Sort } from 'interfaces';
@@ -33,14 +34,25 @@ export const SortSection = ({
     };
 
     return (
-        <Grid item>
+        <Grid item xs={12}>
             <Grid container>
-                <Grid item>
-                    <Typography variant="overline">SORT</Typography>
+                <Grid item xs={12} py={0.5} px={2}>
+                    <Typography variant="overline" color={grey[700]}>
+                        SORT
+                    </Typography>
                 </Grid>
-                <Grid item>
-                    <Grid container onClick={onAscClick}>
-                        <Grid item>
+                <Grid item xs={12}>
+                    <Grid
+                        container
+                        justifyContent="space-between"
+                        py={1}
+                        px={2}
+                        sx={{
+                            '&:hover': { bgcolor: grey[100], cursor: 'pointer' }
+                        }}
+                        onClick={onAscClick}
+                    >
+                        <Grid item xs={10}>
                             <Link
                                 component="button"
                                 sx={{
@@ -62,7 +74,16 @@ export const SortSection = ({
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
-                    <Grid container onClick={onDescClick}>
+                    <Grid
+                        container
+                        justifyContent="space-between"
+                        py={1}
+                        px={2}
+                        sx={{
+                            '&:hover': { bgcolor: grey[100], cursor: 'pointer' }
+                        }}
+                        onClick={onDescClick}
+                    >
                         <Grid item xs={10}>
                             <Link
                                 component="button"

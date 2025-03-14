@@ -43,8 +43,6 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
             : (columnId.split('.')[0] as FilterKeyProps);
 
     const isMultiSelect = getIsMultiSelect(id);
-
-    // const isRange = isRangeSelect(id);
     const isDateRange = isDateRangeSelect(id);
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
         null
@@ -109,7 +107,6 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
     ]);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        // captureGaEvent(clickIconEvent);
         setAnchorEl(event.currentTarget);
         setShowColumnActions(true);
         if (!isDateFilterApplied) {
@@ -118,7 +115,6 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
     };
 
     const handleClose = () => {
-        // captureGaEvent(cancelEvent);
         setAnchorEl(null);
         setShowColumnActions(false);
         setSelectedDateFilter(selectedDateFilterCopy);
@@ -154,6 +150,12 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
         ? `column-actions-popover-${id}`
         : undefined;
 
+    const multiSelectValues = _.get(
+        columnActionsProps,
+        `filterProps.filters.tableFilters.${id}`,
+        []
+    );
+
     const handleApplyClick = () => {
         applyColumnActions(id);
     };
@@ -164,19 +166,14 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
                 onClick={handleClick}
                 size="small"
                 type="button"
-                // color={
-                //     (isMultiSelect &&
-                //         Array.isArray(multiSelectValues) &&
-                //         multiSelectValues.length) ||
-                //     (isRange &&
-                //         Object.keys(
-                //             columnActionsProps.filterProps?.filters
-                //                 .tableFilters[id] || {}
-                //         ).length) ||
-                //     sort?.key === columnId
-                //         ? 'primary'
-                //         : 'default'
-                // }
+                color={
+                    (isMultiSelect &&
+                        Array.isArray(multiSelectValues) &&
+                        multiSelectValues.length) ||
+                    sort?.key === columnId
+                        ? 'primary'
+                        : 'default'
+                }
                 sx={{
                     bgcolor: showColumnActions
                         ? theme.palette.action.hover
@@ -216,15 +213,7 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
                             tableFiltersState={tableFiltersState}
                             setTableFiltersState={setTableFiltersState}
                         />
-                    ) : // ) : columnActionsProps.filterProps?.filterType ===
-                    //       FILTER_TYPE.RANGE && isRange ? (
-                    //     <RangeSection
-                    //         id={id as RangeFilterKey}
-                    //         columnId={columnId}
-                    //         tableFiltersState={tableFiltersState}
-                    //         setTableFiltersState={setTableFiltersState}
-                    //     />
-                    columnActionsProps.filterProps?.filterType ===
+                    ) : columnActionsProps.filterProps?.filterType ===
                           FILTER_TYPE.DATE_RANGE && isDateRange ? (
                         <DateRangeTypeSelect
                             id={id as DateRangeFilterKeyProps}

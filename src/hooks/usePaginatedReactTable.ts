@@ -13,14 +13,9 @@ interface PaginatedReactTableProps {
 }
 
 export const usePaginatedReactTable = ({
-    // tableId,
-    // columns,
-    searchKey,
+    searchKey = '',
     itemsPerPage
 }: PaginatedReactTableProps) => {
-    // const { displayColumns, tableDisplayColumns, handleColumnModifierChange } =
-    //     useGlobalActions(columns, tableId);
-
     const {
         minimalPaginationInfo,
         handleChangePage,
@@ -29,16 +24,11 @@ export const usePaginatedReactTable = ({
         setMinimalPaginationInfo
     } = useMinimalPaginationInfo(itemsPerPage);
 
-    console.log('Metallica: ', minimalPaginationInfo);
-
     React.useEffect(() => {
         handleChangePage(undefined, 0);
-    }, [searchKey]);
+    }, []);
 
     return {
-        // displayColumns,
-        // tableDisplayColumns,
-        // handleColumnModifierChange,
         minimalPaginationInfo,
         handleChangePage,
         handleChangeRowsPerPage,

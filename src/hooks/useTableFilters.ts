@@ -17,6 +17,7 @@ export const useTableFilters = () => {
         []
     );
 
+    // TODO: Use form-fields
     const statusOptions: OptionProps[] = useMemo(
         () => [
             { label: 'Completed', value: 'completed' },
@@ -26,7 +27,6 @@ export const useTableFilters = () => {
             { label: 'Canceled', value: 'canceled' },
             { label: 'In Progress', value: 'in-progress' },
             { label: 'Queued', value: 'queued' },
-            { label: 'In Progress', value: 'in-progress' },
             { label: 'Ringing', value: 'ringing' },
             { label: 'Initiated', value: 'initiated' }
         ],

@@ -170,8 +170,6 @@ const MultiSelectSection = ({
         setFilteredOptions(modifiedOptionsState);
     };
 
-    // console.log('Koko: ', filteredOptions);
-
     return (
         <>
             <Grid item xs={12}>

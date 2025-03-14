@@ -19,7 +19,3 @@ export const loggedInPersonnel = ApiClient({
 export const removePersonnel = ApiClient({
     url: `/v1/company/{companyId}/personnel/{personnelId}/remove`
 });
-
-export const nehaTest = ApiClient({
-    url: `/v1/voice-chat/call/search`
-});

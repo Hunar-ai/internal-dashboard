@@ -80,5 +80,6 @@ export type {
     MultiSelectFilterKeyProps,
     DateRangeFilterOptionProps,
     FilterKeyProps,
-    ColumnFilterProps
+    ColumnFilterProps,
+    ColumnActionsProps
 } from './filter.interface';

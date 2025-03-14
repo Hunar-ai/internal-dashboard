@@ -1,10 +1,17 @@
 import { useMemo } from 'react';
-import { Column, Cell } from '@components/common/PaginatedTable';
+import { Column, Cell } from '@components/common/paginatedTable/PaginatedTable';
 import { HandleSortProps, Sort } from 'interfaces';
 import { ColumnActionsPopOver } from '@components/common/ColumnActionsPopOver';
-import { FILTER_TYPE, SORT_TYPE } from 'Enum';
+import { COLUMN_STICKY_TYPE, FILTER_TYPE, SORT_TYPE } from 'Enum';
 import { useTableFilters } from 'hooks/useTableFilters';
-import { Link } from '@mui/material';
+import {
+    Context,
+    DataCell,
+    DataLinkCell,
+    HeaderCell,
+    Result,
+    Transcript
+} from '@components/common';
 import { DateCell } from '@components/common/DateCell';
 
 export interface CallMetricColumnsProps {
@@ -21,121 +28,23 @@ export const CallMetricColumns = ({
     setTableFilters
 }: CallMetricColumnsProps) => {
     const { statusOptions } = useTableFilters();
-    // console.log('Called: ', tableFilters);
     const columns: Array<Column> = useMemo(() => {
         return [
-            // {
-            //     id: 'id',
-            //     accessor: 'id',
-            //     Header: 'ID',
-            //     headerText: 'Call ID',
-            //     isVisible: true,
-            //     minWidth: 175
-            // },
             {
-                id: 'status',
-                accessor: 'status',
-                Header: 'Status',
+                id: 'id',
+                accessor: 'id',
+                Header: HeaderCell,
+                Cell: DataCell,
+                headerText: 'Call ID',
                 isVisible: true,
-                headerText: 'Call Status',
-                minWidth: 175,
-                Filter: ColumnActionsPopOver,
-                columnActionsProps: {
-                    sortProps: {
-                        sort,
-                        handleSort,
-                        sortType: SORT_TYPE.DEFAULT
-                    },
-                    filterProps: {
-                        filterType: FILTER_TYPE.MULTI_SELECT,
-                        options: statusOptions,
-                        filters: {
-                            tableFilters,
-                            setTableFilters,
-                            hideBlanks: true
-                        }
-                    }
-                }
-            },
-            {
-                id: 'mobileNumber',
-                accessor: 'mobileNumber',
-                Header: 'Mobile Number',
-                headerText: 'Mobile Number',
-                isVisible: true,
-                minWidth: 175
-            },
-            {
-                id: 'result',
-                accessor: 'result',
-                Header: 'Result',
-                headerText: 'Call Result',
-                isVisible: true,
-                minWidth: 175,
-                // Filter: ColumnActionsPopOver,
-                // columnActionsProps: {
-                //     sortProps: {
-                //         sort,
-                //         handleSort,
-                //         sortType: SORT_TYPE.DEFAULT
-                //     }
-                // },
-                Cell: ({ value }: Cell) => {
-                    return <i>{value?.willingnessToProceed?.explanation ?? 'N/A'}</i>;
-                }
-            },
-            {
-                id: 'transcript',
-                accessor: 'transcript',
-                Header: 'Transcript',
-                headerText: 'Call Transcript',
-                isVisible: true,
-                minWidth: 175,
-                // Filter: ColumnActionsPopOver,
-                // columnActionsProps: {
-                //     sortProps: {
-                //         sort,
-                //         handleSort,
-                //         sortType: SORT_TYPE.DEFAULT
-                //     }
-                // },
-                Cell: ({ value }: string[]) => {
-                    return <i> Total: {value?.length} </i>;
-                }
-            },
-            {
-                id: 'recordingUrl',
-                accessor: 'recordingUrl',
-                Header: 'Recording',
-                headerText: 'Call Recording',
-                isVisible: true,
-                minWidth: 175,
-                Cell: ({ value }: Cell) => {
-                    return value ? (
-                        <Link target="_blank" href={value} underline="hover">
-                            Listen to Recording
-                        </Link>
-                    ) : (
-                        <>-</>
-                    );
-                }
-            },
-            {
-                id: 'context',
-                accessor: 'context',
-                Header: 'Context',
-                headerText: 'Call Context',
-                isVisible: true,
-                minWidth: 175,
-                Cell: ({ value }: Cell) => {
-                    return <i>{value?.role ?? 'Role N/A'}</i>;
-                }
+                minWidth: 300,
+                sticky: COLUMN_STICKY_TYPE.LEFT
             },
             {
                 id: 'createdAt',
                 accessor: 'createdAt',
-                Header: 'Created At',
-                headerText: 'Call Created At',
+                Header: HeaderCell,
+                headerText: 'Created At',
                 isVisible: true,
                 minWidth: 175,
                 Filter: ColumnActionsPopOver,
@@ -159,45 +68,117 @@ export const CallMetricColumns = ({
                 }
             },
             {
+                id: 'status',
+                accessor: 'status',
+                Header: HeaderCell,
+                Cell: DataCell,
+                isVisible: true,
+                headerText: 'Status',
+                minWidth: 175,
+                Filter: ColumnActionsPopOver,
+                columnActionsProps: {
+                    sortProps: {
+                        sort,
+                        handleSort,
+                        sortType: SORT_TYPE.DEFAULT
+                    },
+                    filterProps: {
+                        filterType: FILTER_TYPE.MULTI_SELECT,
+                        options: statusOptions,
+                        filters: {
+                            tableFilters,
+                            setTableFilters,
+                            hideBlanks: true
+                        }
+                    }
+                }
+            },
+            {
                 id: 'durationSeconds',
                 accessor: 'durationSeconds',
-                Header: 'Duration',
-                headerText: 'Call Duration',
+                Header: HeaderCell,
+                headerText: 'Duration (sec)',
+                isVisible: true,
+                minWidth: 175,
+                Filter: ColumnActionsPopOver,
+                Cell: DataCell,
+                columnActionsProps: {
+                    sortProps: {
+                        sort,
+                        handleSort,
+                        sortType: SORT_TYPE.NUMERIC
+                    }
+                }
+            },
+            {
+                id: 'recordingUrl',
+                accessor: 'recordingUrl',
+                Header: HeaderCell,
+                headerText: 'Recording',
+                isVisible: true,
+                minWidth: 175,
+                Cell: ({ value }: Cell) => {
+                    return (
+                        <DataLinkCell link={value} text="Listen to Recording" />
+                    );
+                }
+            },
+            {
+                id: 'transcript',
+                accessor: 'transcript',
+                Header: HeaderCell,
+                headerText: 'Transcript',
+                isVisible: true,
+                minWidth: 175,
+                Cell: Transcript
+            },
+            {
+                id: 'result',
+                accessor: 'result',
+                Header: HeaderCell,
+                headerText: 'Result',
+                isVisible: true,
+                minWidth: 175,
+                Cell: Result
+            },
+            {
+                id: 'context',
+                accessor: 'context',
+                Header: HeaderCell,
+                headerText: 'Context',
+                isVisible: true,
+                minWidth: 175,
+                Cell: Context
+            },
+            {
+                id: 'mobileNumber',
+                accessor: 'mobileNumber',
+                Header: HeaderCell,
+                Cell: DataCell,
+                headerText: 'Mobile Number',
                 isVisible: true,
                 minWidth: 175
             },
             {
                 id: 'resumeUrl',
                 accessor: 'resumeUrl',
-                Header: 'Resume',
+                Header: HeaderCell,
                 headerText: 'Resume URL',
                 isVisible: true,
                 minWidth: 175,
                 Cell: ({ value }: Cell) => {
-                    return value ? (
-                        <Link target="_blank" href={value} underline="hover">
-                            View Resume
-                        </Link>
-                    ) : (
-                        <>-</>
-                    );
+                    return <DataLinkCell link={value} text="View Resume" />;
                 }
             },
             {
                 id: 'jobDescriptionUrl',
                 accessor: 'jobDescriptionUrl',
-                Header: 'JD',
+                Header: HeaderCell,
                 headerText: 'JD URL',
                 isVisible: true,
                 minWidth: 175,
                 Cell: ({ value }: Cell) => {
-                    return value ? (
-                        <Link target="_blank" href={value} underline="hover">
-                            View JD
-                        </Link>
-                    ) : (
-                        <>-</>
-                    );
+                    return <DataLinkCell link={value} text="View JD" />;
                 }
             }
         ];

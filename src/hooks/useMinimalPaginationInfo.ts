@@ -19,7 +19,6 @@ export const useMinimalPaginationInfo = (itemsPerPage?: number) => {
 
     const handleChangePage = React.useCallback(
         (_: unknown, newPage: number) => {
-            debugger; // eslint-disable-line no-debugger
             setMinimalPaginationInfo({
                 ...minimalPaginationInfo,
                 page: newPage + 1,

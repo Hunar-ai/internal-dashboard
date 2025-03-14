@@ -1,8 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-import { openJobQuery } from 'api/jobQuery';
-import { nehaTest } from 'api/personnel';
+import { nehaCallMetrics } from 'api/nehaMetrics';
 import { usePostReactQuery } from 'hooks/usePostReactQuery';
-import { SingleJobQueryResponse, Sort, TableFiltersProps } from 'interfaces';
+import { Sort, TableFiltersProps } from 'interfaces';
 import { useHelper } from 'useHelper';
 
 interface GetVoiceCallMetrics {
@@ -17,36 +15,13 @@ interface GetVoiceCallMetrics {
 export const useVoiceCallMetrics = ({ body }: GetVoiceCallMetrics) => {
     const { getFormattedfilters } = useHelper();
     const { page, itemsPerPage, filters, sort } = body;
-    debugger; // eslint-disable-line no-debugger
+
     return usePostReactQuery({
-        queryKey: [],
-        requestUrl: nehaTest,
+        queryKey: ['useVoiceCallMetrics', page, itemsPerPage, filters, sort],
+        requestUrl: nehaCallMetrics,
         body: {
             ...body,
             filters: getFormattedfilters(body.filters)
-            // page,
-            // itemsPerPage,
-            // filters,
-            // sort
-        },
-        enabled: true,
-        onSuccess: () => undefined,
-        onError: () => undefined
+        }
     });
-
-    // return useQuery<SingleJobQueryResponse>({
-    //     queryKey: ['openJobQuery', shortcode],
-    //     queryFn: () => {
-    //         return openJobQuery
-    //             .post({
-    //                 params: {
-    //                     shortcode
-    //                 }
-    //             })
-    //             .then((response: any) => {
-    //                 return response;
-    //             });
-    //     },
-    //     refetchOnWindowFocus: false
-    // });
 };

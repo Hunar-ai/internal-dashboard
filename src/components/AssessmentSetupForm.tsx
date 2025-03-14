@@ -19,6 +19,7 @@ import { useSaveAssessmentSettings } from 'hooks/apiHooks/useSaveAssessmentSetti
 
 import { ErrorMsg } from 'utils';
 import type { AssessmentSettingsProps, ErrorStateProps } from 'interfaces';
+import { TableCell } from '@mui/material';
 
 interface AssessmentFormProps extends Omit<AssessmentSettingsProps, 'emails'> {
     emails: string;
