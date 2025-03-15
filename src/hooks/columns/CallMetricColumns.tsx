@@ -37,7 +37,8 @@ export const CallMetricColumns = ({
                 Cell: DataCell,
                 headerText: 'Call ID',
                 isVisible: true,
-                minWidth: 300,
+                minWidth: 175,
+                allowCopy: true,
                 sticky: COLUMN_STICKY_TYPE.LEFT
             },
             {
