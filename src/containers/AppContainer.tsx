@@ -9,12 +9,13 @@ import {
     AssessmentContainer
 } from 'containers';
 
-import { SettingsContext } from 'contexts';
-import { useGetLoggedInPersonnel, useToken } from 'hooks';
+import { SettingsContext, settingsInitialState } from 'contexts';
+import { useGetFormFields, useGetLoggedInPersonnel, useToken } from 'hooks';
 import { NehaMetricsContainer } from './NehaMetricsContainer';
 
 export const AppContainer = () => {
     const { token } = useToken();
+    const { data } = useGetFormFields();
     const { data: personnel, isLoading } = useGetLoggedInPersonnel({
         enabled: !!token
     });
@@ -24,6 +25,7 @@ export const AppContainer = () => {
     ) : (
         <SettingsContext.Provider
             value={{
+                formFields: data || settingsInitialState.formFields,
                 loggedInPersonnel: {
                     personnelId: personnel?.personnelId || '',
                     fullName: personnel?.fullName,

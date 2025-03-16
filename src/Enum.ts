@@ -80,7 +80,8 @@ export enum FORM_FIELD {
     'jobQueryWorkerStatus' = 'jobQueryWorkerStatus',
     'employerJobQueryWorkerStatus' = 'employerJobQueryWorkerStatus',
     'referrerType' = 'referrerType',
-    'logoPlacement' = 'logoPlacement'
+    'logoPlacement' = 'logoPlacement',
+    'twilioStatus' = 'twilioStatus'
 }
 
 export enum SORT_TYPE {

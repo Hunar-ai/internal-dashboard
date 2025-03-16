@@ -1,4 +1,4 @@
-import { OptionProps, DateFilterStateProps } from 'interfaces';
+import { OptionProps, DateFilterStateProps, FormFields } from 'interfaces';
 import { useState, useMemo } from 'react';
 
 export interface TableFilters {
@@ -6,7 +6,7 @@ export interface TableFilters {
     createdAt?: DateFilterStateProps;
 }
 
-export const useTableFilters = () => {
+export const useTableFilters = (formFields?: FormFields) => {
     const [filters, setFilters] = useState<TableFilters>({});
 
     const booleanOptions: OptionProps[] = useMemo(
@@ -17,21 +17,10 @@ export const useTableFilters = () => {
         []
     );
 
-    // TODO: Use form-fields
-    const statusOptions: OptionProps[] = useMemo(
-        () => [
-            { label: 'Completed', value: 'completed' },
-            { label: 'No Answer', value: 'no-answer' },
-            { label: 'Failed', value: 'failed' },
-            { label: 'Busy', value: 'busy' },
-            { label: 'Canceled', value: 'canceled' },
-            { label: 'In Progress', value: 'in-progress' },
-            { label: 'Queued', value: 'queued' },
-            { label: 'Ringing', value: 'ringing' },
-            { label: 'Initiated', value: 'initiated' }
-        ],
-        []
-    );
+    const statusOptions = useMemo(() => {
+        if (formFields) return formFields?.twilioStatus;
+        return [];
+    }, [formFields]);
 
     return {
         filters,

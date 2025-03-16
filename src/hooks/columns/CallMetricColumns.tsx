@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useContext } from 'react';
 import { Column, Cell } from '@components/common/paginatedTable/PaginatedTable';
 import { HandleSortProps, Sort } from 'interfaces';
 import { ColumnActionsPopOver } from '@components/common/ColumnActionsPopOver';
@@ -13,6 +13,7 @@ import {
     Transcript
 } from '@components/common';
 import { DateCell } from '@components/common/DateCell';
+import { SettingsContext } from 'contexts';
 
 export interface CallMetricColumnsProps {
     tableFilters: any;
@@ -27,7 +28,8 @@ export const CallMetricColumns = ({
     tableFilters,
     setTableFilters
 }: CallMetricColumnsProps) => {
-    const { statusOptions } = useTableFilters();
+    const { formFields } = useContext(SettingsContext);
+    const { statusOptions } = useTableFilters(formFields);
     const columns: Array<Column> = useMemo(() => {
         return [
             {
