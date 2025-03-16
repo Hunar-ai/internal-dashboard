@@ -1,9 +1,7 @@
 import { TableFilters } from 'hooks/useTableFilters';
-import { DateRangeFilterKeyProps } from 'interfaces';
 import { FilterKeyProps } from 'interfaces/filter.interface';
 import { useCallback } from 'react';
 import { TimeUtils } from 'utils';
-import { get } from 'lodash';
 
 export const useHelper = () => {
     const getRelativeDateField = (fieldValue: string | null) => {
@@ -17,116 +15,6 @@ export const useHelper = () => {
     const isDateRangeSelect = useCallback((columnId: FilterKeyProps) => {
         return columnId === 'createdAt';
     }, []);
-
-    const getFormattedRangeFilters = (filters: TableFilters) => {
-        let modifiedFilters = { ...filters };
-        if (modifiedFilters.age) {
-            if (modifiedFilters.minAge) delete modifiedFilters.minAge;
-            if (modifiedFilters.maxAge) delete modifiedFilters.maxAge;
-        } else {
-            if (modifiedFilters.minAge) {
-                modifiedFilters = {
-                    ...modifiedFilters,
-                    age: {
-                        ...(modifiedFilters.age || {}),
-                        min: modifiedFilters.minAge
-                    }
-                };
-            }
-            if (modifiedFilters.maxAge) {
-                modifiedFilters = {
-                    ...modifiedFilters,
-                    age: {
-                        ...(modifiedFilters.age || {}),
-                        max: modifiedFilters.maxAge
-                    }
-                };
-            }
-            delete modifiedFilters.minAge;
-            delete modifiedFilters.maxAge;
-        }
-        if (modifiedFilters.currentSalary) {
-            if (modifiedFilters.minCurrentSalary)
-                delete modifiedFilters.minCurrentSalary;
-            if (modifiedFilters.maxCurrentSalary)
-                delete modifiedFilters.maxCurrentSalary;
-        } else {
-            if (modifiedFilters.minCurrentSalary) {
-                modifiedFilters = {
-                    ...modifiedFilters,
-                    currentSalary: {
-                        ...(modifiedFilters.currentSalary || {}),
-                        min: modifiedFilters.minCurrentSalary
-                    }
-                };
-            }
-            if (modifiedFilters.maxCurrentSalary) {
-                modifiedFilters = {
-                    ...modifiedFilters,
-                    currentSalary: {
-                        ...(modifiedFilters.currentSalary || {}),
-                        max: modifiedFilters.maxCurrentSalary
-                    }
-                };
-            }
-            delete modifiedFilters.minCurrentSalary;
-            delete modifiedFilters.maxCurrentSalary;
-        }
-        if (modifiedFilters.expectedSalary) {
-            if (modifiedFilters.minExpectedSalary)
-                delete modifiedFilters.minExpectedSalary;
-            if (modifiedFilters.maxExpectedSalary)
-                delete modifiedFilters.maxExpectedSalary;
-        } else {
-            if (modifiedFilters.minExpectedSalary) {
-                modifiedFilters = {
-                    ...modifiedFilters,
-                    expectedSalary: {
-                        ...(modifiedFilters.expectedSalary || {}),
-                        min: modifiedFilters.minExpectedSalary
-                    }
-                };
-            }
-            if (modifiedFilters.maxExpectedSalary) {
-                modifiedFilters = {
-                    ...modifiedFilters,
-                    expectedSalary: {
-                        ...(modifiedFilters.expectedSalary || {}),
-                        max: modifiedFilters.maxExpectedSalary
-                    }
-                };
-            }
-            delete modifiedFilters.minExpectedSalary;
-            delete modifiedFilters.maxExpectedSalary;
-        }
-        if (modifiedFilters.age) {
-            if (modifiedFilters.minAge) delete modifiedFilters.minAge;
-            if (modifiedFilters.maxAge) delete modifiedFilters.maxAge;
-        } else {
-            if (modifiedFilters.minAge) {
-                modifiedFilters = {
-                    ...modifiedFilters,
-                    age: {
-                        ...(modifiedFilters.age || {}),
-                        min: modifiedFilters.minAge
-                    }
-                };
-            }
-            if (modifiedFilters.maxAge) {
-                modifiedFilters = {
-                    ...modifiedFilters,
-                    age: {
-                        ...(modifiedFilters.age || {}),
-                        max: modifiedFilters.maxAge
-                    }
-                };
-            }
-            delete modifiedFilters.minAge;
-            delete modifiedFilters.maxAge;
-        }
-
-        return modifiedFilters;
-    };
 
     const getFormattedBooleanFilters = (filters: Record<string, unknown>) => {
         const modifiedFilters = { ...filters };
@@ -211,7 +99,7 @@ export const useHelper = () => {
     };
 
     const getFormattedfilters = (filters: TableFilters) => {
-        let modifiedFilters = getFormattedRangeFilters(filters);
+        let modifiedFilters = { ...filters };
         modifiedFilters = getFormattedBooleanFilters(
             modifiedFilters as Record<string, unknown>
         );
@@ -226,27 +114,6 @@ export const useHelper = () => {
                     delete modifiedFilters[filterKey];
                 }
             } else {
-                if (
-                    filterKey === 'age' ||
-                    filterKey === 'yearsOfExperience' ||
-                    filterKey === 'currentSalary' ||
-                    filterKey === 'expectedSalary'
-                ) {
-                    const min = get(modifiedFilters, `${filterKey}.min`);
-                    const max = get(modifiedFilters, `${filterKey}.max`);
-                    if (
-                        (typeof min === 'number' && isNaN(min)) ||
-                        min === null ||
-                        `${min}` === ''
-                    )
-                        delete modifiedFilters[filterKey]?.min;
-                    if (
-                        (typeof max === 'number' && isNaN(max)) ||
-                        max === null ||
-                        `${max}` === ''
-                    )
-                        delete modifiedFilters[filterKey]?.max;
-                }
                 if (
                     Object.keys(modifiedFilters[filterKey] || {}).length === 0
                 ) {

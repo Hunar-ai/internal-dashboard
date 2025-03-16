@@ -18,7 +18,7 @@ import { SettingsContext } from 'contexts';
 export interface CallMetricColumnsProps {
     tableFilters: any;
     setTableFilters: (_: any) => void;
-    sort: Sort;
+    sort?: Sort;
     handleSort: HandleSortProps;
 }
 

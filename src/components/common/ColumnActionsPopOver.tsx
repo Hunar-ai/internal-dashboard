@@ -73,7 +73,7 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
                     hideBlanks ? [] : [{ value: 'NONE', label: 'Blanks' }]
                 )
                     .concat(options)
-                    ?.map((option: Option) => {
+                    ?.map((option: OptionProps) => {
                         const filterValueArray = tableFilters[id]
                             ? tableFilters[id]
                             : [];

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, Paper, Modal, Button } from '@mui/material';
 import { ModalWrapper } from '../ModalWrapper';
+import { Cell } from './PaginatedTable';
 
 interface ChatBubbleProps {
     text: string;
@@ -9,6 +10,10 @@ interface ChatBubbleProps {
 
 interface ChatProps {
     transcript: ChatBubbleProps[];
+}
+
+interface TranscriptProps {
+    cell: Cell;
 }
 
 const ChatBubble = ({ text, speaker }: ChatBubbleProps) => {
@@ -50,7 +55,7 @@ const Chat = ({ transcript = [] }: ChatProps) => {
     );
 };
 
-export const Transcript = ({ cell, column, ...d }) => {
+export const Transcript = ({ cell }: TranscriptProps) => {
     if (!cell?.value?.length) return <></>;
 
     return (

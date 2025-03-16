@@ -6,23 +6,30 @@ import {
     ListItem,
     ListItemText
 } from '@mui/material';
+import { Cell } from './PaginatedTable';
 
 interface CandidateProfile {
-    role?: string;
-    growth?: string;
-    benefits?: string;
-    techSkills?: string[];
-    totalYears?: string;
-    achievements?: string[];
-    companyName?: string;
-    compensation?: string;
-    currentRole?: string;
-    locationCity?: string;
-    locationType?: string;
-    candidateName?: string;
-    sellingPoints?: string[];
-    currentCompany?: string;
-    companyRecruiter?: string;
+    data: {
+        role?: string;
+        growth?: string;
+        benefits?: string;
+        techSkills?: string[];
+        totalYears?: string;
+        achievements?: string[];
+        companyName?: string;
+        compensation?: string;
+        currentRole?: string;
+        locationCity?: string;
+        locationType?: string;
+        candidateName?: string;
+        sellingPoints?: string[];
+        currentCompany?: string;
+        companyRecruiter?: string;
+    };
+}
+
+interface ContextProps {
+    cell: Cell;
 }
 
 export const Candidate = ({ data: candidate }: CandidateProfile) => {
@@ -55,7 +62,9 @@ export const Candidate = ({ data: candidate }: CandidateProfile) => {
             </Typography>
 
             <Divider sx={{ marginY: 2 }} />
-            <Typography variant="body1"><strong>Key Selling Points</strong></Typography>
+            <Typography variant="body1">
+                <strong>Key Selling Points</strong>
+            </Typography>
             <List dense>
                 {candidate?.sellingPoints?.length ? (
                     candidate.sellingPoints.map((point, index) => (
@@ -68,7 +77,9 @@ export const Candidate = ({ data: candidate }: CandidateProfile) => {
                 )}
             </List>
 
-            <Typography variant="subtitle1"><strong>Achievements</strong></Typography>
+            <Typography variant="subtitle1">
+                <strong>Achievements</strong>
+            </Typography>
             <List dense>
                 {candidate?.achievements?.length ? (
                     candidate.achievements.map((achievement, index) => (
@@ -81,7 +92,9 @@ export const Candidate = ({ data: candidate }: CandidateProfile) => {
                 )}
             </List>
 
-            <Typography variant="subtitle1"><strong>Skills</strong></Typography>
+            <Typography variant="subtitle1">
+                <strong>Skills</strong>
+            </Typography>
             <List dense>
                 {candidate?.techSkills?.length ? (
                     candidate.techSkills.map((skill, index) => (
@@ -95,7 +108,7 @@ export const Candidate = ({ data: candidate }: CandidateProfile) => {
             </List>
 
             <Divider sx={{ marginY: 2 }} />
-            <Typography variant="body1" >
+            <Typography variant="body1">
                 <strong>Recruiter:</strong>{' '}
                 {candidate?.companyRecruiter ?? 'N/A'}
             </Typography>
@@ -103,7 +116,7 @@ export const Candidate = ({ data: candidate }: CandidateProfile) => {
     );
 };
 
-export const Context = ({ cell }) => {
+export const Context = ({ cell }: ContextProps) => {
     return (
         <ModalWrapper title="Call Context" CTA="View Context">
             <Candidate data={cell?.value} />

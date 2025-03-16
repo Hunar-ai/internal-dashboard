@@ -1,13 +1,14 @@
 import { nehaCallMetrics } from 'api/nehaMetrics';
 import { usePostReactQuery } from 'hooks/usePostReactQuery';
-import { Sort, TableFiltersProps } from 'interfaces';
+import { TableFilters } from 'hooks/useTableFilters';
+import { Sort } from 'interfaces';
 import { useHelper } from 'useHelper';
 
 interface GetVoiceCallMetrics {
     body: {
         page: number;
         itemsPerPage: number;
-        filters?: TableFiltersProps;
+        filters: TableFilters;
         sort?: Sort;
     };
 }

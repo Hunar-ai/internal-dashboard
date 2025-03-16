@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { CheckCircle, ErrorOutline, Info } from '@mui/icons-material';
 import { ModalWrapper } from '../ModalWrapper';
+import { Cell } from 'react-table';
 
 interface WillingnessToProceed {
     level: string;
@@ -28,6 +29,10 @@ interface ReasonProps {
 
 interface DataDisplayProps {
     data: ReasonProps;
+}
+
+interface ResultProps {
+    cell: Cell;
 }
 
 const hasData = (data: ReasonProps): boolean => {
@@ -193,7 +198,7 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ data }) => {
     );
 };
 
-export const Result = ({ cell }) => {
+export const Result = ({ cell }: ResultProps) => {
     if (!hasData(cell?.value)) return <> </>;
 
     return (

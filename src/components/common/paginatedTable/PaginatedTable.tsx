@@ -10,7 +10,6 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-    Typography,
     useTheme
 } from '@mui/material';
 import MaUTable from '@mui/material/Table';

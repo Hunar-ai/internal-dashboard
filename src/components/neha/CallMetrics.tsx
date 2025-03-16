@@ -1,6 +1,6 @@
 import { PaginatedTable as Table } from '@components/common';
-import { CssBaseline, GlobalStyles, ThemeProvider } from '@mui/material';
-import { useVoiceCallMetrics } from 'hooks/apiHooks/neha/useVoiceCallMetrics';
+import { ThemeProvider } from '@mui/material';
+import { useVoiceCallMetrics } from 'hooks/apiHooks';
 import { CallMetricColumns } from 'hooks/columns/CallMetricColumns';
 import { usePaginatedReactTable } from 'hooks/usePaginatedReactTable';
 import { useTableActions } from 'hooks/useTableActions';
@@ -8,12 +8,13 @@ import { TableFilters } from 'hooks/useTableFilters';
 import { useEffect, useState } from 'react';
 import { theme } from 'theme';
 
+const CallMetricsHeader = () => <h1>Call Metrics</h1>;
+
 export const CallMetrics = () => {
     const [isRefetchRequired, setIsRefetchRequired] = useState(false);
     const {
         sort,
         filters,
-        setFilters,
         handleSort,
         tableFilters,
         setTableFilters,
@@ -46,7 +47,6 @@ export const CallMetrics = () => {
         body: {
             ...minimalPaginationInfo,
             filters: { ...filters, ...(tableFilters as TableFilters) },
-            searchKey: '',
             sort
         }
     });
@@ -69,6 +69,7 @@ export const CallMetrics = () => {
                 paginationInfo={data?.paginationInfo}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
+                tableHeaderCTA={<CallMetricsHeader />}
             />
         </ThemeProvider>
     );
