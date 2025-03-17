@@ -162,7 +162,7 @@ export enum CHECK_INTEREST_PROVIDER {
 }
 
 export enum FIELD_SIZE {
-    'xs' = 'xs',    
+    'xs' = 'xs',
     'sm' = 'sm',
     'small' = 'small',
     'md' = 'md',
@@ -173,4 +173,22 @@ export enum FIELD_SIZE {
 export enum COLUMN_STICKY_TYPE {
     LEFT = 'left',
     RIGHT = 'right'
+}
+
+export enum TWILIO_CALL_STATUS {
+    NOT_STARTED = 'not-started',
+    QUEUED = 'queued',
+    INITIATED = 'initiated',
+    RINGING = 'ringing',
+    IN_PROGRESS = 'in-progress',
+    COMPLETED = 'completed',
+    BUSY = 'busy',
+    NO_ANSWER = 'no-answer',
+    CANCELLED = 'canceled',
+    FAILED = 'failed'
+}
+
+enum DI {
+    A = 'a',
+    B = 'b',
 }

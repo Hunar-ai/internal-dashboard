@@ -252,9 +252,10 @@ export const Table = ({
                                                             width: column.width,
                                                             maxWidth:
                                                                 column.maxWidth,
-                                                            zIndex:
-                                                                200 -
-                                                                columnIndex
+                                                            zIndex: column?.sticky
+                                                                ? 200
+                                                                : 200 -
+                                                                  columnIndex
                                                         }
                                                     })}
                                                 >

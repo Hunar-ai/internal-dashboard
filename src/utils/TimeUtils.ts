@@ -9,6 +9,16 @@ export const TimeUtils = {
     format: (date: Moment | string | Date, format: string): string => {
         return moment(date).format(format);
     },
+    formatSeconds: (seconds: number) => {
+        const duration = moment.duration(seconds, 'seconds');
+        return [
+            duration.hours() ? `${duration.hours()}h` : '',
+            duration.minutes() ? `${duration.minutes()}m` : '',
+            duration.seconds() || seconds === 0 ? `${duration.seconds()}s` : ''
+        ]
+            .filter(Boolean)
+            .join(' ');
+    },
     add: ({ date, period, unit = 'days' }: AddSubtract): Moment => {
         return moment(date).add(period, unit);
     },

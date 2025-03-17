@@ -6,6 +6,7 @@ export { TextOverFlow } from './TextOverflow';
 export { Transcript } from './Transcript';
 export { Result } from './Result';
 export { Context } from './Context';
+export { CallStatus } from './CallStatus';
 export {
     dynamicInputCellSx,
     getDisabledRowMaskSx

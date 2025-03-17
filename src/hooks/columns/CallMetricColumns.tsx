@@ -5,6 +5,7 @@ import { ColumnActionsPopOver } from '@components/common/ColumnActionsPopOver';
 import { COLUMN_STICKY_TYPE, FILTER_TYPE, SORT_TYPE } from 'Enum';
 import { useTableFilters } from 'hooks/useTableFilters';
 import {
+    CallStatus,
     Context,
     DataCell,
     DataLinkCell,
@@ -14,6 +15,7 @@ import {
 } from '@components/common';
 import { DateCell } from '@components/common/DateCell';
 import { SettingsContext } from 'contexts';
+import { TimeUtils } from 'utils';
 
 export interface CallMetricColumnsProps {
     tableFilters: any;
@@ -44,37 +46,21 @@ export const CallMetricColumns = ({
                 sticky: COLUMN_STICKY_TYPE.LEFT
             },
             {
-                id: 'createdAt',
-                accessor: 'createdAt',
+                id: 'mobileNumber',
+                accessor: 'mobileNumber',
                 Header: HeaderCell,
-                headerText: 'Created At',
+                Cell: DataCell,
+                headerText: 'Mobile Number',
                 isVisible: true,
-                minWidth: 175,
-                Filter: ColumnActionsPopOver,
-                columnActionsProps: {
-                    sortProps: {
-                        sort,
-                        handleSort,
-                        sortType: SORT_TYPE.DATE
-                    },
-                    filterProps: {
-                        filterType: FILTER_TYPE.DATE_RANGE,
-                        filters: {
-                            tableFilters,
-                            setTableFilters,
-                            hideBlanks: true
-                        }
-                    }
-                },
-                Cell: ({ value }: Cell) => {
-                    return <DateCell value={value} />;
-                }
+                minWidth: 175
             },
             {
                 id: 'status',
                 accessor: 'status',
                 Header: HeaderCell,
-                Cell: DataCell,
+                Cell: ({ value }: Cell) => {
+                    return <CallStatus status={value} />;
+                },
                 isVisible: true,
                 headerText: 'Status',
                 minWidth: 175,
@@ -100,11 +86,14 @@ export const CallMetricColumns = ({
                 id: 'durationSeconds',
                 accessor: 'durationSeconds',
                 Header: HeaderCell,
-                headerText: 'Duration (sec)',
+                headerText: 'Duration',
                 isVisible: true,
                 minWidth: 175,
                 Filter: ColumnActionsPopOver,
-                Cell: DataCell,
+                Cell: ({ value, ...props }: Cell) => {
+                    const seconds = TimeUtils.formatSeconds(value ?? 0);
+                    return <DataCell cell={{ ...props, value: seconds }} />;
+                },
                 columnActionsProps: {
                     sortProps: {
                         sort,
@@ -112,6 +101,15 @@ export const CallMetricColumns = ({
                         sortType: SORT_TYPE.NUMERIC
                     }
                 }
+            },
+            {
+                id: 'transcript',
+                accessor: 'transcript',
+                Header: HeaderCell,
+                headerText: 'Transcript',
+                isVisible: true,
+                minWidth: 175,
+                Cell: Transcript
             },
             {
                 id: 'recordingUrl',
@@ -125,15 +123,6 @@ export const CallMetricColumns = ({
                         <DataLinkCell link={value} text="Listen to Recording" />
                     );
                 }
-            },
-            {
-                id: 'transcript',
-                accessor: 'transcript',
-                Header: HeaderCell,
-                headerText: 'Transcript',
-                isVisible: true,
-                minWidth: 175,
-                Cell: Transcript
             },
             {
                 id: 'result',
@@ -152,15 +141,6 @@ export const CallMetricColumns = ({
                 isVisible: true,
                 minWidth: 175,
                 Cell: Context
-            },
-            {
-                id: 'mobileNumber',
-                accessor: 'mobileNumber',
-                Header: HeaderCell,
-                Cell: DataCell,
-                headerText: 'Mobile Number',
-                isVisible: true,
-                minWidth: 175
             },
             {
                 id: 'resumeUrl',
@@ -182,6 +162,34 @@ export const CallMetricColumns = ({
                 minWidth: 175,
                 Cell: ({ value }: Cell) => {
                     return <DataLinkCell link={value} text="View JD" />;
+                }
+            },
+            {
+                id: 'createdAt',
+                accessor: 'createdAt',
+                Header: HeaderCell,
+                headerText: 'Created At',
+                isVisible: true,
+                minWidth: 175,
+                sticky: COLUMN_STICKY_TYPE.RIGHT,
+                Filter: ColumnActionsPopOver,
+                columnActionsProps: {
+                    sortProps: {
+                        sort,
+                        handleSort,
+                        sortType: SORT_TYPE.DATE
+                    },
+                    filterProps: {
+                        filterType: FILTER_TYPE.DATE_RANGE,
+                        filters: {
+                            tableFilters,
+                            setTableFilters,
+                            hideBlanks: true
+                        }
+                    }
+                },
+                Cell: ({ value }: Cell) => {
+                    return <DateCell value={value} />;
                 }
             }
         ];
