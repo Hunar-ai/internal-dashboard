@@ -13,7 +13,7 @@ import { grey } from '@mui/material/colors';
 import { Search as SearchIcon } from '@mui/icons-material';
 
 import { FilterOptionsProps } from 'components/common/ColumnActionsPopOver';
-// import { FilterListSkeleton } from 'components/common/columnActionsPopOverComponents/FilterListSkeleton';
+import { FilterListSkeleton } from 'components/common/columnActionsPopOverComponents';
 
 import {
     type TableFiltersProps,
@@ -222,7 +222,7 @@ const MultiSelectSection = ({
                 ></TextField>
             </Grid>
             <Grid item xs={12} maxHeight={152} overflow="auto">
-                <React.Suspense fallback={<>Loading</>}>
+                <React.Suspense fallback={<FilterListSkeleton count={6} />}>
                     <FilterList
                         filteredOptions={filteredOptions}
                         onChange={onChange}
