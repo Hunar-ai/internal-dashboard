@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { Chip } from '@mui/material';
-import { SettingsContext } from 'contexts';
 import { grey, red, blue, amber, green } from '@mui/material/colors';
-import { TWILIO_CALL_STATUS } from 'Enum';
 import { useWorkerDataActions } from 'hooks';
+import { SettingsContext } from 'contexts';
+import { TWILIO_CALL_STATUS } from 'Enum';
 
 const labelToColorMap = {
     [TWILIO_CALL_STATUS.NOT_STARTED]: grey[300],

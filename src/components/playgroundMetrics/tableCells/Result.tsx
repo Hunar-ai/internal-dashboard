@@ -12,7 +12,7 @@ import {
     Box
 } from '@mui/material';
 import { CheckCircle, ErrorOutline, Info } from '@mui/icons-material';
-import { ModalWrapper } from '../ModalWrapper';
+import { ModalWrapper } from 'components/common';
 import { Cell } from 'react-table';
 
 interface WillingnessToProceed {

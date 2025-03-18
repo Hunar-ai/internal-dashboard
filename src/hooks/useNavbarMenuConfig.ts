@@ -49,7 +49,11 @@ export const useNavbarMenuConfig = () => {
                 isNewFeature: true
             },
             { id: 'assessment', title: 'Assessment', link: '/assessment' },
-            { id: 'neha', title: 'Neha Metrics', link: '/neha' }
+            {
+                id: 'playground-metrics',
+                title: 'Playground Metrics',
+                link: '/playground-metrics'
+            }
         ];
     }, []);
 

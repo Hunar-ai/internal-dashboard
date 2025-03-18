@@ -9,9 +9,9 @@ import {
     AssessmentContainer
 } from 'containers';
 
-import { SettingsContext, settingsInitialState } from 'contexts';
 import { useGetFormFields, useGetLoggedInPersonnel, useToken } from 'hooks';
-import { NehaMetricsContainer } from './NehaMetricsContainer';
+import { SettingsContext, settingsInitialState } from 'contexts';
+import { PlaygroundMetricsContainer } from './PlaygroundMetricsContainer';
 
 export const AppContainer = () => {
     const { token } = useToken();
@@ -51,7 +51,10 @@ export const AppContainer = () => {
                         path="/assessment"
                         element={<AssessmentContainer />}
                     />
-                    <Route path="/neha" element={<NehaMetricsContainer />} />
+                    <Route
+                        path="/playground-metrics"
+                        element={<PlaygroundMetricsContainer />}
+                    />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </ProtectedRoute>

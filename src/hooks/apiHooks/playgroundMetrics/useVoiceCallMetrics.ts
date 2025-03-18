@@ -1,7 +1,7 @@
-import { nehaCallMetrics } from 'api/nehaMetrics';
+import { getPlaygroundCallMetrics } from 'api/playgroundMetrics';
 import { usePostReactQuery } from 'hooks/usePostReactQuery';
 import { TableFilters } from 'hooks/useTableFilters';
-import { Sort } from 'interfaces';
+import { type Sort } from 'interfaces';
 import { useHelper } from 'useHelper';
 
 interface GetVoiceCallMetrics {
@@ -19,7 +19,7 @@ export const useVoiceCallMetrics = ({ body }: GetVoiceCallMetrics) => {
 
     return usePostReactQuery({
         queryKey: ['useVoiceCallMetrics', page, itemsPerPage, filters, sort],
-        requestUrl: nehaCallMetrics,
+        requestUrl: getPlaygroundCallMetrics,
         body: {
             ...body,
             filters: getFormattedfilters(body.filters)

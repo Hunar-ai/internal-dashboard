@@ -4,18 +4,16 @@ import { HandleSortProps, Sort } from 'interfaces';
 import { ColumnActionsPopOver } from '@components/common/ColumnActionsPopOver';
 import { COLUMN_STICKY_TYPE, FILTER_TYPE, SORT_TYPE } from 'Enum';
 import { useTableFilters } from 'hooks/useTableFilters';
-import {
-    CallStatus,
-    Context,
-    DataCell,
-    DataLinkCell,
-    HeaderCell,
-    Result,
-    Transcript
-} from '@components/common';
+import { DataCell, DataLinkCell, HeaderCell } from '@components/common';
 import { DateCell } from '@components/common/DateCell';
 import { SettingsContext } from 'contexts';
 import { TimeUtils } from 'utils';
+import {
+    CallStatus,
+    Context,
+    Result,
+    Transcript
+} from '@components/playgroundMetrics';
 
 export interface CallMetricColumnsProps {
     tableFilters: any;

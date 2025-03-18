@@ -2,7 +2,7 @@ import { Grid, Typography, Link } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { Check as CheckIcon } from '@mui/icons-material';
 import { SORT_ORDER, SORT_TYPE } from 'Enum';
-import { Sort } from 'interfaces';
+import { type Sort } from 'interfaces';
 import { SortAscendingText } from './SortAscendingText';
 import { SortDescendingText } from './SortDescendingText';
 

@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Typography, Paper, Modal, Button } from '@mui/material';
-import { ModalWrapper } from '../ModalWrapper';
-import { Cell } from './PaginatedTable';
+import { Box, Typography, Paper } from '@mui/material';
+import { ModalWrapper, type Cell } from 'components/common';
 
 interface ChatBubbleProps {
     text: string;

@@ -1,4 +1,4 @@
-import { ModalWrapper } from '../ModalWrapper';
+import { ModalWrapper, type Cell } from '@components/common';
 import {
     Divider,
     Typography,
@@ -6,7 +6,6 @@ import {
     ListItem,
     ListItemText
 } from '@mui/material';
-import { Cell } from './PaginatedTable';
 
 interface CandidateProfile {
     data: {

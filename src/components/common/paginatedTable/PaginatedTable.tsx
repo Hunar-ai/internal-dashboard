@@ -13,7 +13,7 @@ import {
     useTheme
 } from '@mui/material';
 import MaUTable from '@mui/material/Table';
-import { useTable, useBlockLayout, useFilters, HeaderGroup } from 'react-table';
+import { useTable, useFilters, HeaderGroup } from 'react-table';
 
 import { grey } from '@mui/material/colors';
 import {
@@ -125,15 +125,13 @@ export const Table = ({
     const isMobile = useIsMobile();
     const theme = useTheme();
     const { currentPage, itemsPerPage, total } = paginationInfo;
-    const extra = isMobile ? useBlockLayout : useSticky;
     const { getTableProps, headerGroups, rows, prepareRow } = useTable(
         {
             columns,
             data
         },
         useFilters,
-        useSticky,
-        extra
+        useSticky
     );
 
     const generateEmptyRows = React.useCallback(() => {

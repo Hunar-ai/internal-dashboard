@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { PERSONNEL_TYPE } from 'Enum';
-import { FormFields } from 'interfaces';
+import { type FormFields } from 'interfaces';
 
 interface SettingsContextType {
     loggedInPersonnel?: {

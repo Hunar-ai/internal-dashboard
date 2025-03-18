@@ -6,4 +6,4 @@ export { SigninContainer } from './SigninContainer';
 export { CompanyContainer } from './CompanyContainer';
 export { ChecklistContainer } from './ChecklistContainer';
 export { AssessmentContainer } from './AssessmentContainer';
-export { NehaMetricsContainer } from './NehaMetricsContainer';
+export { PlaygroundMetricsContainer } from './PlaygroundMetricsContainer';

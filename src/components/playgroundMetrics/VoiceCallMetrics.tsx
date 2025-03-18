@@ -1,17 +1,18 @@
+import React from 'react';
+import { ThemeProvider, Typography } from '@mui/material';
+
 import { PaginatedTable as Table } from '@components/common';
-import { ThemeProvider } from '@mui/material';
 import { useVoiceCallMetrics } from 'hooks/apiHooks';
-import { CallMetricColumns } from 'hooks/columns/CallMetricColumns';
 import { usePaginatedReactTable } from 'hooks/usePaginatedReactTable';
 import { useTableActions } from 'hooks/useTableActions';
 import { TableFilters } from 'hooks/useTableFilters';
-import { useEffect, useState } from 'react';
+import { CallMetricColumns } from 'hooks/columns/CallMetricColumns';
 import { theme } from 'theme';
 
-const CallMetricsHeader = () => <h1>Call Metrics</h1>;
+const TableHeader = () => <Typography>Voice Call Metrics</Typography>;
 
-export const CallMetrics = () => {
-    const [isRefetchRequired, setIsRefetchRequired] = useState(false);
+export const VoiceCallMetrics = () => {
+    const [isRefetchRequired, setIsRefetchRequired] = React.useState(false);
     const {
         sort,
         filters,
@@ -30,7 +31,7 @@ export const CallMetrics = () => {
 
     const { minimalPaginationInfo, handleChangePage, handleChangeRowsPerPage } =
         usePaginatedReactTable({
-            tableId: 'neha-call-metrics-table',
+            tableId: 'playground-call-metrics-table',
             defaultSort: {
                 id: 'createdAt',
                 desc: false
@@ -51,7 +52,7 @@ export const CallMetrics = () => {
         }
     });
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (isRefetchRequired) {
             voiceMetricsRefresh();
             setIsRefetchRequired(false);
@@ -69,7 +70,7 @@ export const CallMetrics = () => {
                 paginationInfo={data?.paginationInfo}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
-                tableHeaderCTA={<CallMetricsHeader />}
+                tableHeaderCTA={<TableHeader />}
             />
         </ThemeProvider>
     );
