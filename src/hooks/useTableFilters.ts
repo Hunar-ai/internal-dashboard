@@ -1,5 +1,5 @@
+import React from 'react';
 import { OptionProps, DateFilterStateProps, FormFields } from 'interfaces';
-import { useState, useMemo } from 'react';
 
 export interface TableFilters {
     status?: string;
@@ -7,9 +7,9 @@ export interface TableFilters {
 }
 
 export const useTableFilters = (formFields?: FormFields) => {
-    const [filters, setFilters] = useState<TableFilters>({});
+    const [filters, setFilters] = React.useState<TableFilters>({});
 
-    const booleanOptions: OptionProps[] = useMemo(
+    const booleanOptions: OptionProps[] = React.useMemo(
         () => [
             { label: 'Yes', value: 'TRUE' },
             { label: 'No', value: 'FALSE' }
@@ -17,7 +17,7 @@ export const useTableFilters = (formFields?: FormFields) => {
         []
     );
 
-    const statusOptions = useMemo(() => {
+    const statusOptions = React.useMemo(() => {
         if (formFields) return formFields?.twilioStatus;
         return [];
     }, [formFields]);

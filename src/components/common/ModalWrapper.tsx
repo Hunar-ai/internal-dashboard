@@ -1,4 +1,4 @@
-import { useState, ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 import {
     Button,
     Dialog,
@@ -19,17 +19,15 @@ export const ModalWrapper = ({
     CTA = 'View',
     children
 }: ModalWrapperProps) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
 
     const toggleModal = () => {
         setIsModalOpen(prev => !prev);
     };
 
-    const onOpenModal = () => setIsModalOpen(true);
-
     return (
         <>
-            <Button variant="text" size="small" onClick={onOpenModal}>
+            <Button variant="text" size="small" onClick={toggleModal}>
                 {CTA}
             </Button>
             <Dialog open={isModalOpen} onClose={toggleModal} fullWidth>

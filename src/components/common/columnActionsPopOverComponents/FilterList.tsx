@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Checkbox, FormControlLabel, Grid } from '@mui/material';
 import { grey } from '@mui/material/colors';
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const FilterList = ({ filteredOptions, onChange }: Props) => {
-    const [filterUi, setFilterUi] = useState<JSX.Element[]>();
+    const [filterUi, setFilterUi] = React.useState<JSX.Element[]>();
     const [, startTransition] = React.useTransition();
 
     React.useEffect(() => {
