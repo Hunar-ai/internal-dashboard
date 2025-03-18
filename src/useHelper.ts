@@ -1,6 +1,9 @@
+import React from 'react';
+
 import { TableFilters } from 'hooks/useTableFilters';
-import { FilterKeyProps } from 'interfaces/filter.interface';
-import { useCallback } from 'react';
+
+import { FilterKeyProps } from 'interfaces';
+
 import { TimeUtils } from 'utils';
 
 export const useHelper = () => {
@@ -8,11 +11,11 @@ export const useHelper = () => {
         return fieldValue ? TimeUtils.timeSince(fieldValue) : '';
     };
 
-    const isMultiSelect = useCallback((columnId: FilterKeyProps) => {
+    const isMultiSelect = React.useCallback((columnId: FilterKeyProps) => {
         return columnId === 'status';
     }, []);
 
-    const isDateRangeSelect = useCallback((columnId: FilterKeyProps) => {
+    const isDateRangeSelect = React.useCallback((columnId: FilterKeyProps) => {
         return columnId === 'createdAt';
     }, []);
 

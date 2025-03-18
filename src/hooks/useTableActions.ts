@@ -1,10 +1,13 @@
-import _ from 'lodash';
-import { SORT_ORDER } from 'Enum';
-import { Sort, TableFiltersProps } from 'interfaces';
 import React from 'react';
-import { TableFilters } from './useTableFilters';
+
+import _ from 'lodash';
+
+import { type TableFilters } from 'hooks';
+
+import { FilterKeyProps, Sort, TableFiltersProps } from 'interfaces';
+import { SORT_ORDER } from 'Enum';
+
 import { useHelper } from 'useHelper';
-import { FilterKeyProps } from 'interfaces/filter.interface';
 
 export const useTableActions = (defaultSort?: {
     key: string;

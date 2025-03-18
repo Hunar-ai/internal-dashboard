@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { OptionProps, DateFilterStateProps, FormFields } from 'interfaces';
 
 export interface TableFilters {

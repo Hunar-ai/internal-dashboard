@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Column } from 'components/common';
-// import { useGlobalActions } from 'useGlobalActions';
-import { useMinimalPaginationInfo } from './useMinimalPaginationInfo';
+
+import { useMinimalPaginationInfo } from 'hooks';
 
 interface PaginatedReactTableProps {
     tableId: string;
@@ -26,7 +26,7 @@ export const usePaginatedReactTable = ({
 
     React.useEffect(() => {
         handleChangePage(undefined, 0);
-    }, []);
+    }, [searchKey]);
 
     return {
         minimalPaginationInfo,

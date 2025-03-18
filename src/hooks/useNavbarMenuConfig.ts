@@ -1,7 +1,8 @@
 import React from 'react';
 
-import type { MenuProps } from 'interfaces';
 import { useGetLoggedInPersonnel, useToken } from 'hooks';
+
+import type { MenuProps } from 'interfaces';
 
 const PLAYGROUND_METRICS_USERS =
     import.meta.env.VITE_PLAYGROUND_METRICS_USERS?.split(',') ?? [];

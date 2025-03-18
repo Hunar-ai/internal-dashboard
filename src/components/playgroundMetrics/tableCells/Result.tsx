@@ -1,4 +1,7 @@
 import React from 'react';
+
+import { type Cell } from 'react-table';
+
 import {
     Card,
     CardContent,
@@ -12,8 +15,8 @@ import {
     Box
 } from '@mui/material';
 import { CheckCircle, ErrorOutline, Info } from '@mui/icons-material';
+
 import { ModalWrapper } from 'components/common';
-import { Cell } from 'react-table';
 
 interface WillingnessToProceed {
     level: string;

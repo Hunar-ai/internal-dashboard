@@ -1,5 +1,6 @@
-import { FilterKeyProps } from 'interfaces/filter.interface';
 import { useCallback } from 'react';
+
+import { FilterKeyProps } from 'interfaces';
 
 export const useHelper = () => {
     const isMultiSelect = useCallback((columnId: FilterKeyProps) => {

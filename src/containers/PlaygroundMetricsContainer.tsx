@@ -1,5 +1,7 @@
 import { Box, Center } from '@chakra-ui/react';
+
 import { VoiceCallMetrics } from '@components/playgroundMetrics';
+
 import { NAVBAR_HEIGHT } from 'Constants';
 
 export const PlaygroundMetricsContainer = () => {

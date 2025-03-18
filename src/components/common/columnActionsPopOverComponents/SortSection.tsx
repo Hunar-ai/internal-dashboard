@@ -1,10 +1,12 @@
 import { Grid, Typography, Link } from '@mui/material';
-import { grey } from '@mui/material/colors';
 import { Check as CheckIcon } from '@mui/icons-material';
-import { SORT_ORDER, SORT_TYPE } from 'Enum';
-import { type Sort } from 'interfaces';
+import { grey } from '@mui/material/colors';
+
 import { SortAscendingText } from './SortAscendingText';
 import { SortDescendingText } from './SortDescendingText';
+
+import { type Sort } from 'interfaces';
+import { SORT_ORDER, SORT_TYPE } from 'Enum';
 
 interface SortSectionProps {
     sortState?: Sort;

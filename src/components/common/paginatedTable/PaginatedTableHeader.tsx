@@ -1,5 +1,6 @@
-import { type ReactElement } from 'interfaces';
 import { Grid } from '@mui/material';
+
+import { type ReactElement } from 'interfaces';
 
 interface PageLayoutProps {
     height?: number | string;

@@ -1,4 +1,3 @@
-import { ModalWrapper, type Cell } from '@components/common';
 import {
     Divider,
     Typography,
@@ -6,6 +5,8 @@ import {
     ListItem,
     ListItemText
 } from '@mui/material';
+
+import { ModalWrapper, type Cell } from '@components/common';
 
 interface CandidateProfile {
     data: {

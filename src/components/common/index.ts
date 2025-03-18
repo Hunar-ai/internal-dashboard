@@ -28,5 +28,6 @@ export {
 } from './paginatedTable/PaginatedTable';
 export {
     ColumnActionsPopOver,
-    type FilterOptionProps
+    type FilterOptionProps,
+    type FilterOptionsProps
 } from './ColumnActionsPopOver';

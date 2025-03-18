@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useSticky } from 'react-table-sticky';
+import { useTable, useFilters, HeaderGroup } from 'react-table';
 
 import {
     Grid,
@@ -13,18 +14,17 @@ import {
     useTheme
 } from '@mui/material';
 import MaUTable from '@mui/material/Table';
-import { useTable, useFilters, HeaderGroup } from 'react-table';
-
 import { grey } from '@mui/material/colors';
+
 import {
     PaginatedTableHeader,
     PaginatedTableSkeleton,
     TextOverFlow
 } from 'components/common';
 import { DisabledRowMask } from './DisabledRowMask';
-import { useIsMobile } from 'hooks/useIsMobile';
 
 import type { ColumnActionsProps, ReactElement } from 'interfaces';
+import { useIsMobile } from 'hooks/useIsMobile';
 import { COLUMN_STICKY_TYPE } from 'Enum';
 
 export interface PaginationInfo {

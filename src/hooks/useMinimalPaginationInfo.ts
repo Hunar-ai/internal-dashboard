@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { type PaginationInfo } from 'interfaces';
 
 const paginationInfoInitialState: PaginationInfo = {

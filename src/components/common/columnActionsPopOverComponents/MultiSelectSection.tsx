@@ -12,8 +12,7 @@ import {
 import { grey } from '@mui/material/colors';
 import { Search as SearchIcon } from '@mui/icons-material';
 
-import { FilterOptionsProps } from 'components/common/ColumnActionsPopOver';
-import { FilterListSkeleton } from 'components/common/columnActionsPopOverComponents';
+import { FilterListSkeleton, type FilterOptionsProps } from 'components/common';
 
 import {
     type TableFiltersProps,
@@ -35,7 +34,7 @@ interface toggleSelectAllOptions {
 }
 
 const FilterList = React.lazy(() => import('./FilterList'));
-const MultiSelectSection = ({
+export const MultiSelectSection = ({
     id,
     // columnId,
     optionsState,
@@ -232,5 +231,3 @@ const MultiSelectSection = ({
         </>
     );
 };
-
-export default MultiSelectSection;

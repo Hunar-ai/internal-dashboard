@@ -17,8 +17,8 @@ import type {
     DateRangeFilterOptionProps,
     DateFilterStateProps
 } from 'interfaces';
-import { TimeUtils } from 'utils';
 import { DATE_FILTER_SELECT_TYPE, FIELD_SIZE } from 'Enum';
+import { TimeUtils } from 'utils';
 
 interface DateFilterSelectProps {
     tableFiltersState?: Pick<TableFiltersProps, DateRangeFilterKeyProps>;

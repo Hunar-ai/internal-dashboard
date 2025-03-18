@@ -4,8 +4,13 @@ import _ from 'lodash';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Button, Grid, IconButton, Popover, useTheme } from '@mui/material';
 
-import { SortSection, DateRangeTypeSelect } from 'components/common/';
-import MultiSelectSection from 'components/common/columnActionsPopOverComponents/MultiSelectSection';
+import {
+    SortSection,
+    MultiSelectSection,
+    DateRangeTypeSelect
+} from 'components/common/';
+
+import { useHelper } from 'useHelper';
 
 import {
     type OptionProps,
@@ -17,7 +22,6 @@ import {
     type DateRangeFilterKeyProps
 } from 'interfaces';
 import { FILTER_TYPE, SORT_TYPE } from 'Enum';
-import { useHelper } from 'useHelper';
 
 export interface FilterOptionProps extends OptionProps {
     checked: boolean;

@@ -1,4 +1,5 @@
 import { Box, Typography, Paper } from '@mui/material';
+
 import { ModalWrapper, type Cell } from 'components/common';
 
 interface ChatBubbleProps {

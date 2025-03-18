@@ -1,7 +1,9 @@
 import { IconButton, Box } from '@mui/material';
 import { ContentCopy } from '@mui/icons-material';
-import { useToast } from 'hooks/useToast';
+
 import { TextOverFlow } from './TextOverflow';
+
+import { useToast } from 'hooks/useToast';
 
 interface DataCellProps {
     cell: any;

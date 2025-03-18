@@ -1,13 +1,18 @@
 import React from 'react';
+
 import { ThemeProvider, Typography } from '@mui/material';
 
 import { PaginatedTable as Table } from '@components/common';
-import { useVoiceCallMetrics } from 'hooks/apiHooks';
-import { usePaginatedReactTable } from 'hooks/usePaginatedReactTable';
-import { useTableActions } from 'hooks/useTableActions';
-import { TableFilters } from 'hooks/useTableFilters';
-import { CallMetricColumns } from 'hooks/columns/CallMetricColumns';
+
+import {
+    type TableFilters,
+    useTableActions,
+    usePaginatedReactTable,
+    useVoiceCallMetrics
+} from 'hooks';
+
 import { theme } from 'theme';
+import { CallMetricColumns } from './columns/CallMetricColumns';
 
 const TableHeader = () => <Typography>Voice Call Metrics</Typography>;
 

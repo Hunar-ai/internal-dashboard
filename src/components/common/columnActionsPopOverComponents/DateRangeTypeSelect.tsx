@@ -1,18 +1,18 @@
 import React from 'react';
+
 import _ from 'lodash';
 
 import { Grid } from '@mui/material';
 
 import { DateFilterSelect, DateRangePicker } from 'components/common';
 
-import { TimeUtils } from 'utils';
 import { DATE_FILTER_SELECT_TYPE, FIELD_SIZE } from 'Enum';
-
 import {
     type DateFilterStateProps,
     type DateRangeFilterKeyProps,
     type TableFiltersProps
 } from 'interfaces';
+import { TimeUtils } from 'utils';
 
 interface DateRangeTypeSelectProps {
     id: DateRangeFilterKeyProps;
