@@ -21,7 +21,7 @@ import {
     PaginatedTableSkeleton,
     TextOverFlow
 } from 'components/common';
-import { DisabledRowMask } from './DisabledRowMask';
+import { PaginatedTableDisabledRowMask } from './PaginatedTableDisabledRowMask';
 
 import type { ColumnActionsProps, ReactElement } from 'interfaces';
 import { useIsMobile } from 'hooks/useIsMobile';
@@ -459,7 +459,7 @@ export const Table = ({
                                                     }
                                                 )}
                                                 {isRowDisabled && (
-                                                    <DisabledRowMask
+                                                    <PaginatedTableDisabledRowMask
                                                         columnCount={
                                                             row.cells.length
                                                         }

@@ -9,7 +9,7 @@ interface DisabledRowMaskProps {
     isRowSelected: boolean;
 }
 
-export const DisabledRowMask = ({
+export const PaginatedTableDisabledRowMask = ({
     isRowSelected,
     columnCount
 }: DisabledRowMaskProps) => {
