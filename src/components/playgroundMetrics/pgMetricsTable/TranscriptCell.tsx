@@ -11,7 +11,7 @@ interface ChatProps {
     transcript: ChatBubbleProps[];
 }
 
-interface TranscriptProps {
+interface TranscriptCellProps {
     cell: Cell;
 }
 
@@ -54,7 +54,7 @@ const Chat = ({ transcript = [] }: ChatProps) => {
     );
 };
 
-export const Transcript = ({ cell }: TranscriptProps) => {
+export const TranscriptCell = ({ cell }: TranscriptCellProps) => {
     if (!cell?.value?.length) return <></>;
 
     return (

@@ -34,7 +34,7 @@ interface DataDisplayProps {
     data: ReasonProps;
 }
 
-interface ResultProps {
+interface ResultCellProps {
     cell: Cell;
 }
 
@@ -101,7 +101,6 @@ export const Reason = ({ data }: DataDisplayProps) => {
 const DataDisplay: React.FC<DataDisplayProps> = ({ data }) => {
     return (
         <Paper
-            // elevation={3}÷
             elevation={0}
             sx={{
                 maxWidth: 700,
@@ -201,7 +200,7 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ data }) => {
     );
 };
 
-export const Result = ({ cell }: ResultProps) => {
+export const ResultCell = ({ cell }: ResultCellProps) => {
     if (!hasData(cell?.value)) return <> </>;
 
     return (

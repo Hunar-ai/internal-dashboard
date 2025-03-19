@@ -28,7 +28,7 @@ interface CandidateProfile {
     };
 }
 
-interface ContextProps {
+interface ContextCellProps {
     cell: Cell;
 }
 
@@ -116,7 +116,7 @@ export const Candidate = ({ data: candidate }: CandidateProfile) => {
     );
 };
 
-export const Context = ({ cell }: ContextProps) => {
+export const ContextCell = ({ cell }: ContextCellProps) => {
     return (
         <ModalWrapper title="Call Context" CTA="View Context">
             <Candidate data={cell?.value} />

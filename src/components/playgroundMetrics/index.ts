@@ -1,2 +1,2 @@
-export * from './tableCells';
-export { VoiceCallMetrics } from './VoiceCallMetrics';
+export * from './pgMetricsTable';
+export { PGMetricsMasterTable } from './PGMetricsMasterTable';

@@ -8,15 +8,15 @@ import {
     type TableFilters,
     useTableActions,
     usePaginatedReactTable,
-    useVoiceCallMetrics
+    usePlaygroundVoiceCallMetrics
 } from 'hooks';
 
 import { theme } from 'theme';
-import { CallMetricColumns } from './columns/CallMetricColumns';
+import { PlayGroundMetricsColumns } from './PGMetricsColumns';
 
 const TableHeader = () => <Typography>Voice Call Metrics</Typography>;
 
-export const VoiceCallMetrics = () => {
+export const PGMetricsMasterTable = () => {
     const [isRefetchRequired, setIsRefetchRequired] = React.useState(false);
     const {
         sort,
@@ -27,7 +27,7 @@ export const VoiceCallMetrics = () => {
         activeFilterColumns
     } = useTableActions();
 
-    const columns = CallMetricColumns({
+    const columns = PlayGroundMetricsColumns({
         sort,
         handleSort,
         tableFilters,
@@ -47,9 +47,9 @@ export const VoiceCallMetrics = () => {
 
     const {
         data,
-        refetch: voiceMetricsRefresh,
+        refetch: refreshMetrics,
         isLoading
-    } = useVoiceCallMetrics({
+    } = usePlaygroundVoiceCallMetrics({
         body: {
             ...minimalPaginationInfo,
             filters: { ...filters, ...(tableFilters as TableFilters) },
@@ -59,10 +59,10 @@ export const VoiceCallMetrics = () => {
 
     React.useEffect(() => {
         if (isRefetchRequired) {
-            voiceMetricsRefresh();
+            refreshMetrics();
             setIsRefetchRequired(false);
         }
-    }, [isRefetchRequired, voiceMetricsRefresh, setIsRefetchRequired]);
+    }, [isRefetchRequired, refreshMetrics, setIsRefetchRequired]);
 
     return (
         <ThemeProvider theme={theme}>

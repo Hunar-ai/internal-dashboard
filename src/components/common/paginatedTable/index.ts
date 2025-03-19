@@ -1,3 +1,4 @@
+export * from './paginatedTableCells';
 export { Table } from './PaginatedTable';
 export { DisabledRowMask } from './DisabledRowMask';
 export { PaginatedTableHeader } from './PaginatedTableHeader';
@@ -7,6 +8,3 @@ export {
     dynamicInputCellSx,
     getDisabledRowMaskSx
 } from './PaginatedTableStyles';
-export { HeaderCell } from './HeaderCell';
-export { DataCell } from './DataCell';
-export { DataLinkCell } from './DataLinkCell';

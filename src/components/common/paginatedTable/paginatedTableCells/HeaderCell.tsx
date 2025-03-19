@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-import { Column } from './PaginatedTable';
+import { Column } from '../PaginatedTable';
 
 interface HeaderCellProps {
     column: Column;

@@ -21,11 +21,11 @@ const labelToColorMap = {
     [TWILIO_CALL_STATUS.FAILED]: red[500]
 };
 
-interface CallStatusProps {
+interface CallStatusCellProps {
     status: TWILIO_CALL_STATUS;
 }
 
-export const CallStatus = ({ status }: CallStatusProps) => {
+export const CallStatusCell = ({ status }: CallStatusCellProps) => {
     const { formFields } = React.useContext(SettingsContext);
     const { mapObj } = useWorkerDataActions({ formFields });
     return (

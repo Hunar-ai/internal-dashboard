@@ -9,25 +9,25 @@ import { DateCell } from '@components/common/DateCell';
 import { SettingsContext } from 'contexts';
 import { TimeUtils } from 'utils';
 import {
-    CallStatus,
-    Context,
-    Result,
-    Transcript
+    CallStatusCell,
+    ContextCell,
+    ResultCell,
+    TranscriptCell
 } from '@components/playgroundMetrics';
 
-export interface CallMetricColumnsProps {
+export interface PlayGroundMetricsColumnsProps {
     tableFilters: any;
     setTableFilters: (_: any) => void;
     sort?: Sort;
     handleSort: HandleSortProps;
 }
 
-export const CallMetricColumns = ({
+export const PlayGroundMetricsColumns = ({
     sort,
     handleSort,
     tableFilters,
     setTableFilters
-}: CallMetricColumnsProps) => {
+}: PlayGroundMetricsColumnsProps) => {
     const { formFields } = React.useContext(SettingsContext);
     const { statusOptions } = useTableFilters(formFields);
 
@@ -58,7 +58,7 @@ export const CallMetricColumns = ({
                 accessor: 'status',
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
-                    return <CallStatus status={value} />;
+                    return <CallStatusCell status={value} />;
                 },
                 isVisible: true,
                 headerText: 'Status',
@@ -108,7 +108,7 @@ export const CallMetricColumns = ({
                 headerText: 'Transcript',
                 isVisible: true,
                 minWidth: 175,
-                Cell: Transcript
+                Cell: TranscriptCell
             },
             {
                 id: 'recordingUrl',
@@ -130,7 +130,7 @@ export const CallMetricColumns = ({
                 headerText: 'Result',
                 isVisible: true,
                 minWidth: 175,
-                Cell: Result
+                Cell: ResultCell
             },
             {
                 id: 'context',
@@ -139,7 +139,7 @@ export const CallMetricColumns = ({
                 headerText: 'Context',
                 isVisible: true,
                 minWidth: 175,
-                Cell: Context
+                Cell: ContextCell
             },
             {
                 id: 'resumeUrl',
