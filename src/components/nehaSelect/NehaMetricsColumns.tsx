@@ -105,6 +105,18 @@ export const NehaMetricsColumns = ({
                 }
             },
             {
+                id: 'callLater',
+                accessor: 'callsList.0.callLater',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    return <DataCell cell={{ value: value ? 'Yes' : 'No' }} />;
+                },
+                isVisible: true,
+                headerText: 'Call Later',
+                allowCopy: true,
+                minWidth: 175
+            },
+            {
                 id: 'willingToProceed',
                 accessor: 'callsList.0.willingToProceed.level',
                 Header: HeaderCell,
