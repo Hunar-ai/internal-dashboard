@@ -118,7 +118,7 @@ export const NehaMetricsColumns = ({
             },
             {
                 id: 'willingToProceed',
-                accessor: 'callsList.0.willingToProceed.level',
+                accessor: 'callsList.0.willingnessToProceed',
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
                     return <DataCell cell={{ value: value ?? 'NA' }} />;
@@ -162,7 +162,7 @@ export const NehaMetricsColumns = ({
             },
             {
                 id: 'followUpPoints',
-                accessor: 'callsList.0.followUpPoints',
+                accessor: 'callsList.0.followupPoints',
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
                     return (
