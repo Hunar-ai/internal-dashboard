@@ -65,6 +65,11 @@ export const useNavbarMenuConfig = () => {
                 title: 'Playground Metrics',
                 link: '/playground-metrics'
             });
+            baseRoutes.push({
+                id: 'neha-select',
+                title: 'Neha Select',
+                link: '/neha-select'
+            });
         }
 
         return baseRoutes;
