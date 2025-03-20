@@ -1,10 +1,8 @@
-import React from 'react';
+import { ReactNode } from 'react';
 
 import { type Cell } from 'react-table';
 
 import {
-    Card,
-    CardContent,
     Typography,
     List,
     ListItem,
@@ -30,8 +28,15 @@ interface ReasonProps {
     willingnessToProceed: WillingnessToProceed;
 }
 
-interface DataDisplayProps {
+interface ResultDataProps {
     data: ReasonProps;
+}
+
+interface ResultDataSectionProps {
+    header: string;
+    data: any[];
+    icon: ReactNode;
+    listItemBackgroundColor: string;
 }
 
 interface ResultCellProps {
@@ -48,57 +53,39 @@ const hasData = (data: ReasonProps): boolean => {
     );
 };
 
-export const Reason = ({ data }: DataDisplayProps) => {
+const ResultDataSection = ({
+    icon,
+    header,
+    data = [],
+    listItemBackgroundColor
+}: ResultDataSectionProps) => {
     return (
-        <Card sx={{ maxWidth: 600, margin: 'auto', mt: 4, p: 2 }}>
-            <CardContent>
-                <Typography variant="h5" gutterBottom>
-                    Summary
-                </Typography>
-
-                <Typography variant="h6">Concerns</Typography>
-                <List>
-                    {data.concerns.map((concern, index) => (
-                        <ListItem key={index}>
-                            <ListItemText primary={concern} />
-                        </ListItem>
-                    ))}
-                </List>
-                <Divider sx={{ my: 2 }} />
-
-                <Typography variant="h6">Next Steps</Typography>
-                <List>
-                    {data.nextSteps.map((step, index) => (
-                        <ListItem key={index}>
-                            <ListItemText primary={step} />
-                        </ListItem>
-                    ))}
-                </List>
-                <Divider sx={{ my: 2 }} />
-
-                <Typography variant="h6">Follow-Up Points</Typography>
-                <List>
-                    {data.followUpPoints.map((point, index) => (
-                        <ListItem key={index}>
-                            <ListItemText primary={point} />
-                        </ListItem>
-                    ))}
-                </List>
-                <Divider sx={{ my: 2 }} />
-
-                <Typography variant="h6">Willingness to Proceed</Typography>
-                <Typography variant="body1">
-                    <strong>Level:</strong> {data.willingnessToProceed.level}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    {data.willingnessToProceed.explanation}
-                </Typography>
-            </CardContent>
-        </Card>
+        <>
+            <Typography
+                variant="h6"
+                sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
+            >
+                {icon} {header}
+            </Typography>
+            <List>
+                {data?.map((value, index) => (
+                    <ListItem
+                        key={index}
+                        sx={{
+                            backgroundColor: listItemBackgroundColor,
+                            borderRadius: 1,
+                            mb: 1
+                        }}
+                    >
+                        <ListItemText primary={value} />
+                    </ListItem>
+                ))}
+            </List>
+        </>
     );
 };
 
-const DataDisplay: React.FC<DataDisplayProps> = ({ data }) => {
+const ResultData = ({ data }: ResultDataProps) => {
     return (
         <Paper
             elevation={0}
@@ -110,75 +97,30 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ data }) => {
                 backgroundColor: '#f9f9f9'
             }}
         >
-            <Typography
-                variant="h6"
-                sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
-            >
-                <ErrorOutline color="error" sx={{ mr: 1 }} /> Concerns
-            </Typography>
-            <List>
-                {data?.concerns?.map((concern, index) => (
-                    <ListItem
-                        key={index}
-                        sx={{
-                            backgroundColor: '#ffe5e5',
-                            borderRadius: 1,
-                            mb: 1
-                        }}
-                    >
-                        <ListItemText primary={concern} />
-                    </ListItem>
-                ))}
-            </List>
+            <ResultDataSection
+                header="Concerns"
+                data={data?.concerns ?? []}
+                icon={<ErrorOutline color="error" sx={{ mr: 1 }} />}
+                listItemBackgroundColor="#ffe5e5"
+            />
             <Divider sx={{ my: 2 }} />
 
-            {/* Next Steps */}
-            <Typography
-                variant="h6"
-                sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
-            >
-                <CheckCircle color="success" sx={{ mr: 1 }} /> Next Steps
-            </Typography>
-            <List>
-                {data?.nextSteps?.map((step, index) => (
-                    <ListItem
-                        key={index}
-                        sx={{
-                            backgroundColor: '#e8f5e9',
-                            borderRadius: 1,
-                            mb: 1
-                        }}
-                    >
-                        <ListItemText primary={step} />
-                    </ListItem>
-                ))}
-            </List>
+            <ResultDataSection
+                header="Next Steps"
+                data={data?.nextSteps ?? []}
+                icon={<CheckCircle color="success" sx={{ mr: 1 }} />}
+                listItemBackgroundColor="#e8f5e9"
+            />
             <Divider sx={{ my: 2 }} />
 
-            {/* Follow-Up Points */}
-            <Typography
-                variant="h6"
-                sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
-            >
-                <Info color="primary" sx={{ mr: 1 }} /> Follow-Up Points
-            </Typography>
-            <List>
-                {data?.followUpPoints?.map((point, index) => (
-                    <ListItem
-                        key={index}
-                        sx={{
-                            backgroundColor: '#e3f2fd',
-                            borderRadius: 1,
-                            mb: 1
-                        }}
-                    >
-                        <ListItemText primary={point} />
-                    </ListItem>
-                ))}
-            </List>
+            <ResultDataSection
+                header="Follow-Up Points"
+                data={data?.followUpPoints ?? []}
+                icon={<Info color="primary" sx={{ mr: 1 }} />}
+                listItemBackgroundColor="#e3f2fd"
+            />
             <Divider sx={{ my: 2 }} />
 
-            {/* Willingness to Proceed */}
             <Typography variant="h6" sx={{ mb: 1 }}>
                 Willingness to Proceed
                 {data.willingnessToProceed?.level && (
@@ -205,7 +147,7 @@ export const ResultCell = ({ cell }: ResultCellProps) => {
 
     return (
         <ModalWrapper title="Summary" CTA="View Result">
-            <DataDisplay data={cell?.value} />
+            <ResultData data={cell?.value} />
         </ModalWrapper>
     );
 };

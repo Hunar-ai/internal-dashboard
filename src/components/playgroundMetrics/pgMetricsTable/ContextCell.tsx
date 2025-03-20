@@ -1,14 +1,10 @@
-import {
-    Divider,
-    Typography,
-    List,
-    ListItem,
-    ListItemText
-} from '@mui/material';
+import { Divider } from '@mui/material';
 
 import { ModalWrapper, type Cell } from '@components/common';
+import { PGMetricsModalField } from './PGMetricsModalField';
+import { PGMetricsModalDataList } from './PGMetricsModalDataList';
 
-interface CandidateProfile {
+interface ContextProps {
     data: {
         role?: string;
         growth?: string;
@@ -32,86 +28,76 @@ interface ContextCellProps {
     cell: Cell;
 }
 
-export const Candidate = ({ data: candidate }: CandidateProfile) => {
+export const Context = ({ data: candidate }: ContextProps) => {
     return (
         <>
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold' }}>
-                {candidate?.candidateName ?? 'N/A'}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-                <strong>Role:</strong> {candidate?.role ?? 'N/A'} at{' '}
-                {candidate?.companyName ?? 'N/A'}
-            </Typography>
-            <Typography variant="body1" color="text.secondary" gutterBottom>
-                <strong>Growth:</strong> {candidate?.growth ?? 'N/A'}
-            </Typography>
-            <Typography variant="body1" color="text.secondary" gutterBottom>
-                <strong>Benefits:</strong> {candidate?.benefits ?? 'N/A'}
-            </Typography>
-            <Typography variant="body1" color="text.secondary" gutterBottom>
-                <strong>Compensation:</strong>{' '}
-                {candidate?.compensation ?? 'N/A'}
-            </Typography>
-            <Typography variant="body1" color="text.secondary" gutterBottom>
-                <strong>Location:</strong> {candidate?.locationCity ?? 'N/A'} (
-                {candidate?.locationType ?? 'N/A'})
-            </Typography>
-            <Typography variant="body1" color="text.secondary" gutterBottom>
-                <strong>Current Role:</strong> {candidate?.currentRole ?? 'N/A'}{' '}
-                at {candidate?.currentCompany ?? 'N/A'}
-            </Typography>
+            <PGMetricsModalField
+                variant="h5"
+                value={candidate?.candidateName ?? 'N/A'}
+                sx={{ fontWeight: 'bold' }}
+                gutterBottom
+            />
+            <PGMetricsModalField
+                label="Role:"
+                value={`${candidate?.role ?? 'N/A'} at ${
+                    candidate?.companyName ?? 'N/A'
+                }`}
+                gutterBottom
+            />
+            <PGMetricsModalField
+                label="Growth:"
+                color="text.secondary"
+                value={candidate?.growth ?? 'N/A'}
+                gutterBottom
+            />
+            <PGMetricsModalField
+                label="Benefits:"
+                color="text.secondary"
+                value={candidate?.benefits ?? 'N/A'}
+                gutterBottom
+            />
+            <PGMetricsModalField
+                label="Compensation:"
+                color="text.secondary"
+                value={candidate?.compensation ?? 'N/A'}
+                gutterBottom
+            />
+            <PGMetricsModalField
+                label="Location:"
+                color="text.secondary"
+                value={`${candidate?.locationCity ?? 'N/A'} ${
+                    candidate?.locationType ?? 'N/A'
+                }`}
+                gutterBottom
+            />
+            <PGMetricsModalField
+                label="Current Role:"
+                color="text.secondary"
+                value={`${candidate?.currentRole ?? 'N/A'} at ${
+                    candidate?.currentCompany ?? 'N/A'
+                }`}
+                gutterBottom
+            />
 
             <Divider sx={{ marginY: 2 }} />
-            <Typography variant="body1">
-                <strong>Key Selling Points</strong>
-            </Typography>
-            <List dense>
-                {candidate?.sellingPoints?.length ? (
-                    candidate.sellingPoints.map((point, index) => (
-                        <ListItem key={index} disablePadding>
-                            <ListItemText primary={point} />
-                        </ListItem>
-                    ))
-                ) : (
-                    <Typography variant="body2">N/A</Typography>
-                )}
-            </List>
-
-            <Typography variant="subtitle1">
-                <strong>Achievements</strong>
-            </Typography>
-            <List dense>
-                {candidate?.achievements?.length ? (
-                    candidate.achievements.map((achievement, index) => (
-                        <ListItem key={index} disablePadding>
-                            <ListItemText primary={achievement} />
-                        </ListItem>
-                    ))
-                ) : (
-                    <Typography variant="body2">N/A</Typography>
-                )}
-            </List>
-
-            <Typography variant="subtitle1">
-                <strong>Skills</strong>
-            </Typography>
-            <List dense>
-                {candidate?.techSkills?.length ? (
-                    candidate.techSkills.map((skill, index) => (
-                        <ListItem key={index} disablePadding>
-                            <ListItemText primary={skill} />
-                        </ListItem>
-                    ))
-                ) : (
-                    <Typography variant="body2">N/A</Typography>
-                )}
-            </List>
-
+            <PGMetricsModalDataList
+                header="Key Selling Points"
+                data={candidate?.sellingPoints ?? []}
+            />
+            <PGMetricsModalDataList
+                header="Achievements"
+                data={candidate?.achievements ?? []}
+            />
+            <PGMetricsModalDataList
+                header="Skills"
+                data={candidate?.techSkills ?? []}
+            />
             <Divider sx={{ marginY: 2 }} />
-            <Typography variant="body1">
-                <strong>Recruiter:</strong>{' '}
-                {candidate?.companyRecruiter ?? 'N/A'}
-            </Typography>
+
+            <PGMetricsModalField
+                label="Recruiter:"
+                value={candidate?.companyRecruiter ?? 'N/A'}
+            />
         </>
     );
 };
@@ -119,7 +105,7 @@ export const Candidate = ({ data: candidate }: CandidateProfile) => {
 export const ContextCell = ({ cell }: ContextCellProps) => {
     return (
         <ModalWrapper title="Call Context" CTA="View Context">
-            <Candidate data={cell?.value} />
+            <Context data={cell?.value} />
         </ModalWrapper>
     );
 };

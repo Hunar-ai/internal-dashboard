@@ -192,3 +192,8 @@ enum DI {
     A = 'a',
     B = 'b',
 }
+
+export enum TRANSCRIPT_SPEAKER_TYPE {
+    AGENT = 'agent',
+    CUSTOMER = 'customer'
+}
