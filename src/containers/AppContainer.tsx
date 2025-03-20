@@ -9,11 +9,16 @@ import {
     AssessmentContainer
 } from 'containers';
 
-import { SettingsContext } from 'contexts';
-import { useGetLoggedInPersonnel, useToken } from 'hooks';
+import { useGetFormFields, useGetLoggedInPersonnel, useToken } from 'hooks';
+import { SettingsContext, settingsInitialState } from 'contexts';
+import { PlaygroundMetricsContainer } from './PlaygroundMetricsContainer';
+
+const PLAYGROUND_METRICS_USERS =
+    import.meta.env.VITE_PLAYGROUND_METRICS_USERS?.split(',') ?? [];
 
 export const AppContainer = () => {
     const { token } = useToken();
+    const { data } = useGetFormFields();
     const { data: personnel, isLoading } = useGetLoggedInPersonnel({
         enabled: !!token
     });
@@ -23,6 +28,7 @@ export const AppContainer = () => {
     ) : (
         <SettingsContext.Provider
             value={{
+                formFields: data || settingsInitialState.formFields,
                 loggedInPersonnel: {
                     personnelId: personnel?.personnelId || '',
                     fullName: personnel?.fullName,
@@ -48,6 +54,12 @@ export const AppContainer = () => {
                         path="/assessment"
                         element={<AssessmentContainer />}
                     />
+                    {PLAYGROUND_METRICS_USERS?.includes(personnel?.email) && (
+                        <Route
+                            path="/playground-metrics"
+                            element={<PlaygroundMetricsContainer />}
+                        />
+                    )}
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </ProtectedRoute>

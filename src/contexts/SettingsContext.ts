@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { PERSONNEL_TYPE } from 'Enum';
+import { type FormFields } from 'interfaces';
 
 interface SettingsContextType {
     loggedInPersonnel?: {
@@ -19,6 +20,7 @@ interface SettingsContextType {
         } | null;
         type?: PERSONNEL_TYPE | null;
     };
+    formFields: FormFields;
 }
 
 export const settingsInitialState: SettingsContextType = {
@@ -30,6 +32,9 @@ export const settingsInitialState: SettingsContextType = {
         mobileNumber: null,
         personalizationDetails: null,
         type: null
+    },
+    formFields: {
+        twilioStatus: []
     }
 };
 

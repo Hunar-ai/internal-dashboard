@@ -1,10 +1,18 @@
 import React from 'react';
 
+import { useGetLoggedInPersonnel, useToken } from 'hooks';
+
 import type { MenuProps } from 'interfaces';
 
+const PLAYGROUND_METRICS_USERS =
+    import.meta.env.VITE_PLAYGROUND_METRICS_USERS?.split(',') ?? [];
+
 export const useNavbarMenuConfig = () => {
+    const { token } = useToken();
+    const { data: personnel } = useGetLoggedInPersonnel({ enabled: !!token });
+
     const menuConfig: MenuProps[] = React.useMemo(() => {
-        return [
+        const baseRoutes = [
             {
                 id: 'user',
                 title: 'User',
@@ -50,7 +58,17 @@ export const useNavbarMenuConfig = () => {
             },
             { id: 'assessment', title: 'Assessment', link: '/assessment' }
         ];
-    }, []);
+
+        if (PLAYGROUND_METRICS_USERS?.includes(personnel?.email)) {
+            baseRoutes.push({
+                id: 'playground-metrics',
+                title: 'Playground Metrics',
+                link: '/playground-metrics'
+            });
+        }
+
+        return baseRoutes;
+    }, [personnel?.email]);
 
     return menuConfig;
 };
