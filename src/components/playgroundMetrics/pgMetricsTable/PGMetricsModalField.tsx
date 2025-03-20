@@ -10,11 +10,11 @@ interface PGMetricsModalFieldProps {
 }
 
 export const PGMetricsModalField = ({
-    label,
-    value,
-    color,
-    sx = {},
+    label = '',
+    value = '',
+    color = 'text.primary',
     variant = 'body1',
+    sx = {},
     gutterBottom = false
 }: PGMetricsModalFieldProps) => {
     return (
