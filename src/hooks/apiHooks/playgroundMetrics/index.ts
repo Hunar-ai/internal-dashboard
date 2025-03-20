@@ -1,1 +1,1 @@
-export { usePlaygroundVoiceCallMetrics } from './usePlaygroundVoiceCallMetrics';
+export { useSearchPlaygroundMetrics } from './useSearchPlaygroundMetrics';

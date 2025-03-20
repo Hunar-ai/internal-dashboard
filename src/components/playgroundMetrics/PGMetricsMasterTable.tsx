@@ -8,7 +8,7 @@ import {
     type TableFilters,
     useTableActions,
     usePaginatedReactTable,
-    usePlaygroundVoiceCallMetrics
+    useSearchPlaygroundMetrics
 } from 'hooks';
 
 import { theme } from 'theme';
@@ -49,7 +49,7 @@ export const PGMetricsMasterTable = () => {
         data,
         refetch: refreshMetrics,
         isLoading
-    } = usePlaygroundVoiceCallMetrics({
+    } = useSearchPlaygroundMetrics({
         body: {
             ...minimalPaginationInfo,
             filters: { ...filters, ...(tableFilters as TableFilters) },

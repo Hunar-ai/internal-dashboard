@@ -1,10 +1,10 @@
-import { getPlaygroundVoiceCallMetrics } from 'api/playgroundMetrics';
+import { searchPlaygroundMetrics } from 'api/playgroundMetrics';
 import { usePostReactQuery } from 'hooks/usePostReactQuery';
 import { TableFilters } from 'hooks/useTableFilters';
 import { type Sort } from 'interfaces';
 import { useHelper } from 'useHelper';
 
-interface GetPlaygroundVoiceCallMetrics {
+interface SearchPlaygroundMetricsProps {
     body: {
         page: number;
         itemsPerPage: number;
@@ -13,21 +13,21 @@ interface GetPlaygroundVoiceCallMetrics {
     };
 }
 
-export const usePlaygroundVoiceCallMetrics = ({
+export const useSearchPlaygroundMetrics = ({
     body
-}: GetPlaygroundVoiceCallMetrics) => {
+}: SearchPlaygroundMetricsProps) => {
     const { getFormattedfilters } = useHelper();
     const { page, itemsPerPage, filters, sort } = body;
 
     return usePostReactQuery({
         queryKey: [
-            'playgroundVoiceCallMetrics',
+            'searchPlaygroundMetrics',
             page,
             itemsPerPage,
             filters,
             sort
         ],
-        requestUrl: getPlaygroundVoiceCallMetrics,
+        requestUrl: searchPlaygroundMetrics,
         body: {
             ...body,
             filters: getFormattedfilters(body.filters)
