@@ -1,12 +1,14 @@
 import { Button, Grid } from '@mui/material';
 
-interface NehaSelectTableHeaderProps {
-    onUploadClick: () => void;
-}
+import { useUpdateSearchParams } from 'hooks/useUpdateSearchParams';
 
-export const NehaSelectTableHeader = ({
-    onUploadClick
-}: NehaSelectTableHeaderProps) => {
+export const NehaSelectTableHeader = () => {
+    const { append } = useUpdateSearchParams();
+
+    const onUploadClick = () => {
+        append('upload', 'true');
+    };
+
     return (
         <>
             <Grid

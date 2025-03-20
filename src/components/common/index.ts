@@ -31,3 +31,6 @@ export {
     type FilterOptionProps,
     type FilterOptionsProps
 } from './ColumnActionsPopOver';
+export { DropzoneArea } from './DropzoneArea';
+export { DropzoneDisplayArea } from './DropzoneDisplayArea';
+export { DropzoneUploadArea } from './DropzoneUploadArea';

@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { ThemeProvider } from '@mui/material';
-
 import { PaginatedTable as Table } from '@components/common';
 import { NehaMetricsColumns } from './NehaMetricsColumns';
+import { NehaSelectLeadUploadModal } from './NehaSelectLeadUploadModal';
 import { NehaSelectTableHeader } from './NehaSelectTableHeader';
 
 import {
@@ -12,8 +11,6 @@ import {
     usePaginatedReactTable
 } from 'hooks';
 import { useSearchNehaSelectCalls } from 'hooks/apiHooks/nehaSelect/useSearchNehaSelectCalls';
-
-import { theme } from 'theme';
 
 export const NehaSelectMasterTable = () => {
     const [isRefetchRequired, setIsRefetchRequired] = React.useState(false);
@@ -64,7 +61,7 @@ export const NehaSelectMasterTable = () => {
     }, [isRefetchRequired, refreshMetrics, setIsRefetchRequired]);
 
     return (
-        <ThemeProvider theme={theme}>
+        <>
             <Table
                 columns={columns}
                 data={data?.data ?? []}
@@ -74,10 +71,9 @@ export const NehaSelectMasterTable = () => {
                 paginationInfo={data?.paginationInfo}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
-                tableHeaderCTA={
-                    <NehaSelectTableHeader onUploadClick={() => undefined} />
-                }
+                tableHeaderCTA={<NehaSelectTableHeader />}
             />
-        </ThemeProvider>
+            <NehaSelectLeadUploadModal />
+        </>
     );
 };
