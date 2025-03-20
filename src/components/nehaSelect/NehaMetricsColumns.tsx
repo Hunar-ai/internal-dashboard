@@ -102,6 +102,85 @@ export const NehaMetricsColumns = ({
                 }
             },
             {
+                id: 'callLater',
+                accessor: 'callLater',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    return <DataCell cell={{ value }} />;
+                },
+                isVisible: true,
+                headerText: 'Call Later',
+                minWidth: 150,
+                Filter: ColumnActionsPopOver,
+                columnActionsProps: {
+                    sortProps: {
+                        sort,
+                        handleSort,
+                        sortType: SORT_TYPE.DEFAULT
+                    }
+                }
+            },
+            {
+                id: 'willingToProceed',
+                accessor: 'callsList.0.willingnessToProceed',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    return <DataCell cell={{ value: value ?? 'NA' }} />;
+                },
+                isVisible: true,
+                headerText: 'Willing to Proceed',
+                allowCopy: true,
+                minWidth: 175
+            },
+            {
+                id: 'nextSteps',
+                accessor: 'callsList.0.nextSteps',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    return (
+                        <DataCell
+                            cell={{ value: value?.length ? value : 'NA' }}
+                        />
+                    );
+                },
+                isVisible: true,
+                headerText: 'Next Steps',
+                allowCopy: true,
+                minWidth: 175
+            },
+            {
+                id: 'concerns',
+                accessor: 'callsList.0.concerns',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    return (
+                        <DataCell
+                            cell={{ value: value?.length ? value : 'NA' }}
+                        />
+                    );
+                },
+                isVisible: true,
+                headerText: 'Concerns',
+                allowCopy: true,
+                minWidth: 175
+            },
+            {
+                id: 'followUpPoints',
+                accessor: 'callsList.0.followupPoints',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    return (
+                        <DataCell
+                            cell={{ value: value?.length ? value : 'NA' }}
+                        />
+                    );
+                },
+                isVisible: true,
+                headerText: 'Follow Up Points',
+                allowCopy: true,
+                minWidth: 175
+            },
+            {
                 id: 'transcript',
                 accessor: 'transcript',
                 Header: HeaderCell,
