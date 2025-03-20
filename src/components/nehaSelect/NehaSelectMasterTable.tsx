@@ -5,18 +5,13 @@ import { NehaMetricsColumns } from './NehaMetricsColumns';
 import { NehaSelectLeadUploadModal } from './NehaSelectLeadUploadModal';
 import { NehaSelectTableHeader } from './NehaSelectTableHeader';
 
-import {
-    type TableFilters,
-    useTableActions,
-    usePaginatedReactTable
-} from 'hooks';
-import { useSearchNehaSelectCalls } from 'hooks/apiHooks/nehaSelect/useSearchNehaSelectCalls';
+import { useTableActions, usePaginatedReactTable } from 'hooks';
+import { useSearchNehaSelectLeads } from 'hooks/apiHooks/nehaSelect/useSearchNehaSelectLeads';
 
 export const NehaSelectMasterTable = () => {
     const [isRefetchRequired, setIsRefetchRequired] = React.useState(false);
     const {
         sort,
-        filters,
         handleSort,
         tableFilters,
         setTableFilters,
@@ -32,7 +27,7 @@ export const NehaSelectMasterTable = () => {
 
     const { minimalPaginationInfo, handleChangePage, handleChangeRowsPerPage } =
         usePaginatedReactTable({
-            tableId: 'playground-call-metrics-table',
+            tableId: 'neha-select-master-table',
             defaultSort: {
                 id: 'createdAt',
                 desc: false
@@ -45,11 +40,9 @@ export const NehaSelectMasterTable = () => {
         data,
         refetch: refreshMetrics,
         isLoading
-    } = useSearchNehaSelectCalls({
-        body: {
-            ...minimalPaginationInfo,
-            filters: { ...filters, ...(tableFilters as TableFilters) },
-            sort
+    } = useSearchNehaSelectLeads({
+        params: {
+            companyId: 'select'
         }
     });
 
@@ -64,11 +57,11 @@ export const NehaSelectMasterTable = () => {
         <>
             <Table
                 columns={columns}
-                data={data?.data ?? []}
+                data={data ?? []}
                 isLoading={isLoading}
                 activeSortColumn={sort?.key}
                 activeFilterColumns={activeFilterColumns}
-                paginationInfo={data?.paginationInfo}
+                paginationInfo={minimalPaginationInfo}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
                 tableHeaderCTA={<NehaSelectTableHeader />}

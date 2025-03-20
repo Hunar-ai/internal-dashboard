@@ -1,16 +1,21 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import Papa from 'papaparse';
-
 import { Button, Dialog, DialogTitle, Grid } from '@mui/material';
-import { DropzoneArea } from '@components/common';
 import LoadingButton from '@mui/lab/LoadingButton';
+
+import { DropzoneArea } from '@components/common';
+
+import { useUploadNehaLeads } from 'hooks/apiHooks/nehaSelect/useUploadNehaLeads';
+
+import type { ApiError } from 'interfaces';
 
 export const NehaSelectLeadUploadModal = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [isUploadModalOpen, setIsUploadModalOpen] = React.useState(false);
-    const [bulkUploadData, setBulkUploadData] = React.useState<unknown[]>([]);
+    const [file, setFile] = React.useState<File | null>(null);
+
+    const uploadNehaLeads = useUploadNehaLeads();
 
     React.useEffect(() => {
         if (searchParams.has('upload')) {
@@ -28,16 +33,26 @@ export const NehaSelectLeadUploadModal = () => {
 
     const onFileDrop = (acceptedFiles: File[]) => {
         const file = acceptedFiles[0];
-        Papa.parse(file, {
-            complete: (parsedData: Papa.ParseResult<{ data: string[][] }>) => {
-                setBulkUploadData(parsedData.data);
-                console.log(bulkUploadData);
-            }
-        });
+        setFile(file);
     };
 
     const onUpload = () => {
-        console.log('upload');
+        if (!file) return;
+
+        uploadNehaLeads.mutate(
+            {
+                companyId: 'select',
+                leadsFile: file
+            },
+            {
+                onSuccess: () => {
+                    onClose();
+                },
+                onError: (error: ApiError) => {
+                    console.error(error);
+                }
+            }
+        );
     };
 
     return (
@@ -45,13 +60,21 @@ export const NehaSelectLeadUploadModal = () => {
             <DialogTitle>Upload Lead Call Details CSV</DialogTitle>
             <Grid container spacing={2} p={2}>
                 <Grid item xs={12}>
-                    <DropzoneArea onDrop={onFileDrop} type="csv" />
+                    <DropzoneArea
+                        value={file?.name}
+                        onDrop={onFileDrop}
+                        type="csv"
+                    />
                 </Grid>
                 <Grid item xs={12} display="flex" justifyContent="end" gap={2}>
                     <Button variant="outlined" onClick={onClose}>
                         Cancel
                     </Button>
-                    <LoadingButton variant="contained" onClick={onUpload}>
+                    <LoadingButton
+                        loading={uploadNehaLeads.isLoading}
+                        variant="contained"
+                        onClick={onUpload}
+                    >
                         Upload
                     </LoadingButton>
                 </Grid>

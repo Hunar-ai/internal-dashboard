@@ -1,25 +1,22 @@
 import React from 'react';
+
 import { Column, Cell } from '@components/common/paginatedTable/PaginatedTable';
-import { HandleSortProps, Sort } from 'interfaces';
 import { ColumnActionsPopOver } from '@components/common/ColumnActionsPopOver';
-import { COLUMN_STICKY_TYPE, FILTER_TYPE, SORT_TYPE } from 'Enum';
-import { useTableFilters } from 'hooks/useTableFilters';
-import { DataCell, DataLinkCell, HeaderCell } from '@components/common';
 import { DateCell } from '@components/common/DateCell';
+import { CallStatusCell, TranscriptCell } from '@components/playgroundMetrics';
+import { DataCell, DataLinkCell, HeaderCell } from '@components/common';
+
+import { useTableFilters } from 'hooks/useTableFilters';
 import { SettingsContext } from 'contexts';
-import { TimeUtils } from 'utils';
-import {
-    CallStatusCell,
-    ContextCell,
-    ResultCell,
-    TranscriptCell
-} from '@components/playgroundMetrics';
+
+import type { HandleSortProps, Sort } from 'interfaces';
+import { COLUMN_STICKY_TYPE, FILTER_TYPE, SORT_TYPE } from 'Enum';
 
 export interface NehaMetricsColumnsProps {
-    tableFilters: any;
-    setTableFilters: (_: any) => void;
     sort?: Sort;
     handleSort: HandleSortProps;
+    tableFilters: any;
+    setTableFilters: (_: any) => void;
 }
 
 export const NehaMetricsColumns = ({
@@ -34,14 +31,13 @@ export const NehaMetricsColumns = ({
     const columns: Array<Column> = React.useMemo(() => {
         return [
             {
-                id: 'id',
-                accessor: 'id',
+                id: 'name',
+                accessor: 'name',
                 Header: HeaderCell,
                 Cell: DataCell,
-                headerText: 'Call ID',
+                headerText: 'Candidate Name',
                 isVisible: true,
                 minWidth: 175,
-                allowCopy: true,
                 sticky: COLUMN_STICKY_TYPE.LEFT
             },
             {
@@ -54,8 +50,35 @@ export const NehaMetricsColumns = ({
                 minWidth: 175
             },
             {
+                id: 'jobRole',
+                accessor: 'jobRole',
+                Header: HeaderCell,
+                Cell: DataCell,
+                headerText: 'Job Role',
+                isVisible: true,
+                minWidth: 175
+            },
+            {
+                id: 'companyName',
+                accessor: 'companyName',
+                Header: HeaderCell,
+                Cell: DataCell,
+                headerText: 'Company Name',
+                isVisible: true,
+                minWidth: 175
+            },
+            {
+                id: 'callsCount',
+                accessor: 'callsList.length',
+                Header: HeaderCell,
+                Cell: DataCell,
+                headerText: 'Calls Count',
+                isVisible: true,
+                minWidth: 175
+            },
+            {
                 id: 'status',
-                accessor: 'status',
+                accessor: 'callsList.0.status',
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
                     return <CallStatusCell status={value} />;
@@ -82,28 +105,68 @@ export const NehaMetricsColumns = ({
                 }
             },
             {
-                id: 'durationSeconds',
-                accessor: 'durationSeconds',
+                id: 'willingToProceed',
+                accessor: 'callsList.0.willingToProceed.level',
                 Header: HeaderCell,
-                headerText: 'Duration',
-                isVisible: true,
-                minWidth: 175,
-                Filter: ColumnActionsPopOver,
-                Cell: ({ value, ...props }: Cell) => {
-                    const seconds = TimeUtils.formatSeconds(value ?? 0);
-                    return <DataCell cell={{ ...props, value: seconds }} />;
+                Cell: ({ value }: Cell) => {
+                    return <DataCell cell={{ value: value ?? 'NA' }} />;
                 },
-                columnActionsProps: {
-                    sortProps: {
-                        sort,
-                        handleSort,
-                        sortType: SORT_TYPE.NUMERIC
-                    }
-                }
+                isVisible: true,
+                headerText: 'Willing to Proceed',
+                allowCopy: true,
+                minWidth: 175
+            },
+            {
+                id: 'nextSteps',
+                accessor: 'callsList.0.nextSteps',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    return (
+                        <DataCell
+                            cell={{ value: value?.length ? value : 'NA' }}
+                        />
+                    );
+                },
+                isVisible: true,
+                headerText: 'Next Steps',
+                allowCopy: true,
+                minWidth: 175
+            },
+            {
+                id: 'concerns',
+                accessor: 'callsList.0.concerns',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    return (
+                        <DataCell
+                            cell={{ value: value?.length ? value : 'NA' }}
+                        />
+                    );
+                },
+                isVisible: true,
+                headerText: 'Concerns',
+                allowCopy: true,
+                minWidth: 175
+            },
+            {
+                id: 'followUpPoints',
+                accessor: 'callsList.0.followUpPoints',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    return (
+                        <DataCell
+                            cell={{ value: value?.length ? value : 'NA' }}
+                        />
+                    );
+                },
+                isVisible: true,
+                headerText: 'Follow Up Points',
+                allowCopy: true,
+                minWidth: 175
             },
             {
                 id: 'transcript',
-                accessor: 'transcript',
+                accessor: 'callsList.0.transcript',
                 Header: HeaderCell,
                 headerText: 'Transcript',
                 isVisible: true,
@@ -112,7 +175,7 @@ export const NehaMetricsColumns = ({
             },
             {
                 id: 'recordingUrl',
-                accessor: 'recordingUrl',
+                accessor: 'callsList.0.recordingUrl',
                 Header: HeaderCell,
                 headerText: 'Recording',
                 isVisible: true,
@@ -121,46 +184,6 @@ export const NehaMetricsColumns = ({
                     return (
                         <DataLinkCell link={value} text="Listen to Recording" />
                     );
-                }
-            },
-            {
-                id: 'result',
-                accessor: 'result',
-                Header: HeaderCell,
-                headerText: 'Result',
-                isVisible: true,
-                minWidth: 175,
-                Cell: ResultCell
-            },
-            {
-                id: 'context',
-                accessor: 'context',
-                Header: HeaderCell,
-                headerText: 'Context',
-                isVisible: true,
-                minWidth: 175,
-                Cell: ContextCell
-            },
-            {
-                id: 'resumeUrl',
-                accessor: 'resumeUrl',
-                Header: HeaderCell,
-                headerText: 'Resume URL',
-                isVisible: true,
-                minWidth: 175,
-                Cell: ({ value }: Cell) => {
-                    return <DataLinkCell link={value} text="View Resume" />;
-                }
-            },
-            {
-                id: 'jobDescriptionUrl',
-                accessor: 'jobDescriptionUrl',
-                Header: HeaderCell,
-                headerText: 'JD URL',
-                isVisible: true,
-                minWidth: 175,
-                Cell: ({ value }: Cell) => {
-                    return <DataLinkCell link={value} text="View JD" />;
                 }
             },
             {

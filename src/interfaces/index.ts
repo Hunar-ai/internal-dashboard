@@ -83,3 +83,5 @@ export type {
     ColumnFilterProps,
     ColumnActionsProps
 } from './filter.interface';
+
+export type { NehaSelectLeadProps } from './nehaSelect.interface';
