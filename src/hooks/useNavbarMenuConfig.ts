@@ -61,9 +61,20 @@ export const useNavbarMenuConfig = () => {
 
         if (PLAYGROUND_METRICS_USERS?.includes(personnel?.email)) {
             baseRoutes.push({
-                id: 'playground-metrics',
+                id: 'playground',
                 title: 'Playground Metrics',
-                link: '/playground-metrics'
+                subMenus: [
+                    {
+                        id: 'playground-metrics',
+                        title: 'Table',
+                        link: '/playground-metrics'
+                    },
+                    {
+                        id: 'playground-metrics/charts',
+                        title: 'Charts',
+                        link: '/playground-metrics?charts=true'
+                    }
+                ]
             });
         }
 
