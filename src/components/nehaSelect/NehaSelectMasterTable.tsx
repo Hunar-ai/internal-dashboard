@@ -53,11 +53,16 @@ export const NehaSelectMasterTable = () => {
         }
     }, [isRefetchRequired, refreshMetrics, setIsRefetchRequired]);
 
+    const formattedData = React.useMemo(() => {
+        if (!data || !Array.isArray(data)) return [];
+        return data.slice(0, 100);
+    }, [data]);
+
     return (
         <>
             <Table
                 columns={columns}
-                data={data ?? []}
+                data={formattedData}
                 isLoading={isLoading}
                 activeSortColumn={sort?.key}
                 activeFilterColumns={activeFilterColumns}
