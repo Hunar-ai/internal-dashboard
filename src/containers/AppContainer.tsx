@@ -6,12 +6,12 @@ import {
     UserContainer,
     ResetPasswordContainer,
     ChecklistContainer,
-    AssessmentContainer
+    AssessmentContainer,
+    PlaygroundMetricsContainer
 } from 'containers';
 
 import { useGetFormFields, useGetLoggedInPersonnel, useToken } from 'hooks';
 import { SettingsContext, settingsInitialState } from 'contexts';
-import { PlaygroundMetricsContainer } from './PlaygroundMetricsContainer';
 
 const PLAYGROUND_METRICS_USERS =
     import.meta.env.VITE_PLAYGROUND_METRICS_USERS?.split(',') ?? [];
