@@ -188,7 +188,7 @@ export enum TWILIO_CALL_STATUS {
     FAILED = 'failed'
 }
 
-enum DI {
-    A = 'a',
-    B = 'b',
+export enum TRANSCRIPT_SPEAKER_TYPE {
+    AGENT = 'agent',
+    CUSTOMER = 'customer'
 }
