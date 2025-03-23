@@ -26,9 +26,11 @@ export const CallDurationChart = ({
                 xAxis={[
                     {
                         scaleType: 'band',
-                        data: data.map(d => d.label)
+                        data: data.map(d => d.label),
+                        categoryGapRatio: 0.5
                     }
                 ]}
+                margin={{ left: 80 }}
                 series={[
                     {
                         data: data.map(d => d.value),

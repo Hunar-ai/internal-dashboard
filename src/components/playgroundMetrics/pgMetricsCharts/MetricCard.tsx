@@ -22,7 +22,7 @@ export const MetricCard = ({ label, value }: MetricCardProps) => {
             <CardHeader title={label} />
             <CardContent>
                 <Typography variant="h4" component="div" fontWeight={600}>
-                    {value}
+                    {value ?? '-'}
                 </Typography>
             </CardContent>
         </Card>
