@@ -13,12 +13,13 @@ export const useGetPlaygroundMetrics = ({
     filters
 }: useGetPlaygroundMetricsProps) => {
     const { getFormattedfilters } = useHelper();
+    const formattedFilters = getFormattedfilters(filters);
 
     return usePostReactQuery({
-        queryKey: ['useGetPlaygroundMetrics', filters],
+        queryKey: ['useGetPlaygroundMetrics', JSON.stringify(formattedFilters)],
         requestUrl: getPlaygroundMetrics,
         body: {
-            filters: getFormattedfilters(filters)
+            filters: formattedFilters
         }
     });
 };
