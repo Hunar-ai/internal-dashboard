@@ -493,7 +493,7 @@ export const Table = ({
                     alignItems="center"
                     sx={{ borderTop: `1px solid ${grey[300]}` }}
                 >
-                    <Grid item xs={6} md="auto">
+                    <Grid item xs="auto">
                         <TablePagination
                             color="white"
                             rowsPerPageOptions={rowsPerPageOptions}

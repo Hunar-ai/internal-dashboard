@@ -240,6 +240,13 @@
   dependencies:
     regenerator-runtime "^0.13.11"
 
+"@babel/runtime@^7.24.7":
+  version "7.27.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.27.0.tgz#fbee7cf97c709518ecc1f590984481d5460d4762"
+  integrity sha512-VtPOkrdPHZsKc/clNqyi9WUA8TINkZ4cGk63UUE3u4pmB2k+ZMQRDuIOagv8UVd6j7k0T3+RRIb7beKTebNbcw==
+  dependencies:
+    regenerator-runtime "^0.14.0"
+
 "@babel/template@^7.22.15", "@babel/template@^7.23.9":
   version "7.23.9"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.23.9.tgz#f881d0487cba2828d3259dcb9ef5005a9731011a"
@@ -1434,6 +1441,16 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
+"@hunar.ai/hunar-design-system@^0.7.0-rc.2":
+  version "0.7.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@hunar.ai/hunar-design-system/-/hunar-design-system-0.7.0-rc.2.tgz#ce07323b2601429bbd011bb8a92aeb18b1d82868"
+  integrity sha512-DwARbNPhLRxAEZAQ9a/rjba9nLedKkmHP19a8/3A+0o69zvsE76cvTnbYqbNxh6m7Lww//5kBrwKx0HPmxbvLw==
+  dependencies:
+    "@babel/runtime" "^7.24.7"
+    "@mui/icons-material" "^5.6.2"
+    "@phosphor-icons/react" "^2.1.7"
+    tinycolor2 "^1.6.0"
+
 "@isaacs/string-locale-compare@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@isaacs/string-locale-compare/-/string-locale-compare-1.1.0.tgz#291c227e93fd407a96ecd59879a35809120e432b"
@@ -1889,6 +1906,11 @@
   integrity sha512-dQK2FUMQtowVP00mtIksrlZhdFXQZPC+taih1q4CvPZ5vqdxR/LKBaFg0oAfzd1GlHZXXSPdQfzQnt+ViGvEIQ==
   dependencies:
     pako "^1.0.10"
+
+"@phosphor-icons/react@^2.1.7":
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/@phosphor-icons/react/-/react-2.1.7.tgz#b11a4b25849b7e3849970b688d9fe91e5d4fd8d7"
+  integrity sha512-g2e2eVAn1XG2a+LI09QU3IORLhnFNAFkNbo2iwbX6NOKSLOwvEMmTa7CgOzEbgNWR47z8i8kwjdvYZ5fkGx1mQ==
 
 "@pkgr/utils@^2.3.1":
   version "2.3.1"
@@ -6433,6 +6455,11 @@ react-is@^18.0.0, react-is@^18.2.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
+react-mobile-datepicker-ts@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/react-mobile-datepicker-ts/-/react-mobile-datepicker-ts-1.0.9.tgz#87c2e46c9ba815f78a5cebb9544eab26d6d74cb8"
+  integrity sha512-8ySnNMJafUJrF0MWZmLomz0fGjC70DKcGAG2z7rs2kLHg5QF0+5WOJlVAiJvB9VM4hKXCMnvxWtOGOIUxrORzQ==
+
 react-mui-dropzone@^4.0.6:
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/react-mui-dropzone/-/react-mui-dropzone-4.0.7.tgz#85221fe36844d799d30a33466f99fe4b5ffc8274"
@@ -6441,6 +6468,11 @@ react-mui-dropzone@^4.0.6:
     "@babel/runtime" "^7.4.4"
     clsx "^1.0.2"
     react-dropzone "^10.2.1"
+
+react-number-format@^5.4.3:
+  version "5.4.3"
+  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-5.4.3.tgz#e634df907da7742faf597afab3f25f9a59689d60"
+  integrity sha512-VCY5hFg/soBighAoGcdE+GagkJq0230qN6jcS5sp8wQX1qy1fYN/RX7/BXkrs0oyzzwqR8/+eSUrqXbGeywdUQ==
 
 react-refresh@^0.14.0:
   version "0.14.0"
@@ -7283,6 +7315,11 @@ tiny-warning@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tiny-warning/-/tiny-warning-1.0.3.tgz#94a30db453df4c643d0fd566060d60a875d84754"
   integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==
+
+tinycolor2@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/tinycolor2/-/tinycolor2-1.6.0.tgz#f98007460169b0263b97072c5ae92484ce02d09e"
+  integrity sha512-XPaBkWQJdsf3pLKJV9p4qN/S+fm2Oj8AIPo1BTUhg5oxkvm9+SVEGFdhyOz7tTdUTfvxMiAs4sp6/eZO2Ew+pw==
 
 to-fast-properties@^2.0.0:
   version "2.0.0"

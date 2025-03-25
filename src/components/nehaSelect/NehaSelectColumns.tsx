@@ -6,23 +6,59 @@ import {
     HeaderCell,
     DataCell,
     DataLinkCell,
-    ColumnActionsPopOver
+    ColumnActionsPopOver,
+    BaseColumns
 } from '@components/common';
-import { CallStatusCell } from '@components/playgroundMetrics';
+import {
+    CallStatusCell,
+    ResultSectionCell
+} from '@components/playgroundMetrics';
+import { CallLanguageCell } from './CallLanguageCell';
+import { CallLaterCell } from './CallLaterCell';
+import { WillingnessToProceedCell } from './WillingnessToProceedCell';
 
-import type { HandleSortProps, Sort } from 'interfaces';
-import { COLUMN_STICKY_TYPE, SORT_TYPE } from 'Enum';
+import { useTableFilters } from 'hooks/useTableFilters';
+import { SettingsContext } from 'contexts';
+
+import type {
+    DateFilterTypeMapProps,
+    HandleSortProps,
+    Sort,
+    TableFiltersProps
+} from 'interfaces';
+import {
+    COLUMN_STICKY_TYPE,
+    FILTER_TYPE,
+    SORT_TYPE,
+    CALL_RESULT_SECTION
+} from 'Enum';
 import { TimeUtils } from 'utils';
 
 export interface NehaSelectColumnsProps {
     sort?: Sort;
     handleSort: HandleSortProps;
+    tableFilters: TableFiltersProps;
+    setTableFilters: (_: TableFiltersProps) => void;
+    dateFilterTypeMap: DateFilterTypeMapProps;
+    setDateFilterTypeMap: (_: DateFilterTypeMapProps) => void;
 }
 
 export const NehaSelectColumns = ({
     sort,
-    handleSort
+    handleSort,
+    tableFilters,
+    setTableFilters,
+    dateFilterTypeMap,
+    setDateFilterTypeMap
 }: NehaSelectColumnsProps) => {
+    const { formFields } = React.useContext(SettingsContext);
+    const {
+        statusOptions,
+        willingnessToProceedOptions,
+        callLanguageOptions,
+        callLaterOptions
+    } = useTableFilters(formFields);
+
     const columns: Array<Column> = React.useMemo(() => {
         return [
             {
@@ -78,6 +114,15 @@ export const NehaSelectColumns = ({
                         sort,
                         handleSort,
                         sortType: SORT_TYPE.DEFAULT
+                    },
+                    filterProps: {
+                        filterType: FILTER_TYPE.MULTI_SELECT,
+                        options: statusOptions,
+                        filters: {
+                            tableFilters,
+                            setTableFilters,
+                            hideBlanks: true
+                        }
                     }
                 }
             },
@@ -85,7 +130,9 @@ export const NehaSelectColumns = ({
                 id: 'language',
                 accessor: 'language',
                 Header: HeaderCell,
-                Cell: DataCell,
+                Cell: ({ value }: Cell) => {
+                    return <CallLanguageCell callLanguage={value} />;
+                },
                 isVisible: true,
                 headerText: 'Language',
                 minWidth: 135,
@@ -95,6 +142,15 @@ export const NehaSelectColumns = ({
                         sort,
                         handleSort,
                         sortType: SORT_TYPE.DEFAULT
+                    },
+                    filterProps: {
+                        filterType: FILTER_TYPE.MULTI_SELECT,
+                        options: callLanguageOptions,
+                        filters: {
+                            tableFilters,
+                            setTableFilters,
+                            hideBlanks: true
+                        }
                     }
                 }
             },
@@ -102,7 +158,9 @@ export const NehaSelectColumns = ({
                 id: 'callLater',
                 accessor: 'callLater',
                 Header: HeaderCell,
-                Cell: DataCell,
+                Cell: ({ value }: Cell) => {
+                    return <CallLaterCell callLater={value} />;
+                },
                 isVisible: true,
                 headerText: 'Call Later',
                 minWidth: 150,
@@ -112,6 +170,15 @@ export const NehaSelectColumns = ({
                         sort,
                         handleSort,
                         sortType: SORT_TYPE.DEFAULT
+                    },
+                    filterProps: {
+                        filterType: FILTER_TYPE.MULTI_SELECT,
+                        options: callLaterOptions,
+                        filters: {
+                            tableFilters,
+                            setTableFilters,
+                            hideBlanks: true
+                        }
                     }
                 }
             },
@@ -140,7 +207,14 @@ export const NehaSelectColumns = ({
                 id: 'willingnessToProceed',
                 accessor: 'willingnessToProceed',
                 Header: HeaderCell,
-                Cell: DataCell,
+                Cell: ({ value }: Cell) => {
+                    return (
+                        <WillingnessToProceedCell
+                            willingnessToProceed={value}
+                        />
+                    );
+                },
+                isVisible: true,
                 headerText: 'Willing to Proceed',
                 minWidth: 225,
                 Filter: ColumnActionsPopOver,
@@ -149,6 +223,15 @@ export const NehaSelectColumns = ({
                         sort,
                         handleSort,
                         sortType: SORT_TYPE.DEFAULT
+                    },
+                    filterProps: {
+                        filterType: FILTER_TYPE.MULTI_SELECT,
+                        options: willingnessToProceedOptions,
+                        filters: {
+                            tableFilters,
+                            setTableFilters,
+                            hideBlanks: true
+                        }
                     }
                 }
             },
@@ -156,7 +239,14 @@ export const NehaSelectColumns = ({
                 id: 'nextSteps',
                 accessor: 'nextSteps',
                 Header: HeaderCell,
-                Cell: DataCell,
+                Cell: ({ value }: Cell) => {
+                    return (
+                        <ResultSectionCell
+                            value={value}
+                            section={CALL_RESULT_SECTION.NEXT_STEPS}
+                        />
+                    );
+                },
                 isVisible: true,
                 headerText: 'Next Steps',
                 minWidth: 150
@@ -165,7 +255,14 @@ export const NehaSelectColumns = ({
                 id: 'concerns',
                 accessor: 'concerns',
                 Header: HeaderCell,
-                Cell: DataCell,
+                Cell: ({ value }: Cell) => {
+                    return (
+                        <ResultSectionCell
+                            value={value}
+                            section={CALL_RESULT_SECTION.CONCERNS}
+                        />
+                    );
+                },
                 isVisible: true,
                 headerText: 'Concerns',
                 minWidth: 150
@@ -174,7 +271,14 @@ export const NehaSelectColumns = ({
                 id: 'followupPoints',
                 accessor: 'followupPoints',
                 Header: HeaderCell,
-                Cell: DataCell,
+                Cell: ({ value }: Cell) => {
+                    return (
+                        <ResultSectionCell
+                            value={value}
+                            section={CALL_RESULT_SECTION.FOLLOW_UP_POINTS}
+                        />
+                    );
+                },
                 isVisible: true,
                 headerText: 'Follow Up Points',
                 minWidth: 225
@@ -191,9 +295,28 @@ export const NehaSelectColumns = ({
                         <DataLinkCell link={value} text="Listen to Recording" />
                     );
                 }
-            }
+            },
+            ...new BaseColumns({
+                sort,
+                handleSort,
+                tableFilters,
+                setTableFilters,
+                dateFilterTypeMap,
+                setDateFilterTypeMap
+            }).getBaseColumns()
         ];
-    }, [handleSort, sort]);
+    }, [
+        handleSort,
+        setTableFilters,
+        sort,
+        statusOptions,
+        willingnessToProceedOptions,
+        callLanguageOptions,
+        callLaterOptions,
+        dateFilterTypeMap,
+        setDateFilterTypeMap,
+        tableFilters
+    ]);
 
     return columns;
 };

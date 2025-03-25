@@ -3,10 +3,10 @@ import React from 'react';
 import { Chip } from '@mui/material';
 import { grey, red, blue, green } from '@mui/material/colors';
 
-import { useWorkerDataActions } from 'hooks';
 import { SettingsContext } from 'contexts';
+import { useFormFieldsHelper } from 'hooks';
 
-import { TWILIO_CALL_STATUS } from 'Enum';
+import { FORM_FIELD, TWILIO_CALL_STATUS } from 'Enum';
 
 const labelToColorMap = {
     [TWILIO_CALL_STATUS.COMPLETED]: green[300],
@@ -27,11 +27,11 @@ interface CallStatusCellProps {
 
 export const CallStatusCell = ({ status }: CallStatusCellProps) => {
     const { formFields } = React.useContext(SettingsContext);
-    const { mapObj } = useWorkerDataActions({ formFields });
+    const { formFieldMap } = useFormFieldsHelper({ formFields });
     return (
         <Chip
             size="small"
-            label={mapObj?.twilioStatus[status] ?? status}
+            label={formFieldMap[FORM_FIELD.twilioStatus][status] ?? status}
             sx={{
                 backgroundColor: labelToColorMap[status]
             }}

@@ -14,17 +14,28 @@ import { useSearchNehaSelectCalls } from 'hooks/apiHooks/nehaSelect/useSearchNeh
 import { SORT_ORDER } from 'Enum';
 
 export const NehaSelectMasterTable = () => {
-    const { sort, handleSort, tableFilters, activeFilterColumns } =
-        useTableActions({
-            key: 'updatedAt',
-            order: SORT_ORDER.DESC
-        });
+    const {
+        sort,
+        handleSort,
+        tableFilters,
+        setTableFilters,
+        activeFilterColumns,
+        dateFilterTypeMap,
+        setDateFilterTypeMap
+    } = useTableActions({
+        key: 'updatedAt',
+        order: SORT_ORDER.DESC
+    });
 
     const [searchKey, setSearchKey] = React.useState('');
 
     const columns = NehaSelectColumns({
         sort,
-        handleSort
+        handleSort,
+        tableFilters,
+        setTableFilters,
+        dateFilterTypeMap,
+        setDateFilterTypeMap
     });
 
     const { minimalPaginationInfo, handleChangePage, handleChangeRowsPerPage } =

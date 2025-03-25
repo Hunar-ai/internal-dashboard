@@ -1,35 +1,63 @@
 import React from 'react';
-import { Column, Cell } from '@components/common/paginatedTable/PaginatedTable';
-import { HandleSortProps, Sort } from 'interfaces';
+
+import {
+    Column,
+    Cell,
+    HeaderCell,
+    DataCell,
+    DataLinkCell
+} from '@components/common';
 import { ColumnActionsPopOver } from '@components/common/ColumnActionsPopOver';
-import { COLUMN_STICKY_TYPE, FILTER_TYPE, SORT_TYPE } from 'Enum';
-import { useTableFilters } from 'hooks/useTableFilters';
-import { DataCell, DataLinkCell, HeaderCell } from '@components/common';
-import { DateCell } from '@components/common/DateCell';
-import { SettingsContext } from 'contexts';
-import { TimeUtils } from 'utils';
 import {
     CallStatusCell,
-    ContextCell,
-    ResultCell,
-    TranscriptCell
+    ResultSectionCell
 } from '@components/playgroundMetrics';
+import { BaseColumns } from '@components/common/BaseColumns';
+import { CallLanguageCell } from './CallLanguageCell';
+import { CallLaterCell } from './CallLaterCell';
+import { WillingnessToProceedCell } from './WillingnessToProceedCell';
+
+import { useTableFilters } from 'hooks/useTableFilters';
+import { SettingsContext } from 'contexts';
+
+import type {
+    DateFilterTypeMapProps,
+    HandleSortProps,
+    Sort,
+    TableFiltersProps
+} from 'interfaces';
+import {
+    COLUMN_STICKY_TYPE,
+    FILTER_TYPE,
+    SORT_TYPE,
+    CALL_RESULT_SECTION
+} from 'Enum';
+import { TimeUtils } from 'utils';
 
 export interface NehaMetricsColumnsProps {
-    tableFilters: any;
-    setTableFilters: (_: any) => void;
     sort?: Sort;
     handleSort: HandleSortProps;
+    tableFilters: TableFiltersProps;
+    setTableFilters: (_: TableFiltersProps) => void;
+    dateFilterTypeMap: DateFilterTypeMapProps;
+    setDateFilterTypeMap: (_: DateFilterTypeMapProps) => void;
 }
 
 export const NehaMetricsColumns = ({
     sort,
     handleSort,
     tableFilters,
-    setTableFilters
+    setTableFilters,
+    dateFilterTypeMap,
+    setDateFilterTypeMap
 }: NehaMetricsColumnsProps) => {
     const { formFields } = React.useContext(SettingsContext);
-    const { statusOptions } = useTableFilters(formFields);
+    const {
+        statusOptions,
+        willingnessToProceedOptions,
+        callLanguageOptions,
+        callLaterOptions
+    } = useTableFilters(formFields);
 
     const columns: Array<Column> = React.useMemo(() => {
         return [
@@ -51,7 +79,34 @@ export const NehaMetricsColumns = ({
                 Cell: DataCell,
                 headerText: 'Mobile Number',
                 isVisible: true,
+                minWidth: 150
+            },
+            {
+                id: 'jobRole',
+                accessor: 'jobRole',
+                Header: HeaderCell,
+                Cell: DataCell,
+                headerText: 'Job Role',
+                isVisible: true,
                 minWidth: 175
+            },
+            {
+                id: 'companyName',
+                accessor: 'companyName',
+                Header: HeaderCell,
+                Cell: DataCell,
+                headerText: 'Company Name',
+                isVisible: true,
+                minWidth: 175
+            },
+            {
+                id: 'callsCount',
+                accessor: 'callsCount',
+                Header: HeaderCell,
+                Cell: DataCell,
+                headerText: 'Calls Count',
+                isVisible: true,
+                minWidth: 150
             },
             {
                 id: 'status',
@@ -62,7 +117,7 @@ export const NehaMetricsColumns = ({
                 },
                 isVisible: true,
                 headerText: 'Status',
-                minWidth: 175,
+                minWidth: 150,
                 Filter: ColumnActionsPopOver,
                 columnActionsProps: {
                     sortProps: {
@@ -106,7 +161,7 @@ export const NehaMetricsColumns = ({
                 accessor: 'callLater',
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
-                    return <DataCell cell={{ value }} />;
+                    return <CallLaterCell callLater={value} />;
                 },
                 isVisible: true,
                 headerText: 'Call Later',
@@ -117,20 +172,108 @@ export const NehaMetricsColumns = ({
                         sort,
                         handleSort,
                         sortType: SORT_TYPE.DEFAULT
+                    },
+                    filterProps: {
+                        filterType: FILTER_TYPE.MULTI_SELECT,
+                        options: callLaterOptions,
+                        filters: {
+                            tableFilters,
+                            setTableFilters,
+                            hideBlanks: true
+                        }
                     }
                 }
             },
             {
-                id: 'willingToProceed',
+                id: 'language',
+                accessor: 'language',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    return <CallLanguageCell callLanguage={value} />;
+                },
+                isVisible: true,
+                headerText: 'Call Language',
+                minWidth: 150,
+                Filter: ColumnActionsPopOver,
+                columnActionsProps: {
+                    sortProps: {
+                        sort,
+                        handleSort,
+                        sortType: SORT_TYPE.DEFAULT
+                    },
+                    filterProps: {
+                        filterType: FILTER_TYPE.MULTI_SELECT,
+                        options: callLanguageOptions,
+                        filters: {
+                            tableFilters,
+                            setTableFilters,
+                            hideBlanks: true
+                        }
+                    }
+                }
+            },
+            {
+                id: 'duration',
+                accessor: 'callsList.0.duration',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    const seconds = (value ?? 0) * 60;
+                    const formattedSeconds = TimeUtils.formatSeconds(seconds);
+                    return <DataCell cell={{ value: formattedSeconds }} />;
+                },
+                isVisible: true,
+                headerText: 'Call Duration',
+                allowCopy: true,
+                minWidth: 225,
+                Filter: ColumnActionsPopOver,
+                columnActionsProps: {
+                    sortProps: {
+                        sort,
+                        handleSort,
+                        sortType: SORT_TYPE.NUMERIC
+                    },
+                    filterProps: {
+                        filterType: FILTER_TYPE.RANGE,
+                        filters: {
+                            tableFilters,
+                            setTableFilters,
+                            hideBlanks: true
+                        }
+                    }
+                }
+            },
+            {
+                id: 'willingnessToProceed',
                 accessor: 'callsList.0.willingnessToProceed',
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
-                    return <DataCell cell={{ value: value ?? 'NA' }} />;
+                    return (
+                        <WillingnessToProceedCell
+                            willingnessToProceed={value}
+                        />
+                    );
                 },
                 isVisible: true,
                 headerText: 'Willing to Proceed',
                 allowCopy: true,
-                minWidth: 175
+                minWidth: 225,
+                Filter: ColumnActionsPopOver,
+                columnActionsProps: {
+                    sortProps: {
+                        sort,
+                        handleSort,
+                        sortType: SORT_TYPE.DEFAULT
+                    },
+                    filterProps: {
+                        filterType: FILTER_TYPE.MULTI_SELECT,
+                        options: willingnessToProceedOptions,
+                        filters: {
+                            tableFilters,
+                            setTableFilters,
+                            hideBlanks: true
+                        }
+                    }
+                }
             },
             {
                 id: 'nextSteps',
@@ -138,15 +281,16 @@ export const NehaMetricsColumns = ({
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
                     return (
-                        <DataCell
-                            cell={{ value: value?.length ? value : 'NA' }}
+                        <ResultSectionCell
+                            value={value}
+                            section={CALL_RESULT_SECTION.NEXT_STEPS}
                         />
                     );
                 },
                 isVisible: true,
                 headerText: 'Next Steps',
                 allowCopy: true,
-                minWidth: 175
+                minWidth: 150
             },
             {
                 id: 'concerns',
@@ -154,15 +298,16 @@ export const NehaMetricsColumns = ({
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
                     return (
-                        <DataCell
-                            cell={{ value: value?.length ? value : 'NA' }}
+                        <ResultSectionCell
+                            value={value}
+                            section={CALL_RESULT_SECTION.CONCERNS}
                         />
                     );
                 },
                 isVisible: true,
                 headerText: 'Concerns',
                 allowCopy: true,
-                minWidth: 175
+                minWidth: 150
             },
             {
                 id: 'followUpPoints',
@@ -170,24 +315,16 @@ export const NehaMetricsColumns = ({
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
                     return (
-                        <DataCell
-                            cell={{ value: value?.length ? value : 'NA' }}
+                        <ResultSectionCell
+                            value={value}
+                            section={CALL_RESULT_SECTION.FOLLOW_UP_POINTS}
                         />
                     );
                 },
                 isVisible: true,
                 headerText: 'Follow Up Points',
                 allowCopy: true,
-                minWidth: 175
-            },
-            {
-                id: 'transcript',
-                accessor: 'transcript',
-                Header: HeaderCell,
-                headerText: 'Transcript',
-                isVisible: true,
-                minWidth: 175,
-                Cell: TranscriptCell
+                minWidth: 225
             },
             {
                 id: 'recordingUrl',
@@ -202,76 +339,27 @@ export const NehaMetricsColumns = ({
                     );
                 }
             },
-            {
-                id: 'result',
-                accessor: 'result',
-                Header: HeaderCell,
-                headerText: 'Result',
-                isVisible: true,
-                minWidth: 175,
-                Cell: ResultCell
-            },
-            {
-                id: 'context',
-                accessor: 'context',
-                Header: HeaderCell,
-                headerText: 'Context',
-                isVisible: true,
-                minWidth: 175,
-                Cell: ContextCell
-            },
-            {
-                id: 'resumeUrl',
-                accessor: 'resumeUrl',
-                Header: HeaderCell,
-                headerText: 'Resume URL',
-                isVisible: true,
-                minWidth: 175,
-                Cell: ({ value }: Cell) => {
-                    return <DataLinkCell link={value} text="View Resume" />;
-                }
-            },
-            {
-                id: 'jobDescriptionUrl',
-                accessor: 'jobDescriptionUrl',
-                Header: HeaderCell,
-                headerText: 'JD URL',
-                isVisible: true,
-                minWidth: 175,
-                Cell: ({ value }: Cell) => {
-                    return <DataLinkCell link={value} text="View JD" />;
-                }
-            },
-            {
-                id: 'createdAt',
-                accessor: 'createdAt',
-                Header: HeaderCell,
-                headerText: 'Created At',
-                isVisible: true,
-                minWidth: 175,
-                sticky: COLUMN_STICKY_TYPE.RIGHT,
-                Filter: ColumnActionsPopOver,
-                columnActionsProps: {
-                    sortProps: {
-                        sort,
-                        handleSort,
-                        sortType: SORT_TYPE.DATE
-                    },
-                    filterProps: {
-                        filterType: FILTER_TYPE.DATE_RANGE,
-                        filters: {
-                            tableFilters,
-                            setTableFilters,
-                            hideBlanks: true
-                        }
-                    }
-                },
-                Cell: ({ value }: Cell) => {
-                    return <DateCell value={value} />;
-                }
-            }
+            ...new BaseColumns({
+                sort,
+                handleSort,
+                tableFilters,
+                setTableFilters,
+                dateFilterTypeMap,
+                setDateFilterTypeMap
+            }).getBaseColumns()
         ];
-    }, [handleSort, setTableFilters, sort, statusOptions, tableFilters]);
+    }, [
+        sort,
+        handleSort,
+        statusOptions,
+        tableFilters,
+        setTableFilters,
+        callLaterOptions,
+        callLanguageOptions,
+        willingnessToProceedOptions,
+        dateFilterTypeMap,
+        setDateFilterTypeMap
+    ]);
 
     return columns;
 };
