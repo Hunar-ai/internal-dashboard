@@ -16,11 +16,7 @@ import {
 import MaUTable from '@mui/material/Table';
 import { grey } from '@mui/material/colors';
 
-import {
-    PaginatedTableHeader,
-    PaginatedTableSkeleton,
-    TextOverFlow
-} from 'components/common';
+import { PaginatedTableSkeleton, TextOverFlow } from 'components/common';
 import { PaginatedTableDisabledRowMask } from './PaginatedTableDisabledRowMask';
 
 import type { ColumnActionsProps, ReactElement } from 'interfaces';
@@ -93,7 +89,6 @@ interface Props {
     disabledRowMap?: Record<string, boolean>;
     isAllSelected?: boolean;
     size?: 'small' | 'medium';
-    tableHeaderCTA: React.ReactNode;
     subHeader?: { [key: string]: string };
     footer?: ReactElement;
     isPaginationEnabled?: boolean;
@@ -117,7 +112,6 @@ export const Table = ({
     activeFilterColumns,
     NoDataFound,
     size = 'small',
-    tableHeaderCTA,
     subHeader,
     isPaginationEnabled = true,
     tableHeight = 'calc(100vh - 176px)'
@@ -191,7 +185,6 @@ export const Table = ({
 
     return (
         <>
-            <PaginatedTableHeader tableHeaderCTA={tableHeaderCTA} />
             <TableContainer
                 id={id}
                 sx={{
@@ -500,7 +493,7 @@ export const Table = ({
                     alignItems="center"
                     sx={{ borderTop: `1px solid ${grey[300]}` }}
                 >
-                    <Grid item xs={6} md="auto">
+                    <Grid item xs="auto">
                         <TablePagination
                             color="white"
                             rowsPerPageOptions={rowsPerPageOptions}

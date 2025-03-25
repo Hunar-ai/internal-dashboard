@@ -81,7 +81,10 @@ export enum FORM_FIELD {
     'employerJobQueryWorkerStatus' = 'employerJobQueryWorkerStatus',
     'referrerType' = 'referrerType',
     'logoPlacement' = 'logoPlacement',
-    'twilioStatus' = 'twilioStatus'
+    'twilioStatus' = 'twilioStatus',
+    'nehaSelectWillingnessToProceed' = 'nehaSelectWillingnessToProceed',
+    'callLanguage' = 'callLanguage',
+    'nehaSelectCallLater' = 'nehaSelectCallLater'
 }
 
 export enum SORT_TYPE {
@@ -188,7 +191,24 @@ export enum TWILIO_CALL_STATUS {
     FAILED = 'failed'
 }
 
+export enum WILLINGNESS_TO_PROCEED {
+    'HIGH' = 'HIGH',
+    'MEDIUM' = 'MEDIUM',
+    'LOW' = 'LOW'
+}
+
 export enum TRANSCRIPT_SPEAKER_TYPE {
     AGENT = 'agent',
     CUSTOMER = 'customer'
+}
+
+export enum CALL_LATER {
+    'YES' = 'YES',
+    'NO' = 'NO'
+}
+
+export enum CALL_RESULT_SECTION {
+    CONCERNS = 'concerns',
+    NEXT_STEPS = 'nextSteps',
+    FOLLOW_UP_POINTS = 'followUpPoints'
 }

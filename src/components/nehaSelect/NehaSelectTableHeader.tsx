@@ -1,20 +1,39 @@
+import React from 'react';
+
+import LoadingButton from '@mui/lab/LoadingButton';
 import { Button, Grid } from '@mui/material';
 
-import { useUpdateSearchParams } from 'hooks/useUpdateSearchParams';
-import { useExportNehaLeads } from 'hooks/apiHooks/nehaSelect/useExportNehaLeads';
-import LoadingButton from '@mui/lab/LoadingButton';
+import { SearchBar } from '@hunar.ai/hunar-design-system';
 
-export const NehaSelectTableHeader = () => {
+import { useUpdateSearchParams } from 'hooks/useUpdateSearchParams';
+import { useExportNehaSelectCalls } from 'hooks/apiHooks/nehaSelect/useExportNehaSelectCalls';
+
+import type { TableFiltersProps } from 'interfaces';
+import { useToast } from 'hooks/useToast';
+
+interface NehaSelectTableHeaderProps {
+    setSearchValue: (_: string) => void;
+    filters: TableFiltersProps;
+}
+
+export const NehaSelectTableHeader = ({
+    setSearchValue,
+    filters
+}: NehaSelectTableHeaderProps) => {
+    const { showError, showSuccess } = useToast();
     const { append } = useUpdateSearchParams();
-    const exportNehaLeads = useExportNehaLeads();
+    const exportNehaSelectCalls = useExportNehaSelectCalls();
 
     const onUploadClick = () => {
         append('upload', 'true');
     };
 
     const onExportClick = () => {
-        exportNehaLeads.mutate(
-            { companyId: '123' },
+        exportNehaSelectCalls.mutate(
+            {
+                params: { companyId: 'select' },
+                requestBody: { filters }
+            },
             {
                 onSuccess: data => {
                     const file = new File([data], 'leads.csv', {
@@ -22,9 +41,17 @@ export const NehaSelectTableHeader = () => {
                     });
                     const url = URL.createObjectURL(file);
                     window.open(url, '_blank');
+                    URL.revokeObjectURL(url);
+                    showSuccess({
+                        title: 'Success!',
+                        description: 'Leads exported successfully'
+                    });
                 },
                 onError: error => {
-                    console.log(error);
+                    showError({
+                        title: 'Error!',
+                        description: error.errors.displayError
+                    });
                 }
             }
         );
@@ -37,13 +64,17 @@ export const NehaSelectTableHeader = () => {
                 display="flex"
                 justifyContent="end"
                 alignItems="center"
-                gap={1}
+                gap={1.5}
             >
+                <SearchBar
+                    setSearchValue={setSearchValue}
+                    placeholder="Search"
+                />
                 <LoadingButton
-                    loading={exportNehaLeads.isLoading}
+                    loading={exportNehaSelectCalls.isLoading}
                     variant="outlined"
                     color="primary"
-                    size="small"
+                    size="medium"
                     onClick={onExportClick}
                 >
                     EXPORT
@@ -51,7 +82,7 @@ export const NehaSelectTableHeader = () => {
                 <Button
                     variant="contained"
                     color="primary"
-                    size="small"
+                    size="medium"
                     onClick={onUploadClick}
                 >
                     UPLOAD

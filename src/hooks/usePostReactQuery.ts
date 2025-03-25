@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import type { ApiError, PersonnelFiltersProps, Sort } from 'interfaces';
+import type { ApiError, Sort } from 'interfaces';
 import { DataUtils, ErrorTracker } from 'utils';
 import { useToast } from 'hooks/useToast';
 
@@ -11,7 +11,7 @@ interface PostReactQueryProps {
         | string
         | number
         | Sort
-        | PersonnelFiltersProps
+        | Record<string, unknown>
         | undefined
         | null
     )[];
@@ -38,7 +38,7 @@ const getSort = (sort: Sort) => {
     }
     return sort;
 };
-export const usePostReactQuery = ({
+export const usePostReactQuery = <ResponseProps extends SuccessData>({
     queryKey,
     requestUrl,
     params,
@@ -50,7 +50,7 @@ export const usePostReactQuery = ({
     exclude
 }: PostReactQueryProps) => {
     const { showError } = useToast();
-    return useQuery<SuccessData, ApiError>({
+    return useQuery<ResponseProps, ApiError>({
         queryKey,
         queryFn: () => {
             return requestUrl.post({

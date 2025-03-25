@@ -34,7 +34,10 @@ export const settingsInitialState: SettingsContextType = {
         type: null
     },
     formFields: {
-        twilioStatus: []
+        twilioStatus: [],
+        nehaSelectWillingnessToProceed: [],
+        callLanguage: [],
+        nehaSelectCallLater: []
     }
 };
 

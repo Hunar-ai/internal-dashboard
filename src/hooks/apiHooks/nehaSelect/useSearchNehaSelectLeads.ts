@@ -1,19 +1,52 @@
 import { search } from 'api/nehaSelect';
-import { useGetReactQuery } from 'hooks/useGetReactQuery';
-import type { NehaSelectLeadProps } from 'interfaces';
+
+import { usePostReactQuery } from 'hooks/usePostReactQuery';
+import { useHelper } from 'useHelper';
+
+import type {
+    NehaSelectLeadProps,
+    PaginationInfo,
+    Sort,
+    TableFiltersProps
+} from 'interfaces';
 
 interface GetSearchNehaSelectLeads {
     params: {
         companyId: string;
     };
+    requestBody: {
+        searchKey: string;
+        page: number;
+        itemsPerPage: number;
+        filters: TableFiltersProps;
+        sort?: Sort;
+    };
+}
+
+interface NehaSelectLeadsResponse {
+    data: NehaSelectLeadProps[];
+    paginationInfo: PaginationInfo;
 }
 
 export const useSearchNehaSelectLeads = ({
-    params: { companyId }
+    params: { companyId },
+    requestBody: { page, itemsPerPage, filters, sort, searchKey }
 }: GetSearchNehaSelectLeads) => {
-    return useGetReactQuery<NehaSelectLeadProps[]>({
-        queryKey: ['searchNehaSelectLeads', companyId],
+    const { getFormattedfilters } = useHelper();
+    const formattedFilters = getFormattedfilters(filters);
+
+    return usePostReactQuery<NehaSelectLeadsResponse>({
+        queryKey: [
+            'searchNehaSelectLeads',
+            companyId,
+            page,
+            itemsPerPage,
+            formattedFilters,
+            sort,
+            searchKey
+        ],
         requestUrl: search,
-        params: { companyId }
+        params: { companyId },
+        body: { page, itemsPerPage, filters: formattedFilters, sort, searchKey }
     });
 };

@@ -34,3 +34,4 @@ export {
 export { DropzoneArea } from './DropzoneArea';
 export { DropzoneDisplayArea } from './DropzoneDisplayArea';
 export { DropzoneUploadArea } from './DropzoneUploadArea';
+export { BaseColumns } from './BaseColumns';

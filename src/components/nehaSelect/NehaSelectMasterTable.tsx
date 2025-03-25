@@ -1,77 +1,98 @@
 import React from 'react';
 
-import { PaginatedTable as Table } from '@components/common';
+import {
+    PaginatedTable as Table,
+    PaginatedTableHeader
+} from '@components/common';
 import { NehaMetricsColumns } from './NehaMetricsColumns';
 import { NehaSelectLeadUploadModal } from './NehaSelectLeadUploadModal';
 import { NehaSelectTableHeader } from './NehaSelectTableHeader';
 
 import { useTableActions, usePaginatedReactTable } from 'hooks';
 import { useSearchNehaSelectLeads } from 'hooks/apiHooks/nehaSelect/useSearchNehaSelectLeads';
+import { useUpdateSearchParams } from 'hooks/useUpdateSearchParams';
+
+import { SORT_ORDER } from 'Enum';
 
 export const NehaSelectMasterTable = () => {
-    const [isRefetchRequired, setIsRefetchRequired] = React.useState(false);
+    const { append } = useUpdateSearchParams();
     const {
         sort,
         handleSort,
         tableFilters,
         setTableFilters,
-        activeFilterColumns
-    } = useTableActions();
+        activeFilterColumns,
+        dateFilterTypeMap,
+        setDateFilterTypeMap
+    } = useTableActions({
+        key: 'updatedAt',
+        order: SORT_ORDER.DESC
+    });
+
+    const [searchKey, setSearchKey] = React.useState('');
+
+    const setSearchValue = (value: string) => {
+        append('searchKey', value);
+        setSearchKey(value);
+    };
 
     const columns = NehaMetricsColumns({
         sort,
         handleSort,
         tableFilters,
-        setTableFilters
+        setTableFilters,
+        dateFilterTypeMap,
+        setDateFilterTypeMap
     });
 
     const { minimalPaginationInfo, handleChangePage, handleChangeRowsPerPage } =
         usePaginatedReactTable({
             tableId: 'neha-select-master-table',
-            defaultSort: {
-                id: 'createdAt',
-                desc: false
-            },
             columns,
             searchKey: ''
         });
 
     const {
-        data,
-        refetch: refreshMetrics,
-        isLoading
+        data: leadData,
+        refetch: refreshLeadData,
+        isLoading: isLeadDataLoading
     } = useSearchNehaSelectLeads({
         params: {
             companyId: 'select'
+        },
+        requestBody: {
+            searchKey,
+            ...minimalPaginationInfo,
+            filters: tableFilters,
+            sort
         }
     });
 
-    React.useEffect(() => {
-        if (isRefetchRequired) {
-            refreshMetrics();
-            setIsRefetchRequired(false);
-        }
-    }, [isRefetchRequired, refreshMetrics, setIsRefetchRequired]);
-
-    const formattedData = React.useMemo(() => {
-        if (!data || !Array.isArray(data)) return [];
-        return data.slice(0, 100);
-    }, [data]);
-
     return (
         <>
+            <PaginatedTableHeader
+                height={56}
+                pl={0}
+                pr={0}
+                tableHeaderCTA={
+                    <NehaSelectTableHeader
+                        setSearchValue={setSearchValue}
+                        filters={tableFilters}
+                    />
+                }
+            />
             <Table
                 columns={columns}
-                data={formattedData}
-                isLoading={isLoading}
+                tableHeight="calc(100vh - 192px)"
+                data={leadData?.data ?? []}
+                isLoading={isLeadDataLoading}
                 activeSortColumn={sort?.key}
                 activeFilterColumns={activeFilterColumns}
-                paginationInfo={minimalPaginationInfo}
+                paginationInfo={leadData?.paginationInfo}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
-                tableHeaderCTA={<NehaSelectTableHeader />}
             />
-            <NehaSelectLeadUploadModal />
+            <NehaSelectLeadUploadModal onUploadSuccess={refreshLeadData} />
         </>
     );
 };
