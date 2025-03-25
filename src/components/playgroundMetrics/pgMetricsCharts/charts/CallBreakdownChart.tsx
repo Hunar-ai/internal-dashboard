@@ -6,20 +6,20 @@ import { ChartWrapper } from '../wrappers';
 import { NumberUtils } from 'utils';
 
 interface CallBreakdownChartProps {
-    completed: number;
-    disconnected: number;
-    notPicked: number;
+    totalCompletedCalls: number;
+    callsDisconnected: number;
+    callsNotPicked: number;
 }
 
 export const CallBreakdownChart = ({
-    completed = 0,
-    disconnected = 0,
-    notPicked = 0
+    totalCompletedCalls = 0,
+    callsDisconnected = 0,
+    callsNotPicked = 0
 }: CallBreakdownChartProps) => {
     const data = [
-        { value: completed, label: 'Completed', color: green[300] },
-        { value: disconnected, label: 'Disconnected', color: red[300] },
-        { value: notPicked, label: 'Not Picked', color: amber[300] }
+        { value: totalCompletedCalls, label: 'Completed', color: green[300] },
+        { value: callsDisconnected, label: 'Disconnected', color: red[300] },
+        { value: callsNotPicked, label: 'Not Picked', color: amber[300] }
     ];
 
     return (

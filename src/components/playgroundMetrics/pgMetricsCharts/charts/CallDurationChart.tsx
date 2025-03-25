@@ -3,20 +3,20 @@ import { BarChart } from '@mui/x-charts/BarChart';
 import { ChartWrapper } from '../wrappers';
 
 interface CallDurationChartProps {
-    below45: number;
-    between46To90: number;
-    above90: number;
+    callsBelow45Seconds: number;
+    callsBetween46To90Seconds: number;
+    callsAbove90Seconds: number;
 }
 
 export const CallDurationChart = ({
-    below45 = 0,
-    between46To90 = 0,
-    above90 = 0
+    callsBelow45Seconds = 0,
+    callsBetween46To90Seconds = 0,
+    callsAbove90Seconds = 0
 }: CallDurationChartProps) => {
     const data = [
-        { label: '<45', value: below45 },
-        { label: '46 to 90', value: between46To90 },
-        { label: '> 90', value: above90 }
+        { label: '<45', value: callsBelow45Seconds },
+        { label: '46 to 90', value: callsBetween46To90Seconds },
+        { label: '> 90', value: callsAbove90Seconds }
     ];
 
     return (

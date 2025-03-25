@@ -18,8 +18,6 @@ export const useGetPlaygroundMetrics = ({
     return usePostReactQuery({
         queryKey: ['useGetPlaygroundMetrics', JSON.stringify(formattedFilters)],
         requestUrl: getPlaygroundMetrics,
-        body: {
-            filters: formattedFilters
-        }
+        body: { ...formattedFilters?.createdAt }
     });
 };

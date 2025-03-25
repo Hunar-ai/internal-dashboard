@@ -10,6 +10,8 @@ export const TimeUtils = {
         return moment(date).format(format);
     },
     formatSeconds: (seconds: number) => {
+        if (seconds === null) return null;
+
         const duration = moment.duration(seconds, 'seconds');
         return [
             duration.hours() ? `${duration.hours()}h` : '',

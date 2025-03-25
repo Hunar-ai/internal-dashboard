@@ -7,14 +7,14 @@ import { NumberUtils, TimeUtils } from 'utils';
 
 interface LeftColumnProps {
     totalCalls: number;
-    connectedCalls: number;
+    callsConnected: number;
     totalDuration: number;
     medianDuration: number;
 }
 
 export const LeftColumn = ({
     totalCalls,
-    connectedCalls,
+    callsConnected,
     totalDuration,
     medianDuration
 }: LeftColumnProps) => {
@@ -30,7 +30,7 @@ export const LeftColumn = ({
                 <Grid item xs={6}>
                     <MetricCard
                         label="Connected"
-                        value={NumberUtils.abbreviateNumber(connectedCalls)}
+                        value={NumberUtils.abbreviateNumber(callsConnected)}
                     />
                 </Grid>
             </NestedGridWrapper>

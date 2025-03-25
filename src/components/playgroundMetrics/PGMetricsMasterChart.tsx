@@ -1,29 +1,25 @@
 import React from 'react';
 
-import { CircularProgress, Grid, ThemeProvider } from '@mui/material';
+import { Grid, ThemeProvider } from '@mui/material';
 
-import { DateRangeTypeSelect } from '@components/common';
+import { AppLoader, DateRangeTypeSelect } from '@components/common';
 import { ChartGridView, NestedGridWrapper } from './pgMetricsCharts';
 
 import { TableFilters, useGetPlaygroundMetrics } from 'hooks';
 
 import { TableFiltersProps } from 'interfaces';
 import { theme } from 'theme';
-import fakeData from 'mockResponses/playgroundCharts';
 
 export const PGMetricsMasterChart = () => {
     const [tableFiltersState, setTableFiltersState] =
         React.useState<TableFiltersProps>({});
     const [selectedDateFilter, setSelectedDateFilter] = React.useState('');
 
-    /* TODO: Use data from API Hook */
-    const { data: undoChange, isLoading } = useGetPlaygroundMetrics({
+    const { data, isLoading } = useGetPlaygroundMetrics({
         filters: { ...(tableFiltersState as TableFilters) }
     });
 
-    const data = fakeData;
-
-    if (isLoading) return <CircularProgress />;
+    if (isLoading) return <AppLoader />;
 
     return (
         <ThemeProvider theme={theme}>
@@ -43,19 +39,20 @@ export const PGMetricsMasterChart = () => {
 
                 <ChartGridView
                     totalCalls={data?.totalCalls}
-                    connectedCalls={data?.callsConnected}
+                    callsConnected={data?.callsConnected}
                     totalDuration={data?.totalDuration}
-                    completed={data?.totalCompletedCalls}
-                    disconnected={data?.callsDisconnected}
-                    notPicked={data?.callsNotPicked}
-                    below45={data?.below45}
-                    between46To90={data?.between46To90}
-                    above90={data?.above90}
+                    totalCompletedCalls={data?.totalCompletedCalls}
+                    callsDisconnected={data?.callsDisconnected}
+                    callsNotPicked={data?.callsNotPicked}
+                    callsBelow45Seconds={data?.below_45}
+                    callsBetween46To90Seconds={data?.between_46To_90}
+                    callsAbove90Seconds={data?.above_90}
                     medianDuration={data?.medianDuration}
                     uniqueNumbersReachedOnce={data?.uniqueNumbersReachedOnce}
                     uniqueNumbersReachedMoreThanOnce={
                         data?.uniqueNumbersReachedMoreThanOnce
                     }
+                    phoneNumbersReached={data?.phoneNumbersReached}
                 />
             </Grid>
         </ThemeProvider>

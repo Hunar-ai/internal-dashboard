@@ -3,29 +3,30 @@ import { NestedGridWrapper } from './wrappers';
 
 interface ChartGridViewProps {
     totalCalls: number;
-    connectedCalls: number;
     totalDuration: number;
-    completed: number;
-    disconnected: number;
-    notPicked: number;
-    below45: number;
-    between46To90: number;
-    above90: number;
+    callsConnected: number;
+    totalCompletedCalls: number;
+    callsDisconnected: number;
+    callsNotPicked: number;
+    callsBelow45Seconds: number;
+    callsBetween46To90Seconds: number;
+    callsAbove90Seconds: number;
     medianDuration: number;
     uniqueNumbersReachedOnce: number;
     uniqueNumbersReachedMoreThanOnce: number;
+    phoneNumbersReached: number;
 }
 
 export const ChartGridView = ({
     totalCalls,
-    connectedCalls,
     totalDuration,
-    completed,
-    disconnected,
-    notPicked,
-    below45,
-    between46To90,
-    above90,
+    callsConnected,
+    totalCompletedCalls,
+    callsDisconnected,
+    callsNotPicked,
+    callsBelow45Seconds,
+    callsBetween46To90Seconds,
+    callsAbove90Seconds,
     medianDuration,
     uniqueNumbersReachedOnce,
     uniqueNumbersReachedMoreThanOnce
@@ -34,20 +35,20 @@ export const ChartGridView = ({
         <NestedGridWrapper>
             <LeftColumn
                 totalCalls={totalCalls}
-                connectedCalls={connectedCalls}
+                callsConnected={callsConnected}
                 totalDuration={totalDuration}
                 medianDuration={medianDuration}
             />
             <MidColumn
-                completed={completed}
-                disconnected={disconnected}
-                notPicked={notPicked}
+                totalCompletedCalls={totalCompletedCalls}
+                callsDisconnected={callsDisconnected}
+                callsNotPicked={callsNotPicked}
                 uniqueNumbersReachedOnce={uniqueNumbersReachedOnce}
             />
             <RightColumn
-                below45={below45}
-                between46To90={between46To90}
-                above90={above90}
+                callsBelow45Seconds={callsBelow45Seconds}
+                callsBetween46To90Seconds={callsBetween46To90Seconds}
+                callsAbove90Seconds={callsAbove90Seconds}
                 uniqueNumbersReachedMoreThanOnce={
                     uniqueNumbersReachedMoreThanOnce
                 }

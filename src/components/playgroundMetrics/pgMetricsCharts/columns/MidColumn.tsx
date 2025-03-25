@@ -6,16 +6,16 @@ import { MetricCard } from '../MetricCard';
 import { NumberUtils } from 'utils';
 
 interface MidColumnProps {
-    completed: number;
-    disconnected: number;
-    notPicked: number;
+    totalCompletedCalls: number;
+    callsDisconnected: number;
+    callsNotPicked: number;
     uniqueNumbersReachedOnce: number;
 }
 
 export const MidColumn = ({
-    completed,
-    disconnected,
-    notPicked,
+    totalCompletedCalls,
+    callsDisconnected,
+    callsNotPicked,
     uniqueNumbersReachedOnce
 }: MidColumnProps) => {
     return (
@@ -23,9 +23,9 @@ export const MidColumn = ({
             <NestedGridWrapper>
                 <Grid item xs={12}>
                     <CallBreakdownChart
-                        completed={completed}
-                        disconnected={disconnected}
-                        notPicked={notPicked}
+                        totalCompletedCalls={totalCompletedCalls}
+                        callsDisconnected={callsDisconnected}
+                        callsNotPicked={callsNotPicked}
                     />
                 </Grid>
             </NestedGridWrapper>

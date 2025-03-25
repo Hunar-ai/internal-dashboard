@@ -6,16 +6,16 @@ import { MetricCard } from '../MetricCard';
 import { NumberUtils } from 'utils';
 
 interface RightColumnProps {
-    below45: number;
-    between46To90: number;
-    above90: number;
+    callsBelow45Seconds: number;
+    callsBetween46To90Seconds: number;
+    callsAbove90Seconds: number;
     uniqueNumbersReachedMoreThanOnce: number;
 }
 
 export const RightColumn = ({
-    below45,
-    between46To90,
-    above90,
+    callsBelow45Seconds,
+    callsBetween46To90Seconds,
+    callsAbove90Seconds,
     uniqueNumbersReachedMoreThanOnce
 }: RightColumnProps) => {
     return (
@@ -23,9 +23,9 @@ export const RightColumn = ({
             <NestedGridWrapper>
                 <Grid item xs={12}>
                     <CallDurationChart
-                        below45={below45}
-                        between46To90={between46To90}
-                        above90={above90}
+                        callsBelow45Seconds={callsBelow45Seconds}
+                        callsBetween46To90Seconds={callsBetween46To90Seconds}
+                        callsAbove90Seconds={callsAbove90Seconds}
                     />
                 </Grid>
             </NestedGridWrapper>
