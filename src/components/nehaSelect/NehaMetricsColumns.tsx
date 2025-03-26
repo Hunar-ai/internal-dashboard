@@ -62,8 +62,8 @@ export const NehaMetricsColumns = ({
     const columns: Array<Column> = React.useMemo(() => {
         return [
             {
-                id: 'id',
-                accessor: 'id',
+                id: 'name',
+                accessor: 'lead.name',
                 Header: HeaderCell,
                 Cell: DataCell,
                 headerText: 'Call ID',
@@ -74,7 +74,7 @@ export const NehaMetricsColumns = ({
             },
             {
                 id: 'mobileNumber',
-                accessor: 'mobileNumber',
+                accessor: 'lead.mobileNumber',
                 Header: HeaderCell,
                 Cell: DataCell,
                 headerText: 'Mobile Number',
@@ -83,7 +83,7 @@ export const NehaMetricsColumns = ({
             },
             {
                 id: 'jobRole',
-                accessor: 'jobRole',
+                accessor: 'lead.jobRole',
                 Header: HeaderCell,
                 Cell: DataCell,
                 headerText: 'Job Role',
@@ -92,21 +92,12 @@ export const NehaMetricsColumns = ({
             },
             {
                 id: 'companyName',
-                accessor: 'companyName',
+                accessor: 'lead.companyName',
                 Header: HeaderCell,
                 Cell: DataCell,
                 headerText: 'Company Name',
                 isVisible: true,
                 minWidth: 175
-            },
-            {
-                id: 'callsCount',
-                accessor: 'callsCount',
-                Header: HeaderCell,
-                Cell: DataCell,
-                headerText: 'Calls Count',
-                isVisible: true,
-                minWidth: 150
             },
             {
                 id: 'status',
@@ -214,7 +205,7 @@ export const NehaMetricsColumns = ({
             },
             {
                 id: 'duration',
-                accessor: 'callsList.0.duration',
+                accessor: 'duration',
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
                     const seconds = (value ?? 0) * 60;
@@ -231,20 +222,12 @@ export const NehaMetricsColumns = ({
                         sort,
                         handleSort,
                         sortType: SORT_TYPE.NUMERIC
-                    },
-                    filterProps: {
-                        filterType: FILTER_TYPE.RANGE,
-                        filters: {
-                            tableFilters,
-                            setTableFilters,
-                            hideBlanks: true
-                        }
                     }
                 }
             },
             {
                 id: 'willingnessToProceed',
-                accessor: 'callsList.0.willingnessToProceed',
+                accessor: 'willingnessToProceed',
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
                     return (
@@ -277,7 +260,7 @@ export const NehaMetricsColumns = ({
             },
             {
                 id: 'nextSteps',
-                accessor: 'callsList.0.nextSteps',
+                accessor: 'nextSteps',
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
                     return (
@@ -294,7 +277,7 @@ export const NehaMetricsColumns = ({
             },
             {
                 id: 'concerns',
-                accessor: 'callsList.0.concerns',
+                accessor: 'concerns',
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
                     return (
@@ -310,8 +293,8 @@ export const NehaMetricsColumns = ({
                 minWidth: 150
             },
             {
-                id: 'followUpPoints',
-                accessor: 'callsList.0.followupPoints',
+                id: 'followupPoints',
+                accessor: 'followupPoints',
                 Header: HeaderCell,
                 Cell: ({ value }: Cell) => {
                     return (
