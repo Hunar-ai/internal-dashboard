@@ -85,4 +85,7 @@ export type {
     DateFilterTypeMapProps
 } from './filter.interface';
 
-export type { NehaSelectLeadProps } from './nehaSelect.interface';
+export type {
+    NehaSelectLeadProps,
+    NehaSelectCallProps
+} from './nehaSelect.interface';

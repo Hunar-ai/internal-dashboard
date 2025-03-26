@@ -13,7 +13,7 @@ export interface NehaSelectLeadProps {
     createdAt: string;
     updatedAt: string;
     callsCount: number;
-    callsList: CallInfoProps[];
+    callsList: NehaSelectCallProps[];
 }
 
 interface ResumeAnalysisProps {
@@ -111,7 +111,7 @@ interface MatchAnalysisProps {
     talkingPoints: string[];
 }
 
-interface CallInfoProps {
+export interface NehaSelectCallProps {
     id: string;
     external_call_id: string;
     lead_id: string;

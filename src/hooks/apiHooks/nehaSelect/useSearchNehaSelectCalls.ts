@@ -1,16 +1,16 @@
-import { searchLeads } from 'api/nehaSelect';
+import { searchCalls } from 'api/nehaSelect';
 
 import { usePostReactQuery } from 'hooks/usePostReactQuery';
 import { useHelper } from 'useHelper';
 
 import type {
-    NehaSelectLeadProps,
+    NehaSelectCallProps,
     PaginationInfo,
     Sort,
     TableFiltersProps
 } from 'interfaces';
 
-interface GetSearchNehaSelectLeads {
+interface GetSearchNehaSelectCalls {
     params: {
         companyId: string;
     };
@@ -23,21 +23,21 @@ interface GetSearchNehaSelectLeads {
     };
 }
 
-interface NehaSelectLeadsResponse {
-    data: NehaSelectLeadProps[];
+interface NehaSelectCallsResponse {
+    data: NehaSelectCallProps[];
     paginationInfo: PaginationInfo;
 }
 
-export const useSearchNehaSelectLeads = ({
+export const useSearchNehaSelectCalls = ({
     params: { companyId },
     requestBody: { page, itemsPerPage, filters, sort, searchKey }
-}: GetSearchNehaSelectLeads) => {
+}: GetSearchNehaSelectCalls) => {
     const { getFormattedfilters } = useHelper();
     const formattedFilters = getFormattedfilters(filters);
 
-    return usePostReactQuery<NehaSelectLeadsResponse>({
+    return usePostReactQuery<NehaSelectCallsResponse>({
         queryKey: [
-            'searchNehaSelectLeads',
+            'searchNehaSelectCalls',
             companyId,
             page,
             itemsPerPage,
@@ -45,7 +45,7 @@ export const useSearchNehaSelectLeads = ({
             sort,
             searchKey
         ],
-        requestUrl: searchLeads,
+        requestUrl: searchCalls,
         params: { companyId },
         body: { page, itemsPerPage, filters: formattedFilters, sort, searchKey }
     });

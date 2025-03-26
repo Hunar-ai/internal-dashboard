@@ -9,7 +9,7 @@ import { NehaSelectLeadUploadModal } from './NehaSelectLeadUploadModal';
 import { NehaSelectTableHeader } from './NehaSelectTableHeader';
 
 import { useTableActions, usePaginatedReactTable } from 'hooks';
-import { useSearchNehaSelectLeads } from 'hooks/apiHooks/nehaSelect/useSearchNehaSelectLeads';
+import { useSearchNehaSelectCalls } from 'hooks/apiHooks/nehaSelect/useSearchNehaSelectCalls';
 import { useUpdateSearchParams } from 'hooks/useUpdateSearchParams';
 
 import { SORT_ORDER } from 'Enum';
@@ -53,10 +53,10 @@ export const NehaSelectMasterTable = () => {
         });
 
     const {
-        data: leadData,
-        refetch: refreshLeadData,
-        isLoading: isLeadDataLoading
-    } = useSearchNehaSelectLeads({
+        data: callData,
+        refetch: refreshCallData,
+        isLoading: isCallDataLoading
+    } = useSearchNehaSelectCalls({
         params: {
             companyId: 'select'
         },
@@ -84,15 +84,15 @@ export const NehaSelectMasterTable = () => {
             <Table
                 columns={columns}
                 tableHeight="calc(100vh - 192px)"
-                data={leadData?.data ?? []}
-                isLoading={isLeadDataLoading}
+                data={callData?.data ?? []}
+                isLoading={isCallDataLoading}
                 activeSortColumn={sort?.key}
                 activeFilterColumns={activeFilterColumns}
-                paginationInfo={leadData?.paginationInfo}
+                paginationInfo={callData?.paginationInfo}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
             />
-            <NehaSelectLeadUploadModal onUploadSuccess={refreshLeadData} />
+            <NehaSelectLeadUploadModal onUploadSuccess={refreshCallData} />
         </>
     );
 };
