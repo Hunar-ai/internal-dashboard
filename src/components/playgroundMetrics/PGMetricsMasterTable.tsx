@@ -79,7 +79,6 @@ export const PGMetricsMasterTable = () => {
                 paginationInfo={data?.paginationInfo}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
-                tableHeaderCTA={<TableHeader />}
             />
         </ThemeProvider>
     );
