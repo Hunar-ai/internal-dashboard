@@ -1,0 +1,96 @@
+import LoadingButton from '@mui/lab/LoadingButton';
+import { Button, Grid } from '@mui/material';
+
+import { SearchBar } from '@hunar.ai/hunar-design-system';
+
+import { useUpdateSearchParams } from 'hooks/useUpdateSearchParams';
+import { useExportNehaSelectCalls } from 'hooks/apiHooks/nehaSelect/useExportNehaSelectCalls';
+import { useErrorHelper } from 'hooks/useErrorHelper';
+import { useToast } from 'hooks/useToast';
+
+import type { TableFiltersProps } from 'interfaces';
+
+interface NehaSelectTableHeaderProps {
+    setSearchKey: (_: string) => void;
+    filters: TableFiltersProps;
+}
+
+export const NehaSelectTableHeader = ({
+    setSearchKey,
+    filters
+}: NehaSelectTableHeaderProps) => {
+    const { showError, showSuccess } = useToast();
+    const { append } = useUpdateSearchParams();
+    const { getApiErrorMsg } = useErrorHelper();
+    const exportNehaSelectCalls = useExportNehaSelectCalls();
+
+    const onUploadClick = () => {
+        append('upload', 'true');
+    };
+
+    const saveFile = (data: string) => {
+        const file = new File([data], 'leads.csv', {
+            type: 'text/csv'
+        });
+        const url = URL.createObjectURL(file);
+        window.open(url, '_blank');
+        URL.revokeObjectURL(url);
+    };
+
+    const exportLeads = async () => {
+        try {
+            const data = await exportNehaSelectCalls.mutateAsync({
+                params: { companyId: 'select' },
+                requestBody: { filters }
+            });
+            return data;
+        } catch (error) {
+            const errorMsg = getApiErrorMsg(error);
+            showError({ title: 'Error!', description: errorMsg });
+        }
+    };
+
+    const onExportClick = () => {
+        exportLeads().then(data => {
+            if (!data) return;
+
+            saveFile(data);
+            showSuccess({
+                title: 'Success!',
+                description: 'Leads exported successfully'
+            });
+        });
+    };
+
+    return (
+        <>
+            <Grid
+                item
+                xs={12}
+                display="flex"
+                justifyContent="end"
+                alignItems="center"
+                gap={1.5}
+            >
+                <SearchBar setSearchValue={setSearchKey} placeholder="Search" />
+                <LoadingButton
+                    loading={exportNehaSelectCalls.isLoading}
+                    variant="outlined"
+                    color="primary"
+                    size="medium"
+                    onClick={onExportClick}
+                >
+                    {`EXPORT`}
+                </LoadingButton>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="medium"
+                    onClick={onUploadClick}
+                >
+                    {`UPLOAD`}
+                </Button>
+            </Grid>
+        </>
+    );
+};

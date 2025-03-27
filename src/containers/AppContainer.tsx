@@ -6,7 +6,8 @@ import {
     UserContainer,
     ResetPasswordContainer,
     ChecklistContainer,
-    AssessmentContainer
+    AssessmentContainer,
+    NehaSelectContainer
 } from 'containers';
 
 import { useGetFormFields, useGetLoggedInPersonnel, useToken } from 'hooks';
@@ -55,10 +56,16 @@ export const AppContainer = () => {
                         element={<AssessmentContainer />}
                     />
                     {PLAYGROUND_METRICS_USERS?.includes(personnel?.email) && (
-                        <Route
-                            path="/playground-metrics"
-                            element={<PlaygroundMetricsContainer />}
-                        />
+                        <>
+                            <Route
+                                path="/playground-metrics"
+                                element={<PlaygroundMetricsContainer />}
+                            />
+                            <Route
+                                path="/neha-select"
+                                element={<NehaSelectContainer />}
+                            />
+                        </>
                     )}
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
