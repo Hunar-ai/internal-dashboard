@@ -13,7 +13,9 @@ interface CallLaterCellProps {
 
 export const CallLaterCell = ({ callLater }: CallLaterCellProps) => {
     const { formFields } = React.useContext(SettingsContext);
+
     const { formFieldMap } = useFormFieldsHelper({ formFields });
+
     return (
         <DataCell
             cell={{

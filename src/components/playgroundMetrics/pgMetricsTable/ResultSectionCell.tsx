@@ -16,7 +16,7 @@ export const ResultSectionCell = ({
     section
 }: ResultSectionCellProps) => {
     const hasData = React.useMemo(() => {
-        return Boolean(value.length);
+        return !!value.length;
     }, [value]);
 
     if (!hasData) return <> </>;

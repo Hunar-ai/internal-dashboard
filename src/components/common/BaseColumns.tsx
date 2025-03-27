@@ -37,19 +37,19 @@ export class BaseColumns {
     constructor({
         tableFilters,
         sort,
+        dateFilterTypeMap,
+        isFilterEnabled = true,
         handleSort,
         setTableFilters,
-        dateFilterTypeMap,
-        setDateFilterTypeMap,
-        isFilterEnabled = true
+        setDateFilterTypeMap
     }: BaseColumnsProps) {
         this.sort = sort;
-        this.handleSort = handleSort;
         this.tableFilters = tableFilters;
-        this.setTableFilters = setTableFilters;
         this.dateFilterTypeMap = dateFilterTypeMap;
-        this.setDateFilterTypeMap = setDateFilterTypeMap;
         this.isFilterEnabled = isFilterEnabled;
+        this.handleSort = handleSort;
+        this.setTableFilters = setTableFilters;
+        this.setDateFilterTypeMap = setDateFilterTypeMap;
     }
 
     getBaseColumns = () => {

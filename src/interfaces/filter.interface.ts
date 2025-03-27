@@ -1,4 +1,5 @@
 import { DATE_FILTER_TYPE } from '@hunar.ai/hunar-design-system';
+
 import { FILTER_TYPE, SORT_TYPE } from 'Enum';
 import { OptionsProps } from './option.interface';
 import { HandleSortProps, Sort } from './table.interface';

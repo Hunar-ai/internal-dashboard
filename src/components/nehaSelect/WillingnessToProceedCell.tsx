@@ -15,7 +15,7 @@ const labelToColorMap = {
 };
 
 interface WillingnessToProceedCellProps {
-    willingnessToProceed: WILLINGNESS_TO_PROCEED;
+    willingnessToProceed: WILLINGNESS_TO_PROCEED | null;
 }
 
 export const WillingnessToProceedCell = ({
@@ -33,9 +33,7 @@ export const WillingnessToProceedCell = ({
                     willingnessToProceed
                 ]
             }
-            sx={{
-                backgroundColor: labelToColorMap[willingnessToProceed]
-            }}
+            sx={{ bgcolor: labelToColorMap[willingnessToProceed] }}
         />
     ) : (
         <></>

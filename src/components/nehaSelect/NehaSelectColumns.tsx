@@ -35,23 +35,24 @@ import {
 import { TimeUtils } from 'utils';
 
 export interface NehaSelectColumnsProps {
-    sort?: Sort;
-    handleSort: HandleSortProps;
     tableFilters: TableFiltersProps;
-    setTableFilters: (_: TableFiltersProps) => void;
     dateFilterTypeMap: DateFilterTypeMapProps;
+    sort?: Sort;
+    setTableFilters: (_: TableFiltersProps) => void;
     setDateFilterTypeMap: (_: DateFilterTypeMapProps) => void;
+    handleSort: HandleSortProps;
 }
 
 export const NehaSelectColumns = ({
-    sort,
-    handleSort,
     tableFilters,
-    setTableFilters,
     dateFilterTypeMap,
-    setDateFilterTypeMap
+    sort,
+    setTableFilters,
+    setDateFilterTypeMap,
+    handleSort
 }: NehaSelectColumnsProps) => {
     const { formFields } = React.useContext(SettingsContext);
+
     const {
         statusOptions,
         willingnessToProceedOptions,
