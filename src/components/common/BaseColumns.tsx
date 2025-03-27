@@ -68,17 +68,20 @@ export class BaseColumns {
                         handleSort: this.handleSort,
                         sortType: SORT_TYPE.DATE
                     },
-                    filterProps: {
-                        filterType: FILTER_TYPE.DATE_RANGE,
-                        filters: {
-                            tableFilters: this.tableFilters,
-                            setTableFilters: this.setTableFilters,
-                            dateFilterTypeMap: this.dateFilterTypeMap,
-                            setDateFilterTypeMap: this.setDateFilterTypeMap
-                        }
-                    }
+                    filterProps: this.isFilterEnabled
+                        ? {
+                              filterType: FILTER_TYPE.DATE_RANGE,
+                              filters: {
+                                  tableFilters: this.tableFilters,
+                                  setTableFilters: this.setTableFilters,
+                                  dateFilterTypeMap: this.dateFilterTypeMap,
+                                  setDateFilterTypeMap:
+                                      this.setDateFilterTypeMap
+                              }
+                          }
+                        : undefined
                 },
-                Cell: ({ value }: Cell) => {
+                Cell: ({ value }) => {
                     return <DateCell value={value} />;
                 }
             },
@@ -107,15 +110,18 @@ export class BaseColumns {
                         handleSort: this.handleSort,
                         sortType: SORT_TYPE.DATE
                     },
-                    filterProps: {
-                        filterType: FILTER_TYPE.DATE_RANGE,
-                        filters: {
-                            tableFilters: this.tableFilters,
-                            setTableFilters: this.setTableFilters,
-                            dateFilterTypeMap: this.dateFilterTypeMap,
-                            setDateFilterTypeMap: this.setDateFilterTypeMap
-                        }
-                    }
+                    filterProps: this.isFilterEnabled
+                        ? {
+                              filterType: FILTER_TYPE.DATE_RANGE,
+                              filters: {
+                                  tableFilters: this.tableFilters,
+                                  setTableFilters: this.setTableFilters,
+                                  dateFilterTypeMap: this.dateFilterTypeMap,
+                                  setDateFilterTypeMap:
+                                      this.setDateFilterTypeMap
+                              }
+                          }
+                        : undefined
                 },
                 Cell: ({ value }: Cell) => {
                     return <DateCell value={value} />;

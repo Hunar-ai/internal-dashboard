@@ -1,5 +1,6 @@
-import { CALL_RESULT_SECTION } from 'Enum';
 import { CheckCircle, ErrorOutline, Info } from '@mui/icons-material';
+
+import { CALL_RESULT_SECTION } from 'Enum';
 
 export const NEHA_SELECT_SECTION_MAP = {
     [CALL_RESULT_SECTION.CONCERNS]: {

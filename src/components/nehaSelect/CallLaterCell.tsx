@@ -17,9 +17,7 @@ export const CallLaterCell = ({ callLater }: CallLaterCellProps) => {
     return (
         <DataCell
             cell={{
-                value:
-                    formFieldMap[FORM_FIELD.nehaSelectCallLater][callLater] ??
-                    callLater
+                value: formFieldMap[FORM_FIELD.nehaSelectCallLater][callLater]
             }}
         />
     );

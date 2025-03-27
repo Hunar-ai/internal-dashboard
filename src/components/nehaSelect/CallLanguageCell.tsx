@@ -12,18 +12,14 @@ interface CallLanguageCellProps {
 
 export const CallLanguageCell = ({ callLanguage }: CallLanguageCellProps) => {
     const { formFields } = React.useContext(SettingsContext);
-    const { formFieldMap, getMultipleFormattedFields } = useFormFieldsHelper({
+    const { formFieldMap } = useFormFieldsHelper({
         formFields
     });
 
     return (
         <DataCell
             cell={{
-                value: getMultipleFormattedFields(
-                    FORM_FIELD.callLanguage,
-                    [callLanguage],
-                    formFieldMap
-                )
+                value: formFieldMap[FORM_FIELD.callLanguage][callLanguage]
             }}
         />
     );
