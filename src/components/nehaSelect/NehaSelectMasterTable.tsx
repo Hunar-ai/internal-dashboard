@@ -4,7 +4,7 @@ import {
     PaginatedTable as Table,
     PaginatedTableHeader
 } from '@components/common';
-import { NehaMetricsColumns } from './NehaMetricsColumns';
+import { NehaSelectColumns } from './NehaSelectColumns';
 import { NehaSelectLeadUploadModal } from './NehaSelectLeadUploadModal';
 import { NehaSelectTableHeader } from './NehaSelectTableHeader';
 
@@ -36,7 +36,7 @@ export const NehaSelectMasterTable = () => {
         setSearchKey(value);
     };
 
-    const columns = NehaMetricsColumns({
+    const columns = NehaSelectColumns({
         sort,
         handleSort,
         tableFilters,

@@ -10,7 +10,7 @@ import type {
     TableFiltersProps
 } from 'interfaces';
 
-interface GetSearchNehaSelectLeads {
+interface SearchNehaSelectLeadsProps {
     params: {
         companyId: string;
     };
@@ -31,7 +31,7 @@ interface NehaSelectLeadsResponse {
 export const useSearchNehaSelectLeads = ({
     params: { companyId },
     requestBody: { page, itemsPerPage, filters, sort, searchKey }
-}: GetSearchNehaSelectLeads) => {
+}: SearchNehaSelectLeadsProps) => {
     const { getFormattedfilters } = useHelper();
     const formattedFilters = getFormattedfilters(filters);
 

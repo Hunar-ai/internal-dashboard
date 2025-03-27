@@ -8,7 +8,7 @@ export const searchCalls = ApiClient({
     url: `/v1/neha-select/company/{companyId}/calls`
 });
 
-export const exportLeads = ApiClient({
+export const exportCalls = ApiClient({
     url: `/v1/neha-select/company/{companyId}/export`
 });
 

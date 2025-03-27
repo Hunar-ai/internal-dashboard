@@ -34,7 +34,7 @@ import {
 } from 'Enum';
 import { TimeUtils } from 'utils';
 
-export interface NehaMetricsColumnsProps {
+export interface NehaSelectColumnsProps {
     sort?: Sort;
     handleSort: HandleSortProps;
     tableFilters: TableFiltersProps;
@@ -43,14 +43,14 @@ export interface NehaMetricsColumnsProps {
     setDateFilterTypeMap: (_: DateFilterTypeMapProps) => void;
 }
 
-export const NehaMetricsColumns = ({
+export const NehaSelectColumns = ({
     sort,
     handleSort,
     tableFilters,
     setTableFilters,
     dateFilterTypeMap,
     setDateFilterTypeMap
-}: NehaMetricsColumnsProps) => {
+}: NehaSelectColumnsProps) => {
     const { formFields } = React.useContext(SettingsContext);
     const {
         statusOptions,
@@ -313,16 +313,16 @@ export const NehaMetricsColumns = ({
             }).getBaseColumns()
         ];
     }, [
-        handleSort,
-        setTableFilters,
         sort,
+        handleSort,
         statusOptions,
-        willingnessToProceedOptions,
+        tableFilters,
+        setTableFilters,
         callLanguageOptions,
         callLaterOptions,
+        willingnessToProceedOptions,
         dateFilterTypeMap,
-        setDateFilterTypeMap,
-        tableFilters
+        setDateFilterTypeMap
     ]);
 
     return columns;

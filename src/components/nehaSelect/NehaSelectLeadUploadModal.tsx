@@ -4,9 +4,11 @@ import { useSearchParams } from 'react-router-dom';
 import { Button, Dialog, DialogTitle, Grid } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { AppLoader, DropzoneArea } from '@components/common';
+import { AppLoader } from '@components/common';
+import { Dropzone, DROPZONE_FILETYPE } from '@hunar.ai/hunar-design-system';
 
 import { useUploadNehaLeads } from 'hooks/apiHooks/nehaSelect/useUploadNehaLeads';
+import { useToast } from 'hooks/useToast';
 
 import type { ApiError } from 'interfaces';
 
@@ -17,6 +19,7 @@ interface NehaSelectLeadUploadModalProps {
 export const NehaSelectLeadUploadModal = ({
     onUploadSuccess
 }: NehaSelectLeadUploadModalProps) => {
+    const { showSuccess, showError } = useToast();
     const [searchParams, setSearchParams] = useSearchParams();
     const [isUploadModalOpen, setIsUploadModalOpen] = React.useState(false);
     const [file, setFile] = React.useState<File | null>(null);
@@ -60,9 +63,16 @@ export const NehaSelectLeadUploadModal = ({
                 onSuccess: () => {
                     handleClose();
                     onUploadSuccess();
+                    showSuccess({
+                        title: 'Success!',
+                        description: 'Leads uploaded successfully'
+                    });
                 },
                 onError: (error: ApiError) => {
-                    console.error(error);
+                    showError({
+                        title: 'Error!',
+                        description: error.errors.displayError
+                    });
                 }
             }
         );
@@ -74,11 +84,11 @@ export const NehaSelectLeadUploadModal = ({
             <DialogTitle>Upload Lead Call Details CSV</DialogTitle>
             <Grid container spacing={2} p={2}>
                 <Grid item xs={12}>
-                    <DropzoneArea
+                    <Dropzone
                         value={file?.name}
                         onDrop={onFileDrop}
                         onRemoveClick={onRemoveClick}
-                        type="csv"
+                        type={DROPZONE_FILETYPE.CSV}
                     />
                 </Grid>
                 <Grid item xs={12} display="flex" justifyContent="end" gap={2}>

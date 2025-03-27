@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { exportLeads } from 'api/nehaSelect';
+import { exportCalls } from 'api/nehaSelect';
 import type { ApiError, TableFiltersProps } from 'interfaces';
 import { useHelper } from 'useHelper';
 
@@ -22,7 +22,7 @@ export const useExportNehaSelectCalls = () => {
         }: ExportNehaSelectCallsProps) => {
             const formattedFilters = getFormattedfilters(filters);
 
-            return exportLeads
+            return exportCalls
                 .post({
                     params: { companyId },
                     body: { filters: formattedFilters }

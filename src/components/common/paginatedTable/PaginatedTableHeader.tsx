@@ -1,8 +1,10 @@
 import { Grid } from '@mui/material';
 
+import { type ReactElement } from 'interfaces';
+
 interface PageLayoutProps {
     height?: number | string;
-    tableHeaderCTA?: React.ReactNode;
+    tableHeaderCTA?: ReactElement;
     pl?: number;
     pr?: number;
     pt?: number;
