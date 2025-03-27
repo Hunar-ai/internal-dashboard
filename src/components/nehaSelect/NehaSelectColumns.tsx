@@ -127,30 +127,22 @@ export const NehaSelectColumns = ({
                 }
             },
             {
-                id: 'language',
-                accessor: 'language',
+                id: 'durationSeconds',
+                accessor: 'durationSeconds',
                 Header: HeaderCell,
-                Cell: ({ value }: Cell) => {
-                    return <CallLanguageCell callLanguage={value} />;
-                },
+                headerText: 'Duration',
                 isVisible: true,
-                headerText: 'Language',
-                minWidth: 135,
+                minWidth: 175,
                 Filter: ColumnActionsPopOver,
+                Cell: ({ value, ...props }: Cell) => {
+                    const seconds = TimeUtils.formatSeconds(value ?? 0);
+                    return <DataCell cell={{ ...props, value: seconds }} />;
+                },
                 columnActionsProps: {
                     sortProps: {
                         sort,
                         handleSort,
-                        sortType: SORT_TYPE.DEFAULT
-                    },
-                    filterProps: {
-                        filterType: FILTER_TYPE.MULTI_SELECT,
-                        options: callLanguageOptions,
-                        filters: {
-                            tableFilters,
-                            setTableFilters,
-                            hideBlanks: true
-                        }
+                        sortType: SORT_TYPE.NUMERIC
                     }
                 }
             },
@@ -174,6 +166,34 @@ export const NehaSelectColumns = ({
                     filterProps: {
                         filterType: FILTER_TYPE.MULTI_SELECT,
                         options: callLaterOptions,
+                        filters: {
+                            tableFilters,
+                            setTableFilters,
+                            hideBlanks: true
+                        }
+                    }
+                }
+            },
+            {
+                id: 'language',
+                accessor: 'language',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    return <CallLanguageCell callLanguage={value} />;
+                },
+                isVisible: true,
+                headerText: 'Call Language',
+                minWidth: 150,
+                Filter: ColumnActionsPopOver,
+                columnActionsProps: {
+                    sortProps: {
+                        sort,
+                        handleSort,
+                        sortType: SORT_TYPE.DEFAULT
+                    },
+                    filterProps: {
+                        filterType: FILTER_TYPE.MULTI_SELECT,
+                        options: callLanguageOptions,
                         filters: {
                             tableFilters,
                             setTableFilters,
