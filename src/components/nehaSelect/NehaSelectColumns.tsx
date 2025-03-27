@@ -6,7 +6,8 @@ import {
     HeaderCell,
     DataCell,
     DataLinkCell,
-    ColumnActionsPopOver
+    ColumnActionsPopOver,
+    BaseColumns
 } from '@components/common';
 import { CallStatusCell } from '@components/playgroundMetrics';
 
@@ -191,7 +192,11 @@ export const NehaSelectColumns = ({
                         <DataLinkCell link={value} text="Listen to Recording" />
                     );
                 }
-            }
+            },
+            ...new BaseColumns({
+                sort,
+                handleSort
+            }).getBaseColumns()
         ];
     }, [handleSort, sort]);
 
