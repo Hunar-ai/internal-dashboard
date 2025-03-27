@@ -8,10 +8,6 @@ export interface DateFilterStateProps {
     endDate?: string | null;
 }
 
-export type FilterKeyProps =
-    | MultiSelectFilterKeyProps
-    | DateRangeFilterKeyProps;
-
 export type MultiSelectFilterKeyProps =
     | 'status'
     | 'willingnessToProceed'
@@ -19,14 +15,16 @@ export type MultiSelectFilterKeyProps =
     | 'callLater';
 
 export type DateRangeFilterKeyProps = 'createdAt' | 'updatedAt';
+export type FilterKeyProps =
+    | MultiSelectFilterKeyProps
+    | DateRangeFilterKeyProps;
+
 export type MultiSelectFiltersProps = Partial<
     Record<MultiSelectFilterKeyProps, string[]>
 >;
-
 export type DateRangeFiltersProps = Partial<
     Record<DateRangeFilterKeyProps, DateFilterStateProps>
 >;
-
 export type TableFiltersProps = Partial<
     MultiSelectFiltersProps & DateRangeFiltersProps
 >;

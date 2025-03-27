@@ -2,7 +2,7 @@
 import {
     DateCell,
     TimeCell,
-    type Cell,
+    type Cell as CellProps,
     ColumnActionsPopOver,
     HeaderCell
 } from '@components/common';
@@ -15,7 +15,7 @@ import type {
 } from 'interfaces';
 import { FILTER_TYPE, SORT_TYPE } from 'Enum';
 
-interface CommonColumnsProps {
+interface BaseColumnsProps {
     tableFilters: TableFiltersProps;
     sort?: Sort;
     isFilterEnabled?: boolean;
@@ -42,7 +42,7 @@ export class BaseColumns {
         dateFilterTypeMap,
         setDateFilterTypeMap,
         isFilterEnabled = true
-    }: CommonColumnsProps) {
+    }: BaseColumnsProps) {
         this.sort = sort;
         this.handleSort = handleSort;
         this.tableFilters = tableFilters;
@@ -81,7 +81,7 @@ export class BaseColumns {
                           }
                         : undefined
                 },
-                Cell: ({ value }) => {
+                Cell: ({ value }: CellProps) => {
                     return <DateCell value={value} />;
                 }
             },
@@ -92,7 +92,7 @@ export class BaseColumns {
                 Header: HeaderCell,
                 headerText: 'Created At',
                 minWidth: 125,
-                Cell: ({ value }: Cell) => {
+                Cell: ({ value }: CellProps) => {
                     return <TimeCell value={value} />;
                 }
             },
@@ -123,7 +123,7 @@ export class BaseColumns {
                           }
                         : undefined
                 },
-                Cell: ({ value }: Cell) => {
+                Cell: ({ value }: CellProps) => {
                     return <DateCell value={value} />;
                 }
             },
@@ -134,7 +134,7 @@ export class BaseColumns {
                 Header: HeaderCell,
                 headerText: 'Updated At',
                 minWidth: 125,
-                Cell: ({ value }: Cell) => {
+                Cell: ({ value }: CellProps) => {
                     return <TimeCell value={value} />;
                 }
             }

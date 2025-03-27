@@ -27,7 +27,9 @@ interface CallStatusCellProps {
 
 export const CallStatusCell = ({ status }: CallStatusCellProps) => {
     const { formFields } = React.useContext(SettingsContext);
+
     const { formFieldMap } = useFormFieldsHelper({ formFields });
+
     return (
         <Chip
             size="small"

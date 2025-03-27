@@ -1,11 +1,11 @@
 import React from 'react';
 
+import { DataCell } from '@components/common';
+
 import { SettingsContext } from 'contexts';
 import { useFormFieldsHelper } from 'hooks';
 
 import { CALL_LATER, FORM_FIELD } from 'Enum';
-
-import { DataCell } from '@components/common';
 
 interface CallLaterCellProps {
     callLater: CALL_LATER;

@@ -1,11 +1,6 @@
 import React from 'react';
 
-import type {
-    OptionsProps,
-    FormFields,
-    FormattedFieldMap,
-    MappedField
-} from 'interfaces';
+import type { FormFields, FormattedFieldMap, MappedField } from 'interfaces';
 
 interface FormFieldsHelperProps {
     formFields: FormFields;
@@ -17,12 +12,13 @@ export const useFormFieldsHelper = ({ formFields }: FormFieldsHelperProps) => {
             keyof FormFields
         >;
         return formFieldKeys.reduce((formFieldMap, field: keyof FormFields) => {
-            const fieldArray: OptionsProps = formFields[field];
-            const fieldMapObj = fieldArray.reduce((fieldMap, datum) => {
+            const fieldArray = formFields[field];
+
+            formFieldMap[field] = fieldArray.reduce((fieldMap, datum) => {
                 fieldMap[datum.value] = datum.label;
                 return fieldMap;
             }, {} as MappedField);
-            formFieldMap[field] = fieldMapObj;
+
             return formFieldMap;
         }, {} as FormattedFieldMap);
     }, [formFields]);
@@ -32,10 +28,12 @@ export const useFormFieldsHelper = ({ formFields }: FormFieldsHelperProps) => {
         fieldValue: string[],
         formFieldMapObj: FormattedFieldMap
     ): string => {
-        if (formFieldMapObj[fieldName])
+        if (formFieldMapObj[fieldName]) {
             return (fieldValue || [])
                 .map(datum => formFieldMapObj[fieldName][datum])
                 .join(', ');
+        }
+
         return '';
     };
 

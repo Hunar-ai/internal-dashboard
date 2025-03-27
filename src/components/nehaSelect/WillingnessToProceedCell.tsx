@@ -22,14 +22,16 @@ export const WillingnessToProceedCell = ({
     willingnessToProceed
 }: WillingnessToProceedCellProps) => {
     const { formFields } = React.useContext(SettingsContext);
+
     const { formFieldMap } = useFormFieldsHelper({ formFields });
+
     return willingnessToProceed ? (
         <Chip
             size="small"
             label={
                 formFieldMap[FORM_FIELD.nehaSelectWillingnessToProceed][
                     willingnessToProceed
-                ] ?? willingnessToProceed
+                ]
             }
             sx={{
                 backgroundColor: labelToColorMap[willingnessToProceed]

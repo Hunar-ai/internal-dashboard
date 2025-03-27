@@ -9,7 +9,6 @@ import { useErrorHelper } from 'hooks/useErrorHelper';
 import { useToast } from 'hooks/useToast';
 
 import type { TableFiltersProps } from 'interfaces';
-
 interface NehaSelectTableHeaderProps {
     setSearchKey: (_: string) => void;
     filters: TableFiltersProps;

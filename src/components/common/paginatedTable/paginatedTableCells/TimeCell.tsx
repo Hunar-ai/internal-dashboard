@@ -11,11 +11,12 @@ interface TimeCellProps {
 
 export const TimeCell = ({ value, defaultValue = '' }: TimeCellProps) => {
     const formattedTime = React.useMemo(() => {
-        return value
-            ? TimeUtils.format(
-                  TimeUtils.getDateFromUtcISOString(value),
-                  DateTimeFormat.HTML5_FMT_TIME
-              )
+        const localDate = value
+            ? TimeUtils.getDateFromUtcISOString(value)
+            : undefined;
+
+        return localDate
+            ? TimeUtils.format(localDate, DateTimeFormat.HTML5_FMT_TIME)
             : defaultValue;
     }, [defaultValue, value]);
 

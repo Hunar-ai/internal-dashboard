@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { ModalWrapper } from 'components/common';
-import { ResultSectionDataView } from './ResultSectionDataView';
-import { CALL_RESULT_SECTION } from 'Enum';
+import { ModalWrapper } from '@components/common';
 import { NEHA_SELECT_SECTION_MAP } from '@components/nehaSelect/NehaSelectConstants';
+import { ResultSectionDataView } from './ResultSectionDataView';
+
+import { CALL_RESULT_SECTION } from 'Enum';
 
 interface ResultSectionCellProps {
     value: string[];
@@ -14,16 +15,16 @@ export const ResultSectionCell = ({
     value,
     section
 }: ResultSectionCellProps) => {
-    const hasData = React.useCallback((data: string[]): boolean => {
-        return Boolean(data?.length);
-    }, []);
+    const hasData = React.useMemo(() => {
+        return Boolean(value.length);
+    }, [value]);
 
-    if (!hasData(value)) return <> </>;
+    if (!hasData) return <> </>;
 
     return (
         <ModalWrapper
-            title={`Call Summary: ${NEHA_SELECT_SECTION_MAP[section]?.title}`}
-            CTA={NEHA_SELECT_SECTION_MAP[section]?.ctaTitle}
+            title={`Call Summary: ${NEHA_SELECT_SECTION_MAP[section].title}`}
+            CTA={NEHA_SELECT_SECTION_MAP[section].ctaTitle}
         >
             <ResultSectionDataView data={value} section={section} />
         </ModalWrapper>
