@@ -6,28 +6,22 @@ import { DateCell } from '@components/common/DateCell';
 import { CallStatusCell, TranscriptCell } from '@components/playgroundMetrics';
 import { DataCell, DataLinkCell, HeaderCell } from '@components/common';
 
-import { useTableFilters } from 'hooks/useTableFilters';
-import { SettingsContext } from 'contexts';
-
-import type { HandleSortProps, Sort } from 'interfaces';
+import type { HandleSortProps, Sort, TableFiltersProps } from 'interfaces';
 import { COLUMN_STICKY_TYPE, FILTER_TYPE, SORT_TYPE } from 'Enum';
 
-export interface NehaMetricsColumnsProps {
+export interface NehaSelectColumnsProps {
     sort?: Sort;
     handleSort: HandleSortProps;
-    tableFilters: any;
-    setTableFilters: (_: any) => void;
+    tableFilters: TableFiltersProps;
+    setTableFilters: (_: TableFiltersProps) => void;
 }
 
-export const NehaMetricsColumns = ({
+export const NehaSelectColumns = ({
     sort,
     handleSort,
     tableFilters,
     setTableFilters
-}: NehaMetricsColumnsProps) => {
-    const { formFields } = React.useContext(SettingsContext);
-    const { statusOptions } = useTableFilters(formFields);
-
+}: NehaSelectColumnsProps) => {
     const columns: Array<Column> = React.useMemo(() => {
         return [
             {
@@ -92,15 +86,6 @@ export const NehaMetricsColumns = ({
                         sort,
                         handleSort,
                         sortType: SORT_TYPE.DEFAULT
-                    },
-                    filterProps: {
-                        filterType: FILTER_TYPE.MULTI_SELECT,
-                        options: statusOptions,
-                        filters: {
-                            tableFilters,
-                            setTableFilters,
-                            hideBlanks: true
-                        }
                     }
                 }
             },
@@ -239,7 +224,7 @@ export const NehaMetricsColumns = ({
                 }
             }
         ];
-    }, [handleSort, setTableFilters, sort, statusOptions, tableFilters]);
+    }, [handleSort, setTableFilters, sort, tableFilters]);
 
     return columns;
 };

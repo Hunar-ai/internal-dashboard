@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { PaginatedTable as Table } from '@components/common';
-import { NehaMetricsColumns } from './NehaMetricsColumns';
+import { NehaSelectColumns } from './NehaSelectColumns';
 import { NehaSelectLeadUploadModal } from './NehaSelectLeadUploadModal';
 import { NehaSelectTableHeader } from './NehaSelectTableHeader';
 
@@ -18,7 +18,7 @@ export const NehaSelectMasterTable = () => {
         activeFilterColumns
     } = useTableActions();
 
-    const columns = NehaMetricsColumns({
+    const columns = NehaSelectColumns({
         sort,
         handleSort,
         tableFilters,

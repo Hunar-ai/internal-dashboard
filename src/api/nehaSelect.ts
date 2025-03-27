@@ -1,10 +1,14 @@
 import { ApiClient } from 'middleware';
 
-export const search = ApiClient({
+export const searchLeads = ApiClient({
     url: `/v1/neha-select/company/{companyId}/leads`
 });
 
-export const exportLeads = ApiClient({
+export const searchCalls = ApiClient({
+    url: `/v1/neha-select/company/{companyId}/calls`
+});
+
+export const exportCalls = ApiClient({
     url: `/v1/neha-select/company/{companyId}/export`
 });
 

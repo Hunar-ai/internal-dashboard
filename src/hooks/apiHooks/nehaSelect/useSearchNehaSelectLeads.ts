@@ -1,8 +1,8 @@
-import { search } from 'api/nehaSelect';
+import { searchLeads } from 'api/nehaSelect';
 import { useGetReactQuery } from 'hooks/useGetReactQuery';
 import type { NehaSelectLeadProps } from 'interfaces';
 
-interface GetSearchNehaSelectLeads {
+interface SearchNehaSelectLeadsProps {
     params: {
         companyId: string;
     };
@@ -10,10 +10,10 @@ interface GetSearchNehaSelectLeads {
 
 export const useSearchNehaSelectLeads = ({
     params: { companyId }
-}: GetSearchNehaSelectLeads) => {
+}: SearchNehaSelectLeadsProps) => {
     return useGetReactQuery<NehaSelectLeadProps[]>({
         queryKey: ['searchNehaSelectLeads', companyId],
-        requestUrl: search,
+        requestUrl: searchLeads,
         params: { companyId }
     });
 };
