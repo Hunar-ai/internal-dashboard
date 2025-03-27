@@ -71,7 +71,7 @@ export const NehaSelectMasterTable = () => {
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
                 tableHeaderCTA={<NehaSelectTableHeader />}
             />
-            <NehaSelectLeadUploadModal />
+            <NehaSelectLeadUploadModal onUploadSuccess={refreshMetrics} />
         </>
     );
 };

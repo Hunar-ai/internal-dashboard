@@ -1,16 +1,25 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { Button, Dialog, DialogTitle, Grid } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { Button, Dialog, DialogTitle, Grid } from '@mui/material';
 
-import { DropzoneArea } from '@components/common';
+import { Dropzone, DROPZONE_FILETYPE } from '@hunar.ai/hunar-design-system';
+import { AppLoader } from '@components/common';
 
 import { useUploadNehaLeads } from 'hooks/apiHooks/nehaSelect/useUploadNehaLeads';
+import { useToast } from 'hooks/useToast';
 
 import type { ApiError } from 'interfaces';
 
-export const NehaSelectLeadUploadModal = () => {
+interface NehaSelectLeadUploadModalProps {
+    onUploadSuccess: () => void;
+}
+
+export const NehaSelectLeadUploadModal = ({
+    onUploadSuccess
+}: NehaSelectLeadUploadModalProps) => {
+    const { showSuccess, showError } = useToast();
     const [searchParams, setSearchParams] = useSearchParams();
     const [isUploadModalOpen, setIsUploadModalOpen] = React.useState(false);
     const [file, setFile] = React.useState<File | null>(null);
@@ -26,14 +35,20 @@ export const NehaSelectLeadUploadModal = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchParams.has('upload')]);
 
-    const onClose = () => {
+    const handleClose = () => {
         searchParams.delete('upload');
+        setIsUploadModalOpen(false);
         setSearchParams(searchParams);
+        setFile(null);
     };
 
     const onFileDrop = (acceptedFiles: File[]) => {
         const file = acceptedFiles[0];
         setFile(file);
+    };
+
+    const onRemoveClick = () => {
+        setFile(null);
     };
 
     const onUpload = () => {
@@ -46,28 +61,38 @@ export const NehaSelectLeadUploadModal = () => {
             },
             {
                 onSuccess: () => {
-                    onClose();
+                    handleClose();
+                    onUploadSuccess();
+                    showSuccess({
+                        title: 'Success!',
+                        description: 'Leads uploaded successfully'
+                    });
                 },
                 onError: (error: ApiError) => {
-                    console.error(error);
+                    showError({
+                        title: 'Error!',
+                        description: error.errors.displayError
+                    });
                 }
             }
         );
     };
 
     return (
-        <Dialog open={isUploadModalOpen} onClose={onClose} fullWidth>
+        <Dialog open={isUploadModalOpen} onClose={handleClose} fullWidth>
+            {uploadNehaLeads.isLoading && <AppLoader />}
             <DialogTitle>Upload Lead Call Details CSV</DialogTitle>
             <Grid container spacing={2} p={2}>
                 <Grid item xs={12}>
-                    <DropzoneArea
+                    <Dropzone
                         value={file?.name}
                         onDrop={onFileDrop}
-                        type="csv"
+                        onRemoveClick={onRemoveClick}
+                        type={DROPZONE_FILETYPE.CSV}
                     />
                 </Grid>
                 <Grid item xs={12} display="flex" justifyContent="end" gap={2}>
-                    <Button variant="outlined" onClick={onClose}>
+                    <Button variant="outlined" onClick={handleClose}>
                         Cancel
                     </Button>
                     <LoadingButton

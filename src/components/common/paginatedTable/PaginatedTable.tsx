@@ -93,7 +93,7 @@ interface Props {
     disabledRowMap?: Record<string, boolean>;
     isAllSelected?: boolean;
     size?: 'small' | 'medium';
-    tableHeaderCTA: React.ReactNode;
+    tableHeaderCTA: ReactElement;
     subHeader?: { [key: string]: string };
     footer?: ReactElement;
     isPaginationEnabled?: boolean;
