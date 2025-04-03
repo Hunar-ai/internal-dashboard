@@ -13,7 +13,11 @@ export const PlaygroundMetricsContainer = () => {
     const [searchParams] = useSearchParams();
 
     return (
-        <Box height={`calc(100vh - ${NAVBAR_HEIGHT})`} overflow="scroll">
+        <Box
+            height={`calc(100vh - ${NAVBAR_HEIGHT})`}
+            sx={{ background: '#EFEFF5' }}
+            overflow="scroll"
+        >
             <Center flexDirection="column" py={4} px={8}>
                 {searchParams?.has('charts') ? (
                     <PGMetricsMasterChart />

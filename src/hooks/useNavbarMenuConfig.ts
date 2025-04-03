@@ -66,7 +66,7 @@ export const useNavbarMenuConfig = () => {
                 subMenus: [
                     {
                         id: 'playground-metrics',
-                        title: 'Table',
+                        title: 'Data Table',
                         link: '/playground-metrics'
                     },
                     {

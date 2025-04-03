@@ -1,5 +1,5 @@
-import { PieChart } from '@mui/x-charts/PieChart';
-import { amber, green, red } from '@mui/material/colors';
+import { useTheme } from '@mui/material';
+import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 
 import { ChartWrapper } from '../wrappers';
 
@@ -16,10 +16,23 @@ export const CallBreakdownChart = ({
     callsDisconnected = 0,
     callsNotPicked = 0
 }: CallBreakdownChartProps) => {
+    const theme = useTheme();
     const data = [
-        { value: totalCompletedCalls, label: 'Completed', color: green[300] },
-        { value: callsDisconnected, label: 'Disconnected', color: red[300] },
-        { value: callsNotPicked, label: 'Not Picked', color: amber[300] }
+        {
+            value: totalCompletedCalls,
+            label: 'Completed',
+            color: theme.palette.violet.light
+        },
+        {
+            value: callsNotPicked,
+            label: 'Not Picked',
+            color: theme.palette.violet.main
+        },
+        {
+            value: callsDisconnected,
+            label: 'Disconnected',
+            color: theme.palette.violet.dark
+        }
     ];
 
     return (
@@ -35,18 +48,24 @@ export const CallBreakdownChart = ({
                             `${NumberUtils.abbreviateNumber(item.value)}`
                     }
                 ]}
+                sx={{
+                    [`& .${pieArcLabelClasses.root}`]: {
+                        fill: 'white',
+                        fontWeight: '500',
+                        fontFamily: 'Lato, Arial'
+                    }
+                }}
                 slotProps={{
                     legend: {
                         direction: 'column',
                         position: {
                             vertical: 'middle',
                             horizontal: 'right'
-                        },
-                        padding: 12
+                        }
                     }
                 }}
                 margin={{ right: 160 }}
-                height={220}
+                height={260}
             />
         </ChartWrapper>
     );

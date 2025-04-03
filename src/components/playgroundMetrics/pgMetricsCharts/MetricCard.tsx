@@ -1,29 +1,73 @@
-import React from 'react';
-import { Card, CardHeader, CardContent, Typography } from '@mui/material';
+import React, { ReactNode } from 'react';
+import { Card, CardContent, Grid, Typography } from '@mui/material';
 
 interface MetricCardProps {
+    icon: ReactNode;
     label: string;
     value: number | string;
 }
 
-export const MetricCard = ({ label, value }: MetricCardProps) => {
+export const MetricCard = ({ icon, label, value }: MetricCardProps) => {
     return (
         <Card
             sx={{
                 minWidth: 200,
                 borderRadius: 3,
-                boxShadow: 3,
+                boxShadow: 0,
                 transition: 'transform 0.2s ease-in-out',
                 '&:hover': {
-                    transform: 'scale(1.05)'
+                    transform: 'scale(1.05)',
+                    boxShadow: 3
                 }
             }}
+            variant="outlined"
+            elevation={0}
         >
-            <CardHeader title={label} />
-            <CardContent>
-                <Typography variant="h4" component="div" fontWeight={600}>
-                    {value ?? '-'}
-                </Typography>
+            <CardContent
+                sx={{
+                    '&:last-child': { paddingBottom: '16px' },
+                    paddingTop: '16px'
+                }}
+            >
+                <Grid container sx={{ height: 60 }}>
+                    <Grid
+                        item
+                        xs={4}
+                        sx={{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            display: 'flex'
+                        }}
+                    >
+                        {icon ? icon : <></>}
+                    </Grid>
+                    <Grid
+                        item
+                        xs={8}
+                        sx={{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            display: 'flex',
+                            flexDirection: 'column'
+                        }}
+                    >
+                        <Typography
+                            variant="h5"
+                            component="div"
+                            fontWeight={600}
+                        >
+                            {value ?? '-'}
+                        </Typography>
+                        <Typography
+                            variant="caption"
+                            component="div"
+                            color="text.secondary"
+                            fontWeight={400}
+                        >
+                            {label ?? '-'}
+                        </Typography>
+                    </Grid>
+                </Grid>
             </CardContent>
         </Card>
     );

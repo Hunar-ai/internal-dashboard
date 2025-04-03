@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from '@mui/material';
+import { Card, CardContent, CardHeader, Divider } from '@mui/material';
 import { ReactNode } from 'react';
 
 interface ChartWrapperProps {
@@ -12,14 +12,15 @@ export const ChartWrapper = ({ title, children }: ChartWrapperProps) => {
             sx={{
                 minWidth: 200,
                 borderRadius: 3,
-                boxShadow: 3,
                 transition: 'transform 0.2s ease-in-out',
                 '&:hover': {
                     transform: 'scale(1.05)'
                 }
             }}
+            elevation={1}
         >
-            <CardHeader title={title} />
+            <CardHeader subheader={title} />
+            <Divider />
             <CardContent>{children}</CardContent>
         </Card>
     );

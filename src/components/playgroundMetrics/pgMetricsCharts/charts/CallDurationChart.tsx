@@ -1,3 +1,4 @@
+import { useTheme } from '@mui/material';
 import { BarChart } from '@mui/x-charts/BarChart';
 
 import { ChartWrapper } from '../wrappers';
@@ -13,6 +14,7 @@ export const CallDurationChart = ({
     callsBetween46To90Seconds = 0,
     callsAbove90Seconds = 0
 }: CallDurationChartProps) => {
+    const theme = useTheme();
     const data = [
         { label: '<45', value: callsBelow45Seconds },
         { label: '46 to 90', value: callsBetween46To90Seconds },
@@ -30,14 +32,15 @@ export const CallDurationChart = ({
                         categoryGapRatio: 0.5
                     }
                 ]}
-                margin={{ left: 80 }}
                 series={[
                     {
                         data: data.map(d => d.value),
-                        color: '#1976d2'
+                        label: 'Call duration (measured in seconds)',
+                        color: theme.palette.violet.light
                     }
                 ]}
-                height={220}
+                legend={{ position: { vertical: 'top', horizontal: 'right' } }}
+                height={514}
             />
         </ChartWrapper>
     );

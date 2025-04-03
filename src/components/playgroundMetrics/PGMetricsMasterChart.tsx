@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Grid, ThemeProvider } from '@mui/material';
 
-import { AppLoader, DateRangeTypeSelect } from '@components/common';
-import { ChartGridView, NestedGridWrapper } from './pgMetricsCharts';
+import { AppLoader } from '@components/common';
+import { ChartGridView, FilterPopover } from './pgMetricsCharts';
 
 import { TableFilters, useGetPlaygroundMetrics } from 'hooks';
 
@@ -11,32 +11,27 @@ import { TableFiltersProps } from 'interfaces';
 import { theme } from 'theme';
 
 export const PGMetricsMasterChart = () => {
-    const [tableFiltersState, setTableFiltersState] =
-        React.useState<TableFiltersProps>({});
+    const [filtersState, setFiltersState] = React.useState<TableFiltersProps>(
+        {}
+    );
     const [selectedDateFilter, setSelectedDateFilter] = React.useState('');
 
     const { data, isLoading } = useGetPlaygroundMetrics({
-        filters: { ...(tableFiltersState as TableFilters) }
+        filters: { ...(filtersState as TableFilters) }
     });
 
     if (isLoading) return <AppLoader />;
 
     return (
         <ThemeProvider theme={theme}>
-            <Grid container spacing={8}>
-                <NestedGridWrapper>
-                    <Grid item xs={6} />
-                    <Grid item xs={6}>
-                        <DateRangeTypeSelect
-                            id="createdAt"
-                            tableFiltersState={tableFiltersState}
-                            setTableFiltersState={setTableFiltersState}
-                            selectedDateFilter={selectedDateFilter}
-                            setSelectedDateFilter={setSelectedDateFilter}
-                        />
-                    </Grid>
-                </NestedGridWrapper>
-
+            <Grid container spacing={8} sx={{ paddingTop: 4 }}>
+                <FilterPopover
+                    id="createdAt"
+                    filtersState={filtersState}
+                    setFiltersState={setFiltersState}
+                    selectedDateFilter={selectedDateFilter}
+                    setSelectedDateFilter={setSelectedDateFilter}
+                />
                 <ChartGridView
                     totalCalls={data?.totalCalls}
                     callsConnected={data?.callsConnected}

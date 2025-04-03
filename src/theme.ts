@@ -1,5 +1,9 @@
 import { createTheme } from '@mui/material/styles';
 import { grey, red } from '@mui/material/colors';
+import {
+    type PaletteColor,
+    type PaletteColorOptions
+} from '@mui/material/styles/createPalette';
 
 interface ChatBotTheme {
     bgColor: {
@@ -18,6 +22,15 @@ declare module '@mui/material/styles' {
     }
     interface PaletteOptions {
         chatBot: ChatBotTheme;
+    }
+}
+
+declare module '@mui/material/styles' {
+    interface Palette {
+        violet: PaletteColor;
+    }
+    interface PaletteOptions {
+        violet?: PaletteColorOptions;
     }
 }
 
@@ -47,6 +60,12 @@ export const theme = createTheme({
         },
         text: {
             primary: grey[900]
+        },
+        violet: {
+            main: '#7367EF',
+            light: '#857BEF',
+            dark: '#6258D0',
+            contrastText: '#fff'
         }
     },
     components: {
