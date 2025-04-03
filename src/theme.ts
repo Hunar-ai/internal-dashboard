@@ -62,8 +62,8 @@ export const theme = createTheme({
             primary: grey[900]
         },
         violet: {
-            main: '#7367EF',
-            light: '#857BEF',
+            main: '#7A6FEF',
+            light: '#8B84F0',
             dark: '#6258D0',
             contrastText: '#fff'
         }

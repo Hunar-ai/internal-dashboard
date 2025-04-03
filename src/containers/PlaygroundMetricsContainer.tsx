@@ -11,15 +11,16 @@ import { NAVBAR_HEIGHT } from 'Constants';
 
 export const PlaygroundMetricsContainer = () => {
     const [searchParams] = useSearchParams();
+    const isChartsPage = searchParams?.has('charts');
 
     return (
         <Box
             height={`calc(100vh - ${NAVBAR_HEIGHT})`}
-            sx={{ background: '#EFEFF5' }}
+            sx={{ background: isChartsPage ? '#EFEFF5' : 'inherit' }}
             overflow="scroll"
         >
-            <Center flexDirection="column" py={4} px={8}>
-                {searchParams?.has('charts') ? (
+            <Center flexDirection="column" py={0} px={8}>
+                {isChartsPage ? (
                     <PGMetricsMasterChart />
                 ) : (
                     <PGMetricsMasterTable />

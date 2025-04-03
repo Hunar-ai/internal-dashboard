@@ -36,11 +36,16 @@ export const CallDurationChart = ({
                     {
                         data: data.map(d => d.value),
                         label: 'Call duration (measured in seconds)',
-                        color: theme.palette.violet.light
+                        color: theme.palette.violet.main
                     }
                 ]}
+                sx={{
+                    '& .MuiChartsLegend-root text': {
+                        fill: 'rgba(0, 0, 0, 0.6) !important'
+                    }
+                }}
                 legend={{ position: { vertical: 'top', horizontal: 'right' } }}
-                height={514}
+                height={513}
             />
         </ChartWrapper>
     );

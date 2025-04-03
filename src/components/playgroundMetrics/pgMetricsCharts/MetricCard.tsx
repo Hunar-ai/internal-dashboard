@@ -9,20 +9,7 @@ interface MetricCardProps {
 
 export const MetricCard = ({ icon, label, value }: MetricCardProps) => {
     return (
-        <Card
-            sx={{
-                minWidth: 200,
-                borderRadius: 3,
-                boxShadow: 0,
-                transition: 'transform 0.2s ease-in-out',
-                '&:hover': {
-                    transform: 'scale(1.05)',
-                    boxShadow: 3
-                }
-            }}
-            variant="outlined"
-            elevation={0}
-        >
+        <Card sx={{ minWidth: 200 }} variant="outlined" elevation={0}>
             <CardContent
                 sx={{
                     '&:last-child': { paddingBottom: '16px' },
