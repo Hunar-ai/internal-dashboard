@@ -80,17 +80,29 @@ export enum FORM_FIELD {
     'jobQueryWorkerStatus' = 'jobQueryWorkerStatus',
     'employerJobQueryWorkerStatus' = 'employerJobQueryWorkerStatus',
     'referrerType' = 'referrerType',
-    'logoPlacement' = 'logoPlacement'
+    'logoPlacement' = 'logoPlacement',
+    'twilioStatus' = 'twilioStatus'
 }
 
 export enum SORT_TYPE {
     'DEFAULT' = 'DEFAULT',
+    'DATE' = 'DATE',
     'NUMERIC' = 'NUMERIC'
 }
 
 export enum FILTER_TYPE {
     'MULTI_SELECT' = 'MULTI_SELECT',
+    'DATE_RANGE' = 'DATE_RANGE',
     'RANGE' = 'RANGE'
+}
+
+export enum DATE_FILTER_SELECT_TYPE {
+    'noFilter' = 'noFilter',
+    'yesterday' = 'yesterday',
+    'today' = 'today',
+    'past7Days' = 'past7Days',
+    'lastMonth' = 'lastMonth',
+    'dateRange' = 'dateRange'
 }
 
 export enum REFERRER_TYPE {
@@ -152,6 +164,36 @@ export enum CHECK_INTEREST_PROVIDER {
 export enum FIELD_SIZE {
     'xs' = 'xs',
     'sm' = 'sm',
+    'small' = 'small',
     'md' = 'md',
+    'medium' = 'medium',
     'lg' = 'lg'
+}
+
+export enum COLUMN_STICKY_TYPE {
+    LEFT = 'left',
+    RIGHT = 'right'
+}
+
+export enum TWILIO_CALL_STATUS {
+    NOT_STARTED = 'not-started',
+    QUEUED = 'queued',
+    INITIATED = 'initiated',
+    RINGING = 'ringing',
+    IN_PROGRESS = 'in-progress',
+    COMPLETED = 'completed',
+    BUSY = 'busy',
+    NO_ANSWER = 'no-answer',
+    CANCELLED = 'canceled',
+    FAILED = 'failed'
+}
+
+enum DI {
+    A = 'a',
+    B = 'b',
+}
+
+export enum TRANSCRIPT_SPEAKER_TYPE {
+    AGENT = 'agent',
+    CUSTOMER = 'customer'
 }

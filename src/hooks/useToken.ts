@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React from 'react';
 import { useSessionStorage } from './useSessionStorage';
 
 export const useToken = () => {
@@ -10,7 +10,7 @@ export const useToken = () => {
         return userToken;
     };
 
-    const [token, setToken] = useState<string>(getToken());
+    const [token, setToken] = React.useState<string>(getToken());
 
     const saveToken = ({ access }: { access: string }) => {
         if (access) {

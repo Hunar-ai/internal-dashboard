@@ -1,4 +1,4 @@
-import { SORT_ORDER } from '@/Enum';
+import { SORT_ORDER } from 'Enum';
 
 export interface Sort {
     key: string;
@@ -10,7 +10,7 @@ export type HandleSortProps = (sortBy: {
     order: SORT_ORDER;
 }) => void;
 
-export type DateRangeFilterKey = 'createdOn';
+export type DateRangeFilterKeyProps = 'createdAt';
 
 export interface PaginationInfo {
     currentPage: number;
