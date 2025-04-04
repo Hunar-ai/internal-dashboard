@@ -71,6 +71,8 @@ export const FilterPopover = ({
     const [filters, setFilters] = React.useState<TableFiltersProps>({
         ...filtersState
     });
+    const [dateTypeFilter, setDateTypeFilter] =
+        React.useState(selectedDateFilter);
     const [dateRangeFilterState, setDateRangeFilterState] =
         React.useState<DateFilterStateProps>({
             startDate: DataUtils.getDateFromObject(
@@ -84,8 +86,8 @@ export const FilterPopover = ({
         });
 
     const selectMenuSx = React.useMemo(
-        () => getSelectMenuSx(selectedDateFilter),
-        [selectedDateFilter]
+        () => getSelectMenuSx(dateTypeFilter),
+        [dateTypeFilter]
     );
 
     const isOpen = Boolean(anchorEl);
@@ -119,7 +121,7 @@ export const FilterPopover = ({
     );
 
     const handleDateFilterChange = (event: SelectChangeEvent) => {
-        setSelectedDateFilter(event.target.value);
+        setDateTypeFilter(event.target.value);
 
         if (event.target.value !== DATE_FILTER_SELECT_TYPE.dateRange) {
             const selectedFilter =
@@ -154,12 +156,15 @@ export const FilterPopover = ({
         setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = () => {
+    const handleClose = (resetDateTypeFilter = true) => {
         setAnchorEl(null);
+        if (resetDateTypeFilter) {
+            setDateTypeFilter(selectedDateFilter);
+        }
     };
 
     const applyFilterHandler = () => {
-        if (selectedDateFilter === DATE_FILTER_SELECT_TYPE.dateRange) {
+        if (dateTypeFilter === DATE_FILTER_SELECT_TYPE.dateRange) {
             if (
                 !dateRangeFilterState?.startDate ||
                 !dateRangeFilterState?.endDate
@@ -171,12 +176,13 @@ export const FilterPopover = ({
         } else {
             setFiltersState(filters);
         }
-        handleClose();
+        setSelectedDateFilter(dateTypeFilter);
+        handleClose(false);
     };
 
     const clearFilterHandler = () => {
         setFilters({});
-        setSelectedDateFilter('');
+        setDateTypeFilter('');
         setDateRangeFilterState({ startDate: '', endDate: '' });
     };
 
@@ -243,7 +249,7 @@ export const FilterPopover = ({
                         <Select
                             fullWidth
                             displayEmpty
-                            value={selectedDateFilter}
+                            value={dateTypeFilter}
                             onChange={handleDateFilterChange}
                             size={FIELD_SIZE.small}
                             sx={selectMenuSx}
@@ -260,7 +266,7 @@ export const FilterPopover = ({
                                 </MenuItem>
                             ))}
                         </Select>
-                        {selectedDateFilter ===
+                        {dateTypeFilter ===
                         DATE_FILTER_SELECT_TYPE.dateRange ? (
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DatePicker
