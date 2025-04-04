@@ -14,6 +14,7 @@ export const ChartWrapper = ({ title, children }: ChartWrapperProps) => {
                 subheaderTypographyProps={{
                     fontWeight: 600
                 }}
+                sx={{ userSelect: 'none' }}
             />
             <Divider />
             <CardContent>{children}</CardContent>

@@ -42,6 +42,7 @@ export const MetricCard = ({ icon, label, value }: MetricCardProps) => {
                             variant="h5"
                             component="div"
                             fontWeight={600}
+                            sx={{ userSelect: 'none' }}
                         >
                             {value ?? '-'}
                         </Typography>
@@ -50,6 +51,7 @@ export const MetricCard = ({ icon, label, value }: MetricCardProps) => {
                             component="div"
                             color="text.secondary"
                             fontWeight={400}
+                            sx={{ userSelect: 'none' }}
                         >
                             {label ?? '-'}
                         </Typography>
