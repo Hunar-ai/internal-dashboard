@@ -79,7 +79,11 @@ export const NehaSelectTableHeader = ({
             >
                 <Grid>
                     <Typography variant="body2">
-                        {`Pending Calls: ${pendingCallsData?.callsCount}`}
+                        {`Pending Calls: ${
+                            pendingCallsData
+                                ? pendingCallsData.callsCount
+                                : 'Loading...'
+                        }`}
                     </Typography>
                 </Grid>
                 <Grid display="flex" alignItems="center" gap={1.5}>
