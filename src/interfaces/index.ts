@@ -87,5 +87,6 @@ export type {
 
 export type {
     NehaSelectLeadProps,
-    NehaSelectCallProps
+    NehaSelectCallProps,
+    NehaSelectPendingCallsProps
 } from './nehaSelect.interface';
