@@ -70,8 +70,8 @@ export const NehaSelectLeadUploadModal = ({
             handleClose();
             onUploadSuccess();
             showSuccess({
-                title: 'Success!',
-                description: 'Leads uploaded successfully'
+                title: 'Success',
+                description: 'Leads uploaded successfully!'
             });
         });
     };
