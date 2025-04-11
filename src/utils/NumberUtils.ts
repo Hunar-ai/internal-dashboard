@@ -22,17 +22,10 @@ export const NumberUtils = {
         return new Intl.NumberFormat('en-IN').format(value);
     },
     abbreviateNumber(value: number): string {
-        if (value >= 10000000) {
-            // 1 Crore and above
-            return (value / 10000000).toFixed(2).replace(/\.00$/, '') + 'Cr';
-        } else if (value >= 100000) {
-            // 1 Lakh and above
-            return (value / 100000).toFixed(2).replace(/\.00$/, '') + 'L';
-        } else if (value >= 10000) {
-            // 10K and above
-            return (value / 1000).toFixed(2).replace(/\.00$/, '') + 'K';
-        } else {
-            return this.format(value);
-        }
+        const formatter = new Intl.NumberFormat('en-IN', {
+            notation: 'compact',
+            compactDisplay: 'short'
+        });
+        return formatter.format(value);
     }
 };

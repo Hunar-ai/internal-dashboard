@@ -26,7 +26,6 @@ export const PGMetricsMasterChart = () => {
         <ThemeProvider theme={theme}>
             <Grid container spacing={8} sx={{ paddingTop: 4 }}>
                 <FilterPopover
-                    id="createdAt"
                     filtersState={filtersState}
                     setFiltersState={setFiltersState}
                     selectedDateFilter={selectedDateFilter}

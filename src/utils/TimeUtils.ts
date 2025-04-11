@@ -9,7 +9,7 @@ export const TimeUtils = {
     format: (date: Moment | string | Date, format: string): string => {
         return moment(date).format(format);
     },
-    formatSeconds: (seconds: number) => {
+    formatSeconds: (seconds: number | null) => {
         if (seconds === null) return '';
 
         const duration = moment.duration(seconds, 'seconds');

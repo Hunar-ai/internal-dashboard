@@ -8,8 +8,10 @@ import {
     TimerOutlined
 } from '@mui/icons-material';
 
-import { MetricCard } from './MetricCard';
-import { VerticalGridWrapper } from './wrappers';
+import {
+    MetricCard,
+    VerticalGridWrapper
+} from '@components/playgroundMetrics/pgMetricsCharts';
 
 import { NumberUtils, TimeUtils } from 'utils';
 

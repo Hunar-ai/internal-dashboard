@@ -3,10 +3,11 @@ import { Grid } from '@mui/material';
 import {
     CallBreakdownChart,
     CallConversionChart,
-    CallDurationChart
-} from './charts';
-import { MetricsContainer } from './MetricsContainer';
-import { NestedGridWrapper, VerticalGridWrapper } from './wrappers';
+    CallDurationChart,
+    NestedGridWrapper,
+    VerticalGridWrapper,
+    MetricsContainer
+} from '@components/playgroundMetrics/pgMetricsCharts';
 
 interface ChartGridViewProps {
     totalCalls: number;

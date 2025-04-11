@@ -1,7 +1,7 @@
 import { useTheme } from '@mui/material';
 import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 
-import { ChartWrapper } from '../wrappers';
+import { ChartWrapper } from '@components/playgroundMetrics/pgMetricsCharts';
 
 interface CallConversionChartProps {
     totalCompletedCalls: number;

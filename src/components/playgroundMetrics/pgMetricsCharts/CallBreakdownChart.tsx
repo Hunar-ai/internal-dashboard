@@ -1,7 +1,7 @@
 import { useTheme } from '@mui/material';
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 
-import { ChartWrapper } from '../wrappers';
+import { ChartWrapper } from '@components/playgroundMetrics/pgMetricsCharts';
 
 import { NumberUtils } from 'utils';
 

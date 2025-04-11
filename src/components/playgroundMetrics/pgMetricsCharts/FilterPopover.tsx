@@ -28,8 +28,7 @@ import {
 import { DATE_FILTER_SELECT_TYPE, FIELD_SIZE } from 'Enum';
 import { DataUtils, TimeUtils } from 'utils';
 
-interface SelectPopoverProps {
-    id: DateRangeFilterKeyProps;
+interface FilterPopoverProps {
     filtersState?: Pick<TableFiltersProps, DateRangeFilterKeyProps>;
     setFiltersState: (_: TableFiltersProps) => void;
     selectedDateFilter: string;
@@ -61,12 +60,12 @@ const getFilterLabel = (dateFilter: string) => {
 };
 
 export const FilterPopover = ({
-    id,
     filtersState,
     setFiltersState,
     selectedDateFilter,
     setSelectedDateFilter
-}: SelectPopoverProps) => {
+}: FilterPopoverProps) => {
+    const dateFilterId = 'createdAt';
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [filters, setFilters] = React.useState<TableFiltersProps>({
         ...filtersState
@@ -77,11 +76,11 @@ export const FilterPopover = ({
         React.useState<DateFilterStateProps>({
             startDate: DataUtils.getDateFromObject(
                 filters || {},
-                `createdAt.startDate`
+                `${dateFilterId}.startDate`
             ),
             endDate: DataUtils.getDateFromObject(
                 filters || {},
-                `createdAt.endDate`
+                `${dateFilterId}.endDate`
             )
         });
 
@@ -107,8 +106,8 @@ export const FilterPopover = ({
         (startDate?: string, endDate?: string) => {
             const modifiedTableFilters: Partial<TableFiltersProps> = {
                 ...filters,
-                [id]: {
-                    ...filters?.[id],
+                [dateFilterId]: {
+                    ...filters?.[dateFilterId],
                     startDate,
                     endDate
                 }
@@ -117,7 +116,7 @@ export const FilterPopover = ({
                 ...modifiedTableFilters
             } as TableFiltersProps);
         },
-        [id, filters, setFilters]
+        [filters, setFilters]
     );
 
     const handleDateFilterChange = (event: SelectChangeEvent) => {
@@ -156,11 +155,15 @@ export const FilterPopover = ({
         setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = (resetDateTypeFilter = true) => {
+    const closePopover = (resetDateTypeFilter = true) => {
         setAnchorEl(null);
         if (resetDateTypeFilter) {
             setDateTypeFilter(selectedDateFilter);
         }
+    };
+
+    const handleClosePopover = () => {
+        closePopover();
     };
 
     const applyFilterHandler = () => {
@@ -177,7 +180,7 @@ export const FilterPopover = ({
             setFiltersState(filters);
         }
         setSelectedDateFilter(dateTypeFilter);
-        handleClose(false);
+        closePopover(false);
     };
 
     const clearFilterHandler = () => {
@@ -216,7 +219,10 @@ export const FilterPopover = ({
                         {getFilterLabel(selectedDateFilter)}
                     </Typography>
                 )}
-                <IconButton onClick={handleClick} aria-describedby={id}>
+                <IconButton
+                    onClick={handleClick}
+                    aria-describedby={`filter-icon`}
+                >
                     <FilterList />
                 </IconButton>
             </Box>
@@ -224,7 +230,7 @@ export const FilterPopover = ({
                 id={popoverId}
                 open={isOpen}
                 anchorEl={anchorEl}
-                onClose={handleClose}
+                onClose={handleClosePopover}
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'left'
@@ -276,7 +282,9 @@ export const FilterPopover = ({
                                     onChange={date =>
                                         onChangeDates(
                                             'startDate',
-                                            TimeUtils.getISTStartOfTheDay(date)
+                                            TimeUtils.getISTStartOfTheDay(
+                                                date as Date
+                                            )
                                         )
                                     }
                                     slotProps={{
@@ -298,7 +306,9 @@ export const FilterPopover = ({
                                     onChange={date =>
                                         onChangeDates(
                                             'endDate',
-                                            TimeUtils.getISTStartOfTheDay(date)
+                                            TimeUtils.getISTStartOfTheDay(
+                                                date as Date
+                                            )
                                         )
                                     }
                                 />

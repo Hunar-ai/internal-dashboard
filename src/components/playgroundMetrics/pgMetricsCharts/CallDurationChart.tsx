@@ -1,7 +1,7 @@
 import { useTheme } from '@mui/material';
 import { BarChart } from '@mui/x-charts/BarChart';
 
-import { ChartWrapper } from '../wrappers';
+import { ChartWrapper } from '@components/playgroundMetrics/pgMetricsCharts';
 
 interface CallDurationChartProps {
     callsBelow45Seconds: number;
