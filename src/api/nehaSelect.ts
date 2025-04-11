@@ -8,7 +8,7 @@ export const searchCalls = ApiClient({
     url: `/v1/neha-select/company/{companyId}/calls`
 });
 
-export const pendingCalls = ApiClient({
+export const pendingCallsCount = ApiClient({
     url: `/v1/neha-select/company/{companyId}/calls/count`
 });
 

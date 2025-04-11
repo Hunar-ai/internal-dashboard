@@ -1,4 +1,4 @@
-import { pendingCalls } from 'api/nehaSelect';
+import { pendingCallsCount } from 'api/nehaSelect';
 
 import { useGetReactQuery } from 'hooks/useGetReactQuery';
 
@@ -15,7 +15,7 @@ export const useGetNehaSelectPendingCalls = ({
 }: SearchNehaSelectCallsProps) => {
     return useGetReactQuery<NehaSelectPendingCallsProps>({
         queryKey: ['getNehaSelectPendingCalls', companyId],
-        requestUrl: pendingCalls,
+        requestUrl: pendingCallsCount,
         params: { companyId }
     });
 };
