@@ -1,9 +1,6 @@
 import React from 'react';
 
-import {
-    PaginatedTable as Table,
-    PaginatedTableHeader
-} from '@components/common';
+import { PaginatedTable, PaginatedTableHeader } from '@components/common';
 import { NehaSelectColumns } from './NehaSelectColumns';
 import { NehaSelectLeadUploadModal } from './NehaSelectLeadUploadModal';
 import { NehaSelectTableHeader } from './NehaSelectTableHeader';
@@ -63,7 +60,7 @@ export const NehaSelectMasterTable = () => {
                     />
                 }
             />
-            <Table
+            <PaginatedTable
                 columns={columns}
                 tableHeight="calc(100vh - 192px)"
                 data={callData?.data ?? []}
