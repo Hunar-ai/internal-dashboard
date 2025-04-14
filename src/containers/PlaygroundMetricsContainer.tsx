@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
 import { Box, Center } from '@chakra-ui/react';
 
@@ -10,8 +10,8 @@ import {
 import { NAVBAR_HEIGHT } from 'Constants';
 
 export const PlaygroundMetricsContainer = () => {
-    const [searchParams] = useSearchParams();
-    const isChartsPage = searchParams?.has('charts');
+    const { pathname } = useLocation();
+    const isChartsPage = pathname?.includes('charts');
 
     return (
         <Box
@@ -20,11 +20,10 @@ export const PlaygroundMetricsContainer = () => {
             overflow="scroll"
         >
             <Center flexDirection="column" py={0} px={8}>
-                {isChartsPage ? (
-                    <PGMetricsMasterChart />
-                ) : (
-                    <PGMetricsMasterTable />
-                )}
+                <Routes>
+                    <Route path="charts" element={<PGMetricsMasterChart />} />
+                    <Route path="" element={<PGMetricsMasterTable />} />
+                </Routes>
             </Center>
         </Box>
     );

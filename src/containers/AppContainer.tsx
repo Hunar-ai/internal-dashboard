@@ -56,7 +56,7 @@ export const AppContainer = () => {
                     />
                     {PLAYGROUND_METRICS_USERS?.includes(personnel?.email) && (
                         <Route
-                            path="/playground-metrics"
+                            path="/playground-metrics/*"
                             element={<PlaygroundMetricsContainer />}
                         />
                     )}

@@ -72,7 +72,7 @@ export const useNavbarMenuConfig = () => {
                     {
                         id: 'playground-metrics/charts',
                         title: 'Charts',
-                        link: '/playground-metrics?charts=true'
+                        link: '/playground-metrics/charts'
                     }
                 ]
             });
