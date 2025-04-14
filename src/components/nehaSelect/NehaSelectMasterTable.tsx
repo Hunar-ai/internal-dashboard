@@ -9,6 +9,7 @@ import { useTableActions, usePaginatedReactTable } from 'hooks';
 import { useSearchNehaSelectCalls } from 'hooks/apiHooks/nehaSelect/useSearchNehaSelectCalls';
 
 import { SORT_ORDER } from 'Enum';
+import { NEHA_SELECT_COMPANY_ID } from './NehaSelectConstants';
 
 export const NehaSelectMasterTable = () => {
     const {
@@ -48,7 +49,7 @@ export const NehaSelectMasterTable = () => {
         isLoading: isCallDataLoading
     } = useSearchNehaSelectCalls({
         params: {
-            companyId: 'select'
+            companyId: NEHA_SELECT_COMPANY_ID
         },
         requestBody: {
             searchKey,

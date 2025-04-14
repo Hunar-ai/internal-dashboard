@@ -22,3 +22,5 @@ export const NEHA_SELECT_SECTION_MAP = {
         listItemBackgroundColor: '#e3f2fd'
     }
 };
+
+export const NEHA_SELECT_COMPANY_ID = 'select';

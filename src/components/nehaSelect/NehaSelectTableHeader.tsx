@@ -11,6 +11,7 @@ import { useErrorHelper } from 'hooks/useErrorHelper';
 import { useToast } from 'hooks/useToast';
 
 import type { TableFiltersProps } from 'interfaces';
+import { NEHA_SELECT_COMPANY_ID } from './NehaSelectConstants';
 
 interface NehaSelectTableHeaderProps {
     setSearchKey: (_: string) => void;
@@ -27,7 +28,7 @@ export const NehaSelectTableHeader = ({
     const exportNehaSelectCalls = useExportNehaSelectCalls();
 
     const { data: pendingCallsData } = useGetNehaSelectPendingCalls({
-        params: { companyId: 'select' }
+        params: { companyId: NEHA_SELECT_COMPANY_ID }
     });
 
     const onUploadClick = () => {
@@ -47,7 +48,7 @@ export const NehaSelectTableHeader = ({
     const exportLeads = async () => {
         try {
             const data = await exportNehaSelectCalls.mutateAsync({
-                params: { companyId: 'select' },
+                params: { companyId: NEHA_SELECT_COMPANY_ID },
                 requestBody: { filters }
             });
             return data;

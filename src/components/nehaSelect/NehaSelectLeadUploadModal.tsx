@@ -11,6 +11,8 @@ import { useUploadNehaSelectLeads } from 'hooks/apiHooks/nehaSelect/useUploadNeh
 import { useToast } from 'hooks/useToast';
 import { useErrorHelper } from 'hooks/useErrorHelper';
 
+import { NEHA_SELECT_COMPANY_ID } from './NehaSelectConstants';
+
 interface NehaSelectLeadUploadModalProps {
     onUploadSuccess: () => void;
 }
@@ -54,7 +56,7 @@ export const NehaSelectLeadUploadModal = ({
     const uploadLeads = async (leadsFile: File) => {
         try {
             await uploadNehaLeads.mutateAsync({
-                companyId: 'select',
+                companyId: NEHA_SELECT_COMPANY_ID,
                 leadsFile
             });
         } catch (error) {
