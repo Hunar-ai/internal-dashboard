@@ -1,9 +1,10 @@
+import { useSearchParams } from 'react-router-dom';
+
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Button, Grid, Typography } from '@mui/material';
 
 import { SearchBar } from '@hunar.ai/hunar-design-system';
 
-import { useUpdateSearchParams } from 'hooks/useUpdateSearchParams';
 import { useGetNehaSelectPendingCalls } from 'hooks/apiHooks/nehaSelect/useGetNehaSelectPendingCalls';
 import { useExportNehaSelectCalls } from 'hooks/apiHooks/nehaSelect/useExportNehaSelectCalls';
 import { useErrorHelper } from 'hooks/useErrorHelper';
@@ -21,7 +22,7 @@ export const NehaSelectTableHeader = ({
     filters
 }: NehaSelectTableHeaderProps) => {
     const { showError, showSuccess } = useToast();
-    const { append } = useUpdateSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const { getApiErrorMsg } = useErrorHelper();
     const exportNehaSelectCalls = useExportNehaSelectCalls();
 
@@ -30,7 +31,8 @@ export const NehaSelectTableHeader = ({
     });
 
     const onUploadClick = () => {
-        append('upload', 'true');
+        searchParams.set('upload', 'true');
+        setSearchParams(searchParams);
     };
 
     const saveFile = (data: string) => {
