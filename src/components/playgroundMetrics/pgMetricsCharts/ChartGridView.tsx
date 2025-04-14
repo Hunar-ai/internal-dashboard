@@ -11,7 +11,7 @@ import {
 
 interface ChartGridViewProps {
     totalCalls: number;
-    totalDuration: number;
+    totalDuration: number | null;
     callsConnected: number;
     totalCompletedCalls: number;
     callsDisconnected: number;
@@ -19,7 +19,7 @@ interface ChartGridViewProps {
     callsBelow45Seconds: number;
     callsBetween46To90Seconds: number;
     callsAbove90Seconds: number;
-    medianDuration: number;
+    medianDuration: number | null;
     uniqueNumbersReachedOnce: number;
     uniqueNumbersReachedMoreThanOnce: number;
     phoneNumbersReached: number;

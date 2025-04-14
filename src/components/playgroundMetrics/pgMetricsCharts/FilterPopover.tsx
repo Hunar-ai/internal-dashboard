@@ -175,7 +175,17 @@ export const FilterPopover = ({
                 return;
             }
 
-            setFiltersState({ ...filters, createdAt: dateRangeFilterState });
+            setFiltersState({
+                ...filters,
+                createdAt: {
+                    startDate: new Date(
+                        dateRangeFilterState.startDate
+                    ).toISOString(),
+                    endDate: new Date(
+                        dateRangeFilterState.endDate
+                    ).toISOString()
+                }
+            });
         } else {
             setFiltersState(filters);
         }

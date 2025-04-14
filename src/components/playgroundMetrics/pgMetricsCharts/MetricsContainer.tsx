@@ -17,9 +17,9 @@ import { NumberUtils, TimeUtils } from 'utils';
 
 interface MetricsContainerProps {
     totalCalls: number;
-    totalDuration: number;
+    totalDuration: number | null;
     callsConnected: number;
-    medianDuration: number;
+    medianDuration: number | null;
     uniqueNumbersReachedOnce: number;
     uniqueNumbersReachedMoreThanOnce: number;
 }
@@ -33,6 +33,10 @@ export const MetricsContainer = ({
     uniqueNumbersReachedMoreThanOnce
 }: MetricsContainerProps) => {
     const theme = useTheme();
+    const formattedTotalDuration =
+        totalDuration === null ? '-' : TimeUtils.formatSeconds(totalDuration);
+    const formattedMedianDuration =
+        medianDuration === null ? '-' : TimeUtils.formatSeconds(medianDuration);
 
     return (
         <>
@@ -65,7 +69,7 @@ export const MetricsContainer = ({
                     <VerticalGridWrapper xs={12} md={12}>
                         <MetricCard
                             label="Total Duration"
-                            value={TimeUtils.formatSeconds(totalDuration)}
+                            value={formattedTotalDuration}
                             icon={
                                 <TimerOutlined
                                     sx={{ color: theme.palette.violet.main }}
@@ -75,7 +79,7 @@ export const MetricsContainer = ({
                         />
                         <MetricCard
                             label="Median Duration"
-                            value={TimeUtils.formatSeconds(medianDuration)}
+                            value={formattedMedianDuration}
                             icon={
                                 <TimelapseOutlined
                                     sx={{ color: theme.palette.violet.main }}
