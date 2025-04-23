@@ -29,7 +29,7 @@ interface DateFilterSelectProps {
     setFilterState: (_: DateFilterStateProps) => void;
 }
 
-const filterOptions: DateRangeFilterOptionProps = {
+export const filterOptions: DateRangeFilterOptionProps = {
     yesterday: {
         label: 'Yesterday',
         value: DATE_FILTER_SELECT_TYPE.yesterday,

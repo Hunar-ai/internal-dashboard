@@ -7,12 +7,12 @@ import {
     ResetPasswordContainer,
     ChecklistContainer,
     AssessmentContainer,
-    NehaSelectContainer
+    NehaSelectContainer,
+    PlaygroundMetricsContainer
 } from 'containers';
 
 import { useGetFormFields, useGetLoggedInPersonnel, useToken } from 'hooks';
 import { SettingsContext, settingsInitialState } from 'contexts';
-import { PlaygroundMetricsContainer } from './PlaygroundMetricsContainer';
 
 const PLAYGROUND_METRICS_USERS =
     import.meta.env.VITE_PLAYGROUND_METRICS_USERS?.split(',') ?? [];
@@ -58,7 +58,7 @@ export const AppContainer = () => {
                     {PLAYGROUND_METRICS_USERS?.includes(personnel?.email) && (
                         <>
                             <Route
-                                path="/playground-metrics"
+                                path="/playground-metrics/*"
                                 element={<PlaygroundMetricsContainer />}
                             />
                             <Route
