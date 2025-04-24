@@ -12,7 +12,7 @@
     "@emotion/babel-plugin": "^11.11.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
-    "@hunar.ai/hunar-design-system": "^0.8.0",
+    "@hunar.ai/hunar-design-system": "^0.8.1",
     "@mui/icons-material": "^5.6.2",
     "@mui/lab": "^5.0.0-alpha.79",
     "@mui/material": "^5.8.7",

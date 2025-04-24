@@ -1493,10 +1493,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@hunar.ai/hunar-design-system@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@hunar.ai/hunar-design-system/-/hunar-design-system-0.8.0.tgz#e34335c5e8c6263d35a0fd6b383b18149f219f57"
-  integrity sha512-tb0IYHOgd0M/YGIDxS1c3FQ9lPt600LGvkiosFKaca22LhMnFxHMvdokEIBBUnNI+D/XVyqnfKy5ME/Tvmoiog==
+"@hunar.ai/hunar-design-system@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@hunar.ai/hunar-design-system/-/hunar-design-system-0.8.1.tgz#1b9441f11b011e513e81828b60ba4881771ba8e5"
+  integrity sha512-M+In7Q81IJ8AGI/rRermCze0klI1/uMD/tw4Y5zRP41cN75JjyCm1B4wbKCqCPhgtFY0mubze1RTlw7G0NcoQA==
   dependencies:
     "@babel/runtime" "^7.24.7"
     "@mui/icons-material" "^5.6.2"
