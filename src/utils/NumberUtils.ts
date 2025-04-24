@@ -17,5 +17,15 @@ export const NumberUtils = {
     },
     isPositiveNumber(value: number): boolean {
         return NumberUtils.isNumeric(value) && NumberUtils.toNumber(value) > 0;
+    },
+    format(value: number): string {
+        return new Intl.NumberFormat('en-IN').format(value);
+    },
+    abbreviateNumber(value: number): string {
+        const formatter = new Intl.NumberFormat('en-IN', {
+            notation: 'compact',
+            compactDisplay: 'short'
+        });
+        return formatter.format(value);
     }
 };

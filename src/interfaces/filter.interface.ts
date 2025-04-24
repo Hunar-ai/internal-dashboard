@@ -5,8 +5,8 @@ import { OptionsProps } from './option.interface';
 import { HandleSortProps, Sort } from './table.interface';
 
 export interface DateFilterStateProps {
-    startDate?: string | null;
-    endDate?: string | null;
+    startDate?: Date | string | null;
+    endDate?: Date | string | null;
 }
 
 export type MultiSelectFilterKeyProps =
