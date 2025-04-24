@@ -9,19 +9,31 @@ import { useTableActions, usePaginatedReactTable } from 'hooks';
 import { useSearchNehaSelectCalls } from 'hooks/apiHooks/nehaSelect/useSearchNehaSelectCalls';
 
 import { SORT_ORDER } from 'Enum';
+import { NEHA_SELECT_COMPANY_ID } from './NehaSelectConstants';
 
 export const NehaSelectMasterTable = () => {
-    const { sort, handleSort, tableFilters, activeFilterColumns } =
-        useTableActions({
-            key: 'updatedAt',
-            order: SORT_ORDER.DESC
-        });
+    const {
+        sort,
+        handleSort,
+        tableFilters,
+        setTableFilters,
+        activeFilterColumns,
+        dateFilterTypeMap,
+        setDateFilterTypeMap
+    } = useTableActions({
+        key: 'updatedAt',
+        order: SORT_ORDER.DESC
+    });
 
     const [searchKey, setSearchKey] = React.useState('');
 
     const columns = NehaSelectColumns({
         sort,
-        handleSort
+        handleSort,
+        tableFilters,
+        setTableFilters,
+        dateFilterTypeMap,
+        setDateFilterTypeMap
     });
 
     const { minimalPaginationInfo, handleChangePage, handleChangeRowsPerPage } =
@@ -37,7 +49,7 @@ export const NehaSelectMasterTable = () => {
         isLoading: isCallDataLoading
     } = useSearchNehaSelectCalls({
         params: {
-            companyId: 'select'
+            companyId: NEHA_SELECT_COMPANY_ID
         },
         requestBody: {
             searchKey,

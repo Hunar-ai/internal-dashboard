@@ -7,21 +7,49 @@ import {
     HeaderCell
 } from '@components/common';
 
-import type { HandleSortProps, Sort } from 'interfaces';
-import { SORT_TYPE } from 'Enum';
+import type {
+    DateFilterTypeMapProps,
+    HandleSortProps,
+    Sort,
+    TableFiltersProps
+} from 'interfaces';
+import { FILTER_TYPE, SORT_TYPE } from 'Enum';
 
 interface BaseColumnsProps {
+    tableFilters: TableFiltersProps;
     sort?: Sort;
+    isFilterEnabled?: boolean;
+    dateFilterTypeMap?: DateFilterTypeMapProps;
     handleSort: HandleSortProps;
+    setTableFilters: (_: TableFiltersProps) => void;
+    setDateFilterTypeMap?: (_: DateFilterTypeMapProps) => void;
 }
 
 export class BaseColumns {
     sort?: Sort;
     handleSort: HandleSortProps;
+    tableFilters: TableFiltersProps;
+    dateFilterTypeMap?: DateFilterTypeMapProps;
+    setTableFilters: (_: TableFiltersProps) => void;
+    setDateFilterTypeMap?: (_: DateFilterTypeMapProps) => void;
+    isFilterEnabled: boolean;
 
-    constructor({ sort, handleSort }: BaseColumnsProps) {
+    constructor({
+        tableFilters,
+        sort,
+        dateFilterTypeMap,
+        isFilterEnabled = true,
+        handleSort,
+        setTableFilters,
+        setDateFilterTypeMap
+    }: BaseColumnsProps) {
         this.sort = sort;
+        this.tableFilters = tableFilters;
+        this.dateFilterTypeMap = dateFilterTypeMap;
+        this.isFilterEnabled = isFilterEnabled;
         this.handleSort = handleSort;
+        this.setTableFilters = setTableFilters;
+        this.setDateFilterTypeMap = setDateFilterTypeMap;
     }
 
     getBaseColumns = () => {
@@ -39,7 +67,19 @@ export class BaseColumns {
                         sort: this.sort,
                         handleSort: this.handleSort,
                         sortType: SORT_TYPE.DATE
-                    }
+                    },
+                    filterProps: this.isFilterEnabled
+                        ? {
+                              filterType: FILTER_TYPE.DATE_RANGE,
+                              filters: {
+                                  tableFilters: this.tableFilters,
+                                  setTableFilters: this.setTableFilters,
+                                  dateFilterTypeMap: this.dateFilterTypeMap,
+                                  setDateFilterTypeMap:
+                                      this.setDateFilterTypeMap
+                              }
+                          }
+                        : undefined
                 },
                 Cell: ({ value }: CellProps) => {
                     return <DateCell value={value} />;
@@ -69,7 +109,19 @@ export class BaseColumns {
                         sort: this.sort,
                         handleSort: this.handleSort,
                         sortType: SORT_TYPE.DATE
-                    }
+                    },
+                    filterProps: this.isFilterEnabled
+                        ? {
+                              filterType: FILTER_TYPE.DATE_RANGE,
+                              filters: {
+                                  tableFilters: this.tableFilters,
+                                  setTableFilters: this.setTableFilters,
+                                  dateFilterTypeMap: this.dateFilterTypeMap,
+                                  setDateFilterTypeMap:
+                                      this.setDateFilterTypeMap
+                              }
+                          }
+                        : undefined
                 },
                 Cell: ({ value }: CellProps) => {
                     return <DateCell value={value} />;

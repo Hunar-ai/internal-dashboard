@@ -4,22 +4,21 @@ import _ from 'lodash';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Button, Grid, IconButton, Popover, useTheme } from '@mui/material';
 
+import { DATE_FILTER_TYPE } from '@hunar.ai/hunar-design-system';
 import {
     SortSection,
     MultiSelectSection,
-    DateRangeTypeSelect
-} from 'components/common/';
+    DateFilterSection
+} from '@components/common';
 
-import { useHelper } from 'useHelper';
-
-import {
-    type OptionProps,
-    type Sort,
-    type TableFiltersProps,
-    type FilterKeyProps,
-    type MultiSelectFilterKeyProps,
-    type ColumnFilterProps,
-    type DateRangeFilterKeyProps
+import type {
+    OptionProps,
+    Sort,
+    TableFiltersProps,
+    FilterKeyProps,
+    MultiSelectFilterKeyProps,
+    ColumnFilterProps,
+    DateRangeFilterKeyProps
 } from 'interfaces';
 import { FILTER_TYPE, SORT_TYPE } from 'Enum';
 
@@ -30,7 +29,6 @@ export interface FilterOptionProps extends OptionProps {
 export type FilterOptionsProps = FilterOptionProps[];
 
 export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
-    const { isMultiSelect: getIsMultiSelect, isDateRangeSelect } = useHelper();
     const theme = useTheme();
 
     const {
@@ -46,8 +44,10 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
             ? (columnId.split('.')[1] as FilterKeyProps)
             : (columnId.split('.')[0] as FilterKeyProps);
 
-    const isMultiSelect = getIsMultiSelect(id);
-    const isDateRange = isDateRangeSelect(id);
+    const isMultiSelect =
+        columnActionsProps.filterProps?.filterType === FILTER_TYPE.MULTI_SELECT;
+    const isDateRange =
+        columnActionsProps.filterProps?.filterType === FILTER_TYPE.DATE_RANGE;
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
         null
     );
@@ -57,11 +57,8 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
 
     const [tableFiltersState, setTableFiltersState] =
         React.useState<TableFiltersProps>();
-    const [selectedDateFilter, setSelectedDateFilter] = React.useState('');
-    const [selectedDateFilterCopy, setSelectedDateFilterCopy] =
-        React.useState<string>('');
-    const [isDateFilterApplied, setIsDateFilterApplied] =
-        React.useState<boolean>(false);
+    const [selectedDateFilter, setSelectedDateFilter] =
+        React.useState<DATE_FILTER_TYPE>(DATE_FILTER_TYPE.NONE);
     const [showColumnActions, setShowColumnActions] =
         React.useState<boolean>(false);
     const [sortState, setSortState] = React.useState<Sort | undefined>(sort);
@@ -94,6 +91,14 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
                     _.orderBy(modifiedOptionsState, ['checked'], 'desc')
                 );
                 setTableFiltersState(tableFilters);
+            } else if (isDateRange) {
+                const {
+                    filters: { tableFilters, dateFilterTypeMap }
+                } = columnActionsProps.filterProps;
+                setTableFiltersState(tableFilters);
+                setSelectedDateFilter(
+                    dateFilterTypeMap?.[id] ?? DATE_FILTER_TYPE.NONE
+                );
             } else {
                 const {
                     filters: { tableFilters }
@@ -107,44 +112,63 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
         columnActionsProps.filterProps,
         showColumnActions,
         isMultiSelect,
+        isDateRange,
         sort
     ]);
+
+    const hasDateRangeError = React.useMemo(() => {
+        const startDate = _.get(tableFiltersState, `${id}.startDate`, '');
+        const endDate = _.get(tableFiltersState, `${id}.endDate`, '');
+
+        return !!startDate && !!endDate && endDate < startDate;
+    }, [tableFiltersState, id]);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
         setShowColumnActions(true);
-        if (!isDateFilterApplied) {
-            setSelectedDateFilter('');
-        }
     };
 
     const handleClose = () => {
         setAnchorEl(null);
         setShowColumnActions(false);
-        setSelectedDateFilter(selectedDateFilterCopy);
     };
 
     const applyColumnActions = (id: FilterKeyProps) => {
-        setIsDateFilterApplied(false);
-        setSelectedDateFilterCopy(selectedDateFilter);
-
         if (sortState) handleSort(sortState);
         if (columnActionsProps.filterProps && tableFiltersState) {
-            const modifiedTableFiltersState: Partial<TableFiltersProps> = {
-                ...tableFiltersState
-            };
+            const modifiedTableFiltersState = { ...tableFiltersState };
+
             if (
                 isMultiSelect &&
                 [modifiedTableFiltersState[id] || []]?.length === 0
-            )
+            ) {
                 delete modifiedTableFiltersState[id];
+            } else if (isDateRange) {
+                const dateFilterTypeMap =
+                    columnActionsProps.filterProps.filters.dateFilterTypeMap ??
+                    {};
+                const modifiedDateRangeFilterType = {
+                    ...dateFilterTypeMap,
+                    [id]: selectedDateFilter
+                };
+
+                if (
+                    selectedDateFilter === DATE_FILTER_TYPE.NONE ||
+                    Object.keys(modifiedTableFiltersState?.[id] || {})
+                        .length === 0
+                ) {
+                    delete modifiedDateRangeFilterType[id];
+                    delete modifiedTableFiltersState[id];
+                }
+
+                columnActionsProps.filterProps.filters.setDateFilterTypeMap?.(
+                    modifiedDateRangeFilterType
+                );
+            }
 
             columnActionsProps.filterProps.filters.setTableFilters(
-                modifiedTableFiltersState as TableFiltersProps
+                modifiedTableFiltersState
             );
-        }
-        if (isDateRange && selectedDateFilter !== '') {
-            setIsDateFilterApplied(true);
         }
         setAnchorEl(null);
         setShowColumnActions(false);
@@ -174,6 +198,11 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
                     (isMultiSelect &&
                         Array.isArray(multiSelectValues) &&
                         multiSelectValues.length) ||
+                    (isDateRange &&
+                        Object.keys(
+                            columnActionsProps.filterProps?.filters
+                                .tableFilters[id] || {}
+                        ).length) ||
                     sort?.key === columnId
                         ? 'primary'
                         : 'default'
@@ -207,8 +236,7 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
                         id={columnId}
                     />
 
-                    {columnActionsProps.filterProps?.filterType ===
-                        FILTER_TYPE.MULTI_SELECT && isMultiSelect ? (
+                    {isMultiSelect ? (
                         <MultiSelectSection
                             id={id as MultiSelectFilterKeyProps}
                             columnId={columnId}
@@ -217,14 +245,14 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
                             tableFiltersState={tableFiltersState}
                             setTableFiltersState={setTableFiltersState}
                         />
-                    ) : columnActionsProps.filterProps?.filterType ===
-                          FILTER_TYPE.DATE_RANGE && isDateRange ? (
-                        <DateRangeTypeSelect
-                            id={id as DateRangeFilterKeyProps}
-                            tableFiltersState={tableFiltersState}
+                    ) : isDateRange ? (
+                        <DateFilterSection
+                            columnId={id as DateRangeFilterKeyProps}
+                            tableFiltersState={tableFiltersState ?? {}}
+                            selectedDateFilter={selectedDateFilter}
+                            hasDateRangeError={hasDateRangeError}
                             setTableFiltersState={setTableFiltersState}
                             setSelectedDateFilter={setSelectedDateFilter}
-                            selectedDateFilter={selectedDateFilter}
                         />
                     ) : (
                         <></>
@@ -250,6 +278,7 @@ export const ColumnActionsPopOver = ({ column }: ColumnFilterProps) => {
                                 <Button
                                     variant="contained"
                                     onClick={handleApplyClick}
+                                    disabled={hasDateRangeError}
                                 >
                                     APPLY
                                 </Button>
