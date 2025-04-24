@@ -31,3 +31,4 @@ export {
     type FilterOptionProps,
     type FilterOptionsProps
 } from './ColumnActionsPopOver';
+export { BaseColumns } from './BaseColumns';

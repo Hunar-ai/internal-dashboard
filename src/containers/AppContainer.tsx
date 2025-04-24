@@ -7,6 +7,7 @@ import {
     ResetPasswordContainer,
     ChecklistContainer,
     AssessmentContainer,
+    NehaSelectContainer,
     PlaygroundMetricsContainer
 } from 'containers';
 
@@ -55,10 +56,16 @@ export const AppContainer = () => {
                         element={<AssessmentContainer />}
                     />
                     {PLAYGROUND_METRICS_USERS?.includes(personnel?.email) && (
-                        <Route
-                            path="/playground-metrics/*"
-                            element={<PlaygroundMetricsContainer />}
-                        />
+                        <>
+                            <Route
+                                path="/playground-metrics/*"
+                                element={<PlaygroundMetricsContainer />}
+                            />
+                            <Route
+                                path="/neha-select"
+                                element={<NehaSelectContainer />}
+                            />
+                        </>
                     )}
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

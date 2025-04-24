@@ -3,8 +3,9 @@ import moment, { Moment } from 'moment';
 type AddSubtract = {
     date: Date | string;
     period: string | number;
-    unit: 'days' | 'months' | 'years';
+    unit: 'days' | 'months' | 'years' | 'minutes';
 };
+
 export const TimeUtils = {
     format: (date: Moment | string | Date, format: string): string => {
         return moment(date).format(format);
@@ -25,6 +26,23 @@ export const TimeUtils = {
     subtract: ({ date, period, unit = 'days' }: AddSubtract): Moment => {
         return moment(date).subtract(period, unit);
     },
+    to24Hour: (time12h: string) => {
+        const [time, modifier] = time12h.split(' ');
+
+        const [hours, minutes] = time.split(':');
+
+        let formattedHours = hours;
+
+        if (formattedHours === '12') {
+            formattedHours = '00';
+        }
+
+        if (modifier === 'pm') {
+            formattedHours = `${parseInt(formattedHours, 10) + 12}`;
+        }
+
+        return { hours: parseInt(formattedHours), minutes: parseInt(minutes) };
+    },
     getMoment: (dateString: string) => {
         if (!dateString) {
             return '';
@@ -43,9 +61,17 @@ export const TimeUtils = {
         }
         return moment(dateString, format).toDate();
     },
+    getDateFromUtcISOString: (date: string) => {
+        return moment.utc(date).toDate();
+    },
     timeSince: (date: string) => {
         const utcMoment = moment.utc(date);
         return moment(utcMoment).local().fromNow();
+    },
+    getFormattedLocalDate: (date: string, format: string) => {
+        const utcMoment = moment.utc(date);
+        const localTime = utcMoment.local().format(format);
+        return localTime;
     },
     getUtcISOString: (date: Moment | string | Date) => {
         const utc = moment(date).utc().toISOString();
@@ -54,13 +80,35 @@ export const TimeUtils = {
     getISOString: (date: Moment) => {
         return date.toISOString();
     },
-    getISTStartOfTheDay: (date?: Date | null) => {
-        const selectedDate = date ?? new Date();
-        return moment(selectedDate).startOf('day').toDate();
+    getUTCStartOfTheDay: () => {
+        return moment().utc().startOf('day').toDate();
     },
-    getISTEndOfTheDay: (date?: Date | null) => {
-        const selectedDate = date ?? new Date();
-        return moment(selectedDate).endOf('day').toDate();
+    getUTCEndOfTheDay: () => {
+        return moment().utc().endOf('day').toDate();
+    },
+    getISTStartOfTheDay: (date: Date | null) => {
+        return moment(date).startOf('day').toDate();
+    },
+    getISTEndOfTheDay: (date: Date | null) => {
+        return moment(date).endOf('day').toDate();
+    },
+    getUTCDate: (date: Date) => {
+        return moment.utc(date);
+    },
+    getDiffString: (startTime: Moment, endTime: Moment) => {
+        const diffSeconds = startTime.diff(endTime, 'seconds');
+        const minutes = Math.floor(diffSeconds / 60);
+        const seconds = diffSeconds - minutes * 60;
+        if (minutes > 0)
+            return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+        else return '00:' + (seconds < 10 ? '0' : '') + seconds;
+    },
+    getDiff: (startTime: Moment, endTime: Moment) => {
+        const seconds = startTime.diff(endTime, 'seconds');
+        return seconds;
+    },
+    isValidDate: (date: string | Date | Moment) => {
+        return moment(date).isValid();
     }
 };
 

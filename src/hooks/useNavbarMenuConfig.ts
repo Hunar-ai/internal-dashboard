@@ -76,6 +76,11 @@ export const useNavbarMenuConfig = () => {
                     }
                 ]
             });
+            baseRoutes.push({
+                id: 'neha-select',
+                title: 'Neha Select',
+                link: '/neha-select'
+            });
         }
 
         return baseRoutes;
