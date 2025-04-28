@@ -4,10 +4,13 @@ import _ from 'lodash';
 
 import { type TableFilters } from 'hooks';
 
-import { FilterKeyProps, Sort, TableFiltersProps } from 'interfaces';
+import {
+    DateFilterTypeMapProps,
+    FilterKeyProps,
+    Sort,
+    TableFiltersProps
+} from 'interfaces';
 import { SORT_ORDER } from 'Enum';
-
-import { useHelper } from 'useHelper';
 
 export const useTableActions = (defaultSort?: {
     key: string;
@@ -17,9 +20,14 @@ export const useTableActions = (defaultSort?: {
     const [sort, setSort] = React.useState<Sort | undefined>(defaultSort);
     const [tableFilters, setTableFilters] = React.useState<TableFiltersProps>({
         createdAt: {},
-        status: []
+        updatedAt: {},
+        status: [],
+        willingnessToProceed: [],
+        callLanguage: [],
+        callLater: []
     });
-    const { isMultiSelect, isDateRangeSelect } = useHelper();
+    const [dateFilterTypeMap, setDateFilterTypeMap] =
+        React.useState<DateFilterTypeMapProps>({});
 
     const handleSort = React.useCallback(
         (sortBy: { key: string; order: SORT_ORDER }): void => {
@@ -28,28 +36,21 @@ export const useTableActions = (defaultSort?: {
         []
     );
 
-    const activeFilterColumns = React.useMemo(
-        () =>
-            (
-                Object.keys(tableFilters) as Array<keyof typeof tableFilters>
-            ).filter((columnId: keyof typeof tableFilters) => {
-                const id = columnId as FilterKeyProps;
-                if (isMultiSelect(id)) {
-                    const appliedFiltersLength = _.get(
-                        tableFilters,
-                        `${id}.length`,
-                        0
-                    );
-                    return appliedFiltersLength > 0;
-                } else if (isDateRangeSelect(id)) {
-                    const appliedFiltersLength = Object.keys(
-                        tableFilters[id] || {}
-                    ).length;
-                    return appliedFiltersLength > 0;
+    const activeFilterColumns = React.useMemo(() => {
+        return (Object.keys(tableFilters) as Array<FilterKeyProps>).filter(
+            columnId => {
+                const appliedFilters = _.get(tableFilters, columnId, null);
+
+                if (!appliedFilters) {
+                    return false;
+                } else if (Array.isArray(appliedFilters)) {
+                    return appliedFilters.length > 0;
+                } else if (typeof appliedFilters === 'object') {
+                    return Object.keys(appliedFilters).length > 0;
                 }
-            }),
-        [isDateRangeSelect, isMultiSelect, tableFilters]
-    );
+            }
+        );
+    }, [tableFilters]);
 
     return {
         sort,
@@ -58,6 +59,8 @@ export const useTableActions = (defaultSort?: {
         setFilters,
         tableFilters,
         setTableFilters,
-        activeFilterColumns
+        activeFilterColumns,
+        dateFilterTypeMap,
+        setDateFilterTypeMap
     };
 };

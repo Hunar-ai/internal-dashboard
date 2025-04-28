@@ -81,5 +81,12 @@ export type {
     DateRangeFilterOptionProps,
     FilterKeyProps,
     ColumnFilterProps,
-    ColumnActionsProps
+    ColumnActionsProps,
+    DateFilterTypeMapProps
 } from './filter.interface';
+
+export type {
+    NehaSelectLeadProps,
+    NehaSelectCallProps,
+    NehaSelectPendingCallsProps
+} from './nehaSelect.interface';

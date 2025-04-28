@@ -11,5 +11,6 @@ export { useTableActions } from './useTableActions';
 export { useTableFilters, type TableFilters } from './useTableFilters';
 export { usePaginatedReactTable } from './usePaginatedReactTable';
 export { useMinimalPaginationInfo } from './useMinimalPaginationInfo';
+export { useFormFieldsHelper } from './useFormFieldsHelper';
 
 export * from './apiHooks';

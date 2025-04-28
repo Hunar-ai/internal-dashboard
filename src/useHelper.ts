@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { TableFilters } from 'hooks/useTableFilters';
-
-import { FilterKeyProps } from 'interfaces';
+import type { FilterKeyProps, TableFiltersProps } from 'interfaces';
 
 import { TimeUtils } from 'utils';
 
@@ -19,7 +17,7 @@ export const useHelper = () => {
         return columnId === 'createdAt';
     }, []);
 
-    const getFormattedfilters = (filters: TableFilters) => {
+    const getFormattedfilters = (filters: TableFiltersProps) => {
         const modifiedFilters = { ...filters };
 
         for (const modifiedFilterKey of Object.keys(modifiedFilters)) {

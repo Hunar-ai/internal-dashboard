@@ -285,5 +285,10 @@ export const DataUtils = {
             {}
         );
         return formattedForm;
+    },
+    getDateFromObject(object: object, accessor: string) {
+        const date = _.get(object, accessor, '');
+
+        return date === '' ? '' : new Date(date);
     }
 };

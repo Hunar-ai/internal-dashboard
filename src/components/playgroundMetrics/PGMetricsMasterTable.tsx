@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ThemeProvider, Typography } from '@mui/material';
 
-import { PaginatedTable as Table } from '@components/common';
+import { PaginatedTable, PaginatedTableHeader } from '@components/common';
 
 import {
     type TableFilters,
@@ -66,7 +66,8 @@ export const PGMetricsMasterTable = () => {
 
     return (
         <ThemeProvider theme={theme}>
-            <Table
+            <PaginatedTableHeader tableHeaderCTA={<TableHeader />} />
+            <PaginatedTable
                 columns={columns}
                 data={data?.data ?? []}
                 isLoading={isLoading}
@@ -75,7 +76,6 @@ export const PGMetricsMasterTable = () => {
                 paginationInfo={data?.paginationInfo}
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
-                tableHeaderCTA={<TableHeader />}
             />
         </ThemeProvider>
     );

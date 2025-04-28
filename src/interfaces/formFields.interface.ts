@@ -3,6 +3,9 @@ import { FORM_FIELD } from 'Enum';
 
 export interface FormFields {
     [FORM_FIELD.twilioStatus]: OptionsProps;
+    [FORM_FIELD.nehaSelectWillingnessToProceed]: OptionsProps;
+    [FORM_FIELD.callLanguage]: OptionsProps;
+    [FORM_FIELD.nehaSelectCallLater]: OptionsProps;
 }
 
 export interface MappedField {

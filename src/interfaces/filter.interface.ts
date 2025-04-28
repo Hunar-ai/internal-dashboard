@@ -1,22 +1,34 @@
+import { DATE_FILTER_TYPE } from '@hunar.ai/hunar-design-system';
+
 import { FILTER_TYPE, SORT_TYPE } from 'Enum';
 import { OptionsProps } from './option.interface';
 import { HandleSortProps, Sort } from './table.interface';
 
 export interface DateFilterStateProps {
-    startDate?: string | null;
-    endDate?: string | null;
+    startDate?: Date | string | null;
+    endDate?: Date | string | null;
 }
 
-export interface TableFiltersProps {
-    createdAt?: DateFilterStateProps;
-    status?: string[];
-}
+export type MultiSelectFilterKeyProps =
+    | 'status'
+    | 'willingnessToProceed'
+    | 'callLanguage'
+    | 'callLater';
 
-export type FilterKeyProps = 'createdAt' | 'status';
+export type DateRangeFilterKeyProps = 'createdAt' | 'updatedAt';
+export type FilterKeyProps =
+    | MultiSelectFilterKeyProps
+    | DateRangeFilterKeyProps;
 
-export type MultiSelectFilterKeyProps = 'status';
-
-export type DateRangeFilterKeyProps = 'createdAt';
+export type MultiSelectFiltersProps = Partial<
+    Record<MultiSelectFilterKeyProps, string[]>
+>;
+export type DateRangeFiltersProps = Partial<
+    Record<DateRangeFilterKeyProps, DateFilterStateProps>
+>;
+export type TableFiltersProps = Partial<
+    MultiSelectFiltersProps & DateRangeFiltersProps
+>;
 
 export interface ColumnActionsProps {
     sortProps: {
@@ -30,8 +42,10 @@ export interface ColumnActionsProps {
         options?: OptionsProps;
         filters: {
             tableFilters: TableFiltersProps;
-            setTableFilters: (_: TableFiltersProps) => void;
+            dateFilterTypeMap?: DateFilterTypeMapProps;
             hideBlanks?: boolean;
+            setTableFilters: (_: TableFiltersProps) => void;
+            setDateFilterTypeMap?: (_: DateFilterTypeMapProps) => void;
         };
     };
 }
@@ -39,7 +53,7 @@ export interface ColumnActionsProps {
 export interface ColumnFilterProps {
     column: {
         columnActionsProps: ColumnActionsProps;
-        id: 'status' | 'createdAt';
+        id: FilterKeyProps;
     };
 }
 
@@ -59,4 +73,8 @@ export interface DateRangeFilterOptionProps {
             endDate: DateRangeFilterDate;
         };
     };
+}
+
+export interface DateFilterTypeMapProps {
+    [key: string]: DATE_FILTER_TYPE;
 }

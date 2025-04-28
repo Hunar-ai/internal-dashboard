@@ -64,7 +64,7 @@ export const NavbarMenu = ({
                         {menuTitle}
                     </MenuButton>
                     <Portal>
-                        <MenuList>
+                        <MenuList zIndex={500}>
                             {subMenus.map(subMenu => (
                                 <MenuItem
                                     key={subMenu.id}
