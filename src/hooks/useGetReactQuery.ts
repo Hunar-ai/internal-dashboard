@@ -4,11 +4,16 @@ import type {
     ApiError,
     FormFields,
     GetCompaniesResponse,
+    NehaSelectPendingCallsProps,
     PersonnelProps
 } from 'interfaces';
 import ErrorTracker from 'utils/ErrorTracker';
 
-type SuccessDataProps = FormFields | PersonnelProps | GetCompaniesResponse;
+type SuccessDataProps =
+    | FormFields
+    | PersonnelProps
+    | GetCompaniesResponse
+    | NehaSelectPendingCallsProps;
 
 interface GetReactQueryProps<ResponseProps> {
     queryKey: string[];

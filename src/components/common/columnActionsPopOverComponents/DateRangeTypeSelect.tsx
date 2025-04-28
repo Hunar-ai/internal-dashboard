@@ -12,7 +12,7 @@ import {
     type DateRangeFilterKeyProps,
     type TableFiltersProps
 } from 'interfaces';
-import { TimeUtils } from 'utils';
+import { DataUtils, TimeUtils } from 'utils';
 
 interface DateRangeTypeSelectProps {
     id: DateRangeFilterKeyProps;
@@ -30,8 +30,14 @@ export const DateRangeTypeSelect = ({
     selectedDateFilter
 }: DateRangeTypeSelectProps) => {
     const [filterState, setFilterState] = React.useState<DateFilterStateProps>({
-        startDate: _.get(tableFiltersState, `${id}.startDate`, ''),
-        endDate: _.get(tableFiltersState, `${id}.endDate`, '')
+        startDate: DataUtils.getDateFromObject(
+            tableFiltersState || {},
+            `${id}.startDate`
+        ),
+        endDate: DataUtils.getDateFromObject(
+            tableFiltersState || {},
+            `${id}.endDate`
+        )
     });
 
     const onChangeDates = (fieldName: string, selectedDate: Date | null) => {

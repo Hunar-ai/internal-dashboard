@@ -23,10 +23,28 @@ export const useTableFilters = (formFields?: FormFields) => {
         return [];
     }, [formFields]);
 
+    const willingnessToProceedOptions = React.useMemo(() => {
+        if (formFields) return formFields?.nehaSelectWillingnessToProceed;
+        return [];
+    }, [formFields]);
+
+    const callLanguageOptions = React.useMemo(() => {
+        if (formFields) return formFields?.callLanguage;
+        return [];
+    }, [formFields]);
+
+    const callLaterOptions = React.useMemo(() => {
+        if (formFields) return formFields?.nehaSelectCallLater;
+        return [];
+    }, [formFields]);
+
     return {
         filters,
         setFilters,
         booleanOptions,
-        statusOptions
+        statusOptions,
+        willingnessToProceedOptions,
+        callLanguageOptions,
+        callLaterOptions
     };
 };

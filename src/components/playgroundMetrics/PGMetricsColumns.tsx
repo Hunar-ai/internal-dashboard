@@ -4,8 +4,12 @@ import { HandleSortProps, Sort } from 'interfaces';
 import { ColumnActionsPopOver } from '@components/common/ColumnActionsPopOver';
 import { COLUMN_STICKY_TYPE, FILTER_TYPE, SORT_TYPE } from 'Enum';
 import { useTableFilters } from 'hooks/useTableFilters';
-import { DataCell, DataLinkCell, HeaderCell } from '@components/common';
-import { DateCell } from '@components/common/DateCell';
+import {
+    DataCell,
+    DataLinkCell,
+    HeaderCell,
+    DateCell
+} from '@components/common';
 import { SettingsContext } from 'contexts';
 import { TimeUtils } from 'utils';
 import {
