@@ -1,0 +1,1 @@
+export { NehaAgentsMasterTable } from './NehaAgentsMasterTable';

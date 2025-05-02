@@ -81,6 +81,11 @@ export const useNavbarMenuConfig = () => {
                 title: 'Neha Select',
                 link: '/neha-select'
             });
+            baseRoutes.push({
+                id: 'neha-agents',
+                title: 'Neha Agents',
+                link: '/neha-agents'
+            });
         }
 
         return baseRoutes;
