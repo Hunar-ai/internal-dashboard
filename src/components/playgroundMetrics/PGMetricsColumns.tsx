@@ -1,23 +1,27 @@
 import React from 'react';
+
 import { Column, Cell } from '@components/common/paginatedTable/PaginatedTable';
-import { HandleSortProps, Sort } from 'interfaces';
 import { ColumnActionsPopOver } from '@components/common/ColumnActionsPopOver';
-import { COLUMN_STICKY_TYPE, FILTER_TYPE, SORT_TYPE } from 'Enum';
-import { useTableFilters } from 'hooks/useTableFilters';
-import {
-    DataCell,
-    DataLinkCell,
-    HeaderCell,
-    DateCell
-} from '@components/common';
-import { SettingsContext } from 'contexts';
-import { TimeUtils } from 'utils';
+import { CallEndedByCell } from '@components/nehaAgents';
 import {
     CallStatusCell,
     ContextCell,
     ResultCell,
     TranscriptCell
 } from '@components/playgroundMetrics';
+import {
+    DataCell,
+    DataLinkCell,
+    HeaderCell,
+    DateCell
+} from '@components/common';
+
+import { useTableFilters } from 'hooks/useTableFilters';
+import { SettingsContext } from 'contexts';
+
+import { COLUMN_STICKY_TYPE, FILTER_TYPE, SORT_TYPE } from 'Enum';
+import { HandleSortProps, Sort } from 'interfaces';
+import { TimeUtils } from 'utils';
 
 export interface PlayGroundMetricsColumnsProps {
     tableFilters: any;
@@ -106,6 +110,34 @@ export const PlayGroundMetricsColumns = ({
                 }
             },
             {
+                id: 'callEndedBy',
+                accessor: 'callEndedBy',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    return <CallEndedByCell callEndedBy={value} />;
+                },
+                isVisible: true,
+                headerText: 'Call Ended By',
+                minWidth: 225,
+                Filter: ColumnActionsPopOver,
+                columnActionsProps: {
+                    sortProps: {
+                        sort,
+                        handleSort,
+                        sortType: SORT_TYPE.DEFAULT
+                    },
+                    filterProps: {
+                        filterType: FILTER_TYPE.MULTI_SELECT,
+                        options: formFields?.nehaCallEndedBy ?? [],
+                        filters: {
+                            tableFilters,
+                            setTableFilters,
+                            hideBlanks: true
+                        }
+                    }
+                }
+            },
+            {
                 id: 'transcript',
                 accessor: 'transcript',
                 Header: HeaderCell,
@@ -126,16 +158,6 @@ export const PlayGroundMetricsColumns = ({
                         <DataLinkCell link={value} text="Listen to Recording" />
                     );
                 }
-            },
-
-            {
-                id: 'callEndedBy',
-                accessor: 'callEndedBy',
-                Header: HeaderCell,
-                Cell: DataCell,
-                headerText: 'Call Ended By',
-                isVisible: true,
-                minWidth: 175
             },
             {
                 id: 'result',
@@ -206,7 +228,14 @@ export const PlayGroundMetricsColumns = ({
                 }
             }
         ];
-    }, [handleSort, setTableFilters, sort, statusOptions, tableFilters]);
+    }, [
+        handleSort,
+        setTableFilters,
+        sort,
+        statusOptions,
+        tableFilters,
+        formFields?.nehaCallEndedBy
+    ]);
 
     return columns;
 };

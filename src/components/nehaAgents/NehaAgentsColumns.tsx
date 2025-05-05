@@ -10,6 +10,7 @@ import {
     BaseColumns
 } from '@components/common';
 import { CallStatusCell } from '@components/playgroundMetrics';
+import { CallEndedByCell } from '@components/nehaAgents';
 import { CallLanguageCell } from '@components/nehaSelect/CallLanguageCell';
 
 import { useTableFilters } from 'hooks/useTableFilters';
@@ -153,6 +154,34 @@ export const NehaAgentsColumns = ({
                 }
             },
             {
+                id: 'callEndedBy',
+                accessor: 'callEndedBy',
+                Header: HeaderCell,
+                Cell: ({ value }: Cell) => {
+                    return <CallEndedByCell callEndedBy={value} />;
+                },
+                isVisible: true,
+                headerText: 'Call Ended By',
+                minWidth: 225,
+                Filter: ColumnActionsPopOver,
+                columnActionsProps: {
+                    sortProps: {
+                        sort,
+                        handleSort,
+                        sortType: SORT_TYPE.DEFAULT
+                    },
+                    filterProps: {
+                        filterType: FILTER_TYPE.MULTI_SELECT,
+                        options: formFields?.nehaCallEndedBy ?? [],
+                        filters: {
+                            tableFilters,
+                            setTableFilters,
+                            hideBlanks: true
+                        }
+                    }
+                }
+            },
+            {
                 id: 'recordingUrl',
                 accessor: 'recordingUrl',
                 Header: HeaderCell,
@@ -164,16 +193,6 @@ export const NehaAgentsColumns = ({
                         <DataLinkCell link={value} text="Listen to Recording" />
                     );
                 }
-            },
-
-            {
-                id: 'callEndedBy',
-                accessor: 'callEndedBy',
-                Header: HeaderCell,
-                Cell: DataCell,
-                headerText: 'Call Ended By',
-                isVisible: true,
-                minWidth: 175
             },
             ...new BaseColumns({
                 sort,
@@ -192,7 +211,8 @@ export const NehaAgentsColumns = ({
         callLanguageOptions,
         dateFilterTypeMap,
         setDateFilterTypeMap,
-        tableFilters
+        tableFilters,
+        formFields?.nehaCallEndedBy
     ]);
 
     return columns;

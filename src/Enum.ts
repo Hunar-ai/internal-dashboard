@@ -85,7 +85,8 @@ export enum FORM_FIELD {
     'nehaSelectWillingnessToProceed' = 'nehaSelectWillingnessToProceed',
     'callLanguage' = 'callLanguage',
     'nehaSelectCallLater' = 'nehaSelectCallLater',
-    'nehaAgentsAllowedCompanies' = 'nehaAgentsAllowedCompanies'
+    'nehaAgentsAllowedCompanies' = 'nehaAgentsAllowedCompanies',
+    'nehaCallEndedBy' = 'nehaCallEndedBy'
 }
 
 export enum SORT_TYPE {

@@ -7,6 +7,7 @@ export interface FormFields {
     [FORM_FIELD.callLanguage]: OptionsProps;
     [FORM_FIELD.nehaSelectCallLater]: OptionsProps;
     [FORM_FIELD.nehaAgentsAllowedCompanies]: OptionsProps;
+    [FORM_FIELD.nehaCallEndedBy]: OptionsProps;
 }
 
 export interface MappedField {
