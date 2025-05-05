@@ -297,6 +297,15 @@ export const NehaSelectColumns = ({
                     );
                 }
             },
+            {
+                id: 'callEndedBy',
+                accessor: 'callEndedBy',
+                Header: HeaderCell,
+                Cell: DataCell,
+                headerText: 'Call Ended By',
+                isVisible: true,
+                minWidth: 175
+            },
             ...new BaseColumns({
                 sort,
                 handleSort,
