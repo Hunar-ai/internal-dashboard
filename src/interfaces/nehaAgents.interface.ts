@@ -1,14 +1,22 @@
 export interface NehaAgentCallProps {
     id: string;
-    external_call_id: string;
-    lead_id: string;
+    externalCallId: string;
+    lead: {
+        id: string;
+        companyId: string;
+        name: string;
+        mobileNumber: string;
+        metaData: object;
+        createdAt: string;
+        updatedAt: string;
+    };
     language: string;
     status: string;
     callEndedBy: string;
-    recording_url: string | null;
+    recordingUrl: string | null;
     duration: number;
-    created_at: string;
-    updated_at: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface NehaAgentPendingCallsProps {
