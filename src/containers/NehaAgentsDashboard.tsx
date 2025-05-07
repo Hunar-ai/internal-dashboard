@@ -1,5 +1,6 @@
-import { NehaAgentsMasterTable } from '@components/nehaAgents';
 import { Box, Grid, ThemeProvider } from '@mui/material';
+
+import { NehaAgentsMasterTable } from '@components/nehaAgents';
 
 import { NAVBAR_HEIGHT } from 'Constants';
 import { theme } from 'theme';

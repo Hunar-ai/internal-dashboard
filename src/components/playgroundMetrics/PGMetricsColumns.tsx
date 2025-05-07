@@ -20,7 +20,7 @@ import { useTableFilters } from 'hooks/useTableFilters';
 import { SettingsContext } from 'contexts';
 
 import { COLUMN_STICKY_TYPE, FILTER_TYPE, SORT_TYPE } from 'Enum';
-import { HandleSortProps, Sort } from 'interfaces';
+import type { HandleSortProps, Sort } from 'interfaces';
 import { TimeUtils } from 'utils';
 
 export interface PlayGroundMetricsColumnsProps {
