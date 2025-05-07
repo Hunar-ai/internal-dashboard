@@ -61,7 +61,7 @@ export const NehaSelectLeadUploadModal = ({
             });
         } catch (error) {
             const errorMsg = getApiErrorMsg(error);
-            showError({ title: 'Error!', description: errorMsg });
+            showError({ description: errorMsg });
         }
     };
 

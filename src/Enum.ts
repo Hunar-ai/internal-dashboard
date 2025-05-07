@@ -214,3 +214,11 @@ export enum CALL_RESULT_SECTION {
     NEXT_STEPS = 'nextSteps',
     FOLLOW_UP_POINTS = 'followUpPoints'
 }
+
+export enum MIME_TYPE {
+    TEXT_CSV = 'text/csv'
+}
+
+export enum FALL_BACK_VALUE {
+    NOT_AVAILABLE = 'N/A'
+}

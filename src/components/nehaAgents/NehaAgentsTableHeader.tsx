@@ -5,15 +5,16 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { Button, Grid, Typography } from '@mui/material';
 
 import { SearchBar } from '@hunar.ai/hunar-design-system';
+import { Select } from '@components/common';
 
 import { useGetNehaAgentPendingCalls } from 'hooks/apiHooks/nehaAgents/useGetNehaAgentPendingCalls';
 import { useExportNehaAgentCalls } from 'hooks/apiHooks/nehaAgents/useExportNehaAgentCalls';
 import { useErrorHelper } from 'hooks/useErrorHelper';
 import { useToast } from 'hooks/useToast';
+import { useGetFormFields } from 'hooks';
 
 import type { OptionProps, TableFiltersProps } from 'interfaces';
-import { Select } from '@components/common';
-import { useGetFormFields } from 'hooks';
+import { FALL_BACK_VALUE, MIME_TYPE } from 'Enum';
 
 interface AgentTableHeaderProps {
     company: OptionProps | null;
@@ -46,7 +47,7 @@ export const NehaAgentsTableHeader = ({
 
     const saveFile = (data: string) => {
         const file = new File([data], 'leads.csv', {
-            type: 'text/csv'
+            type: MIME_TYPE.TEXT_CSV
         });
         const url = URL.createObjectURL(file);
         window.open(url, '_blank');
@@ -62,7 +63,7 @@ export const NehaAgentsTableHeader = ({
             return data;
         } catch (error) {
             const errorMsg = getApiErrorMsg(error);
-            showError({ title: 'Error!', description: errorMsg });
+            showError({ title: 'Error', description: errorMsg });
         }
     };
 
@@ -101,7 +102,8 @@ export const NehaAgentsTableHeader = ({
                         {`Pending Calls: ${
                             isFetching
                                 ? 'Loading...'
-                                : pendingCallsData?.callsCount ?? 'N/A'
+                                : pendingCallsData?.callsCount ??
+                                  FALL_BACK_VALUE.NOT_AVAILABLE
                         }`}
                     </Typography>
                     <Select
