@@ -84,7 +84,9 @@ export enum FORM_FIELD {
     'twilioStatus' = 'twilioStatus',
     'nehaSelectWillingnessToProceed' = 'nehaSelectWillingnessToProceed',
     'callLanguage' = 'callLanguage',
-    'nehaSelectCallLater' = 'nehaSelectCallLater'
+    'nehaSelectCallLater' = 'nehaSelectCallLater',
+    'nehaAgentsAllowedCompanies' = 'nehaAgentsAllowedCompanies',
+    'nehaCallEndedBy' = 'nehaCallEndedBy'
 }
 
 export enum SORT_TYPE {
@@ -211,4 +213,12 @@ export enum CALL_RESULT_SECTION {
     CONCERNS = 'concerns',
     NEXT_STEPS = 'nextSteps',
     FOLLOW_UP_POINTS = 'followUpPoints'
+}
+
+export enum MIME_TYPE {
+    TEXT_CSV = 'text/csv'
+}
+
+export enum FALL_BACK_VALUE {
+    NOT_AVAILABLE = 'N/A'
 }

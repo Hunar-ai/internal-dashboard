@@ -37,7 +37,9 @@ export const settingsInitialState: SettingsContextType = {
         twilioStatus: [],
         nehaSelectWillingnessToProceed: [],
         callLanguage: [],
-        nehaSelectCallLater: []
+        nehaSelectCallLater: [],
+        nehaCallEndedBy: [],
+        nehaAgentsAllowedCompanies: []
     }
 };
 

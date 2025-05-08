@@ -8,7 +8,8 @@ import {
     ChecklistContainer,
     AssessmentContainer,
     NehaSelectContainer,
-    PlaygroundMetricsContainer
+    PlaygroundMetricsContainer,
+    NehaAgentsDashboard
 } from 'containers';
 
 import { useGetFormFields, useGetLoggedInPersonnel, useToken } from 'hooks';
@@ -64,6 +65,10 @@ export const AppContainer = () => {
                             <Route
                                 path="/neha-select"
                                 element={<NehaSelectContainer />}
+                            />
+                            <Route
+                                path="/neha-agents"
+                                element={<NehaAgentsDashboard />}
                             />
                         </>
                     )}

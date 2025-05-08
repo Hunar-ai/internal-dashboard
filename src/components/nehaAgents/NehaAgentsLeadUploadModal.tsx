@@ -7,17 +7,17 @@ import { Button, Dialog, DialogTitle, Grid } from '@mui/material';
 import { AppLoader } from '@components/common';
 import { Dropzone, DROPZONE_FILETYPE } from '@hunar.ai/hunar-design-system';
 
-import { useUploadNehaSelectLeads } from 'hooks/apiHooks/nehaSelect/useUploadNehaSelectLeads';
+import { useUploadNehaAgentLeads } from 'hooks/apiHooks/nehaAgents/useUploadNehaAgentLeads';
 import { useToast } from 'hooks/useToast';
 import { useErrorHelper } from 'hooks/useErrorHelper';
 
-import { NEHA_SELECT_COMPANY_ID } from './NehaSelectConstants';
-
 interface NehaSelectLeadUploadModalProps {
+    companyId: string | null;
     onUploadSuccess: () => void;
 }
 
-export const NehaSelectLeadUploadModal = ({
+export const NehaAgentsLeadUploadModal = ({
+    companyId,
     onUploadSuccess
 }: NehaSelectLeadUploadModalProps) => {
     const { showSuccess, showError } = useToast();
@@ -26,7 +26,7 @@ export const NehaSelectLeadUploadModal = ({
     const [isUploadModalOpen, setIsUploadModalOpen] = React.useState(false);
     const [file, setFile] = React.useState<File | null>(null);
 
-    const uploadNehaLeads = useUploadNehaSelectLeads();
+    const uploadNehaLeads = useUploadNehaAgentLeads();
 
     React.useEffect(() => {
         if (searchParams.has('upload')) {
@@ -53,10 +53,10 @@ export const NehaSelectLeadUploadModal = ({
         setFile(null);
     };
 
-    const uploadLeads = async (leadsFile: File) => {
+    const uploadLeads = async (companyId: string, leadsFile: File) => {
         try {
             await uploadNehaLeads.mutateAsync({
-                companyId: NEHA_SELECT_COMPANY_ID,
+                companyId: companyId,
                 leadsFile
             });
         } catch (error) {
@@ -66,9 +66,9 @@ export const NehaSelectLeadUploadModal = ({
     };
 
     const onUploadClick = () => {
-        if (!file) return;
+        if (!file || !companyId) return;
 
-        uploadLeads(file).then(() => {
+        uploadLeads(companyId, file).then(() => {
             handleClose();
             onUploadSuccess();
             showSuccess({

@@ -3,15 +3,15 @@ import React from 'react';
 import { useToast as useChakraToast } from '@chakra-ui/react';
 
 interface ShowToastProps {
-    title: string;
     description: string;
+    title?: string;
 }
 
 export const useToast = () => {
     const toast = useChakraToast();
 
     const showError = React.useCallback(
-        ({ title, description }: ShowToastProps) => {
+        ({ title = 'Error', description }: ShowToastProps) => {
             toast({
                 title,
                 description,
