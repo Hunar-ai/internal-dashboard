@@ -18,7 +18,7 @@ import { FALL_BACK_VALUE, MIME_TYPE } from 'Enum';
 
 interface AgentTableHeaderProps {
     company: OptionProps | null;
-    setCompany: (company: OptionProps | null) => void;
+    onCompanyChange: (company: OptionProps | null) => void;
     setSearchKey: (_: string) => void;
     filters: TableFiltersProps;
 }
@@ -26,7 +26,7 @@ interface AgentTableHeaderProps {
 export const NehaAgentsTableHeader = ({
     company,
     filters,
-    setCompany,
+    onCompanyChange,
     setSearchKey
 }: AgentTableHeaderProps) => {
     const { showError, showSuccess } = useToast();
@@ -81,12 +81,6 @@ export const NehaAgentsTableHeader = ({
         });
     };
 
-    React.useEffect(() => {
-        if (data?.nehaAgentsAllowedCompanies?.length) {
-            setCompany(data?.nehaAgentsAllowedCompanies[0]);
-        }
-    }, []);
-
     return (
         <>
             <Grid
@@ -98,14 +92,6 @@ export const NehaAgentsTableHeader = ({
                 gap={1.5}
             >
                 <Grid display="flex" alignItems="center" gap={1.5}>
-                    <Typography variant="body2">
-                        {`Pending Calls: ${
-                            isFetching
-                                ? 'Loading...'
-                                : pendingCallsData?.callsCount ??
-                                  FALL_BACK_VALUE.NOT_AVAILABLE
-                        }`}
-                    </Typography>
                     <Select
                         label="Select Company Id"
                         name="companyId"
@@ -116,12 +102,20 @@ export const NehaAgentsTableHeader = ({
                         sx={{ width: '280px' }}
                         onChange={(_, selectedOption) => {
                             if (selectedOption) {
-                                setCompany(selectedOption as OptionProps);
+                                onCompanyChange(selectedOption as OptionProps);
                             } else {
-                                setCompany(null);
+                                onCompanyChange(null);
                             }
                         }}
                     />
+                    <Typography variant="body2">
+                        {`Pending Calls: ${
+                            isFetching
+                                ? 'Loading...'
+                                : pendingCallsData?.callsCount ??
+                                  FALL_BACK_VALUE.NOT_AVAILABLE
+                        }`}
+                    </Typography>
                 </Grid>
                 <Grid display="flex" alignItems="center" gap={1.5}>
                     <SearchBar

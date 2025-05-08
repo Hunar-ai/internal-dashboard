@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useSearchParams } from 'react-router-dom';
+
 import { PaginatedTable, PaginatedTableHeader } from '@components/common';
 import { NehaAgentsColumns } from './NehaAgentsColumns';
 import { NehaAgentsLeadUploadModal } from './NehaAgentsLeadUploadModal';
@@ -24,9 +26,13 @@ export const NehaAgentsMasterTable = () => {
         key: 'updatedAt',
         order: SORT_ORDER.DESC
     });
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const [searchKey, setSearchKey] = React.useState('');
-    const [company, setCompany] = React.useState<OptionProps | null>(null);
+    const [company, setCompany] = React.useState<OptionProps | null>(() => {
+        const companyId = searchParams.get('companyId') || null;
+        return companyId ? { value: companyId, label: companyId } : null;
+    });
 
     const columns = NehaAgentsColumns({
         sort,
@@ -61,6 +67,17 @@ export const NehaAgentsMasterTable = () => {
         }
     });
 
+    const onCompanyChange = (company: OptionProps | null) => {
+        if (company === null) {
+            searchParams.delete('companyId');
+        } else {
+            searchParams.set('companyId', company.value);
+        }
+
+        setCompany(company);
+        setSearchParams(searchParams);
+    };
+
     return (
         <>
             <PaginatedTableHeader
@@ -71,7 +88,7 @@ export const NehaAgentsMasterTable = () => {
                     <NehaAgentsTableHeader
                         company={company}
                         filters={tableFilters}
-                        setCompany={setCompany}
+                        onCompanyChange={onCompanyChange}
                         setSearchKey={setSearchKey}
                     />
                 }
