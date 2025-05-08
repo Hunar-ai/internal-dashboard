@@ -75,7 +75,7 @@ export const NehaAgentsTableHeader = ({
 
             saveFile(data);
             showSuccess({
-                title: 'Success!',
+                title: 'Success',
                 description: 'Leads exported successfully!'
             });
         });

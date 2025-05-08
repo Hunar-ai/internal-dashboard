@@ -64,7 +64,7 @@ export const NehaSelectTableHeader = ({
 
             saveFile(data);
             showSuccess({
-                title: 'Success!',
+                title: 'Success',
                 description: 'Leads exported successfully!'
             });
         });
