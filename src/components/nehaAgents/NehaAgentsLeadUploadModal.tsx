@@ -54,28 +54,31 @@ export const NehaAgentsLeadUploadModal = ({
     };
 
     const uploadLeads = async (companyId: string, leadsFile: File) => {
+        return await uploadNehaLeads.mutateAsync({
+            companyId: companyId,
+            leadsFile
+        });
+    };
+
+    const postUploadSuccess = () => {
+        handleClose();
+        onUploadSuccess();
+        showSuccess({
+            title: 'Success',
+            description: 'Leads uploaded successfully!'
+        });
+    };
+
+    const onUploadClick = async () => {
+        if (!file || !companyId) return;
+
         try {
-            await uploadNehaLeads.mutateAsync({
-                companyId: companyId,
-                leadsFile
-            });
+            await uploadLeads(companyId, file);
+            postUploadSuccess();
         } catch (error) {
             const errorMsg = getApiErrorMsg(error);
             showError({ description: errorMsg });
         }
-    };
-
-    const onUploadClick = () => {
-        if (!file || !companyId) return;
-
-        uploadLeads(companyId, file).then(() => {
-            handleClose();
-            onUploadSuccess();
-            showSuccess({
-                title: 'Success',
-                description: 'Leads uploaded successfully!'
-            });
-        });
     };
 
     return (
