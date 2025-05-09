@@ -90,3 +90,8 @@ export type {
     NehaSelectCallProps,
     NehaSelectPendingCallsProps
 } from './nehaSelect.interface';
+
+export type {
+    NehaAgentCallProps,
+    NehaAgentPendingCallsProps
+} from './nehaAgents.interface';
