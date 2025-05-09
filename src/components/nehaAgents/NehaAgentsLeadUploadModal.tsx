@@ -60,25 +60,22 @@ export const NehaAgentsLeadUploadModal = ({
         });
     };
 
-    const postUploadSuccess = () => {
-        handleClose();
-        onUploadSuccess();
-        showSuccess({
-            title: 'Success',
-            description: 'Leads uploaded successfully!'
-        });
-    };
-
-    const onUploadClick = async () => {
+    const onUploadClick = () => {
         if (!file || !companyId) return;
 
-        try {
-            await uploadLeads(companyId, file);
-            postUploadSuccess();
-        } catch (error) {
-            const errorMsg = getApiErrorMsg(error);
-            showError({ description: errorMsg });
-        }
+        uploadLeads(companyId, file)
+            .then(() => {
+                handleClose();
+                onUploadSuccess();
+                showSuccess({
+                    title: 'Success',
+                    description: 'Leads uploaded successfully!'
+                });
+            })
+            .catch(error => {
+                const errorMsg = getApiErrorMsg(error);
+                showError({ description: errorMsg });
+            });
     };
 
     return (
