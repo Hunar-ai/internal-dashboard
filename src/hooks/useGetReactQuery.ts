@@ -4,6 +4,7 @@ import type {
     ApiError,
     FormFields,
     GetCompaniesResponse,
+    LoiProps,
     NehaSelectPendingCallsProps,
     PersonnelProps
 } from 'interfaces';
@@ -13,7 +14,9 @@ type SuccessDataProps =
     | FormFields
     | PersonnelProps
     | GetCompaniesResponse
-    | NehaSelectPendingCallsProps;
+    | NehaSelectPendingCallsProps
+    | LoiProps
+    | LoiProps[];
 
 interface GetReactQueryProps<ResponseProps> {
     queryKey: string[];

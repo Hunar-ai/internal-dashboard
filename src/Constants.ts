@@ -54,3 +54,5 @@ export const ALLOWED_IMAGE_EXTENSIONS = [
     ALLOWED_EXTENSION.JPG,
     ALLOWED_EXTENSION.JPEG
 ];
+
+export const CREATE_NEW_LOI_ID = 'new';

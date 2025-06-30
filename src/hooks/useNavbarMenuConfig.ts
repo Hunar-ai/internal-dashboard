@@ -56,7 +56,8 @@ export const useNavbarMenuConfig = () => {
                 link: '/checklist',
                 isNewFeature: true
             },
-            { id: 'assessment', title: 'Assessment', link: '/assessment' }
+            { id: 'assessment', title: 'Assessment', link: '/assessment' },
+            { id: 'loi', title: 'LOI', link: '/loi' }
         ];
 
         if (PLAYGROUND_METRICS_USERS?.includes(personnel?.email)) {

@@ -222,3 +222,8 @@ export enum MIME_TYPE {
 export enum FALL_BACK_VALUE {
     NOT_AVAILABLE = 'N/A'
 }
+
+export enum LOI_TEMPLATE_FIELD_TYPE {
+    TEXT = 'TEXT',
+    DATE = 'DATE'
+}
