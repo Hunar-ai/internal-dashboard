@@ -53,9 +53,9 @@ export const LoiDetailsView = () => {
 
     const onSave = () => {
         if (!companyId) return;
-        const placeholders = [...htmlTemplate.matchAll(PLACEHOLDER_REGEX)].map(
-            placeholder => placeholder[1]
-        );
+        const templateFields = [
+            ...htmlTemplate.matchAll(PLACEHOLDER_REGEX)
+        ]?.map(placeholder => placeholder[1]);
 
         updateOrCreateLoi.mutate(
             {
@@ -66,7 +66,7 @@ export const LoiDetailsView = () => {
                     ...(loi && !isNewLoi ? { loiId: loi } : {}),
                     companyId,
                     template: htmlTemplate,
-                    templateFields: getLoiTemplatePlaceholders(placeholders)
+                    templateFields: getLoiTemplatePlaceholders(templateFields)
                 }
             },
             {
