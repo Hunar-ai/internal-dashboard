@@ -9,3 +9,4 @@ export { AssessmentContainer } from './AssessmentContainer';
 export { PlaygroundMetricsContainer } from './PlaygroundMetricsContainer';
 export { NehaSelectContainer } from './NehaSelectContainer';
 export { NehaAgentsDashboard } from './NehaAgentsDashboard';
+export { LoiContainer } from './LoiContainer';
