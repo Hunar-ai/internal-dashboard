@@ -6,6 +6,7 @@ export interface AssessmentSettingsProps {
     emails: string[];
     isAssessmentEnabled: boolean;
     jobDescription: string;
+    jobRoleId: string;
     prompt: string | null;
 }
 

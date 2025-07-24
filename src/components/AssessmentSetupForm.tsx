@@ -11,11 +11,13 @@ import {
     TextField
 } from './common';
 import { useCompanyHelper } from './company/useCompanyHelper';
+import { useJobRoleHelper } from './jobRole/useJobRoleHelper';
 
 import { useToast } from 'hooks/useToast';
 import { useValidationHelper } from 'hooks';
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useSaveAssessmentSettings } from 'hooks/apiHooks/useSaveAssessmentSettings';
+import { useSearchJobRoles } from 'hooks/apiHooks/jobQuery/useSearchJobRoles';
 
 import { ErrorMsg } from 'utils';
 import type { AssessmentSettingsProps, ErrorStateProps } from 'interfaces';
@@ -32,6 +34,7 @@ const assessmentFormInitialValues: AssessmentFormProps = {
     emails: '',
     isAssessmentEnabled: false,
     jobDescription: '',
+    jobRoleId: '',
     prompt: null
 };
 const assessmentFormErrorStateInitialValues: ErrorStateProps = {
@@ -47,32 +50,55 @@ export const AssessmentSetupForm = () => {
 
     const [companyId, setCompanyId] = React.useState('');
     const [hasCompanyIdError, setHasCompanyIdError] = React.useState(false);
+    const [hasJobRoleError, setHasJobRoleError] = React.useState(false);
     const [assessmentForm, setAssessmentForm] = React.useState({
         ...assessmentFormInitialValues
     });
     const [assessmentFormErrorState, setAssessmentFormErrorState] =
         React.useState({ ...assessmentFormErrorStateInitialValues });
+    const [jobRole, setJobRole] = React.useState('');
 
     const { data: companiesResponse, isLoading: isCompaniesLoading } =
         useGetCompanies();
-    const { companyIdOptions, companyMap } = useCompanyHelper(
-        companiesResponse?.data
+    const { companyIdOptions } = useCompanyHelper(companiesResponse?.data);
+    const {
+        mutate: searchJobRoles,
+        data: jobRolesResponse,
+        isLoading: isJobRolesLoading
+    } = useSearchJobRoles();
+
+    const { jobRoleOptions, jobRoleMap } = useJobRoleHelper(
+        jobRolesResponse?.data
     );
 
     const onCompanyIdChange = ({
         target: { value }
     }: React.ChangeEvent<HTMLSelectElement>) => {
-        const assessmentSettings =
-            companyMap[value]?.settings.assessmentSettings;
-        if (assessmentSettings) {
-            const { emails, ...restSettings } = assessmentSettings;
-            setAssessmentForm({ ...restSettings, emails: emails.join(',') });
-        } else {
-            setAssessmentForm({ ...assessmentFormInitialValues });
-        }
-
         setCompanyId(value);
         setHasCompanyIdError(!value);
+    };
+
+    const onJobRoleChange = ({
+        target: { value }
+    }: React.ChangeEvent<HTMLSelectElement>) => {
+        const assessmentSettings =
+            jobRoleMap[value]?.settings?.assessmentSettings;
+        if (assessmentSettings) {
+            const { emails, ...restSettings } = assessmentSettings;
+            setAssessmentForm({
+                ...restSettings,
+                emails: emails.join(','),
+                jobRoleId: value
+            });
+        } else {
+            setAssessmentForm({
+                ...assessmentFormInitialValues,
+                jobRoleId: value
+            });
+        }
+
+        setJobRole(value);
+        setHasJobRoleError(!value);
     };
 
     const onAssessmentEnableToggle = (
@@ -84,7 +110,9 @@ export const AssessmentSetupForm = () => {
 
     const onAssessmentFieldChange = ({
         target: { name, value }
-    }: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    }: React.ChangeEvent<
+        HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement
+    >) => {
         setAssessmentForm(prevForm => ({ ...prevForm, [name]: value }));
 
         setAssessmentFormErrorState(prevFormErrorState => ({
@@ -100,7 +128,10 @@ export const AssessmentSetupForm = () => {
         saveAssessmentSettings.mutate(
             {
                 params: { companyId },
-                requestBody: { emails: formattedEmails, ...restForm }
+                requestBody: {
+                    emails: formattedEmails,
+                    ...restForm
+                }
             },
             {
                 onSuccess: () => {
@@ -136,6 +167,12 @@ export const AssessmentSetupForm = () => {
         submitSettings();
     };
 
+    React.useEffect(() => {
+        if (companyId) {
+            searchJobRoles(companyId);
+        }
+    }, [companyId, searchJobRoles]);
+
     return (
         <FormWrapper
             formTitle="Assessment Settings"
@@ -146,9 +183,9 @@ export const AssessmentSetupForm = () => {
             width={{ base: 'xl', lg: '60%' }}
             id="assessment-setup-form-container"
         >
-            {(isCompaniesLoading || saveAssessmentSettings.isLoading) && (
-                <AppLoader />
-            )}
+            {(isCompaniesLoading ||
+                saveAssessmentSettings.isLoading ||
+                isJobRolesLoading) && <AppLoader />}
             <SelectField
                 label="Company Id"
                 name="companyId"
@@ -193,6 +230,22 @@ export const AssessmentSetupForm = () => {
                             <HelperText
                                 msg="Please enter comma separated emails"
                                 hasError={assessmentFormErrorState.emails}
+                                errorMsg={ErrorMsg.required()}
+                            />
+                        }
+                    />
+                    <SelectField
+                        label="Job Role"
+                        name="jobRole"
+                        placeholder="Select Job Role"
+                        options={jobRoleOptions}
+                        value={jobRole}
+                        onChange={onJobRoleChange}
+                        isRequired
+                        isInvalid={hasJobRoleError}
+                        helperText={
+                            <HelperText
+                                hasError={hasJobRoleError}
                                 errorMsg={ErrorMsg.required()}
                             />
                         }
