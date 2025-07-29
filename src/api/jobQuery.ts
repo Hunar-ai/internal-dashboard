@@ -19,3 +19,7 @@ export const shortlistWorkers = ApiClient({
 export const upload = ApiClient({
     url: `/v1/company/{companyId}/job-query/{jobQueryId}/document`
 });
+
+export const search = ApiClient({
+    url: `/v1/company/{companyId}/search-job-role`
+});
