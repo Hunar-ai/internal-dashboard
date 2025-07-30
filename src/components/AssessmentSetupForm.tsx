@@ -170,6 +170,8 @@ export const AssessmentSetupForm = () => {
     React.useEffect(() => {
         if (companyId) {
             searchJobRoles(companyId);
+            setAssessmentForm({ ...assessmentFormInitialValues });
+            setJobRole('');
         }
     }, [companyId, searchJobRoles]);
 
@@ -202,7 +204,23 @@ export const AssessmentSetupForm = () => {
                     />
                 }
             />
-            {companyId && (
+            <SelectField
+                label="Job Role"
+                name="jobRole"
+                placeholder="Select Job Role"
+                options={jobRoleOptions}
+                value={jobRole}
+                onChange={onJobRoleChange}
+                isRequired
+                isInvalid={hasJobRoleError}
+                helperText={
+                    <HelperText
+                        hasError={hasJobRoleError}
+                        errorMsg={ErrorMsg.required()}
+                    />
+                }
+            />
+            {companyId && jobRole && (
                 <>
                     <FormControl
                         display="flex"
@@ -230,22 +248,6 @@ export const AssessmentSetupForm = () => {
                             <HelperText
                                 msg="Please enter comma separated emails"
                                 hasError={assessmentFormErrorState.emails}
-                                errorMsg={ErrorMsg.required()}
-                            />
-                        }
-                    />
-                    <SelectField
-                        label="Job Role"
-                        name="jobRole"
-                        placeholder="Select Job Role"
-                        options={jobRoleOptions}
-                        value={jobRole}
-                        onChange={onJobRoleChange}
-                        isRequired
-                        isInvalid={hasJobRoleError}
-                        helperText={
-                            <HelperText
-                                hasError={hasJobRoleError}
                                 errorMsg={ErrorMsg.required()}
                             />
                         }
