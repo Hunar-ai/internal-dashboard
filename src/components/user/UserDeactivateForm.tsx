@@ -21,9 +21,8 @@ import { useSearchPersonnels } from 'hooks/apiHooks/useSearchPersonnels';
 import { useValidationHelper } from 'hooks';
 
 import type { PersonnelProps, ValidationMapProps } from 'interfaces';
+import { isSuperUser } from 'permissions';
 import { ErrorMsg, RegExUtil } from 'utils';
-
-const SUPER_USERS: string[] = import.meta.env.VITE_SUPER_USERS.split(',');
 
 const validationMap: ValidationMapProps = {
     companyId: (companyId: string) => RegExUtil.isId(companyId),
@@ -111,7 +110,7 @@ export const UserDeactivateForm = () => {
                 title: 'Not Found',
                 description: 'No personnel found with the provided personnel id'
             });
-        } else if (SUPER_USERS.indexOf(personnel.email) > -1) {
+        } else if (isSuperUser(personnel.email)) {
             showError({
                 title: 'Unauthorized!',
                 description: 'You are not allowed to deactivate this personnel!'

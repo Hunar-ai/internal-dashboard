@@ -3,9 +3,7 @@ import React from 'react';
 import { useGetLoggedInPersonnel, useToken } from 'hooks';
 
 import type { MenuProps } from 'interfaces';
-
-const PLAYGROUND_METRICS_USERS =
-    import.meta.env.VITE_PLAYGROUND_METRICS_USERS?.split(',') ?? [];
+import { hasMetricsPageAccess } from 'permissions';
 
 export const useNavbarMenuConfig = () => {
     const { token } = useToken();
@@ -59,7 +57,7 @@ export const useNavbarMenuConfig = () => {
             { id: 'assessment', title: 'Assessment', link: '/assessment' }
         ];
 
-        if (PLAYGROUND_METRICS_USERS?.includes(personnel?.email)) {
+        if (hasMetricsPageAccess(personnel?.email ?? '')) {
             baseRoutes.push({
                 id: 'playground',
                 title: 'Playground Metrics',
