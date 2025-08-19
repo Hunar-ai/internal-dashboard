@@ -78,6 +78,7 @@ export const LoiView = () => {
         } else {
             setCompany(selectedOption as OptionProps);
         }
+        setLoi(null);
     };
 
     const onLoiChange = (
@@ -149,6 +150,7 @@ export const LoiView = () => {
                     value={loi}
                     disabled={!company?.value}
                     required
+                    clearOnBlur
                     onChange={onLoiChange}
                     helperText={
                         hasNoLoiRecords
