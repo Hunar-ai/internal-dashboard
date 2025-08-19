@@ -5,11 +5,11 @@ export const get = ApiClient({
 });
 
 export const getLoiForCompany = ApiClient({
-    url: `/v1/company/{companyId}/loi`
+    url: `/v1/company/{companyId}/search-loi`
 });
 
 export const createOrUpdate = ApiClient({
-    url: `/v1/company/{companyId}/loi`
+    url: `/v1/company/{companyId}/create-update-loi`
 });
 
 export const deleteLoi = ApiClient({
