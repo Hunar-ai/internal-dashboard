@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
-import { Box } from '@mui/material';
+
+import { Grid, GridItem } from '@chakra-ui/react';
 
 interface SplitViewProps {
     children: ReactNode;
@@ -8,38 +9,37 @@ interface SplitViewProps {
 
 interface PanelProps {
     children: ReactNode;
-    flex?: number;
+    colSpan?: number;
 }
 
 export const SplitView = ({ children, gap = 2 }: SplitViewProps) => {
     return (
-        <Box
-            sx={{
-                display: 'flex',
-                width: '100%',
-                height: '100%',
-                gap: theme => theme.spacing(gap),
-                overflow: 'hidden'
-            }}
+        <Grid
+            display="flex"
+            templateColumns="repeat(12, 1fr)"
+            width="100%"
+            height="100%"
+            overflow="hidden"
+            gap={gap}
         >
             {children}
-        </Box>
+        </Grid>
     );
 };
 
-const Left = ({ children, flex = 1 }: PanelProps) => {
+const Left = ({ children, colSpan = 6 }: PanelProps) => {
     return (
-        <Box sx={{ flex: flex, height: '100%', overflowY: 'auto' }}>
+        <GridItem colSpan={colSpan} height="100%" width="100%" overflowY="auto">
             {children}
-        </Box>
+        </GridItem>
     );
 };
 
-const Right = ({ children, flex = 1 }: PanelProps) => {
+const Right = ({ children, colSpan = 6 }: PanelProps) => {
     return (
-        <Box sx={{ flex: flex, height: '100%', overflowY: 'auto' }}>
+        <GridItem colSpan={colSpan} height="100%" width="100%" overflowY="auto">
             {children}
-        </Box>
+        </GridItem>
     );
 };
 

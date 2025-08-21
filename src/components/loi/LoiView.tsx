@@ -1,18 +1,19 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, ThemeProvider, Typography } from '@mui/material';
+import { Button, ThemeProvider } from '@mui/material';
+import { Box, SimpleGrid, Text } from '@chakra-ui/react';
 
-import { AppLoader, Select } from '@components/common';
+import { AppLoader, CenteredContainer, Select } from '@components/common';
 import { useCompanyHelper } from '@components/company/useCompanyHelper';
 import { useLoiHelper } from '@components/loi/useLoiHelper';
+import { CREATE_NEW_LOI_ID } from './LoiConstants';
 
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useGetLoiForCompany } from 'hooks/apiHooks/loi/useGetLoiForCompany';
 import { useDeleteLoi } from 'hooks/apiHooks/loi/useDeleteLoi';
 import { useToast } from 'hooks/useToast';
 
-import { CREATE_NEW_LOI_ID } from 'Constants';
 import { OptionProps, OptionsProps } from 'interfaces';
 import { theme } from 'theme';
 
@@ -126,72 +127,93 @@ export const LoiView = () => {
 
     return (
         <ThemeProvider theme={theme}>
-            <Box p={4}>
-                <Typography mb={1}>Select Company</Typography>
-                <Select
-                    label="Company ID"
-                    name="companyId"
-                    placeholder="Select Company ID"
-                    options={companyIdOptions}
-                    value={company}
-                    disabled={isLoiListLoading}
-                    required
-                    onChange={onCompanyChange}
-                />
+            <CenteredContainer>
+                <Box
+                    p={4}
+                    borderWidth="1px"
+                    borderRadius="lg"
+                    width={{ base: 'xl', lg: '60%' }}
+                >
+                    <SimpleGrid>
+                        <Box mb={2}>
+                            <Text
+                                fontSize="xl"
+                                lineHeight={1.4}
+                                width="100%"
+                                fontWeight={600}
+                                mb={4}
+                            >
+                                LOI Configuration
+                            </Text>
+                        </Box>
 
-                <Typography mt={2} mb={1}>
-                    Select LOI
-                </Typography>
-                <Select
-                    label="LOI ID"
-                    name="loiId"
-                    placeholder="Select LOI Id"
-                    options={loiIdOptions}
-                    value={loi}
-                    disabled={!company?.value}
-                    required
-                    clearOnBlur
-                    onChange={onLoiChange}
-                    helperText={
-                        hasNoLoiRecords
-                            ? 'No LOI records for the selected company'
-                            : ''
-                    }
-                />
-                {company?.value ? (
-                    <Box
-                        display="flex"
-                        gap={1}
-                        mt={2}
-                        justifyContent="flex-end"
-                    >
-                        <Button
-                            variant="contained"
-                            disabled={!loi?.value}
-                            onClick={navigateToLoiEditView}
-                        >
-                            Edit
-                        </Button>
-                        <Button
-                            variant="contained"
-                            disabled={!loi?.value}
-                            color="error"
-                            onClick={onLoiDelete}
-                        >
-                            Delete
-                        </Button>
+                        <Box mb={4}>
+                            <Select
+                                label="Company ID"
+                                name="companyId"
+                                placeholder="Select Company ID"
+                                options={companyIdOptions}
+                                value={company}
+                                disabled={isLoiListLoading}
+                                required
+                                onChange={onCompanyChange}
+                            />
+                        </Box>
 
-                        <Button
-                            variant="outlined"
-                            onClick={navigateToCreateLoiView}
-                        >
-                            Add New LOI
-                        </Button>
-                    </Box>
-                ) : (
-                    <></>
-                )}
-            </Box>
+                        <Box mb={4}>
+                            <Select
+                                label="LOI ID"
+                                name="loiId"
+                                placeholder="Select LOI ID"
+                                options={loiIdOptions}
+                                value={loi}
+                                disabled={!company?.value}
+                                required
+                                clearOnBlur
+                                onChange={onLoiChange}
+                                helperText={
+                                    hasNoLoiRecords
+                                        ? 'No LOI records for the selected company'
+                                        : ''
+                                }
+                            />
+                        </Box>
+
+                        {company?.value ? (
+                            <Box
+                                display="flex"
+                                gap={2}
+                                justifyContent="flex-end"
+                            >
+                                <Button
+                                    variant="contained"
+                                    disabled={!loi?.value}
+                                    onClick={navigateToLoiEditView}
+                                >
+                                    Edit
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    disabled={!loi?.value}
+                                    color="error"
+                                    onClick={onLoiDelete}
+                                >
+                                    Delete
+                                </Button>
+
+                                <Button
+                                    variant="outlined"
+                                    onClick={navigateToCreateLoiView}
+                                >
+                                    Add New LOI
+                                </Button>
+                            </Box>
+                        ) : (
+                            <></>
+                        )}
+                    </SimpleGrid>
+                </Box>
+            </CenteredContainer>
         </ThemeProvider>
     );
 };

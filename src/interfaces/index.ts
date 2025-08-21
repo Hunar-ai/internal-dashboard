@@ -96,4 +96,8 @@ export type {
     NehaAgentPendingCallsProps
 } from './nehaAgents.interface';
 
-export type { LoiProps, CreateOrUpdateLoiResponseProps } from './loi.interface';
+export type {
+    LoiProps,
+    LoiTemplateField,
+    CreateOrUpdateLoiResponseProps
+} from './loi.interface';

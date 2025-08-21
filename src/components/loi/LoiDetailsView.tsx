@@ -1,27 +1,47 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Button } from '@mui/material';
+import { Button } from '@mui/material';
+import { Box } from '@chakra-ui/react';
 
 import { AppLoader } from '@components/common';
 import { HtmlPreview, HtmlCodeEditor } from '@components/common/htmlPreview';
-import { SplitView, getLoiTemplatePlaceholders } from '@components/loi';
+import {
+    SplitView,
+    LoiEditorView,
+    LoiEditTemplateFieldsForm
+} from '@components/loi';
+import {
+    CREATE_NEW_LOI_ID,
+    HTML_CODE_EDITOR_PLACEHOLDER
+} from './LoiConstants';
 
 import { useGetLoi, useCreateOrUpdateLoi } from 'hooks/apiHooks/loi';
 import { useToast } from 'hooks/useToast';
 
-import { CREATE_NEW_LOI_ID } from 'Constants';
+import { LoiTemplateField } from 'interfaces/loi.interface';
+import { useLoiHelper } from './useLoiHelper';
 
 const SUBMIT_CONTAINER_HEIGHT = '64px';
-const PLACEHOLDER_REGEX = /{{\s*(.*?)\s*}}/g;
 
 export const LoiDetailsView = () => {
-    const { companyId, loi } = useParams();
     const navigate = useNavigate();
+    const { companyId, loi } = useParams();
     const { showError, showSuccess } = useToast();
 
     const [htmlTemplate, setHtmlTemplate] = React.useState('');
+    const [loiTemplateFields, setLoiTemplateFields] = React.useState<
+        LoiTemplateField[]
+    >([]);
+    const [isLoiTemplatesFormVisible, setIsLoiTemplatesFormVisible] =
+        React.useState(false);
     const isNewLoi = React.useMemo(() => loi === CREATE_NEW_LOI_ID, [loi]);
+
+    const {
+        buildTemplateFields,
+        buildTemplateFieldDefaultMap,
+        extractTemplateFieldsFromLoiTemplate
+    } = useLoiHelper();
 
     const { data, isFetching: isLoiLoading } = useGetLoi({
         params: { loiId: loi as string },
@@ -32,6 +52,7 @@ export const LoiDetailsView = () => {
     React.useEffect(() => {
         if (data?.template) {
             setHtmlTemplate(data.template);
+            setLoiTemplateFields(data.templateFields);
         }
     }, [data]);
 
@@ -45,17 +66,52 @@ export const LoiDetailsView = () => {
         setHtmlTemplate(e.target.value);
     };
 
-    const onCancel = () => {
+    const onTemplateFieldChange = (
+        name: string,
+        field: string,
+        value: string | number
+    ) => {
+        setLoiTemplateFields(prev =>
+            prev.map(templateField =>
+                templateField.name === name
+                    ? { ...templateField, [field]: value }
+                    : templateField
+            )
+        );
+    };
+
+    const onCancelClick = () => {
         navigate({
             pathname: `/loi`
         });
     };
 
-    const onSave = () => {
-        if (!companyId) return;
-        const templateFields = [
-            ...htmlTemplate.matchAll(PLACEHOLDER_REGEX)
-        ]?.map(placeholder => placeholder[1]);
+    const onProceedToTemplateEditorClick = () => {
+        if (!loi?.trim()) {
+            return;
+        }
+
+        const templateFields =
+            extractTemplateFieldsFromLoiTemplate(htmlTemplate);
+        const templateFieldDefaultMap =
+            buildTemplateFieldDefaultMap(loiTemplateFields);
+        const modifiedTeplateFields = buildTemplateFields(
+            templateFields,
+            templateFieldDefaultMap
+        );
+
+        setLoiTemplateFields(modifiedTeplateFields);
+        setIsLoiTemplatesFormVisible(true);
+    };
+
+    const onGoToLoiEditorClick = () => {
+        setIsLoiTemplatesFormVisible(false);
+    };
+
+    const onSaveClick = () => {
+        if (!companyId) {
+            return;
+        }
 
         updateOrCreateLoi.mutate(
             {
@@ -66,7 +122,7 @@ export const LoiDetailsView = () => {
                     ...(loi && !isNewLoi ? { loiId: loi } : {}),
                     companyId,
                     template: htmlTemplate,
-                    templateFields: getLoiTemplatePlaceholders(templateFields)
+                    templateFields: loiTemplateFields
                 }
             },
             {
@@ -95,15 +151,28 @@ export const LoiDetailsView = () => {
     }
 
     return (
-        <Box height="100%">
-            <SplitView>
-                <SplitView.Left flex={2}>
-                    <HtmlCodeEditor
-                        htmlInput={htmlTemplate}
-                        onChange={handleChange}
+        <Box height="100%" p={4}>
+            <SplitView gap={4}>
+                <SplitView.Left>
+                    <LoiEditorView
                         containerHeight={`calc(100% - ${SUBMIT_CONTAINER_HEIGHT})`}
-                        codeEditorPlaceholder={`Write your code here. The result will appear in the adjacent panel.`}
-                    />
+                    >
+                        {isLoiTemplatesFormVisible ? (
+                            <LoiEditTemplateFieldsForm
+                                templateFields={loiTemplateFields}
+                                onTemplateFieldChange={onTemplateFieldChange}
+                            />
+                        ) : (
+                            <HtmlCodeEditor
+                                htmlInput={htmlTemplate}
+                                onChange={handleChange}
+                                codeEditorPlaceholder={
+                                    HTML_CODE_EDITOR_PLACEHOLDER
+                                }
+                            />
+                        )}
+                    </LoiEditorView>
+
                     <Box
                         display="flex"
                         alignItems="center"
@@ -113,21 +182,31 @@ export const LoiDetailsView = () => {
                         <Button
                             variant="outlined"
                             size="medium"
-                            onClick={onCancel}
+                            onClick={
+                                isLoiTemplatesFormVisible
+                                    ? onGoToLoiEditorClick
+                                    : onCancelClick
+                            }
                         >
-                            {`CANCEL`}
+                            {isLoiTemplatesFormVisible ? `BACK` : `CANCEL`}
                         </Button>
                         <Button
                             variant="contained"
                             size="medium"
-                            onClick={onSave}
+                            onClick={
+                                isLoiTemplatesFormVisible
+                                    ? onSaveClick
+                                    : onProceedToTemplateEditorClick
+                            }
                         >
-                            {`SAVE AND PUBLISH`}
+                            {isLoiTemplatesFormVisible
+                                ? `SAVE AND PUBLISH`
+                                : `NEXT`}
                         </Button>
                     </Box>
                 </SplitView.Left>
 
-                <SplitView.Right flex={3}>
+                <SplitView.Right>
                     <HtmlPreview htmlInput={htmlTemplate} />
                 </SplitView.Right>
             </SplitView>

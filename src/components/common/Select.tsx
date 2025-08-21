@@ -121,7 +121,17 @@ export const Select = ({
                             {option.label}
                         </Button>
                     ) : (
-                        <li {...props}>
+                        <li
+                            {...props}
+                            style={{
+                                background: option?.highlight
+                                    ? '#b0d0f0'
+                                    : 'inherit',
+                                fontWeight: option?.highlight
+                                    ? 'bold'
+                                    : 'inherit'
+                            }}
+                        >
                             <Checkbox
                                 icon={icon}
                                 checkedIcon={checkedIcon}

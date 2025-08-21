@@ -1,6 +1,7 @@
 import { type SxProps } from '@mui/material';
 
 export const CodeEditorContainerSx: SxProps = {
+    height: '100%',
     backgroundColor: '#1e1e1e',
     color: '#d4d4d4',
     padding: 2,
