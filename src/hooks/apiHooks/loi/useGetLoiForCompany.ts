@@ -20,8 +20,7 @@ export const useGetLoiForCompany = ({
     return useGetReactQuery({
         requestUrl: getLoiForCompany,
         queryKey: [companyId],
-        // eslint-disable-next-line camelcase
-        params: { companyId, sort_key: '-audit_metadata.created_on' },
+        params: { companyId, sortKey: '-audit_metadata.updated_on' },
         enabled
     });
 };
