@@ -26,7 +26,16 @@ export const useLoiHelper = (loiData?: LoiProps[]) => {
 
     const extractTemplateFieldsFromLoiTemplate = (loiTemplate: string) => {
         return [...loiTemplate.matchAll(LOI_PLACEHOLDER_EXTRACTOR_REGEX)]?.map(
-            placeholder => placeholder[1]
+            placeholder => String(placeholder[1]).toLowerCase()
+        );
+    };
+
+    const normalizeLoiTemplatePlaceholders = (loiTemplate: string): string => {
+        return loiTemplate.replace(
+            LOI_PLACEHOLDER_EXTRACTOR_REGEX,
+            (_, placeholder) => {
+                return `{{${placeholder.toLowerCase()}}}`;
+            }
         );
     };
 
@@ -70,6 +79,7 @@ export const useLoiHelper = (loiData?: LoiProps[]) => {
         loiIdOptions,
         extractTemplateFieldsFromLoiTemplate,
         buildTemplateFieldDefaultMap,
-        buildTemplateFields
+        buildTemplateFields,
+        normalizeLoiTemplatePlaceholders
     };
 };

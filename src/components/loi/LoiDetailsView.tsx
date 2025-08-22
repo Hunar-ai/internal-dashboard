@@ -40,7 +40,8 @@ export const LoiDetailsView = () => {
     const {
         buildTemplateFields,
         buildTemplateFieldDefaultMap,
-        extractTemplateFieldsFromLoiTemplate
+        extractTemplateFieldsFromLoiTemplate,
+        normalizeLoiTemplatePlaceholders
     } = useLoiHelper();
 
     const { data, isFetching: isLoiLoading } = useGetLoi({
@@ -91,8 +92,11 @@ export const LoiDetailsView = () => {
             return;
         }
 
-        const templateFields =
-            extractTemplateFieldsFromLoiTemplate(htmlTemplate);
+        const normalisedLoiTemplate =
+            normalizeLoiTemplatePlaceholders(htmlTemplate);
+        const templateFields = extractTemplateFieldsFromLoiTemplate(
+            normalisedLoiTemplate
+        );
         const templateFieldDefaultMap =
             buildTemplateFieldDefaultMap(loiTemplateFields);
         const modifiedTeplateFields = buildTemplateFields(
@@ -100,6 +104,7 @@ export const LoiDetailsView = () => {
             templateFieldDefaultMap
         );
 
+        setHtmlTemplate(normalisedLoiTemplate);
         setLoiTemplateFields(modifiedTeplateFields);
         setIsLoiTemplatesFormVisible(true);
     };
