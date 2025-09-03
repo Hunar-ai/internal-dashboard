@@ -11,20 +11,20 @@ export interface JobRoleSettingsProps {
     assessmentSettings?: AssessmentSettingsProps;
 }
 
-export interface jobRoleProps {
+export interface JobRoleProps {
     companyId: string;
     id: string;
     email: string;
     mobileNumber: string;
-    description_document_access_url: string;
-    description_document: string;
-    description_text: string;
+    descriptionDocumentAccessUrl: string;
+    descriptionDocument: string;
+    descriptionText: string;
     name: string;
-    number_of_job_queries: number;
+    numberOfJobQueries: number;
     settings: JobRoleSettingsProps;
 }
 
 export interface JobResponse {
-    data: jobRoleProps[];
+    data: JobRoleProps[];
     paginationInfo: PaginationInfo;
 }

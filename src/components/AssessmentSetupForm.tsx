@@ -85,16 +85,18 @@ export const AssessmentSetupForm = () => {
             jobRoleMap[value]?.settings?.assessmentSettings;
         if (assessmentSettings) {
             const { emails, ...restSettings } = assessmentSettings;
-            setAssessmentForm({
+            setAssessmentForm(prev => ({
+                ...prev,
                 ...restSettings,
                 emails: emails.join(','),
                 jobRoleId: value
-            });
+            }));
         } else {
-            setAssessmentForm({
+            setAssessmentForm(prev => ({
+                ...prev,
                 ...assessmentFormInitialValues,
                 jobRoleId: value
-            });
+            }));
         }
 
         setJobRole(value);
