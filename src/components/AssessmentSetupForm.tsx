@@ -71,6 +71,18 @@ export const AssessmentSetupForm = () => {
         jobRolesResponse?.data
     );
 
+    const isLoading = React.useMemo(
+        () =>
+            isCompaniesLoading ||
+            saveAssessmentSettings.isLoading ||
+            isJobRolesLoading,
+        [
+            isCompaniesLoading,
+            saveAssessmentSettings.isLoading,
+            isJobRolesLoading
+        ]
+    );
+
     const onCompanyIdChange = ({
         target: { value }
     }: React.ChangeEvent<HTMLSelectElement>) => {
@@ -187,9 +199,7 @@ export const AssessmentSetupForm = () => {
             width={{ base: 'xl', lg: '60%' }}
             id="assessment-setup-form-container"
         >
-            {(isCompaniesLoading ||
-                saveAssessmentSettings.isLoading ||
-                isJobRolesLoading) && <AppLoader />}
+            {isLoading && <AppLoader />}
             <SelectField
                 label="Company Id"
                 name="companyId"
