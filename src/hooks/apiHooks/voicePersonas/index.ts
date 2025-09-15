@@ -1,0 +1,1 @@
+export { useSearchVoicePersonas } from './useSearchVoicePersonas';

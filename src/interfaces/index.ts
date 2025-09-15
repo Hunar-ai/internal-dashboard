@@ -95,3 +95,9 @@ export type {
     NehaAgentCallProps,
     NehaAgentPendingCallsProps
 } from './nehaAgents.interface';
+
+export type { VoicePersonasProps } from './voicePersonas.interface';
+export type {
+    CreateProviderConfigProps,
+    ProviderConfigProps
+} from './voiceConfig.interface';

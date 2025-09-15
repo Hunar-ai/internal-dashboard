@@ -8,6 +8,19 @@ export const useCompanyHelper = (companyData?: CompanyFormProps[]) => {
         return `09AAACH${randomDigits}R4ZZ`;
     };
 
+    const companyNameOptions: OptionsProps = React.useMemo(() => {
+        return (companyData ?? [])
+            ?.map(company => ({
+                value: company.companyId,
+                label: company.name
+            }))
+            .filter(company =>
+                ['20augtestingco', 'bluejay-work-11', 'test-company'].includes(
+                    company.value
+                )
+            );
+    }, [companyData]);
+
     const companyIdOptions: OptionsProps = React.useMemo(() => {
         return (companyData ?? [])?.map(company => ({
             value: company.companyId,
@@ -21,5 +34,10 @@ export const useCompanyHelper = (companyData?: CompanyFormProps[]) => {
         }, {} as Record<string, CompanyFormProps>);
     }, [companyData]);
 
-    return { generateRandomGSTIN, companyIdOptions, companyMap };
+    return {
+        generateRandomGSTIN,
+        companyIdOptions,
+        companyNameOptions,
+        companyMap
+    };
 };
