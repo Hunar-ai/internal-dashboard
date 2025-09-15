@@ -27,10 +27,7 @@ export const useCreateVoiceProvider = () => {
     return useMutation<SuccessResponse, ApiError, UseCreateVoiceProviderProps>(
         ({ params, body }: UseCreateVoiceProviderProps) => {
             return create
-                .post({
-                    params,
-                    body
-                })
+                .post({ params, body })
                 .then((response: SuccessResponse) => {
                     return response;
                 })

@@ -9,16 +9,10 @@ export const useCompanyHelper = (companyData?: CompanyFormProps[]) => {
     };
 
     const companyNameOptions: OptionsProps = React.useMemo(() => {
-        return (companyData ?? [])
-            ?.map(company => ({
-                value: company.companyId,
-                label: company.name
-            }))
-            .filter(company =>
-                ['20augtestingco', 'bluejay-work-11', 'test-company'].includes(
-                    company.value
-                )
-            );
+        return (companyData ?? [])?.map(company => ({
+            value: company.companyId,
+            label: company.name
+        }));
     }, [companyData]);
 
     const companyIdOptions: OptionsProps = React.useMemo(() => {

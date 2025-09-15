@@ -20,7 +20,7 @@ export const useGetVoiceConfig = ({
     onError
 }: UseGetVoiceConfigProps): QueryResult<VoiceConfigProps, ApiError> => {
     return useGetReactQuery({
-        queryKey: [companyId],
+        queryKey: ['useGetVoiceConfig', companyId],
         requestUrl: get,
         params: {
             companyId

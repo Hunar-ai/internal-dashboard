@@ -5,10 +5,10 @@ import { usePostReactQuery } from 'hooks/usePostReactQuery';
 import type { NehaAgentCallProps, PaginationInfo } from 'interfaces';
 
 interface UseSearchVoiceProvider {
-    enabled: boolean;
     params: {
         companyId: string;
     };
+    enabled: boolean;
     onSuccess?: (data: NehaAgentsCallsResponse) => void;
 }
 
@@ -18,8 +18,8 @@ interface NehaAgentsCallsResponse {
 }
 
 export const useSearchVoiceProvider = ({
-    enabled,
     params: { companyId },
+    enabled,
     onSuccess
 }: UseSearchVoiceProvider) => {
     return usePostReactQuery<NehaAgentsCallsResponse>({

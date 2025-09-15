@@ -5,10 +5,10 @@ import { usePostReactQuery } from 'hooks/usePostReactQuery';
 import type { VoicePersonasProps, PaginationInfo } from 'interfaces';
 
 interface UseSearchVoicePersonasProps {
-    enabled: boolean;
     params: {
         companyId: string;
     };
+    enabled: boolean;
     onSuccess?: (data: SearchVoicePersonasResponse) => void;
 }
 
@@ -18,8 +18,8 @@ interface SearchVoicePersonasResponse {
 }
 
 export const useSearchVoicePersonas = ({
-    enabled,
     params: { companyId },
+    enabled,
     onSuccess
 }: UseSearchVoicePersonasProps) => {
     return usePostReactQuery<SearchVoicePersonasResponse>({

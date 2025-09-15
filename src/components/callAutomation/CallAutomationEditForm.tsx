@@ -219,11 +219,11 @@ export const CallAutomationEditForm = () => {
         <FormWrapper
             id="call-automation-form-container"
             formTitle="Call Automation Settings"
+            gridColumns={1}
             isFormDisabled={false}
             isLoading={updateVoiceConfig.isLoading}
-            gridColumns={1}
-            onSubmit={onSubmitClick}
             width={{ base: 'xl', lg: '60%' }}
+            onSubmit={onSubmitClick}
         >
             {(isCompaniesLoading || isLoadingCompanyConfiguration) && (
                 <AppLoader />
@@ -260,7 +260,7 @@ export const CallAutomationEditForm = () => {
                             onChange={onAssessmentEnableToggle}
                         />
                     </Flex>
-                    {form.isCallAutomationEnabled ? (
+                    {form.isCallAutomationEnabled && (
                         <>
                             <FormControl mt={4}>
                                 <SelectField
@@ -298,8 +298,6 @@ export const CallAutomationEditForm = () => {
                                 />
                             </Box>
                         </>
-                    ) : (
-                        <></>
                     )}
                     {isAddVoiceProviderModalVisible && (
                         <AddVoiceProviderConfigModal
