@@ -8,13 +8,6 @@ export const useCompanyHelper = (companyData?: CompanyFormProps[]) => {
         return `09AAACH${randomDigits}R4ZZ`;
     };
 
-    const companyNameOptions: OptionsProps = React.useMemo(() => {
-        return (companyData ?? [])?.map(company => ({
-            value: company.companyId,
-            label: company.name
-        }));
-    }, [companyData]);
-
     const companyIdOptions: OptionsProps = React.useMemo(() => {
         return (companyData ?? [])?.map(company => ({
             value: company.companyId,
@@ -31,7 +24,6 @@ export const useCompanyHelper = (companyData?: CompanyFormProps[]) => {
     return {
         generateRandomGSTIN,
         companyIdOptions,
-        companyNameOptions,
         companyMap
     };
 };

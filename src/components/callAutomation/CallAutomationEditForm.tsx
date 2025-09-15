@@ -73,7 +73,7 @@ export const CallAutomationEditForm = () => {
 
     const { data: companiesResponse, isLoading: isCompaniesLoading } =
         useGetCompanies();
-    const { companyNameOptions } = useCompanyHelper(companiesResponse?.data);
+    const { companyIdOptions } = useCompanyHelper(companiesResponse?.data);
 
     const { data: voicePersonas, isLoading: isVoicePersonasLoading } =
         useSearchVoicePersonas({
@@ -230,10 +230,10 @@ export const CallAutomationEditForm = () => {
             )}
             <FormControl>
                 <SelectField
-                    label="Company Name"
+                    label="Company ID"
                     name="companyId"
-                    placeholder="Select Company"
-                    options={companyNameOptions}
+                    placeholder="Select Company ID"
+                    options={companyIdOptions}
                     value={form.companyId}
                     onChange={onCompanyIdChange}
                     isRequired
