@@ -21,9 +21,5 @@ export const useCompanyHelper = (companyData?: CompanyFormProps[]) => {
         }, {} as Record<string, CompanyFormProps>);
     }, [companyData]);
 
-    return {
-        generateRandomGSTIN,
-        companyIdOptions,
-        companyMap
-    };
+    return { generateRandomGSTIN, companyIdOptions, companyMap };
 };

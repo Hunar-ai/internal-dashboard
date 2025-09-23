@@ -1,4 +1,4 @@
-export interface VoicePersonasProps {
+export interface VoicePersonaProps {
     id: string;
     name: string;
     description: string;

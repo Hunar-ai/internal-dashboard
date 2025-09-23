@@ -1,11 +1,10 @@
 import React from 'react';
 
-import { Box, Flex, FormControl, Switch, Text } from '@chakra-ui/react';
+import { Box, FormControl, FormLabel, Switch } from '@chakra-ui/react';
 
 import {
     AppLoader,
     FormWrapper,
-    FieldRequiredIndicator,
     SelectField,
     HelperText
 } from '@components/common';
@@ -16,15 +15,13 @@ import {
 import { useCompanyHelper } from '@components/company/useCompanyHelper';
 
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
-import { useSearchVoicePersonas } from 'hooks/apiHooks/voicePersonas';
-import {
-    useGetVoiceConfig,
-    useUpdateVoiceConfig
-} from 'hooks/apiHooks/voiceConfig';
+import { useSearchVoicePersona } from 'hooks/apiHooks/voicePersona/useSearchVoicePersona';
+import { useGetVoiceConfig } from 'hooks/apiHooks/voiceConfig/useGetVoiceConfig';
+import { useUpdateVoiceConfig } from 'hooks/apiHooks/voiceConfig/useUpdateVoiceConfig';
 import { useValidationHelper } from 'hooks';
 import { useToast } from 'hooks/useToast';
 
-import { OptionsProps } from 'interfaces';
+import type { OptionsProps } from 'interfaces';
 import { ErrorMsg } from 'utils';
 
 interface CallAutomationEditForm {
@@ -76,15 +73,15 @@ export const CallAutomationEditForm = () => {
     const { companyIdOptions } = useCompanyHelper(companiesResponse?.data);
 
     const { data: voicePersonas, isLoading: isVoicePersonasLoading } =
-        useSearchVoicePersonas({
+        useSearchVoicePersona({
             enabled: !!form.companyId,
             params: { companyId: form.companyId }
         });
 
     const {
-        data: companyVoiceConfigData,
-        isLoading: isCompanyVoiceConfigLoading,
-        refetch: refetchCompanyVoiceConfiguraiton
+        data: voiceConfigData,
+        isLoading: isVoiceConfigLoading,
+        refetch: refetchVoiceConfiguraiton
     } = useGetVoiceConfig({
         enabled: !!form.companyId,
         params: { companyId: form.companyId },
@@ -96,19 +93,13 @@ export const CallAutomationEditForm = () => {
                 companyId: form.companyId,
                 isCallAutomationEnabled: data.enabled,
                 aiPersonaId: data.persona.id,
-                selectedProviderId: activeProvider?.provider.id ?? undefined
-            });
-        },
-        onError: () => {
-            showError({
-                title: 'Error',
-                description: 'Failed to load company voice configuration'
+                selectedProviderId: activeProvider?.provider.id ?? ''
             });
         }
     });
     const updateVoiceConfig = useUpdateVoiceConfig();
 
-    const voicePersonasOptions: OptionsProps = React.useMemo(() => {
+    const voicePersonaOptions: OptionsProps = React.useMemo(() => {
         return (
             voicePersonas?.data?.map(voicePersona => ({
                 label: `${voicePersona.name} (${voicePersona.description})`,
@@ -117,17 +108,17 @@ export const CallAutomationEditForm = () => {
         );
     }, [voicePersonas]);
 
-    const isLoadingCompanyConfiguration = React.useMemo(() => {
+    const isLoadingConfiguration = React.useMemo(() => {
         return (
             form.companyId &&
             (isVoicePersonasLoading ||
-                (form.isCallAutomationEnabled && isCompanyVoiceConfigLoading))
+                (form.isCallAutomationEnabled && isVoiceConfigLoading))
         );
     }, [
         form.companyId,
         isVoicePersonasLoading,
         form.isCallAutomationEnabled,
-        isCompanyVoiceConfigLoading
+        isVoiceConfigLoading
     ]);
 
     const updateFieldError = (fieldName: string, fieldValue: string) => {
@@ -163,18 +154,20 @@ export const CallAutomationEditForm = () => {
         updateFieldError('selectedProviderId', selectedProviderId);
     };
 
-    const onUpdateVoiceCofiguration = () => {
+    const onUpdateVoiceConfiguration = () => {
+        const callAutomationConfig = form.isCallAutomationEnabled
+            ? {
+                  personaId: form.aiPersonaId,
+                  providerId: form.selectedProviderId
+              }
+            : {};
+
         updateVoiceConfig.mutate(
             {
                 params: { companyId: form.companyId },
                 body: {
                     enabled: form.isCallAutomationEnabled,
-                    ...(form.isCallAutomationEnabled
-                        ? {
-                              personaId: form.aiPersonaId,
-                              providerId: form.selectedProviderId
-                          }
-                        : {})
+                    ...callAutomationConfig
                 }
             },
             {
@@ -212,7 +205,7 @@ export const CallAutomationEditForm = () => {
             return;
         }
 
-        onUpdateVoiceCofiguration();
+        onUpdateVoiceConfiguration();
     };
 
     return (
@@ -225,9 +218,7 @@ export const CallAutomationEditForm = () => {
             width={{ base: 'xl', lg: '60%' }}
             onSubmit={onSubmitClick}
         >
-            {(isCompaniesLoading || isLoadingCompanyConfiguration) && (
-                <AppLoader />
-            )}
+            {(isCompaniesLoading || isLoadingConfiguration) && <AppLoader />}
             <FormControl>
                 <SelectField
                     label="Company ID"
@@ -248,18 +239,22 @@ export const CallAutomationEditForm = () => {
             </FormControl>
             {form.companyId ? (
                 <Box>
-                    <Flex justifyContent="space-between" mt={4}>
-                        <Text variant="xl" fontWeight={500}>
+                    <FormControl
+                        display="flex"
+                        justifyContent="space-between"
+                        isRequired
+                        mt={4}
+                    >
+                        <FormLabel variant="xl" fontWeight={500}>
                             {`Enable Automated Calls`}
-                            <FieldRequiredIndicator />
-                        </Text>
+                        </FormLabel>
                         <Switch
                             name="isCallAutomationEnabled"
                             id="isCallAutomationEnabled"
                             isChecked={form.isCallAutomationEnabled}
                             onChange={onAssessmentEnableToggle}
                         />
-                    </Flex>
+                    </FormControl>
                     {form.isCallAutomationEnabled && (
                         <>
                             <FormControl mt={4}>
@@ -267,7 +262,7 @@ export const CallAutomationEditForm = () => {
                                     label="AI Persona"
                                     name="aiPersonaId"
                                     placeholder="Select AI Persona"
-                                    options={voicePersonasOptions}
+                                    options={voicePersonaOptions}
                                     value={form.aiPersonaId}
                                     onChange={onAiPersonaIdChange}
                                     isRequired
@@ -287,7 +282,7 @@ export const CallAutomationEditForm = () => {
                                     isDisabled={!form.isCallAutomationEnabled}
                                     hasError={!!formErrors.selectedProviderId}
                                     providersList={
-                                        companyVoiceConfigData?.providers ?? []
+                                        voiceConfigData?.providers ?? []
                                     }
                                     onSelectedProviderIdChange={
                                         onSelectedProviderChange
@@ -306,8 +301,8 @@ export const CallAutomationEditForm = () => {
                             handleCloseClick={() =>
                                 setIsAddVoiceProviderModalVisible(false)
                             }
-                            refetchCompanyVoiceConfiguraiton={
-                                refetchCompanyVoiceConfiguraiton
+                            refetchVoiceConfiguraiton={
+                                refetchVoiceConfiguraiton
                             }
                         />
                     )}

@@ -25,7 +25,7 @@ export interface ProviderConfigProps {
 export interface CreateProviderConfigProps
     extends Pick<ProviderConfigProps, 'secretId' | 'secretToken'>,
         ProviderConfigMetaProps {
-    providerId: string;
+    providerType: string;
 }
 
 export interface ProviderProps {

@@ -5,9 +5,9 @@ import type {
     FormFields,
     GetCompaniesResponse,
     NehaSelectPendingCallsProps,
-    PersonnelProps
+    PersonnelProps,
+    VoiceConfigProps
 } from 'interfaces';
-import { VoiceConfigProps } from 'interfaces/voiceConfig.interface';
 import ErrorTracker from 'utils/ErrorTracker';
 
 type SuccessDataProps =
@@ -31,7 +31,7 @@ export const useGetReactQuery = <ResponseProps extends SuccessDataProps>({
     requestUrl,
     params,
     enabled = true,
-    retry,
+    retry = false,
     onSuccess,
     onError
 }: GetReactQueryProps<ResponseProps>) => {

@@ -19,7 +19,7 @@ import { useValidationHelper } from 'hooks';
 import { useCreateVoiceProvider } from 'hooks/apiHooks/voiceProviders/useCreateVoiceProvider';
 import { useToast } from 'hooks/useToast';
 
-import { CreateProviderConfigProps } from 'interfaces';
+import type { CreateProviderConfigProps } from 'interfaces';
 import { ErrorMsg, RegExUtil } from 'utils';
 
 export interface AddPhoneNumberFormProps {
@@ -34,12 +34,12 @@ interface AddVoiceProviderConfigModalProps {
     companyId: string;
     isOpen: boolean;
     handleCloseClick: VoidFunction;
-    refetchCompanyVoiceConfiguraiton?: VoidFunction;
+    refetchVoiceConfiguraiton?: VoidFunction;
 }
 
 const initialFormValues: CreateProviderConfigProps = {
     referenceName: '',
-    providerId: '',
+    providerType: '',
     mobileNumber: '',
     secretId: '',
     secretToken: ''
@@ -49,7 +49,7 @@ const initialFormErrorStateValues: Partial<
     Record<keyof CreateProviderConfigProps, boolean>
 > = {
     referenceName: false,
-    providerId: false,
+    providerType: false,
     mobileNumber: false,
     secretId: false,
     secretToken: false
@@ -57,7 +57,7 @@ const initialFormErrorStateValues: Partial<
 
 const requiredFields: (keyof CreateProviderConfigProps)[] = [
     'referenceName',
-    'providerId',
+    'providerType',
     'mobileNumber',
     'secretId',
     'secretToken'
@@ -73,7 +73,7 @@ export const AddVoiceProviderConfigModal = ({
     companyId,
     isOpen,
     handleCloseClick,
-    refetchCompanyVoiceConfiguraiton
+    refetchVoiceConfiguraiton
 }: AddVoiceProviderConfigModalProps) => {
     const {
         formFields: { voiceCallOrchestratorTelephonyProviders }
@@ -95,7 +95,7 @@ export const AddVoiceProviderConfigModal = ({
             {
                 params: { companyId },
                 body: {
-                    providerType: form.providerId,
+                    providerType: form.providerType,
                     config: {
                         authId: form.secretId,
                         authToken: form.secretToken,
@@ -111,7 +111,7 @@ export const AddVoiceProviderConfigModal = ({
                         description: 'Successfully created Phone Number'
                     });
                     handleCloseClick();
-                    refetchCompanyVoiceConfiguraiton?.();
+                    refetchVoiceConfiguraiton?.();
                 },
                 onError: error => {
                     showError({
@@ -166,6 +166,7 @@ export const AddVoiceProviderConfigModal = ({
                             name="referenceName"
                             onChange={onChange}
                             value={form.referenceName}
+                            isRequired
                             isInvalid={!!formErrors.referenceName}
                             helperText={
                                 <HelperText
@@ -180,12 +181,13 @@ export const AddVoiceProviderConfigModal = ({
                     <FormControl mt={4}>
                         <SelectField
                             label="Provider"
-                            name="providerId"
+                            name="providerType"
                             placeholder="Select Provider"
-                            value={form.providerId}
+                            value={form.providerType}
+                            isRequired
+                            isInvalid={!!formErrors.providerType}
                             options={voiceCallOrchestratorTelephonyProviders}
                             onChange={onChange}
-                            isInvalid={!!formErrors.providerId}
                             helperText={
                                 <HelperText
                                     hasError={!!formErrors.referenceName}
@@ -199,8 +201,9 @@ export const AddVoiceProviderConfigModal = ({
                             name="mobileNumber"
                             label="Mobile Number"
                             value={form.mobileNumber}
-                            onChange={onChange}
+                            isRequired
                             isInvalid={!!formErrors.mobileNumber}
+                            onChange={onChange}
                             helperText={
                                 <HelperText
                                     hasError={!!formErrors.referenceName}
@@ -214,8 +217,9 @@ export const AddVoiceProviderConfigModal = ({
                             name="secretId"
                             label="Auth ID"
                             value={form.secretId}
-                            onChange={onChange}
+                            isRequired
                             isInvalid={!!formErrors.secretId}
+                            onChange={onChange}
                             helperText={
                                 <HelperText
                                     hasError={!!formErrors.referenceName}
@@ -229,6 +233,7 @@ export const AddVoiceProviderConfigModal = ({
                             name="secretToken"
                             label="Auth Token"
                             value={form.secretToken}
+                            isRequired
                             onChange={onChange}
                             isInvalid={!!formErrors.secretToken}
                             helperText={

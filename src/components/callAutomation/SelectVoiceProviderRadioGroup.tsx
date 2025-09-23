@@ -10,7 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { FieldRequiredIndicator, HelperText } from '@components/common';
 
-import { CompanyProviderProps } from 'interfaces/voiceConfig.interface';
+import { CompanyProviderProps } from 'interfaces';
 import { ErrorMsg } from 'utils';
 
 interface SelectVoiceProviderRadioGroupProps {
@@ -44,25 +44,24 @@ export const SelectVoiceProviderRadioGroup = ({
                     mt={2}
                 >
                     <Stack direction="column" gap={0}>
-                        {providersList.map(provider => (
-                            <Stack key={provider.id} direction="row">
-                                <Radio
-                                    value={provider.provider.id}
-                                    name={
-                                        provider.provider.config.meta
-                                            .mobileNumber
-                                    }
-                                    mb={2}
-                                >
-                                    {
-                                        provider.provider.config.meta
-                                            .referenceName
-                                    }
-                                    {` : `}
-                                    {provider.provider.config.meta.mobileNumber}
-                                </Radio>
-                            </Stack>
-                        ))}
+                        {providersList.map(provider => {
+                            const { referenceName, mobileNumber } =
+                                provider.provider.config.meta;
+                            return (
+                                <Stack key={provider.id} direction="row">
+                                    <Radio
+                                        value={provider.provider.id}
+                                        name={
+                                            provider.provider.config.meta
+                                                .mobileNumber
+                                        }
+                                        mb={2}
+                                    >
+                                        {`${referenceName} : ${mobileNumber}`}
+                                    </Radio>
+                                </Stack>
+                            );
+                        })}
                     </Stack>
                     {hasError && (
                         <HelperText
