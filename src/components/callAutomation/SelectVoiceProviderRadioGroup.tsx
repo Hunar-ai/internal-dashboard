@@ -10,7 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { FieldRequiredIndicator, HelperText } from '@components/common';
 
-import { CompanyProviderProps } from 'interfaces';
+import type { CompanyProviderProps } from 'interfaces';
 import { ErrorMsg } from 'utils';
 
 interface SelectVoiceProviderRadioGroupProps {
@@ -51,10 +51,7 @@ export const SelectVoiceProviderRadioGroup = ({
                                 <Stack key={provider.id} direction="row">
                                     <Radio
                                         value={provider.provider.id}
-                                        name={
-                                            provider.provider.config.meta
-                                                .mobileNumber
-                                        }
+                                        name={mobileNumber}
                                         mb={2}
                                     >
                                         {`${referenceName} : ${mobileNumber}`}

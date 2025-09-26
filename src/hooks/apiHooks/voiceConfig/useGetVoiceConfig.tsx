@@ -1,7 +1,7 @@
 import { get } from 'api/voiceConfig';
 
 import { useGetReactQuery } from 'hooks/useGetReactQuery';
-import { ApiError, QueryResult, VoiceConfigProps } from 'interfaces';
+import type { ApiError, QueryResult, VoiceConfigProps } from 'interfaces';
 
 interface UseGetVoiceConfigProps {
     enabled: boolean;
