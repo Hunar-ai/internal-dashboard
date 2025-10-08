@@ -89,12 +89,17 @@ export const CallAutomationEditForm = () => {
             const activeProvider = data.providers.find(
                 provider => provider.active
             );
-            setForm({
+
+            setForm(prevForm => ({
                 companyId: form.companyId,
-                isCallAutomationEnabled: data.enabled,
-                aiPersonaId: data.persona.id,
-                selectedProviderId: activeProvider?.provider.id ?? ''
-            });
+                isCallAutomationEnabled:
+                    prevForm?.isCallAutomationEnabled || data.enabled,
+                aiPersonaId: prevForm?.aiPersonaId ?? data.persona?.id ?? '',
+                selectedProviderId:
+                    prevForm?.selectedProviderId ??
+                    activeProvider?.provider.id ??
+                    ''
+            }));
         }
     });
     const updateVoiceConfig = useUpdateVoiceConfig();

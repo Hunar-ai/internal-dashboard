@@ -33,7 +33,7 @@ export const SelectVoiceProviderRadioGroup = ({
     return (
         <>
             <Text variant="xl" fontWeight={500}>
-                {`Phone number`}
+                {`Phone Number`}
                 <FieldRequiredIndicator />
             </Text>
             <FormControl isInvalid={hasError}>
