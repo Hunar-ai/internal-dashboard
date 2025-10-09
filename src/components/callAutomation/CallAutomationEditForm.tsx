@@ -94,10 +94,10 @@ export const CallAutomationEditForm = () => {
                 companyId: form.companyId,
                 isCallAutomationEnabled:
                     prevForm?.isCallAutomationEnabled || data.enabled,
-                aiPersonaId: prevForm?.aiPersonaId ?? data.persona?.id ?? '',
+                aiPersonaId: (prevForm?.aiPersonaId || data.persona?.id) ?? '',
                 selectedProviderId:
-                    prevForm?.selectedProviderId ??
-                    activeProvider?.provider.id ??
+                    (prevForm?.selectedProviderId ||
+                        activeProvider?.provider.id) ??
                     ''
             }));
         }
