@@ -86,7 +86,8 @@ export enum FORM_FIELD {
     'callLanguage' = 'callLanguage',
     'nehaSelectCallLater' = 'nehaSelectCallLater',
     'nehaAgentsAllowedCompanies' = 'nehaAgentsAllowedCompanies',
-    'nehaCallEndedBy' = 'nehaCallEndedBy'
+    'nehaCallEndedBy' = 'nehaCallEndedBy',
+    'voiceCallOrchestratorTelephonyProviders' = 'voiceCallOrchestratorTelephonyProviders'
 }
 
 export enum SORT_TYPE {

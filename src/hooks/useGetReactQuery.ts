@@ -5,7 +5,8 @@ import type {
     FormFields,
     GetCompaniesResponse,
     NehaSelectPendingCallsProps,
-    PersonnelProps
+    PersonnelProps,
+    VoiceConfigProps
 } from 'interfaces';
 import ErrorTracker from 'utils/ErrorTracker';
 
@@ -13,13 +14,15 @@ type SuccessDataProps =
     | FormFields
     | PersonnelProps
     | GetCompaniesResponse
-    | NehaSelectPendingCallsProps;
+    | NehaSelectPendingCallsProps
+    | VoiceConfigProps;
 
 interface GetReactQueryProps<ResponseProps> {
     queryKey: string[];
     requestUrl: any;
     params?: { [key: string]: string | null | undefined };
     enabled?: boolean;
+    retry?: boolean;
     onSuccess?: (data: ResponseProps) => void;
     onError?: (error: ApiError) => void;
 }
@@ -28,6 +31,7 @@ export const useGetReactQuery = <ResponseProps extends SuccessDataProps>({
     requestUrl,
     params,
     enabled = true,
+    retry = false,
     onSuccess,
     onError
 }: GetReactQueryProps<ResponseProps>) => {
@@ -44,6 +48,7 @@ export const useGetReactQuery = <ResponseProps extends SuccessDataProps>({
         },
         refetchOnWindowFocus: false,
         enabled,
+        retry,
         onSuccess,
         onError: (response: ApiError) => {
             onError?.(response);

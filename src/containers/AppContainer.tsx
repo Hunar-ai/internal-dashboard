@@ -9,7 +9,8 @@ import {
     AssessmentContainer,
     NehaSelectContainer,
     PlaygroundMetricsContainer,
-    NehaAgentsDashboard
+    NehaAgentsDashboard,
+    CallAutomationContainer
 } from 'containers';
 
 import { useGetFormFields, useGetLoggedInPersonnel, useToken } from 'hooks';
@@ -55,6 +56,10 @@ export const AppContainer = () => {
                     <Route
                         path="/assessment"
                         element={<AssessmentContainer />}
+                    />
+                    <Route
+                        path="/call-automation"
+                        element={<CallAutomationContainer />}
                     />
                     {PLAYGROUND_METRICS_USERS?.includes(personnel?.email) && (
                         <>
