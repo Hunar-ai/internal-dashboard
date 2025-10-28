@@ -8,6 +8,7 @@ export interface FormFields {
     [FORM_FIELD.nehaSelectCallLater]: OptionsProps;
     [FORM_FIELD.nehaAgentsAllowedCompanies]: OptionsProps;
     [FORM_FIELD.nehaCallEndedBy]: OptionsProps;
+    [FORM_FIELD.voiceCallOrchestratorTelephonyProviders]: OptionsProps;
 }
 
 export interface MappedField {

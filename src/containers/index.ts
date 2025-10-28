@@ -10,3 +10,4 @@ export { PlaygroundMetricsContainer } from './PlaygroundMetricsContainer';
 export { NehaSelectContainer } from './NehaSelectContainer';
 export { NehaAgentsDashboard } from './NehaAgentsDashboard';
 export { LoiContainer } from './LoiContainer';
+export { CallAutomationContainer } from './CallAutomationContainer';

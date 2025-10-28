@@ -32,3 +32,4 @@ export {
     type FilterOptionsProps
 } from './ColumnActionsPopOver';
 export { BaseColumns } from './BaseColumns';
+export { FieldRequiredIndicator } from './FieldRequiredIndicator';

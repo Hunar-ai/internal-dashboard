@@ -39,7 +39,8 @@ export const settingsInitialState: SettingsContextType = {
         callLanguage: [],
         nehaSelectCallLater: [],
         nehaCallEndedBy: [],
-        nehaAgentsAllowedCompanies: []
+        nehaAgentsAllowedCompanies: [],
+        voiceCallOrchestratorTelephonyProviders: []
     }
 };
 

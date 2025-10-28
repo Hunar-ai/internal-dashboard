@@ -18,13 +18,24 @@ export const useSaveAssessmentSettings = () => {
         SaveAssessmentSettingsProps
     >(({ params, requestBody }: SaveAssessmentSettingsProps) => {
         const { companyId } = params;
-        const { emails, isAssessmentEnabled, jobDescription, prompt } =
-            requestBody;
+        const {
+            emails,
+            isAssessmentEnabled,
+            jobDescription,
+            prompt,
+            jobRoleId
+        } = requestBody;
 
         return assessment
             .put({
                 params: { companyId },
-                body: { emails, isAssessmentEnabled, jobDescription, prompt }
+                body: {
+                    emails,
+                    isAssessmentEnabled,
+                    jobDescription,
+                    prompt,
+                    jobRoleId
+                }
             })
             .then((response: AssessmentSettingsProps) => {
                 return response;
