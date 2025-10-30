@@ -9,7 +9,7 @@ export const getLoiForCompany = ApiClient({
 });
 
 export const createOrUpdate = ApiClient({
-    url: `/v1/company/{companyId}/create-update-loi`
+    url: `/v1/company/{companyId}/upsert`
 });
 
 export const deleteLoi = ApiClient({
