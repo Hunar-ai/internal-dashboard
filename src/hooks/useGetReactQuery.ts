@@ -4,6 +4,7 @@ import type {
     ApiError,
     FormFields,
     GetCompaniesResponse,
+    LoiProps,
     NehaSelectPendingCallsProps,
     PersonnelProps,
     VoiceConfigProps
@@ -15,6 +16,8 @@ type SuccessDataProps =
     | PersonnelProps
     | GetCompaniesResponse
     | NehaSelectPendingCallsProps
+    | LoiProps
+    | LoiProps[]
     | VoiceConfigProps;
 
 interface GetReactQueryProps<ResponseProps> {

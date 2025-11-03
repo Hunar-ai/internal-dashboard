@@ -131,6 +131,9 @@ export const ApiClient = ({ url }: ApiModelProps): any => {
         patch: <T>({ body, params }: { body: Body; params: Params }) => {
             return Axios.patch<T>(getUrl(url, params), body);
         },
+        delete: <T>({ params }: { params: Params }) => {
+            return Axios.delete<T>(getUrl(url, params));
+        },
         postForm: <T>({ body, params }: { body: any; params: Params }) => {
             const formData = new FormData();
 

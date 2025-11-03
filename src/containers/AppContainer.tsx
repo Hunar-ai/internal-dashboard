@@ -10,6 +10,7 @@ import {
     NehaSelectContainer,
     PlaygroundMetricsContainer,
     NehaAgentsDashboard,
+    LoiContainer,
     CallAutomationContainer
 } from 'containers';
 
@@ -57,6 +58,7 @@ export const AppContainer = () => {
                         path="/assessment"
                         element={<AssessmentContainer />}
                     />
+                    <Route path="/loi/*" element={<LoiContainer />} />
                     <Route
                         path="/call-automation"
                         element={<CallAutomationContainer />}

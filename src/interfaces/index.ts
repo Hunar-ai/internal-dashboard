@@ -96,6 +96,11 @@ export type {
     NehaAgentPendingCallsProps
 } from './nehaAgents.interface';
 
+export type {
+    LoiProps,
+    LoiTemplateField,
+    CreateOrUpdateLoiResponseProps
+} from './loi.interface';
 export type { VoicePersonaProps } from './voicePersona.interface';
 export type {
     CreateProviderConfigProps,
