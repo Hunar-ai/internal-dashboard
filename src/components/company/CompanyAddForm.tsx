@@ -36,7 +36,8 @@ import type {
     CompanySettingsProps,
     FormErrorProps,
     OnboardingSettingsProps,
-    ValidationMapProps
+    ValidationMapProps,
+    CallSettingsProps
 } from 'interfaces';
 import {
     DEFAULT_COMPANY_ADDRESS,
@@ -86,7 +87,8 @@ const formErrorStateInitialValues: FormErrorProps<CompanyDetailsFormProps> = {
 };
 
 const settingsFormErrorStateInitialValues = {
-    workerSourceAffinityPeriod: false
+    workerSourceAffinityPeriod: false,
+    conclusionMessage: false
 };
 
 interface UpdateFieldErrorStateProps {
@@ -348,6 +350,22 @@ export const CompanyAddForm = () => {
         }));
     };
 
+    const onConclusionMessageChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        const fieldValue = e.target.value;
+
+        const callSettings: CallSettingsProps = {
+            conclusionMessage: fieldValue
+        };
+        const modifiedSettings: CompanySettingsProps = {
+            ...form.settings,
+            callSettings
+        };
+
+        updateForm({ settings: { ...modifiedSettings } });
+    };
+
     const onCareerSetupProceedClick = () => {
         searchParams.delete('add');
         searchParams.set('career', 'true');
@@ -485,6 +503,21 @@ export const CompanyAddForm = () => {
                             })}
                             msg="Number of days"
                         />
+                    </FormControl>
+                    <FormControl
+                        isInvalid={settingsFormErrorState.conclusionMessage}
+                    >
+                        <FormLabel>{`Call Conclusion message`}</FormLabel>
+                        <Textarea
+                            placeholder="Enter message"
+                            name="conclusionMessage"
+                            value={
+                                form.settings.callSettings?.conclusionMessage ??
+                                ''
+                            }
+                            onChange={onConclusionMessageChange}
+                        />
+                        <HelperText msg="This message is played before concluding the call." />
                     </FormControl>
                     <FormControl
                         display="flex"

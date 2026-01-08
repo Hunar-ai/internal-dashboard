@@ -51,6 +51,10 @@ export interface ReferralPageSettingsProps {
     learnMoreLink: string;
 }
 
+export interface CallSettingsProps {
+    conclusionMessage: string;
+}
+
 export interface CompanySettingsProps {
     assessmentSettings?: AssessmentSettingsProps;
     lmsSettings: LmsSettingsProps;
@@ -59,6 +63,7 @@ export interface CompanySettingsProps {
     onboardingSettings?: OnboardingSettingsProps;
     careerPageSettings?: CareerPageSettingsProps;
     referralPageSettings?: ReferralPageSettingsProps;
+    callSettings?: CallSettingsProps;
 }
 
 export interface CompanyFormProps {
