@@ -9,6 +9,7 @@ import {
     HelperText
 } from '@components/common';
 import {
+    AddAiCallLanguageModal,
     AddVoiceProviderConfigModal,
     SelectVoiceProviderRadioGroup
 } from '@components/callAutomation';
@@ -24,9 +25,10 @@ import { useToast } from 'hooks/useToast';
 import type { OptionsProps } from 'interfaces';
 import { ErrorMsg } from 'utils';
 
-interface CallAutomationEditForm {
+export interface CallAutomationEditForm {
     companyId: string;
     isCallAutomationEnabled: boolean;
+    defaultLanguage: string;
     aiPersonaId: string;
     selectedProviderId?: string;
 }
@@ -34,6 +36,7 @@ interface CallAutomationEditForm {
 const callAutomationFormInitialValues: CallAutomationEditForm = {
     companyId: '',
     isCallAutomationEnabled: false,
+    defaultLanguage: '',
     aiPersonaId: '',
     selectedProviderId: ''
 };
@@ -67,6 +70,10 @@ export const CallAutomationEditForm = () => {
     });
     const [isAddVoiceProviderModalVisible, setIsAddVoiceProviderModalVisible] =
         React.useState(false);
+    const [
+        isAddAiCallLanguageModalVisible,
+        setIsAddAiCallLanguageModalVisible
+    ] = React.useState(false);
 
     const { data: companiesResponse, isLoading: isCompaniesLoading } =
         useGetCompanies();
@@ -94,6 +101,7 @@ export const CallAutomationEditForm = () => {
                 companyId: form.companyId,
                 isCallAutomationEnabled:
                     prevForm?.isCallAutomationEnabled || data.enabled,
+                defaultLanguage: prevForm.defaultLanguage,
                 aiPersonaId: (prevForm?.aiPersonaId || data.persona?.id) ?? '',
                 selectedProviderId:
                     (prevForm?.selectedProviderId ||
@@ -152,6 +160,10 @@ export const CallAutomationEditForm = () => {
     ) => {
         const isCallAutomationEnabled = e.target.checked;
         setForm(prevForm => ({ ...prevForm, isCallAutomationEnabled }));
+
+        if (isCallAutomationEnabled) {
+            setIsAddAiCallLanguageModalVisible(true);
+        }
     };
 
     const onSelectedProviderChange = (selectedProviderId: string) => {
@@ -172,6 +184,7 @@ export const CallAutomationEditForm = () => {
                 params: { companyId: form.companyId },
                 body: {
                     enabled: form.isCallAutomationEnabled,
+                    defaultLanguage: form.defaultLanguage,
                     ...callAutomationConfig
                 }
             },
@@ -212,6 +225,16 @@ export const CallAutomationEditForm = () => {
 
         onUpdateVoiceConfiguration();
     };
+
+    const handleCloseAiCallLanguageModal = React.useCallback(() => {
+        if (!form.defaultLanguage) {
+            setForm(prevForm => ({
+                ...prevForm,
+                isCallAutomationEnabled: false
+            }));
+        }
+        setIsAddAiCallLanguageModalVisible(false);
+    }, [form.defaultLanguage]);
 
     return (
         <FormWrapper
@@ -309,6 +332,15 @@ export const CallAutomationEditForm = () => {
                             refetchVoiceConfiguraiton={
                                 refetchVoiceConfiguraiton
                             }
+                        />
+                    )}
+                    {isAddAiCallLanguageModalVisible && (
+                        <AddAiCallLanguageModal
+                            jobQueriesCount={0}
+                            defaultLanguage={form.defaultLanguage}
+                            isOpen={isAddAiCallLanguageModalVisible}
+                            handleCloseClick={handleCloseAiCallLanguageModal}
+                            setDefaultLanguage={setForm}
                         />
                     )}
                 </Box>
