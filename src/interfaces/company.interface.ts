@@ -68,6 +68,7 @@ export interface CompanyFormProps {
     rawAddress: string;
     email: string;
     mobileNumber: string;
+    jobQueriesWithoutLanguageCount: number;
     governmentIdentifiers: {
         gstin: string;
     };

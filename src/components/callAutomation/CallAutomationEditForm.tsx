@@ -77,7 +77,9 @@ export const CallAutomationEditForm = () => {
 
     const { data: companiesResponse, isLoading: isCompaniesLoading } =
         useGetCompanies();
-    const { companyIdOptions } = useCompanyHelper(companiesResponse?.data);
+    const { companyIdOptions, companyMap } = useCompanyHelper(
+        companiesResponse?.data
+    );
 
     const { data: voicePersonas, isLoading: isVoicePersonasLoading } =
         useSearchVoicePersona({
@@ -101,7 +103,8 @@ export const CallAutomationEditForm = () => {
                 companyId: form.companyId,
                 isCallAutomationEnabled:
                     prevForm?.isCallAutomationEnabled || data.enabled,
-                defaultLanguage: prevForm.defaultLanguage,
+                defaultLanguage:
+                    prevForm.defaultLanguage || data.defaultLanguage,
                 aiPersonaId: (prevForm?.aiPersonaId || data.persona?.id) ?? '',
                 selectedProviderId:
                     (prevForm?.selectedProviderId ||
@@ -133,6 +136,14 @@ export const CallAutomationEditForm = () => {
         form.isCallAutomationEnabled,
         isVoiceConfigLoading
     ]);
+
+    const jobQueriesWithoutLanguageCount = React.useMemo(() => {
+        if (!form.companyId || !companyMap) {
+            return 0;
+        }
+        const selectedCompany = companyMap[form.companyId];
+        return selectedCompany?.jobQueriesWithoutLanguageCount ?? 0;
+    }, [form.companyId, companyMap]);
 
     const updateFieldError = (fieldName: string, fieldValue: string) => {
         setFormErrors(prevFormErrors => ({
@@ -336,7 +347,7 @@ export const CallAutomationEditForm = () => {
                     )}
                     {isAddAiCallLanguageModalVisible && (
                         <AddAiCallLanguageModal
-                            jobQueriesCount={0}
+                            jobQueriesCount={jobQueriesWithoutLanguageCount}
                             defaultLanguage={form.defaultLanguage}
                             isOpen={isAddAiCallLanguageModalVisible}
                             handleCloseClick={handleCloseAiCallLanguageModal}

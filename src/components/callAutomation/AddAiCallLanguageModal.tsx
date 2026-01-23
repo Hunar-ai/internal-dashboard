@@ -99,7 +99,7 @@ export const AddAiCallLanguageModal = ({
                             fontSize="md"
                             fontWeight={600}
                         >
-                            {`This company has ${jobQueriesCount} without AI calling language!`}
+                            {`This company has ${jobQueriesCount} JQs without AI calling language!`}
                         </Text>
                         <Text fontSize="sm">
                             To enable automated calling, please select a default
