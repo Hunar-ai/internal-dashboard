@@ -172,7 +172,7 @@ export const CallAutomationEditForm = () => {
         const isCallAutomationEnabled = e.target.checked;
         setForm(prevForm => ({ ...prevForm, isCallAutomationEnabled }));
 
-        if (isCallAutomationEnabled) {
+        if (isCallAutomationEnabled && jobQueriesWithoutLanguageCount > 0) {
             setIsAddAiCallLanguageModalVisible(true);
         }
     };
