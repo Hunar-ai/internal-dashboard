@@ -9,7 +9,7 @@ import {
     HelperText
 } from '@components/common';
 import {
-    AddAiCallLanguageModal,
+    CallAutomationLanguageSelectModal,
     AddVoiceProviderConfigModal,
     SelectVoiceProviderRadioGroup
 } from '@components/callAutomation';
@@ -346,7 +346,7 @@ export const CallAutomationEditForm = () => {
                         />
                     )}
                     {isAddAiCallLanguageModalVisible && (
-                        <AddAiCallLanguageModal
+                        <CallAutomationLanguageSelectModal
                             jobQueriesCount={jobQueriesWithoutLanguageCount}
                             defaultLanguage={form.defaultLanguage}
                             isOpen={isAddAiCallLanguageModalVisible}

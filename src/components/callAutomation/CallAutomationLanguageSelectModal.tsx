@@ -23,7 +23,7 @@ import type { OptionsProps } from 'interfaces';
 import { ErrorMsg } from 'utils';
 import { CallAutomationEditForm } from './CallAutomationEditForm';
 
-interface AddAiCallLanguageModalProps {
+interface CallAutomationLanguageSelectModalProps {
     isOpen: boolean;
     defaultLanguage: string;
     jobQueriesCount?: number;
@@ -33,13 +33,13 @@ interface AddAiCallLanguageModalProps {
     handleCloseClick: VoidFunction;
 }
 
-export const AddAiCallLanguageModal = ({
+export const CallAutomationLanguageSelectModal = ({
     isOpen,
     defaultLanguage,
     jobQueriesCount = 0,
     handleCloseClick,
     setDefaultLanguage
-}: AddAiCallLanguageModalProps) => {
+}: CallAutomationLanguageSelectModalProps) => {
     const {
         formFields: { callLanguage }
     } = React.useContext(SettingsContext);
@@ -71,7 +71,7 @@ export const AddAiCallLanguageModal = ({
             setLanguageError(true);
             showError({
                 title: 'Error',
-                description: 'Please select a language'
+                description: 'Please select a language!'
             });
             return;
         }
