@@ -64,7 +64,8 @@ export type {
     ReferralPageSettingsProps,
     ReferralPageFormProps,
     DashboardSettingsProps,
-    AssessmentSettingsProps
+    AssessmentSettingsProps,
+    CallSettingsProps
 } from './company.interface';
 
 export type { MenuProps } from './menu.interface';
