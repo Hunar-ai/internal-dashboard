@@ -195,7 +195,9 @@ export const CallAutomationEditForm = () => {
                 params: { companyId: form.companyId },
                 body: {
                     enabled: form.isCallAutomationEnabled,
-                    defaultLanguage: form.defaultLanguage,
+                    defaultLanguage: form.isCallAutomationEnabled
+                        ? form.defaultLanguage
+                        : null,
                     ...callAutomationConfig
                 }
             },
