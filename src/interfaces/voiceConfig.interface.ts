@@ -45,5 +45,6 @@ export interface VoiceConfigProps {
     companyId: string;
     enabled: boolean;
     persona: PersonaProps;
+    defaultLanguage: string;
     providers: CompanyProviderProps[];
 }

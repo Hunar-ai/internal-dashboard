@@ -9,6 +9,7 @@ interface UseUpdateVoiceConfigProps {
     };
     body: {
         enabled: boolean;
+        defaultLanguage: string | null;
         personaId?: string;
         providerId?: string;
     };
