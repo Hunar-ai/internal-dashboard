@@ -54,7 +54,13 @@ export const useNavbarMenuConfig = () => {
                 link: '/checklist',
                 isNewFeature: true
             },
-            { id: 'assessment', title: 'Assessment', link: '/assessment' }
+            { id: 'assessment', title: 'Assessment', link: '/assessment' },
+            { id: 'loi', title: 'LOI', link: '/loi' },
+            {
+                id: 'call-automation',
+                title: 'Call Automation',
+                link: '/call-automation'
+            }
         ];
 
         if (hasMetricsPageAccess(personnel?.email ?? '')) {

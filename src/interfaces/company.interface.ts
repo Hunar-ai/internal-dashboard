@@ -6,6 +6,7 @@ export interface AssessmentSettingsProps {
     emails: string[];
     isAssessmentEnabled: boolean;
     jobDescription: string;
+    jobRoleId: string;
     prompt: string | null;
 }
 
@@ -50,6 +51,10 @@ export interface ReferralPageSettingsProps {
     learnMoreLink: string;
 }
 
+export interface CallSettingsProps {
+    conclusionMessage: string;
+}
+
 export interface CompanySettingsProps {
     assessmentSettings?: AssessmentSettingsProps;
     lmsSettings: LmsSettingsProps;
@@ -58,6 +63,7 @@ export interface CompanySettingsProps {
     onboardingSettings?: OnboardingSettingsProps;
     careerPageSettings?: CareerPageSettingsProps;
     referralPageSettings?: ReferralPageSettingsProps;
+    callSettings?: CallSettingsProps;
 }
 
 export interface CompanyFormProps {
@@ -67,6 +73,7 @@ export interface CompanyFormProps {
     rawAddress: string;
     email: string;
     mobileNumber: string;
+    jobQueriesWithoutLanguageCount: number;
     governmentIdentifiers: {
         gstin: string;
     };
