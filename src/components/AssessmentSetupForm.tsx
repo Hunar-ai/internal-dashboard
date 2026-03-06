@@ -1,6 +1,19 @@
 import React from 'react';
 
-import { FormControl, FormLabel, Switch } from '@chakra-ui/react';
+import {
+    Accordion,
+    AccordionButton,
+    AccordionIcon,
+    AccordionItem,
+    AccordionPanel,
+    Box,
+    FormControl,
+    FormLabel,
+    Radio,
+    RadioGroup,
+    Stack,
+    Switch
+} from '@chakra-ui/react';
 
 import {
     AppLoader,
@@ -21,6 +34,7 @@ import { useSearchJobRoles } from 'hooks/apiHooks/jobQuery/useSearchJobRoles';
 
 import { ErrorMsg } from 'utils';
 import type { AssessmentSettingsProps, ErrorStateProps } from 'interfaces';
+import { ASSESSMENT_TYPE } from 'Enum';
 
 interface AssessmentFormProps extends Omit<AssessmentSettingsProps, 'emails'> {
     emails: string;
@@ -28,19 +42,26 @@ interface AssessmentFormProps extends Omit<AssessmentSettingsProps, 'emails'> {
 
 const requiredFields: (keyof AssessmentFormProps)[] = [
     'emails',
-    'jobDescription'
+    'assessmentType',
+    'systemPrompt',
+    'evaluationPrompt',
+    'evaluationJson'
 ];
 const assessmentFormInitialValues: AssessmentFormProps = {
     emails: '',
     isAssessmentEnabled: false,
-    jobDescription: '',
-    jobRoleId: '',
-    prompt: null
+    assessmentType: ASSESSMENT_TYPE.CALL,
+    systemPrompt: '',
+    evaluationPrompt: '',
+    evaluationJson: '',
+    jobRoleId: ''
 };
 const assessmentFormErrorStateInitialValues: ErrorStateProps = {
     emails: false,
-    jobDescription: false,
-    prompt: false
+    assessmentType: false,
+    systemPrompt: false,
+    evaluationPrompt: false,
+    evaluationJson: false
 };
 
 export const AssessmentSetupForm = () => {
@@ -96,11 +117,22 @@ export const AssessmentSetupForm = () => {
         const assessmentSettings =
             jobRoleMap[value]?.settings?.assessmentSettings;
         if (assessmentSettings) {
-            const { emails, ...restSettings } = assessmentSettings;
+            const {
+                emails,
+                assessmentType,
+                systemPrompt,
+                evaluationPrompt,
+                evaluationJson,
+                isAssessmentEnabled
+            } = assessmentSettings;
             setAssessmentForm(prev => ({
                 ...prev,
-                ...restSettings,
-                emails: emails.join(','),
+                assessmentType: assessmentType,
+                systemPrompt: systemPrompt ?? '',
+                evaluationPrompt: evaluationPrompt ?? '',
+                evaluationJson: evaluationJson ?? '',
+                isAssessmentEnabled: !!isAssessmentEnabled,
+                emails: emails?.join(',') ?? '',
                 jobRoleId: value
             }));
         } else {
@@ -120,6 +152,20 @@ export const AssessmentSetupForm = () => {
     ) => {
         const isAssessmentEnabled = e.target.checked;
         setAssessmentForm(prevForm => ({ ...prevForm, isAssessmentEnabled }));
+    };
+
+    const onAssessmentTypeChange = (value: ASSESSMENT_TYPE) => {
+        setAssessmentForm(prevForm => ({
+            ...prevForm,
+            assessmentType: value
+        }));
+        setAssessmentFormErrorState(prevFormErrorState => ({
+            ...prevFormErrorState,
+            assessmentType: hasFormFieldError({
+                fieldName: 'assessmentType',
+                fieldValue: value
+            })
+        }));
     };
 
     const onAssessmentFieldChange = ({
@@ -238,9 +284,10 @@ export const AssessmentSetupForm = () => {
                         display="flex"
                         justifyContent="space-between"
                         alignItems="center"
+                        marginBottom={4}
                         isRequired
                     >
-                        <FormLabel>{'Enable Assessment'}</FormLabel>
+                        <FormLabel>{'Enable AI Assessments'}</FormLabel>
                         <Switch
                             name="assessmentEnabledToggle"
                             id="assessment-enabled-toggle"
@@ -248,48 +295,178 @@ export const AssessmentSetupForm = () => {
                             onChange={onAssessmentEnableToggle}
                         />
                     </FormControl>
-                    <TextField
-                        label="Assessment Result Recipients"
-                        name="emails"
-                        placeholder="Enter comma separated emails"
-                        value={assessmentForm.emails}
-                        onChange={onAssessmentFieldChange}
-                        isRequired
-                        isInvalid={assessmentFormErrorState.emails}
-                        helperText={
-                            <HelperText
-                                msg="Please enter comma separated emails"
-                                hasError={assessmentFormErrorState.emails}
-                                errorMsg={ErrorMsg.required()}
-                            />
-                        }
-                    />
-                    <TextAreaField
-                        label="Job Description"
-                        name="jobDescription"
-                        placeholder="Job Description"
-                        value={assessmentForm.jobDescription}
-                        onChange={onAssessmentFieldChange}
-                        isRequired
-                        isInvalid={assessmentFormErrorState.jobDescription}
-                        maxLength={5000}
-                        helperText={
-                            <HelperText
-                                hasError={
-                                    assessmentFormErrorState.jobDescription
+                    {assessmentForm.isAssessmentEnabled && (
+                        <>
+                            <Accordion
+                                allowToggle
+                                defaultIndex={[0]}
+                                width="100%"
+                            >
+                                <AccordionItem
+                                    border="1px solid"
+                                    borderColor="gray.200"
+                                    borderRadius="md"
+                                >
+                                    <h2>
+                                        <AccordionButton
+                                            px={4}
+                                            py={3}
+                                            _expanded={{ bg: 'gray.50' }}
+                                            borderTopLeftRadius="md"
+                                            borderTopRightRadius="md"
+                                        >
+                                            <Box
+                                                flex="1"
+                                                textAlign="left"
+                                                fontWeight={600}
+                                            >
+                                                Assessment Settings
+                                            </Box>
+                                            <AccordionIcon />
+                                        </AccordionButton>
+                                    </h2>
+                                    <AccordionPanel pb={4} pt={4}>
+                                        <Stack spacing={4}>
+                                            <FormControl
+                                                isRequired
+                                                isInvalid={
+                                                    assessmentFormErrorState.assessmentType
+                                                }
+                                            >
+                                                <FormLabel>
+                                                    {'Assessment Type'}
+                                                </FormLabel>
+                                                <RadioGroup
+                                                    value={
+                                                        assessmentForm.assessmentType
+                                                    }
+                                                    onChange={
+                                                        onAssessmentTypeChange
+                                                    }
+                                                >
+                                                    <Stack
+                                                        direction="row"
+                                                        spacing={6}
+                                                    >
+                                                        <Radio
+                                                            value={
+                                                                ASSESSMENT_TYPE.CALL
+                                                            }
+                                                        >
+                                                            Call only
+                                                        </Radio>
+                                                        <Radio
+                                                            value={
+                                                                ASSESSMENT_TYPE.WEB_AND_CALL
+                                                            }
+                                                        >
+                                                            Web and call
+                                                        </Radio>
+                                                    </Stack>
+                                                </RadioGroup>
+                                                {assessmentFormErrorState.assessmentType ? (
+                                                    <HelperText
+                                                        hasError={true}
+                                                        errorMsg={ErrorMsg.required()}
+                                                    />
+                                                ) : null}
+                                            </FormControl>
+                                            <TextAreaField
+                                                label="System prompt"
+                                                name="systemPrompt"
+                                                placeholder="System prompt"
+                                                value={
+                                                    assessmentForm.systemPrompt
+                                                }
+                                                onChange={
+                                                    onAssessmentFieldChange
+                                                }
+                                                isRequired
+                                                isInvalid={
+                                                    assessmentFormErrorState.systemPrompt
+                                                }
+                                                maxLength={5000}
+                                                helperText={
+                                                    <HelperText
+                                                        hasError={
+                                                            assessmentFormErrorState.systemPrompt
+                                                        }
+                                                        errorMsg={ErrorMsg.required()}
+                                                    />
+                                                }
+                                            />
+                                            <TextAreaField
+                                                label="Evaluation prompt"
+                                                name="evaluationPrompt"
+                                                placeholder="Evaluation prompt"
+                                                value={
+                                                    assessmentForm.evaluationPrompt
+                                                }
+                                                onChange={
+                                                    onAssessmentFieldChange
+                                                }
+                                                isRequired
+                                                isInvalid={
+                                                    assessmentFormErrorState.evaluationPrompt
+                                                }
+                                                maxLength={5000}
+                                                helperText={
+                                                    <HelperText
+                                                        hasError={
+                                                            assessmentFormErrorState.evaluationPrompt
+                                                        }
+                                                        errorMsg={ErrorMsg.required()}
+                                                    />
+                                                }
+                                            />
+                                            <TextAreaField
+                                                label="Evaluation JSON"
+                                                name="evaluationJson"
+                                                placeholder="Evaluation JSON"
+                                                value={
+                                                    assessmentForm.evaluationJson
+                                                }
+                                                onChange={
+                                                    onAssessmentFieldChange
+                                                }
+                                                isRequired
+                                                isInvalid={
+                                                    assessmentFormErrorState.evaluationJson
+                                                }
+                                                maxLength={5000}
+                                                helperText={
+                                                    <HelperText
+                                                        hasError={
+                                                            assessmentFormErrorState.evaluationJson
+                                                        }
+                                                        errorMsg={ErrorMsg.required()}
+                                                    />
+                                                }
+                                            />
+                                        </Stack>
+                                    </AccordionPanel>
+                                </AccordionItem>
+                            </Accordion>
+                            <TextField
+                                label="Assessment Result Recipients"
+                                name="emails"
+                                placeholder="Enter comma separated emails"
+                                value={assessmentForm.emails}
+                                onChange={onAssessmentFieldChange}
+                                isRequired
+                                isInvalid={assessmentFormErrorState.emails}
+                                helperText={
+                                    <HelperText
+                                        msg="Please enter comma separated emails"
+                                        hasError={
+                                            assessmentFormErrorState.emails
+                                        }
+                                        errorMsg={ErrorMsg.required()}
+                                    />
                                 }
-                                errorMsg={ErrorMsg.required()}
                             />
-                        }
-                    />
-                    <TextAreaField
-                        label="Prompt"
-                        name="prompt"
-                        placeholder="Prompt"
-                        value={assessmentForm.prompt || ''}
-                        onChange={onAssessmentFieldChange}
-                        maxLength={5000}
-                    />
+                        </>
+                    )}
                 </>
             )}
         </FormWrapper>

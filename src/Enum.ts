@@ -228,3 +228,8 @@ export enum LOI_TEMPLATE_FIELD_TYPE {
     TEXT = 'TEXT',
     DATE = 'DATE'
 }
+
+export enum ASSESSMENT_TYPE {
+    CALL = 'CALL',
+    WEB_AND_CALL = 'WEB_AND_CALL'
+}

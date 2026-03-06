@@ -1,10 +1,13 @@
+import { ASSESSMENT_TYPE } from 'Enum';
 import { PaginationInfo } from './table.interface';
 
 export interface AssessmentSettingsProps {
     emails: string[];
     isAssessmentEnabled: boolean;
-    jobDescription: string;
-    prompt: string | null;
+    assessmentType: ASSESSMENT_TYPE;
+    systemPrompt: string;
+    evaluationPrompt: string;
+    evaluationJson: string;
 }
 
 export interface JobRoleSettingsProps {
