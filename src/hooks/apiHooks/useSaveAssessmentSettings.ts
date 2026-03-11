@@ -22,9 +22,9 @@ export const useSaveAssessmentSettings = () => {
             emails,
             isAssessmentEnabled,
             assessmentType,
-            systemPrompt,
+            prompt,
             evaluationPrompt,
-            evaluationJson,
+            callPrompt,
             jobRoleId
         } = requestBody;
 
@@ -35,9 +35,9 @@ export const useSaveAssessmentSettings = () => {
                     emails,
                     isAssessmentEnabled,
                     assessmentType,
-                    systemPrompt,
+                    prompt,
                     evaluationPrompt,
-                    evaluationJson,
+                    callPrompt,
                     jobRoleId
                 }
             })

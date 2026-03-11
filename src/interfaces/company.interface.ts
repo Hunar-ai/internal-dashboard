@@ -7,9 +7,9 @@ export interface AssessmentSettingsProps {
     isAssessmentEnabled: boolean;
     jobRoleId: string;
     assessmentType: ASSESSMENT_TYPE;
-    systemPrompt: string;
+    prompt: string;
     evaluationPrompt: string;
-    evaluationJson: string;
+    callPrompt: string;
 }
 
 export interface LmsSettingsProps {

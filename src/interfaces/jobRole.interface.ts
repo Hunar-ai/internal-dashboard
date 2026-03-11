@@ -5,9 +5,9 @@ export interface AssessmentSettingsProps {
     emails: string[];
     isAssessmentEnabled: boolean;
     assessmentType: ASSESSMENT_TYPE;
-    systemPrompt: string;
+    prompt: string;
     evaluationPrompt: string;
-    evaluationJson: string;
+    callPrompt: string;
 }
 
 export interface JobRoleSettingsProps {

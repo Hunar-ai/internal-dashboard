@@ -43,25 +43,25 @@ interface AssessmentFormProps extends Omit<AssessmentSettingsProps, 'emails'> {
 const requiredFields: (keyof AssessmentFormProps)[] = [
     'emails',
     'assessmentType',
-    'systemPrompt',
+    'prompt',
     'evaluationPrompt',
-    'evaluationJson'
+    'callPrompt'
 ];
 const assessmentFormInitialValues: AssessmentFormProps = {
     emails: '',
     isAssessmentEnabled: false,
     assessmentType: ASSESSMENT_TYPE.CALL,
-    systemPrompt: '',
+    prompt: '',
     evaluationPrompt: '',
-    evaluationJson: '',
+    callPrompt: '',
     jobRoleId: ''
 };
 const assessmentFormErrorStateInitialValues: ErrorStateProps = {
     emails: false,
     assessmentType: false,
-    systemPrompt: false,
+    prompt: false,
     evaluationPrompt: false,
-    evaluationJson: false
+    callPrompt: false
 };
 
 export const AssessmentSetupForm = () => {
@@ -120,17 +120,17 @@ export const AssessmentSetupForm = () => {
             const {
                 emails,
                 assessmentType,
-                systemPrompt,
+                prompt,
                 evaluationPrompt,
-                evaluationJson,
+                callPrompt,
                 isAssessmentEnabled
             } = assessmentSettings;
             setAssessmentForm(prev => ({
                 ...prev,
                 assessmentType: assessmentType,
-                systemPrompt: systemPrompt ?? '',
+                prompt: prompt ?? '',
                 evaluationPrompt: evaluationPrompt ?? '',
-                evaluationJson: evaluationJson ?? '',
+                callPrompt: callPrompt ?? '',
                 isAssessmentEnabled: !!isAssessmentEnabled,
                 emails: emails?.join(',') ?? '',
                 jobRoleId: value
@@ -152,6 +152,11 @@ export const AssessmentSetupForm = () => {
     ) => {
         const isAssessmentEnabled = e.target.checked;
         setAssessmentForm(prevForm => ({ ...prevForm, isAssessmentEnabled }));
+        if (!isAssessmentEnabled) {
+            setAssessmentFormErrorState({
+                ...assessmentFormErrorStateInitialValues
+            });
+        }
     };
 
     const onAssessmentTypeChange = (value: ASSESSMENT_TYPE) => {
@@ -177,7 +182,9 @@ export const AssessmentSetupForm = () => {
 
         setAssessmentFormErrorState(prevFormErrorState => ({
             ...prevFormErrorState,
-            [name]: hasFormFieldError({ fieldName: name, fieldValue: value })
+            [name]: assessmentForm.isAssessmentEnabled
+                ? hasFormFieldError({ fieldName: name, fieldValue: value })
+                : false
         }));
     };
 
@@ -216,6 +223,14 @@ export const AssessmentSetupForm = () => {
             return;
         }
 
+        if (!assessmentForm.isAssessmentEnabled) {
+            setAssessmentFormErrorState({
+                ...assessmentFormErrorStateInitialValues
+            });
+            submitSettings();
+            return;
+        }
+
         const { errorState: modifiedFormErrorState, hasFormError } =
             getFormErrorData({ form: assessmentForm, requiredFields });
         setAssessmentFormErrorState(modifiedFormErrorState);
@@ -234,6 +249,8 @@ export const AssessmentSetupForm = () => {
             setJobRole('');
         }
     }, [companyId, searchJobRoles]);
+
+    //Submit with disable and  no fiels sent then get for that role
 
     return (
         <FormWrapper
@@ -311,16 +328,16 @@ export const AssessmentSetupForm = () => {
                                         <AccordionButton
                                             px={4}
                                             py={3}
-                                            _expanded={{ bg: 'gray.50' }}
-                                            borderTopLeftRadius="md"
-                                            borderTopRightRadius="md"
+                                            _hover="none"
+                                            background={'gray.50'}
+                                            borderRadius="md"
                                         >
                                             <Box
                                                 flex="1"
                                                 textAlign="left"
                                                 fontWeight={600}
                                             >
-                                                Assessment Settings
+                                                Assessment configuration
                                             </Box>
                                             <AccordionIcon />
                                         </AccordionButton>
@@ -328,7 +345,9 @@ export const AssessmentSetupForm = () => {
                                     <AccordionPanel pb={4} pt={4}>
                                         <Stack spacing={4}>
                                             <FormControl
-                                                isRequired
+                                                isRequired={
+                                                    assessmentForm.isAssessmentEnabled
+                                                }
                                                 isInvalid={
                                                     assessmentFormErrorState.assessmentType
                                                 }
@@ -372,24 +391,23 @@ export const AssessmentSetupForm = () => {
                                                 ) : null}
                                             </FormControl>
                                             <TextAreaField
-                                                label="System prompt"
-                                                name="systemPrompt"
-                                                placeholder="System prompt"
-                                                value={
-                                                    assessmentForm.systemPrompt
-                                                }
+                                                label="Base prompt"
+                                                name="prompt"
+                                                placeholder="Base prompt"
+                                                value={assessmentForm.prompt}
                                                 onChange={
                                                     onAssessmentFieldChange
                                                 }
-                                                isRequired
-                                                isInvalid={
-                                                    assessmentFormErrorState.systemPrompt
+                                                isRequired={
+                                                    assessmentForm.isAssessmentEnabled
                                                 }
-                                                maxLength={5000}
+                                                isInvalid={
+                                                    assessmentFormErrorState.prompt
+                                                }
                                                 helperText={
                                                     <HelperText
                                                         hasError={
-                                                            assessmentFormErrorState.systemPrompt
+                                                            assessmentFormErrorState.prompt
                                                         }
                                                         errorMsg={ErrorMsg.required()}
                                                     />
@@ -405,11 +423,12 @@ export const AssessmentSetupForm = () => {
                                                 onChange={
                                                     onAssessmentFieldChange
                                                 }
-                                                isRequired
+                                                isRequired={
+                                                    assessmentForm.isAssessmentEnabled
+                                                }
                                                 isInvalid={
                                                     assessmentFormErrorState.evaluationPrompt
                                                 }
-                                                maxLength={5000}
                                                 helperText={
                                                     <HelperText
                                                         hasError={
@@ -420,24 +439,25 @@ export const AssessmentSetupForm = () => {
                                                 }
                                             />
                                             <TextAreaField
-                                                label="Evaluation JSON"
-                                                name="evaluationJson"
-                                                placeholder="Evaluation JSON"
+                                                label="Call specific Instructions"
+                                                name="callPrompt"
+                                                placeholder="Call specific Instructions"
                                                 value={
-                                                    assessmentForm.evaluationJson
+                                                    assessmentForm.callPrompt
                                                 }
                                                 onChange={
                                                     onAssessmentFieldChange
                                                 }
-                                                isRequired
-                                                isInvalid={
-                                                    assessmentFormErrorState.evaluationJson
+                                                isRequired={
+                                                    assessmentForm.isAssessmentEnabled
                                                 }
-                                                maxLength={5000}
+                                                isInvalid={
+                                                    assessmentFormErrorState.callPrompt
+                                                }
                                                 helperText={
                                                     <HelperText
                                                         hasError={
-                                                            assessmentFormErrorState.evaluationJson
+                                                            assessmentFormErrorState.callPrompt
                                                         }
                                                         errorMsg={ErrorMsg.required()}
                                                     />
@@ -453,7 +473,7 @@ export const AssessmentSetupForm = () => {
                                 placeholder="Enter comma separated emails"
                                 value={assessmentForm.emails}
                                 onChange={onAssessmentFieldChange}
-                                isRequired
+                                isRequired={assessmentForm.isAssessmentEnabled}
                                 isInvalid={assessmentFormErrorState.emails}
                                 helperText={
                                     <HelperText
