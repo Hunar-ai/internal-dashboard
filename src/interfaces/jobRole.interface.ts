@@ -2,7 +2,7 @@ import { ASSESSMENT_TYPE } from 'Enum';
 import { PaginationInfo } from './table.interface';
 
 export interface AssessmentSettingsProps {
-    emails: string[];
+    emails?: string[];
     isAssessmentEnabled: boolean;
     assessmentType: ASSESSMENT_TYPE;
     prompt: string;

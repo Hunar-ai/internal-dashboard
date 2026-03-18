@@ -3,7 +3,7 @@ import { ASSESSMENT_TYPE, CHECK_INTEREST_PROVIDER } from 'Enum';
 import type { ChecklistFieldProps, PaginationInfo } from 'interfaces';
 
 export interface AssessmentSettingsProps {
-    emails: string[];
+    emails?: string[];
     isAssessmentEnabled: boolean;
     jobRoleId: string;
     assessmentType: ASSESSMENT_TYPE;

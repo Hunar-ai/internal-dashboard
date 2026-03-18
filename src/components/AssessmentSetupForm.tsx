@@ -190,15 +190,16 @@ export const AssessmentSetupForm = () => {
 
     const submitSettings = () => {
         const { emails, ...restForm } = assessmentForm;
-        const formattedEmails = emails.split(',');
+
+        const requestBody: AssessmentSettingsProps =
+            restForm.isAssessmentEnabled
+                ? { ...restForm, emails: emails.split(',') }
+                : restForm;
 
         saveAssessmentSettings.mutate(
             {
                 params: { companyId },
-                requestBody: {
-                    emails: formattedEmails,
-                    ...restForm
-                }
+                requestBody
             },
             {
                 onSuccess: () => {
