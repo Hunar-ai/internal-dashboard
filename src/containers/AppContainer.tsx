@@ -16,9 +16,7 @@ import {
 
 import { useGetFormFields, useGetLoggedInPersonnel, useToken } from 'hooks';
 import { SettingsContext, settingsInitialState } from 'contexts';
-
-const PLAYGROUND_METRICS_USERS =
-    import.meta.env.VITE_PLAYGROUND_METRICS_USERS?.split(',') ?? [];
+import { hasMetricsPageAccess } from 'permissions';
 
 export const AppContainer = () => {
     const { token } = useToken();
@@ -63,7 +61,7 @@ export const AppContainer = () => {
                         path="/call-automation"
                         element={<CallAutomationContainer />}
                     />
-                    {PLAYGROUND_METRICS_USERS?.includes(personnel?.email) && (
+                    {hasMetricsPageAccess(personnel?.email ?? '') && (
                         <>
                             <Route
                                 path="/playground-metrics/*"
