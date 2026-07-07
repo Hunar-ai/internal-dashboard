@@ -1,7 +1,5 @@
-import { useSearchParams } from 'react-router-dom';
-
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Button, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
 import { SearchBar } from '@hunar.ai/hunar-design-system';
 
@@ -23,18 +21,12 @@ export const NehaSelectTableHeader = ({
     filters
 }: NehaSelectTableHeaderProps) => {
     const { showError, showSuccess } = useToast();
-    const [searchParams, setSearchParams] = useSearchParams();
     const { getApiErrorMsg } = useErrorHelper();
     const exportNehaSelectCalls = useExportNehaSelectCalls();
 
     const { data: pendingCallsData } = useGetNehaSelectPendingCalls({
         params: { companyId: NEHA_SELECT_COMPANY_ID }
     });
-
-    const onUploadClick = () => {
-        searchParams.set('upload', 'true');
-        setSearchParams(searchParams);
-    };
 
     const saveFile = (data: string) => {
         const file = new File([data], 'leads.csv', {
@@ -103,14 +95,6 @@ export const NehaSelectTableHeader = ({
                     >
                         {`EXPORT`}
                     </LoadingButton>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="medium"
-                        onClick={onUploadClick}
-                    >
-                        {`UPLOAD`}
-                    </Button>
                 </Grid>
             </Grid>
         </>
