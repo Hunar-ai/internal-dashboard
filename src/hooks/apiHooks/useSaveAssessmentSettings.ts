@@ -21,8 +21,10 @@ export const useSaveAssessmentSettings = () => {
         const {
             emails,
             isAssessmentEnabled,
-            jobDescription,
+            assessmentType,
             prompt,
+            evaluationPrompt,
+            callPrompt,
             jobRoleId
         } = requestBody;
 
@@ -32,8 +34,10 @@ export const useSaveAssessmentSettings = () => {
                 body: {
                     emails,
                     isAssessmentEnabled,
-                    jobDescription,
+                    assessmentType,
                     prompt,
+                    evaluationPrompt,
+                    callPrompt,
                     jobRoleId
                 }
             })

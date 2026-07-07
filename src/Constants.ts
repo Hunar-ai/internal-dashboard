@@ -39,10 +39,15 @@ export const DEFAULT_ONBOARDING_SETTINGS: OnboardingSettingsProps = {
     workerSourceAffinityPeriod: 0
 };
 
+export const DEFAULT_CALL_SETTINGS = {
+    conclusionMessage: ''
+};
+
 export const DEFAULT_COMPANY_SETTINGS: CompanySettingsProps = {
     lmsSettings: DEFAULT_LMS_SETTINGS,
     workerSettings: DEFAULT_LEAD_SETTINGS,
-    onboardingSettings: DEFAULT_ONBOARDING_SETTINGS
+    onboardingSettings: DEFAULT_ONBOARDING_SETTINGS,
+    callSettings: DEFAULT_CALL_SETTINGS
 };
 
 export const DEFAULT_COMPANY_ADDRESS = 'Plot in Gurgaon, Haryana';

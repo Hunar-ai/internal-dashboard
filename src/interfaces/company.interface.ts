@@ -1,13 +1,15 @@
-import { CHECK_INTEREST_PROVIDER } from 'Enum';
+import { ASSESSMENT_TYPE, CHECK_INTEREST_PROVIDER } from 'Enum';
 
 import type { ChecklistFieldProps, PaginationInfo } from 'interfaces';
 
 export interface AssessmentSettingsProps {
-    emails: string[];
+    emails?: string[];
     isAssessmentEnabled: boolean;
-    jobDescription: string;
     jobRoleId: string;
-    prompt: string | null;
+    assessmentType: ASSESSMENT_TYPE;
+    prompt: string;
+    evaluationPrompt: string;
+    callPrompt: string;
 }
 
 export interface LmsSettingsProps {
@@ -51,6 +53,10 @@ export interface ReferralPageSettingsProps {
     learnMoreLink: string;
 }
 
+export interface CallSettingsProps {
+    conclusionMessage: string;
+}
+
 export interface CompanySettingsProps {
     assessmentSettings?: AssessmentSettingsProps;
     lmsSettings: LmsSettingsProps;
@@ -59,6 +65,7 @@ export interface CompanySettingsProps {
     onboardingSettings?: OnboardingSettingsProps;
     careerPageSettings?: CareerPageSettingsProps;
     referralPageSettings?: ReferralPageSettingsProps;
+    callSettings?: CallSettingsProps;
 }
 
 export interface CompanyFormProps {
@@ -68,6 +75,7 @@ export interface CompanyFormProps {
     rawAddress: string;
     email: string;
     mobileNumber: string;
+    jobQueriesWithoutLanguageCount: number;
     governmentIdentifiers: {
         gstin: string;
     };

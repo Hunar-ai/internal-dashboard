@@ -64,7 +64,8 @@ export type {
     ReferralPageSettingsProps,
     ReferralPageFormProps,
     DashboardSettingsProps,
-    AssessmentSettingsProps
+    AssessmentSettingsProps,
+    CallSettingsProps
 } from './company.interface';
 
 export type { MenuProps } from './menu.interface';
@@ -95,3 +96,16 @@ export type {
     NehaAgentCallProps,
     NehaAgentPendingCallsProps
 } from './nehaAgents.interface';
+
+export type {
+    LoiProps,
+    LoiTemplateField,
+    CreateOrUpdateLoiResponseProps
+} from './loi.interface';
+export type { VoicePersonaProps } from './voicePersona.interface';
+export type {
+    CreateProviderConfigProps,
+    CompanyProviderProps,
+    ProviderConfigProps,
+    VoiceConfigProps
+} from './voiceConfig.interface';

@@ -86,7 +86,8 @@ export enum FORM_FIELD {
     'callLanguage' = 'callLanguage',
     'nehaSelectCallLater' = 'nehaSelectCallLater',
     'nehaAgentsAllowedCompanies' = 'nehaAgentsAllowedCompanies',
-    'nehaCallEndedBy' = 'nehaCallEndedBy'
+    'nehaCallEndedBy' = 'nehaCallEndedBy',
+    'voiceCallOrchestratorTelephonyProviders' = 'voiceCallOrchestratorTelephonyProviders'
 }
 
 export enum SORT_TYPE {
@@ -221,4 +222,14 @@ export enum MIME_TYPE {
 
 export enum FALL_BACK_VALUE {
     NOT_AVAILABLE = 'N/A'
+}
+
+export enum LOI_TEMPLATE_FIELD_TYPE {
+    TEXT = 'TEXT',
+    DATE = 'DATE'
+}
+
+export enum ASSESSMENT_TYPE {
+    CALL = 'CALL',
+    WEB_AND_CALL = 'WEB_AND_CALL'
 }
