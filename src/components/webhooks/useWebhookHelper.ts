@@ -8,6 +8,7 @@ import type {
 export const useWebhookHelper = () => {
     const getBlankWebhookRow = (): WebhookRowProps => ({
         key: crypto.randomUUID(),
+        isSaved: false,
         event: '',
         url: '',
         webhookStatus: WEBHOOK_STATUS.ENABLED
@@ -19,6 +20,7 @@ export const useWebhookHelper = () => {
         webhookConfigs.length
             ? webhookConfigs.map(({ event, url, webhookStatus }) => ({
                   key: event,
+                  isSaved: true,
                   event,
                   url,
                   webhookStatus

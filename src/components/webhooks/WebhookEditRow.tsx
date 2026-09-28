@@ -16,15 +16,14 @@ import { useWebhookHelper } from './useWebhookHelper';
 
 import { HelperText } from '@components/common';
 
+import { SettingsContext } from 'contexts';
 import { ErrorMsg, RegExUtil } from 'utils';
 
 import { WEBHOOK_STATUS } from 'Enum';
-import type { OptionsProps, WebhookRowProps } from 'interfaces';
+import type { WebhookRowProps } from 'interfaces';
 
 interface WebhookEditRowProps {
     webhookRow: WebhookRowProps;
-    isSavedRow: boolean;
-    webhookEventTypes: OptionsProps;
     usedEvents: string[];
     isEditing: boolean;
     isDisabled: boolean;
@@ -36,8 +35,6 @@ interface WebhookEditRowProps {
 
 export const WebhookEditRow = ({
     webhookRow,
-    isSavedRow,
-    webhookEventTypes,
     usedEvents,
     isEditing,
     isDisabled,
@@ -46,9 +43,12 @@ export const WebhookEditRow = ({
     onSaveClick,
     onDeleteClick
 }: WebhookEditRowProps) => {
-    const { key, event, url, webhookStatus } = webhookRow;
+    const { key, isSaved, event, url, webhookStatus } = webhookRow;
 
     const { getWebhookEventOptions } = useWebhookHelper();
+    const {
+        formFields: { webhookEventTypes }
+    } = React.useContext(SettingsContext);
 
     const [isSaveAttempted, setIsSaveAttempted] = React.useState(false);
 
@@ -92,7 +92,7 @@ export const WebhookEditRow = ({
                         name="event"
                         placeholder="Choose Event"
                         value={event}
-                        isDisabled={isDisabled || !isEditing || isSavedRow}
+                        isDisabled={isDisabled || !isEditing || isSaved}
                         onChange={onEventChange}
                     >
                         {getWebhookEventOptions(

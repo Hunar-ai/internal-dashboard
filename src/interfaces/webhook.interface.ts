@@ -28,6 +28,7 @@ export type WebhookConfigsResponse = WebhookConfigProps[];
 
 export interface WebhookRowProps {
     key: string;
+    isSaved: boolean;
     event: string;
     url: string;
     webhookStatus: WEBHOOK_STATUS;

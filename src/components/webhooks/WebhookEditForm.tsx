@@ -233,9 +233,7 @@ export const WebhookEditForm = () => {
     };
 
     const onWebhookRowDeleteClick = (webhookRow: WebhookRowProps) => {
-        const isSavedRow = savedWebhookConfigByEvent.has(webhookRow.event);
-
-        if (!isSavedRow) {
+        if (!webhookRow.isSaved) {
             setWebhookRows(rows =>
                 rows.filter(row => row.key !== webhookRow.key)
             );
@@ -344,10 +342,6 @@ export const WebhookEditForm = () => {
                             <WebhookEditRow
                                 key={webhookRow.key}
                                 webhookRow={webhookRow}
-                                isSavedRow={savedWebhookConfigByEvent.has(
-                                    webhookRow.event
-                                )}
-                                webhookEventTypes={webhookEventTypes}
                                 usedEvents={usedEvents}
                                 isEditing={editingRowKey === webhookRow.key}
                                 isDisabled={isRowDisabled}
