@@ -17,7 +17,8 @@ interface FormWrapperProps {
     isLoading: boolean;
     width?: ResponsiveValue<string | number>;
     gridColumns?: ResponsiveValue<number>;
-    onSubmit: VoidFunction;
+    hideSubmitButton?: boolean;
+    onSubmit?: VoidFunction;
 }
 
 export const FormWrapper = ({
@@ -28,6 +29,7 @@ export const FormWrapper = ({
     isLoading,
     width = undefined,
     gridColumns = undefined,
+    hideSubmitButton = false,
     onSubmit
 }: FormWrapperProps) => {
     const columns = gridColumns ?? { base: 1, md: 2 };
@@ -64,18 +66,20 @@ export const FormWrapper = ({
                     </GridItem>
                     {children}
                 </SimpleGrid>
-                <SimpleGrid columns={columns} spacingX={6} mt={8}>
-                    <GridItem colStart={columns} textAlign="end">
-                        <Button
-                            colorScheme="blue"
-                            onClick={onSubmit}
-                            isDisabled={isFormDisabled}
-                            isLoading={isLoading}
-                        >
-                            SAVE AND PUBLISH
-                        </Button>
-                    </GridItem>
-                </SimpleGrid>
+                {!hideSubmitButton && (
+                    <SimpleGrid columns={columns} spacingX={6} mt={8}>
+                        <GridItem colStart={columns} textAlign="end">
+                            <Button
+                                colorScheme="blue"
+                                onClick={onSubmit}
+                                isDisabled={isFormDisabled}
+                                isLoading={isLoading}
+                            >
+                                SAVE AND PUBLISH
+                            </Button>
+                        </GridItem>
+                    </SimpleGrid>
+                )}
             </Box>
         </>
     );

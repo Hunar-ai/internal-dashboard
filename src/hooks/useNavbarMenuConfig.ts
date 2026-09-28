@@ -54,6 +54,12 @@ export const useNavbarMenuConfig = () => {
                 id: 'checklist',
                 title: 'Checklist',
                 link: '/checklist',
+                isNewFeature: false
+            },
+            {
+                id: 'webhooks',
+                title: 'Webhooks',
+                link: '/webhooks',
                 isNewFeature: true
             },
             { id: 'assessment', title: 'Assessment', link: '/assessment' },

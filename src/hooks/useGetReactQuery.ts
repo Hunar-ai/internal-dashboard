@@ -7,7 +7,9 @@ import type {
     LoiProps,
     NehaSelectPendingCallsProps,
     PersonnelProps,
-    VoiceConfigProps
+    VoiceConfigProps,
+    WebhookConfigsResponse,
+    WebhookSecretProps
 } from 'interfaces';
 import ErrorTracker from 'utils/ErrorTracker';
 
@@ -18,7 +20,9 @@ type SuccessDataProps =
     | NehaSelectPendingCallsProps
     | LoiProps
     | LoiProps[]
-    | VoiceConfigProps;
+    | VoiceConfigProps
+    | WebhookSecretProps
+    | WebhookConfigsResponse;
 
 interface GetReactQueryProps<ResponseProps> {
     queryKey: string[];

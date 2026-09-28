@@ -15,6 +15,7 @@ interface ConfirmationDialogProps {
     isOpen: boolean;
     cancelText?: string;
     submitText?: string;
+    isCentered?: boolean;
     onSubmitClick: VoidFunction;
     onCancelClick: VoidFunction;
 }
@@ -25,11 +26,12 @@ export const ConfirmationDialog = ({
     isOpen,
     cancelText = 'CANCEL',
     submitText = 'SURE',
+    isCentered = false,
     onCancelClick,
     onSubmitClick
 }: ConfirmationDialogProps) => {
     return (
-        <Modal isOpen={isOpen} onClose={onCancelClick}>
+        <Modal isOpen={isOpen} onClose={onCancelClick} isCentered={isCentered}>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>{title}</ModalHeader>
