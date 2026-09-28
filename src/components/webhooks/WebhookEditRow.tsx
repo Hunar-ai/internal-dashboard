@@ -113,11 +113,9 @@ export const WebhookEditRow = ({
             <Box flex="1">
                 <FormControl isInvalid={hasUrlError}>
                     <Input
-                        key={isEditing ? 'url-edit' : 'url-read'}
                         name="url"
                         placeholder="https://your-app.example.com/webhooks"
                         value={url}
-                        autoFocus={isEditing}
                         isDisabled={isDisabled || !isEditing}
                         onChange={onUrlChange}
                     />

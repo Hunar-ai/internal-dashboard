@@ -101,14 +101,6 @@ export const WebhookEditForm = () => {
     const updateWebhookConfig = useUpdateWebhookConfig();
     const deleteWebhookConfig = useDeleteWebhookConfig();
 
-    const savedWebhookConfigByEvent = React.useMemo(
-        () =>
-            new Map(
-                (webhookConfigs ?? []).map(config => [config.event, config])
-            ),
-        [webhookConfigs]
-    );
-
     const usedEvents = webhookRows.map(({ event }) => event);
     const isAddWebhookDisabled = webhookRows.length >= webhookEventTypes.length;
     const isRowDisabled =
@@ -184,7 +176,12 @@ export const WebhookEditForm = () => {
         );
     };
 
-    const saveWebhookRow = ({ event, url, webhookStatus }: WebhookRowProps) => {
+    const saveWebhookRow = ({
+        isSaved,
+        event,
+        url,
+        webhookStatus
+    }: WebhookRowProps) => {
         const mutationOptions = {
             onSuccess: () => {
                 setEditingRowKey(null);
@@ -197,7 +194,7 @@ export const WebhookEditForm = () => {
             onError: showApiError
         };
 
-        if (savedWebhookConfigByEvent.has(event)) {
+        if (isSaved) {
             updateWebhookConfig.mutate(
                 {
                     params: { companyId, event },
@@ -218,7 +215,9 @@ export const WebhookEditForm = () => {
     };
 
     const onWebhookRowSaveClick = (webhookRow: WebhookRowProps) => {
-        const savedConfig = savedWebhookConfigByEvent.get(webhookRow.event);
+        const savedConfig = webhookConfigs?.find(
+            config => config.event === webhookRow.event
+        );
         const isUnchanged =
             !!savedConfig &&
             savedConfig.url === webhookRow.url &&
