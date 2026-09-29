@@ -40,7 +40,8 @@ export const settingsInitialState: SettingsContextType = {
         nehaSelectCallLater: [],
         nehaCallEndedBy: [],
         nehaAgentsAllowedCompanies: [],
-        voiceCallOrchestratorTelephonyProviders: []
+        voiceCallOrchestratorTelephonyProviders: [],
+        webhookEventTypes: []
     }
 };
 

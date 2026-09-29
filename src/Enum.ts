@@ -87,7 +87,8 @@ export enum FORM_FIELD {
     'nehaSelectCallLater' = 'nehaSelectCallLater',
     'nehaAgentsAllowedCompanies' = 'nehaAgentsAllowedCompanies',
     'nehaCallEndedBy' = 'nehaCallEndedBy',
-    'voiceCallOrchestratorTelephonyProviders' = 'voiceCallOrchestratorTelephonyProviders'
+    'voiceCallOrchestratorTelephonyProviders' = 'voiceCallOrchestratorTelephonyProviders',
+    'webhookEventTypes' = 'webhookEventTypes'
 }
 
 export enum SORT_TYPE {
@@ -232,4 +233,9 @@ export enum LOI_TEMPLATE_FIELD_TYPE {
 export enum ASSESSMENT_TYPE {
     CALL = 'CALL',
     WEB_AND_CALL = 'WEB_AND_CALL'
+}
+
+export enum WEBHOOK_STATUS {
+    ENABLED = 'ENABLED',
+    DISABLED = 'DISABLED'
 }

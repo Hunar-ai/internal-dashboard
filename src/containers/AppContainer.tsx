@@ -16,6 +16,7 @@ import {
 
 import { useGetFormFields, useGetLoggedInPersonnel, useToken } from 'hooks';
 import { SettingsContext, settingsInitialState } from 'contexts';
+import { WebhookContainer } from './WebhookContainer';
 
 const PLAYGROUND_METRICS_USERS =
     import.meta.env.VITE_PLAYGROUND_METRICS_USERS?.split(',') ?? [];
@@ -54,6 +55,7 @@ export const AppContainer = () => {
                     <Route path="/user" element={<UserContainer />} />
                     <Route path="/company" element={<CompanyContainer />} />
                     <Route path="/checklist" element={<ChecklistContainer />} />
+                    <Route path="/webhooks" element={<WebhookContainer />} />
                     <Route
                         path="/assessment"
                         element={<AssessmentContainer />}
