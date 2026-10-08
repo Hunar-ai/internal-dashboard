@@ -48,7 +48,8 @@ export const ErrorMsg = {
     minDate: (minDate: string) => `Must be a date on or after ${minDate}`,
     time: (format: string) => `Must be a valid time in format ${format}`,
     hexColor: () => `Must be a valid hex color`,
-    url: () => `Must be a valid URL`
+    url: () => `Must be a valid URL`,
+    httpsUrl: () => `Must be a valid https URL`
 } as const;
 
 export const ErrorMsgUtil: ErrorMsgProps = {

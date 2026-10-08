@@ -109,3 +109,10 @@ export type {
     ProviderConfigProps,
     VoiceConfigProps
 } from './voiceConfig.interface';
+export type {
+    WebhookSecretProps,
+    WebhookSecretWithPlaintextProps,
+    WebhookConfigProps,
+    WebhookConfigsResponse,
+    WebhookRowProps
+} from './webhook.interface';
