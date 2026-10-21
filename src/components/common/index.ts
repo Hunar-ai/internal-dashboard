@@ -19,7 +19,10 @@ export { AppTooltip } from './AppTooltip';
 export { FormWrapper } from './FormWrapper';
 export { LeftPanel } from './LeftPanel';
 export { RightPanel } from './RightPanel';
-export { ConfirmationDialog } from './ConfirmationDialog';
+export {
+    ConfirmationDialog,
+    type ConfirmationDialogProps
+} from './ConfirmationDialog';
 export { ModalWrapper } from './ModalWrapper';
 export {
     Table as PaginatedTable,

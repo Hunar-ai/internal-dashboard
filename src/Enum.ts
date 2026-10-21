@@ -156,7 +156,26 @@ export enum ALLOWED_EXTENSION {
     JPG = '.jpg',
     PDF = '.pdf',
     DOC = '.doc',
-    DOCX = '.docx'
+    DOCX = '.docx',
+    CSV = '.csv'
+}
+
+export enum CHECKLIST_QUESTION_TYPE {
+    MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
+    FREE_TEXT = 'FREE_TEXT',
+    NUMERICAL = 'NUMERICAL'
+}
+
+export enum CSV_UPLOAD_ERROR {
+    NOT_CSV = 'NOT_CSV',
+    TOO_LARGE = 'TOO_LARGE',
+    INVALID_CONTENT = 'INVALID_CONTENT'
+}
+
+export enum CHECKLIST_RULE_ACTION {
+    ONLY_SHOW = 'ONLY_SHOW',
+    ONLY_HIDE = 'ONLY_HIDE',
+    SKIP = 'SKIP'
 }
 
 export enum DOCUMENT_TYPE {
