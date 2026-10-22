@@ -21,9 +21,6 @@ import {
     hasRulesUsingOptionValue,
     hasTypeChangeRuleImpact,
     getSourceQuestion,
-    hasDuplicateOptions,
-    hasDuplicateQuestions,
-    hasNoOptions,
     removeOption,
     removeQuestion,
     removeRulesUsingOptionValue,
@@ -384,13 +381,9 @@ export const useChecklistForm = () => {
         return { hasError: hasFormError, firstErrorKey };
     };
 
-    //the four states that can never be published, greys the button instead of
-    //letting the click through to a wall of red
-    const isSaveDisabled =
-        !checklistForm.length ||
-        checklistForm.some(hasNoOptions) ||
-        checklistForm.some(hasDuplicateOptions) ||
-        hasDuplicateQuestions(checklistForm);
+    //an empty form is the only state the button blocks, because there is no card
+
+    const isSaveDisabled = !checklistForm.length;
 
     return {
         checklistForm,

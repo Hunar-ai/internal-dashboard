@@ -33,6 +33,11 @@ const REQUIRED_HEADERS = CSV_TEMPLATE_COLUMNS.map(column =>
     column.toLowerCase()
 );
 
+// anything outside the template is rejected rather than ignored, which also
+// catches a repeated `Option 1`: papaparse renames the second one to `option 1_1`
+const isKnownHeader = (header: string) =>
+    REQUIRED_HEADERS.includes(header) || OPTION_HEADER.test(header);
+
 type ParseChecklistCsvResult =
     | { error: CSV_UPLOAD_ERROR }
     | { error: null; checklistForm: ChecklistFormProps };
@@ -92,8 +97,7 @@ const parseOptions = (row: ChecklistCsvRow, type: CHECKLIST_QUESTION_TYPE) => {
                 : columns;
         }, [])
         .sort((a, b) => a.index - b.index)
-        .map(({ value }) => value)
-        .slice(0, MAX_CHECKLIST_OPTIONS);
+        .map(({ value }) => value);
 };
 
 const toQuestions = (rows: ChecklistCsvRow[]): ChecklistFormProps | null =>
@@ -105,9 +109,15 @@ const toQuestions = (rows: ChecklistCsvRow[]): ChecklistFormProps | null =>
         }
 
         const question = (row.question ?? '').trim();
-        const options = toOptions(parseOptions(row, type));
+        const parsedOptions = parseOptions(row, type);
+        const options = toOptions(parsedOptions);
 
-        if (!question || getDuplicateOptionIds(options).length) {
+        // parsedOptions, not options - toOptions pads an empty list with a blank row
+        if (
+            !question ||
+            parsedOptions.length > MAX_CHECKLIST_OPTIONS ||
+            getDuplicateOptionIds(options).length
+        ) {
             return null;
         }
 
@@ -129,6 +139,10 @@ const toResult = ({
     const headers = meta.fields ?? [];
 
     if (REQUIRED_HEADERS.some(header => !headers.includes(header))) {
+        return invalid(CSV_UPLOAD_ERROR.INVALID_CONTENT);
+    }
+
+    if (headers.some(header => !isKnownHeader(header))) {
         return invalid(CSV_UPLOAD_ERROR.INVALID_CONTENT);
     }
 

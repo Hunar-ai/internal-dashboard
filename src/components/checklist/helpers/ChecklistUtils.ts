@@ -114,9 +114,6 @@ export const getDuplicateOptionIds = (options: ChecklistOptionProps[]) =>
         ({ value }) => value
     );
 
-export const hasDuplicateQuestions = (checklistForm: ChecklistFormProps) =>
-    !!getDuplicateQuestionKeys(checklistForm).length;
-
 export const getDuplicateQuestionKeys = (checklistForm: ChecklistFormProps) =>
     getRepeatedIds(
         checklistForm,
@@ -126,13 +123,6 @@ export const getDuplicateQuestionKeys = (checklistForm: ChecklistFormProps) =>
 
 export const getFilledOptions = (options: ChecklistOptionProps[]) =>
     options.filter(({ value }) => !!value.trim());
-
-export const hasNoOptions = (question: ChecklistQuestionProps) =>
-    canHaveOptions(question.type) && !getFilledOptions(question.options).length;
-
-export const hasDuplicateOptions = (question: ChecklistQuestionProps) =>
-    canHaveOptions(question.type) &&
-    !!getDuplicateOptionIds(question.options).length;
 
 export const getAvailableSources = (
     checklistForm: ChecklistFormProps,
