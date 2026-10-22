@@ -84,10 +84,10 @@ export interface ChecklistConfirmationProps {
 export const CHECKLIST_CONFIRMATION = {
     DELETE_OPTION: {
         description:
-            'Deleting this option will also affect rules that reference it.',
+            'Deleting this option will also delete all rules that are dependent on it.',
         detail:
-            'Some rules reference this option. Deleting it may remove those rules or change their conditions. ' +
-            'Are you sure?',
+            'You have added rules that are dependent on this option. If you delete this option, ' +
+            'those rules will also be deleted. Are you sure?',
         submitText: 'Yes, delete'
     },
     DELETE_QUESTION: {
