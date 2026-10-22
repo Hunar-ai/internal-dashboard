@@ -66,6 +66,7 @@ export const CHECKLIST_RULE_ACTIONS_BY_TYPE: Record<
 export const CSV_TEMPLATE_COLUMNS = ['Question', 'Type', 'Required'];
 export const CSV_OPTION_COLUMN_PREFIX = 'Option';
 export const CSV_TEMPLATE_FILE_NAME = 'selection-checklist-template.csv';
+export const CSV_TEMPLATE_PLACEHOLDER_QUESTION = 'Example - replace this row';
 
 export const CSV_UPLOAD_ERROR_MSG: Record<CSV_UPLOAD_ERROR, string> = {
     [CSV_UPLOAD_ERROR.NOT_CSV]: 'The file you uploaded is not a CSV',

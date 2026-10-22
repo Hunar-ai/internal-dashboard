@@ -1,10 +1,12 @@
 import Papa from 'papaparse';
 
 import {
+    CHECKLIST_QUESTION_TYPE_LABEL,
     CHECKLIST_QUESTION_TYPES,
     CSV_OPTION_COLUMN_PREFIX,
     CSV_TEMPLATE_COLUMNS,
     CSV_TEMPLATE_FILE_NAME,
+    CSV_TEMPLATE_PLACEHOLDER_QUESTION,
     MAX_CHECKLIST_OPTIONS,
     MAX_CHECKLIST_QUESTIONS,
     MAX_UPLOAD_SIZE_BYTES
@@ -54,10 +56,30 @@ const getChecklistCsvTemplateHeaders = () => [
     )
 ];
 
+const getChecklistCsvTemplateRows = () => [
+    [
+        CSV_TEMPLATE_PLACEHOLDER_QUESTION,
+        CHECKLIST_QUESTION_TYPE_LABEL[CHECKLIST_QUESTION_TYPE.MULTIPLE_CHOICE],
+        'TRUE',
+        'Option A',
+        'Option B'
+    ],
+    [
+        CSV_TEMPLATE_PLACEHOLDER_QUESTION,
+        CHECKLIST_QUESTION_TYPE_LABEL[CHECKLIST_QUESTION_TYPE.FREE_TEXT],
+        'FALSE'
+    ],
+    [
+        CSV_TEMPLATE_PLACEHOLDER_QUESTION,
+        CHECKLIST_QUESTION_TYPE_LABEL[CHECKLIST_QUESTION_TYPE.NUMERICAL],
+        'TRUE'
+    ]
+];
+
 export const downloadChecklistCsvTemplate = () => {
     const csv = Papa.unparse({
         fields: getChecklistCsvTemplateHeaders(),
-        data: []
+        data: getChecklistCsvTemplateRows()
     });
 
     const file = new File([csv], CSV_TEMPLATE_FILE_NAME, { type: 'text/csv' });
