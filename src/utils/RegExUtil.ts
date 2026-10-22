@@ -34,6 +34,10 @@ export const RegExUtil = {
             fullName.length < 100
         );
     },
+    isHttpsUrl(url: string | null) {
+        const re = /^https:\/\/\S+\.\S+$/i;
+        return !!url && re.test(url);
+    },
     isEmail(email: string | null) {
         const re = /\S+@\S+\.\S+/;
         return !!email && re.test(email);

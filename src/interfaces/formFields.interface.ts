@@ -9,6 +9,7 @@ export interface FormFields {
     [FORM_FIELD.nehaAgentsAllowedCompanies]: OptionsProps;
     [FORM_FIELD.nehaCallEndedBy]: OptionsProps;
     [FORM_FIELD.voiceCallOrchestratorTelephonyProviders]: OptionsProps;
+    [FORM_FIELD.webhookEventTypes]: OptionsProps;
 }
 
 export interface MappedField {
