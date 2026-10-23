@@ -1,5 +1,11 @@
+import React from 'react';
+
 import {
+    Box,
     Button,
+    Input,
+    InputGroup,
+    InputLeftElement,
     Menu,
     MenuButton,
     MenuItemOption,
@@ -9,7 +15,7 @@ import {
     Tooltip,
     type ResponsiveValue
 } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, SearchIcon } from '@chakra-ui/icons';
 
 import { DROPDOWN_TOOLTIP_MIN_LENGTH } from '../ChecklistConstants';
 
@@ -136,28 +142,72 @@ export const ChecklistMultiDropdown = ({
     isInvalid = false,
     isDisabled = false,
     onChange
-}: ChecklistMultiDropdownProps) => (
-    <Menu matchWidth closeOnSelect={false}>
-        <DropdownTrigger
-            label={label}
-            display={values.length ? values.join(', ') : placeholder}
-            isPlaceholder={!values.length}
-            isInvalid={isInvalid}
-            isDisabled={isDisabled || !options.length}
-            width={width}
-        />
-        <MenuList maxHeight="260px" overflowY="auto" zIndex="dropdown">
-            <MenuOptionGroup
-                type="checkbox"
-                value={values}
-                onChange={next => onChange(next as string[])}
-            >
-                {options.map(option => (
-                    <MenuItemOption key={option.value} value={option.value}>
-                        {option.label}
-                    </MenuItemOption>
-                ))}
-            </MenuOptionGroup>
-        </MenuList>
-    </Menu>
-);
+}: ChecklistMultiDropdownProps) => {
+    const [query, setQuery] = React.useState('');
+
+    const search = query.trim().toLowerCase();
+    const isMatch = (optionLabel: string) =>
+        optionLabel.toLowerCase().includes(search);
+
+    return (
+        <Menu
+            matchWidth
+            closeOnSelect={false}
+            autoSelect={false}
+            onClose={() => setQuery('')}
+        >
+            <DropdownTrigger
+                label={label}
+                display={values.length ? values.join(', ') : placeholder}
+                isPlaceholder={!values.length}
+                isInvalid={isInvalid}
+                isDisabled={isDisabled || !options.length}
+                width={width}
+            />
+            <MenuList zIndex="dropdown">
+                <InputGroup borderBottomWidth="1px" borderColor="gray.100">
+                    <InputLeftElement pointerEvents="none" height="100%" pl={2}>
+                        <SearchIcon color="gray.400" />
+                    </InputLeftElement>
+                    <Input
+                        autoFocus
+                        variant="unstyled"
+                        placeholder="Search"
+                        _placeholder={{ color: 'gray.400' }}
+                        pl={12}
+                        py={1}
+                        value={query}
+                        onChange={({ target }) => setQuery(target.value)}
+                        onKeyDown={event =>
+                            event.key !== 'Escape' && event.stopPropagation()
+                        }
+                    />
+                </InputGroup>
+                <Box maxHeight="260px" overflowY="auto">
+                    {!options.some(option => isMatch(option.label)) && (
+                        <Text px={4} py={2} fontSize="sm" color="gray.500">
+                            {`No matches`}
+                        </Text>
+                    )}
+                    <MenuOptionGroup
+                        type="checkbox"
+                        value={values}
+                        onChange={next => onChange(next as string[])}
+                    >
+                        {options.map(option => (
+                            <MenuItemOption
+                                key={option.value}
+                                value={option.value}
+                                display={
+                                    isMatch(option.label) ? undefined : 'none'
+                                }
+                            >
+                                {option.label}
+                            </MenuItemOption>
+                        ))}
+                    </MenuOptionGroup>
+                </Box>
+            </MenuList>
+        </Menu>
+    );
+};
