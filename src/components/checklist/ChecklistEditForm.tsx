@@ -19,7 +19,7 @@ import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useSaveChecklist } from 'hooks/apiHooks/useSaveChecklist';
 
 import { useChecklistForm } from './useChecklistForm';
-import { toSelectionChecklist } from './helpers/ChecklistUtils';
+import { toChecklistPayload } from './helpers/ChecklistUtils';
 
 import { ErrorMsg } from 'utils';
 
@@ -87,7 +87,7 @@ export const ChecklistEditForm = () => {
             {
                 params: { companyId },
                 requestBody: {
-                    selectionChecklist: toSelectionChecklist(checklistForm)
+                    selectionChecklist: toChecklistPayload(checklistForm)
                 }
             },
             {

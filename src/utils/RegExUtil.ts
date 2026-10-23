@@ -1,5 +1,7 @@
 export const RegExUtil = {
     alphaNumericWithUnderscoreAndDash: '^[a-zA-Z0-9_-]*$',
+    //capture group is the column number, used to order Option 2 before Option 10
+    optionHeader: /^option\s*(\d+)$/,
     conformToId: (psuedoId: string, limit = 33): string => {
         const id = psuedoId.replace(/[^a-zA-Z0-9_]/g, '-');
         return id.slice(0, limit).toLowerCase();

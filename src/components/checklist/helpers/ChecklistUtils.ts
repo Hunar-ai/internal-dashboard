@@ -193,19 +193,26 @@ export const toChecklistForm = (
         })
     );
 
+type CompleteRuleProps = ChecklistRuleProps & {
+    ruleAction: CHECKLIST_RULE_ACTION;
+};
+
+const isCompleteRule = (rule: ChecklistRuleProps): rule is CompleteRuleProps =>
+    !!rule.ruleAction && !!rule.dependentId && canRuleStillFire(rule);
+
 const toRuleField = ({
     dependentId,
     dependentOptions,
     ruleAction,
     selectedOptions
-}: ChecklistRuleProps): ChecklistRuleFieldProps => ({
+}: CompleteRuleProps): ChecklistRuleFieldProps => ({
     dependsOnKey: dependentId,
     dependsOnOptions: dependentOptions,
-    action: ruleAction as CHECKLIST_RULE_ACTION,
+    action: ruleAction,
     ...(filtersOptions(ruleAction) ? { selectedOptions } : {})
 });
 
-export const toSelectionChecklist = (
+export const toChecklistPayload = (
     checklistForm: ChecklistFormProps
 ): ChecklistFieldProps[] =>
     checklistForm.map(
@@ -221,7 +228,7 @@ export const toSelectionChecklist = (
                       )
                   }
                 : {}),
-            rules: rules.map(toRuleField)
+            rules: rules.filter(isCompleteRule).map(toRuleField)
         })
     );
 

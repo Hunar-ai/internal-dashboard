@@ -3,6 +3,7 @@ import Papa from 'papaparse';
 import {
     CHECKLIST_QUESTION_TYPE_LABEL,
     CHECKLIST_QUESTION_TYPES,
+    CSV_FALSE_VALUES,
     CSV_OPTION_COLUMN_PREFIX,
     CSV_TEMPLATE_COLUMNS,
     CSV_TEMPLATE_FILE_NAME,
@@ -19,6 +20,8 @@ import {
     toOptions
 } from './ChecklistUtils';
 
+import { RegExUtil } from 'utils';
+
 import {
     ALLOWED_EXTENSION,
     CHECKLIST_QUESTION_TYPE,
@@ -29,16 +32,12 @@ import type { ChecklistFormProps } from 'interfaces';
 
 type ChecklistCsvRow = Record<string, string | undefined>;
 
-const OPTION_HEADER = /^option\s*(\d+)$/;
-
 const REQUIRED_HEADERS = CSV_TEMPLATE_COLUMNS.map(column =>
     column.toLowerCase()
 );
 
-// anything outside the template is rejected rather than ignored, which also
-// catches a repeated `Option 1`: papaparse renames the second one to `option 1_1`
 const isKnownHeader = (header: string) =>
-    REQUIRED_HEADERS.includes(header) || OPTION_HEADER.test(header);
+    REQUIRED_HEADERS.includes(header) || RegExUtil.optionHeader.test(header);
 
 type ParseChecklistCsvResult =
     | { error: CSV_UPLOAD_ERROR }
@@ -102,7 +101,7 @@ const parseType = (value = '') => {
 };
 
 const parseIsRequired = (value = '') =>
-    !['FALSE', 'NO', '0'].includes(value.trim().toUpperCase());
+    !CSV_FALSE_VALUES.includes(value.trim().toUpperCase());
 
 const parseOptions = (row: ChecklistCsvRow, type: CHECKLIST_QUESTION_TYPE) => {
     if (!canHaveOptions(type)) {
@@ -111,7 +110,7 @@ const parseOptions = (row: ChecklistCsvRow, type: CHECKLIST_QUESTION_TYPE) => {
 
     return Object.keys(row)
         .reduce((columns: { index: number; value: string }[], header) => {
-            const match = header.match(OPTION_HEADER);
+            const match = header.match(RegExUtil.optionHeader);
             const value = row[header]?.trim();
 
             return match && value
