@@ -5,7 +5,11 @@ import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 
 import { ChecklistQuestionCard } from './ChecklistQuestionCard';
 
-import { MAX_CHECKLIST_QUESTIONS } from '../ChecklistConstants';
+import {
+    MAX_CHECKLIST_QUESTIONS,
+    MAX_RULES_PER_QUESTION
+} from '../ChecklistConstants';
+import { getAvailableSources } from '../helpers/ChecklistUtils';
 
 import type { ChecklistHandlers } from '../useChecklistForm';
 
@@ -13,6 +17,11 @@ import type {
     ChecklistFormErrorStateProps,
     ChecklistFormProps
 } from 'interfaces';
+
+//shared fallbacks, so a card without errors or without rules to draw keeps the
+//same props between renders and React.memo can skip it
+const NO_ERRORS = {};
+const NO_FORM: ChecklistFormProps = [];
 
 interface ChecklistQuestionListProps {
     checklistForm: ChecklistFormProps;
@@ -59,17 +68,28 @@ export const ChecklistQuestionList = ({
 
     return (
         <Flex direction="column" gap={4} id="checklist-question-list">
-            {checklistForm.map((question, index) => (
-                <ChecklistQuestionCard
-                    key={question.key}
-                    index={index}
-                    question={question}
-                    checklistForm={checklistForm}
-                    errorState={checklistFormErrorState[question.key] ?? {}}
-                    isExpanded={question.key === expandedQuestionKey}
-                    handlers={handlers}
-                />
-            ))}
+            {checklistForm.map((question, index) => {
+                const isExpanded = question.key === expandedQuestionKey;
+
+                return (
+                    <ChecklistQuestionCard
+                        key={question.key}
+                        index={index}
+                        question={question}
+                        checklistForm={isExpanded ? checklistForm : NO_FORM}
+                        canAddRule={
+                            !!getAvailableSources(checklistForm, question.key)
+                                .length &&
+                            question.rules.length < MAX_RULES_PER_QUESTION
+                        }
+                        errorState={
+                            checklistFormErrorState[question.key] ?? NO_ERRORS
+                        }
+                        isExpanded={isExpanded}
+                        handlers={handlers}
+                    />
+                );
+            })}
             <Button
                 leftIcon={<AddIcon boxSize={3} />}
                 variant="link"

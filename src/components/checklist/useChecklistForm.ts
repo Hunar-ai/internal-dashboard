@@ -82,6 +82,11 @@ export const useChecklistForm = () => {
     const [activeOperation, setActiveOperation] =
         React.useState<ActiveOperationProps | null>(null);
 
+    //handlers are built once (see the useMemo below) so they cannot close over
+    //checklistForm directly - this ref is how they read the current one
+    const formRef = React.useRef(checklistForm);
+    formRef.current = checklistForm;
+
     const closeActiveOperation = () => setActiveOperation(null);
 
     const editedOption = React.useRef<{
@@ -150,17 +155,17 @@ export const useChecklistForm = () => {
         replaceForm(toChecklistForm(selectionChecklist));
 
     const onQuestionAdd = () => {
-        if (checklistForm.length >= MAX_CHECKLIST_QUESTIONS) {
+        if (formRef.current.length >= MAX_CHECKLIST_QUESTIONS) {
             return;
         }
 
-        const newQuestion = createQuestion(checklistForm);
+        const newQuestion = createQuestion(formRef.current);
         setChecklistForm(prevForm => [...prevForm, newQuestion]);
         setExpandedQuestionKey(newQuestion.key);
     };
 
     const deleteQuestion = (key: string) => {
-        const modifiedForm = removeQuestion(checklistForm, key);
+        const modifiedForm = removeQuestion(formRef.current, key);
 
         setChecklistForm(modifiedForm);
         setChecklistFormErrorState(prevState => {
@@ -176,7 +181,7 @@ export const useChecklistForm = () => {
     };
 
     const onQuestionDelete = (key: string) => {
-        if (!hasDependentRules(checklistForm, key)) {
+        if (!hasDependentRules(formRef.current, key)) {
             deleteQuestion(key);
             return;
         }
@@ -189,7 +194,7 @@ export const useChecklistForm = () => {
     //removing an option that is dependent deletes are rules that reference it
     const onOptionDelete = (key: string, optionId: string) => {
         const hasAffectedRules = hasOptionDeleteRuleImpact(
-            checklistForm,
+            formRef.current,
             key,
             optionId
         );
@@ -206,7 +211,7 @@ export const useChecklistForm = () => {
 
     const onQuestionBlur = (questionKey: string) => {
         const { formErrorState } = getChecklistFormErrors(
-            checklistForm,
+            formRef.current,
             getStandardFieldValidity
         );
 
@@ -230,7 +235,7 @@ export const useChecklistForm = () => {
             return;
         }
 
-        const currentValue = getSourceQuestion(checklistForm, questionKey)
+        const currentValue = getSourceQuestion(formRef.current, questionKey)
             ?.options.find(({ id }) => id === edited.optionId)
             ?.value.trim();
 
@@ -238,7 +243,7 @@ export const useChecklistForm = () => {
             currentValue !== undefined && currentValue !== edited.value.trim();
 
         const hasBrokenRules = hasRulesUsingOptionValue(
-            checklistForm,
+            formRef.current,
             questionKey,
             edited.value.trim()
         );
@@ -269,85 +274,100 @@ export const useChecklistForm = () => {
         );
     };
 
-    const handlers: ChecklistHandlers = {
-        onExpand: setExpandedQuestionKey,
-        onQuestionDelete,
+    //rebuilding this object each render would re-render every question card,
+    //so it is built once and reads the form through formRef instead
+    const handlers: ChecklistHandlers = React.useMemo(
+        () => ({
+            onExpand: setExpandedQuestionKey,
+            onQuestionDelete,
 
-        onQuestionChange: (key, value) =>
-            updateQuestion(key, question => ({ ...question, question: value })),
+            onQuestionChange: (key, value) =>
+                updateQuestion(key, question => ({
+                    ...question,
+                    question: value
+                })),
 
-        onTypeChange: (key, type) => {
-            if (!hasTypeChangeRuleImpact(checklistForm, key)) {
-                setChecklistForm(prevForm =>
-                    changeQuestionType(prevForm, key, type)
+            onTypeChange: (key, type) => {
+                if (!hasTypeChangeRuleImpact(formRef.current, key)) {
+                    setChecklistForm(prevForm =>
+                        changeQuestionType(prevForm, key, type)
+                    );
+                    return;
+                }
+
+                openConfirmation(
+                    CHECKLIST_CONFIRMATION.CHANGE_QUESTION_TYPE,
+                    () =>
+                        setChecklistForm(prevForm =>
+                            changeQuestionType(prevForm, key, type)
+                        )
                 );
-                return;
-            }
+            },
 
-            openConfirmation(CHECKLIST_CONFIRMATION.CHANGE_QUESTION_TYPE, () =>
-                setChecklistForm(prevForm =>
-                    changeQuestionType(prevForm, key, type)
-                )
-            );
-        },
+            onRequiredChange: (key, isRequired) =>
+                updateQuestion(key, question => ({ ...question, isRequired })),
 
-        onRequiredChange: (key, isRequired) =>
-            updateQuestion(key, question => ({ ...question, isRequired })),
+            onOptionChange: (key, optionId, value) =>
+                updateQuestion(key, question => ({
+                    ...question,
+                    options: question.options.map(option =>
+                        option.id === optionId ? { ...option, value } : option
+                    )
+                })),
 
-        onOptionChange: (key, optionId, value) =>
-            updateQuestion(key, question => ({
-                ...question,
-                options: question.options.map(option =>
-                    option.id === optionId ? { ...option, value } : option
-                )
-            })),
+            onOptionAdd: key =>
+                updateQuestion(key, question =>
+                    question.options.length >= MAX_CHECKLIST_OPTIONS
+                        ? question
+                        : {
+                              ...question,
+                              options: [...question.options, createOption()]
+                          }
+                ),
 
-        onOptionAdd: key =>
-            updateQuestion(key, question =>
-                question.options.length >= MAX_CHECKLIST_OPTIONS
-                    ? question
-                    : {
-                          ...question,
-                          options: [...question.options, createOption()]
-                      }
-            ),
+            onOptionDelete,
 
-        onOptionDelete,
+            onOptionFocus: (key, optionId) => {
+                const value = getSourceQuestion(
+                    formRef.current,
+                    key
+                )?.options.find(({ id }) => id === optionId)?.value;
 
-        onOptionFocus: (key, optionId) => {
-            const value = getSourceQuestion(checklistForm, key)?.options.find(
-                ({ id }) => id === optionId
-            )?.value;
+                editedOption.current =
+                    value === undefined
+                        ? null
+                        : { questionKey: key, optionId, value };
+            },
 
-            editedOption.current =
-                value === undefined
-                    ? null
-                    : { questionKey: key, optionId, value };
-        },
+            onQuestionBlur,
 
-        onQuestionBlur,
+            onRuleAdd: key =>
+                updateQuestion(key, question =>
+                    question.rules.length >= MAX_RULES_PER_QUESTION
+                        ? question
+                        : {
+                              ...question,
+                              rules: [...question.rules, createRule()]
+                          }
+                ),
 
-        onRuleAdd: key =>
-            updateQuestion(key, question =>
-                question.rules.length >= MAX_RULES_PER_QUESTION
-                    ? question
-                    : { ...question, rules: [...question.rules, createRule()] }
-            ),
+            onRuleChange: (key, ruleId, patch) =>
+                updateQuestion(key, question => ({
+                    ...question,
+                    rules: question.rules.map(rule =>
+                        rule.id === ruleId ? { ...rule, ...patch } : rule
+                    )
+                })),
 
-        onRuleChange: (key, ruleId, patch) =>
-            updateQuestion(key, question => ({
-                ...question,
-                rules: question.rules.map(rule =>
-                    rule.id === ruleId ? { ...rule, ...patch } : rule
-                )
-            })),
-
-        onRuleDelete: (key, ruleId) =>
-            updateQuestion(key, question => ({
-                ...question,
-                rules: question.rules.filter(rule => rule.id !== ruleId)
-            }))
-    };
+            onRuleDelete: (key, ruleId) =>
+                updateQuestion(key, question => ({
+                    ...question,
+                    rules: question.rules.filter(rule => rule.id !== ruleId)
+                }))
+        }),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
+    );
 
     const importCsv = async (file: File) => {
         const result = await parseChecklistCsv(file);
