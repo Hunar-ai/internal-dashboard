@@ -1,5 +1,6 @@
 export const RegExUtil = {
     alphaNumericWithUnderscoreAndDash: '^[a-zA-Z0-9_-]*$',
+    optionHeader: /^option\s*(\d+)$/,
     conformToId: (psuedoId: string, limit = 33): string => {
         const id = psuedoId.replace(/[^a-zA-Z0-9_]/g, '-');
         return id.slice(0, limit).toLowerCase();

@@ -72,7 +72,14 @@ export type { MenuProps } from './menu.interface';
 
 export type {
     ChecklistFieldProps,
-    ChecklistFormProps
+    ChecklistFormProps,
+    ChecklistOptionProps,
+    ChecklistQuestionProps,
+    ChecklistQuestionErrorProps,
+    ChecklistFormErrorStateProps,
+    ChecklistRuleProps,
+    ChecklistRuleFieldProps,
+    ChecklistRuleErrorProps
 } from './checklist.interface';
 
 export type {

@@ -1,39 +1,33 @@
 import React from 'react';
 
-import _ from 'lodash';
-
-import { Button, Text, GridItem } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
+import { Flex, Text } from '@chakra-ui/react';
 
 import {
     AppLoader,
+    ConfirmationDialog,
+    FieldRequiredIndicator,
     FormWrapper,
     HelperText,
     SelectField
 } from '@components/common';
-import { ChecklistQuestionList } from './ChecklistQuestionList';
+import { ChecklistQuestionList } from './components/ChecklistQuestionList';
+import { ChecklistUploadModal } from './components/ChecklistUploadModal';
 import { useCompanyHelper } from '@components/company/useCompanyHelper';
 
 import { useToast } from 'hooks/useToast';
-import { useValidationHelper } from 'hooks';
 import { useGetCompanies } from 'hooks/apiHooks/company/useGetCompanies';
 import { useSaveChecklist } from 'hooks/apiHooks/useSaveChecklist';
 
-import { ErrorMsg } from 'utils';
-import type { ChecklistFormProps, FormErrorStateProps } from 'interfaces';
+import { useChecklistForm } from './useChecklistForm';
+import { toChecklistPayload } from './helpers/ChecklistUtils';
 
-const MAX_CHECKLIST_QUESTION = 15;
+import { ErrorMsg } from 'utils';
 
 export const ChecklistEditForm = () => {
     const { showError, showSuccess } = useToast();
-    const { getStandardFieldValidity } = useValidationHelper();
     const saveChecklist = useSaveChecklist();
 
     const [companyId, setCompanyId] = React.useState('');
-    const [checklistForm, setChecklistForm] =
-        React.useState<ChecklistFormProps>({});
-    const [checklistFormErrorState, setChecklistFormErrorState] =
-        React.useState<FormErrorStateProps>({});
     const [hasCompanyIdError, setHasCompanyIdError] = React.useState(false);
 
     const { data: companiesResponse, isLoading: isCompaniesLoading } =
@@ -42,119 +36,28 @@ export const ChecklistEditForm = () => {
         companiesResponse?.data
     );
 
-    const isAddDisabled =
-        Object.keys(checklistForm).length >= MAX_CHECKLIST_QUESTION;
-
-    const getFormErrorState = () => {
-        let hasFormError = false;
-        const modifiedFormErrorState = Object.values(checklistForm).reduce(
-            (errorState, question) => {
-                const { errorMsg, hasError } = getStandardFieldValidity(
-                    checklistForm[question.key].question,
-                    true,
-                    { max: 200 }
-                );
-
-                if (hasError) {
-                    hasFormError = true;
-                }
-
-                return {
-                    ...errorState,
-                    [question.key]: { error: hasError, errorMsg }
-                };
-            },
-            {} as FormErrorStateProps
-        );
-
-        return {
-            hasFormError,
-            modifiedFormErrorState
-        };
-    };
-
-    const onQuestionAddClick = () => {
-        const checklistQuestionCount = Object.keys(checklistForm).length;
-        const newKey = `q_${checklistQuestionCount + 1}`;
-        setChecklistForm({
-            ...checklistForm,
-            [newKey]: { key: newKey, question: '' }
-        });
-    };
-
-    const onQuestionDeleteClick = (key: string) => {
-        const modifiedChecklistForm = { ...checklistForm };
-        delete modifiedChecklistForm[key];
-        setChecklistForm(modifiedChecklistForm);
-    };
-
-    const onQuestionFieldChange = ({
-        target: { value, name }
-    }: React.ChangeEvent<HTMLInputElement>) => {
-        const modifiedChecklistForm: ChecklistFormProps = {
-            ...checklistForm,
-            [name]: { key: name, question: value }
-        };
-        setChecklistForm(modifiedChecklistForm);
-
-        const { hasError, errorMsg } = getStandardFieldValidity(value, true, {
-            max: 200
-        });
-        setChecklistFormErrorState(prevErrorState => ({
-            ...prevErrorState,
-            [name]: { error: hasError, errorMsg }
-        }));
-    };
+    const {
+        checklistForm,
+        checklistFormErrorState,
+        expandedQuestionKey,
+        handlers,
+        onQuestionAdd,
+        openUploadModal,
+        isSaveDisabled,
+        activeOperation,
+        loadCompanyChecklist,
+        validate
+    } = useChecklistForm();
 
     const onCompanyIdChange = ({
         target: { value }
     }: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectionChecklist =
+        loadCompanyChecklist(
             companyMap[value]?.settings.dashboardSettings?.selectionChecklist ??
-            [];
-        let modifiedChecklistForm = {} as ChecklistFormProps;
-
-        if (selectionChecklist.length) {
-            modifiedChecklistForm = selectionChecklist.reduce(
-                (form, checklistField) => {
-                    return { ...form, [checklistField.key]: checklistField };
-                },
-                {} as ChecklistFormProps
-            );
-        } else {
-            modifiedChecklistForm = { ['q_1']: { key: 'q_1', question: '' } };
-        }
-
-        setChecklistForm(modifiedChecklistForm);
+                []
+        );
         setCompanyId(value);
         setHasCompanyIdError(!value);
-    };
-
-    const submitChecklist = () => {
-        const selectionChecklist = _.sortBy(Object.values(checklistForm), [
-            'key'
-        ]);
-
-        saveChecklist.mutate(
-            {
-                params: { companyId },
-                requestBody: { selectionChecklist }
-            },
-            {
-                onSuccess: () => {
-                    showSuccess({
-                        title: 'Success',
-                        description: 'Successfully saved Selection Checklist!'
-                    });
-                },
-                onError: error => {
-                    showError({
-                        title: 'Error',
-                        description: error.errors.displayError
-                    });
-                }
-            }
-        );
     };
 
     const onSubmitClick = () => {
@@ -163,31 +66,76 @@ export const ChecklistEditForm = () => {
             return;
         }
 
-        const { hasFormError, modifiedFormErrorState } = getFormErrorState();
-        setChecklistFormErrorState(modifiedFormErrorState);
-
-        if (hasFormError) {
+        if (!checklistForm.length) {
+            showError({
+                title: 'Error',
+                description: 'Add at least one question'
+            });
             return;
         }
 
-        submitChecklist();
+        const { hasError, firstErrorKey } = validate();
+
+        if (hasError) {
+            document
+                .getElementById(`${firstErrorKey}-card`)
+                ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        saveChecklist.mutate(
+            {
+                params: { companyId },
+                requestBody: {
+                    selectionChecklist: toChecklistPayload(checklistForm)
+                }
+            },
+            {
+                onSuccess: () =>
+                    showSuccess({
+                        title: 'Success',
+                        description: 'Successfully saved Selection Checklist!'
+                    }),
+                onError: error =>
+                    showError({
+                        title: 'Error',
+                        description: error.errors.displayError
+                    })
+            }
+        );
+    };
+
+    // Reviewer Note: not moving this to the constants file since this is a important function to show all the modals
+    //habing a single render function for modals so that its scalable for future modals and more readable
+    const renderActiveOperation = () => {
+        if (!activeOperation) {
+            return null;
+        }
+
+        switch (activeOperation.type) {
+            case 'CSVUploadModal':
+                return <ChecklistUploadModal {...activeOperation.data} />;
+            case 'ConfirmationModal':
+                return <ConfirmationDialog {...activeOperation.data} />;
+        }
     };
 
     return (
         <FormWrapper
             id="selection-checklist-form-container"
             formTitle="Selection Checklist Settings"
-            isFormDisabled={saveChecklist.isSuccess}
+            isFormDisabled={false}
+            isSubmitDisabled={isSaveDisabled}
             isLoading={saveChecklist.isLoading}
             onSubmit={onSubmitClick}
             gridColumns={1}
-            width={{ base: 'xl', lg: '60%' }}
+            width={{ base: 'xl', lg: '75%' }}
         >
             {(isCompaniesLoading || saveChecklist.isLoading) && <AppLoader />}
             <SelectField
                 label="Company Id"
                 name="companyId"
-                placeholder="Select Company Id"
+                placeholder="Select company Id"
                 options={companyIdOptions}
                 value={companyId}
                 onChange={onCompanyIdChange}
@@ -200,31 +148,23 @@ export const ChecklistEditForm = () => {
                     />
                 }
             />
-            {companyId && (
-                <>
-                    <Text
-                        fontWeight={600}
-                    >{`Selection Checklist Questions`}</Text>
+            {!!companyId && (
+                <Flex direction="column" gap={4}>
+                    <Text fontWeight={600}>
+                        {`Selection Checklist Questions`}
+                        <FieldRequiredIndicator />
+                    </Text>
                     <ChecklistQuestionList
                         checklistForm={checklistForm}
                         checklistFormErrorState={checklistFormErrorState}
-                        onQuestionChange={onQuestionFieldChange}
-                        onQuestionDelete={onQuestionDeleteClick}
+                        expandedQuestionKey={expandedQuestionKey}
+                        onQuestionAdd={onQuestionAdd}
+                        openUploadModal={openUploadModal}
+                        handlers={handlers}
                     />
-                    <GridItem>
-                        <Button
-                            leftIcon={<AddIcon />}
-                            variant="outline"
-                            colorScheme="blue"
-                            onClick={onQuestionAddClick}
-                            isDisabled={isAddDisabled}
-                            isLoading={saveChecklist.isLoading}
-                        >
-                            {'ADD QUESTION'}
-                        </Button>
-                    </GridItem>
-                </>
+                </Flex>
             )}
+            {renderActiveOperation()}
         </FormWrapper>
     );
 };
