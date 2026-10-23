@@ -13,7 +13,6 @@ import {
 export interface ConfirmationDialogProps {
     title: string;
     description: string;
-    /** A second paragraph. When given, `description` becomes the bold lead. */
     detail?: string;
     isOpen: boolean;
     cancelText?: string;
@@ -51,7 +50,12 @@ export const ConfirmationDialog = ({
                     )}
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant="ghost" mr={3} onClick={onCancelClick}>
+                    <Button
+                        variant="outline"
+                        colorScheme="blue"
+                        mr={3}
+                        onClick={onCancelClick}
+                    >
                         {cancelText}
                     </Button>
                     <Button
