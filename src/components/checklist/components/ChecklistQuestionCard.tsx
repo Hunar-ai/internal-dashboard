@@ -31,8 +31,6 @@ import type {
 interface ChecklistQuestionCardProps {
     index: number;
     question: ChecklistQuestionProps;
-    //only the expanded card renders rules, so the rest are handed a stable
-    //empty form and can skip re-rendering while another question is edited
     checklistForm: ChecklistFormProps;
     canAddRule: boolean;
     errorState: ChecklistQuestionErrorProps;

@@ -82,8 +82,7 @@ export const useChecklistForm = () => {
     const [activeOperation, setActiveOperation] =
         React.useState<ActiveOperationProps | null>(null);
 
-    //handlers are built once (see the useMemo below) so they cannot close over
-    //checklistForm directly - this ref is how they read the current one
+    //handlers read the form from here so they don't need to be rebuilt
     const formRef = React.useRef(checklistForm);
     formRef.current = checklistForm;
 
@@ -274,8 +273,6 @@ export const useChecklistForm = () => {
         );
     };
 
-    //rebuilding this object each render would re-render every question card,
-    //so it is built once and reads the form through formRef instead
     const handlers: ChecklistHandlers = React.useMemo(
         () => ({
             onExpand: setExpandedQuestionKey,

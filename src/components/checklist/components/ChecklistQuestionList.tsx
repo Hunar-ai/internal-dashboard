@@ -18,8 +18,6 @@ import type {
     ChecklistFormProps
 } from 'interfaces';
 
-//shared fallbacks, so a card without errors or without rules to draw keeps the
-//same props between renders and React.memo can skip it
 const NO_ERRORS = {};
 const NO_FORM: ChecklistFormProps = [];
 
