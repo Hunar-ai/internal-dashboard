@@ -114,6 +114,7 @@ export const useChecklistForm = () => {
                 detail,
                 submitText,
                 cancelText: 'Cancel',
+                isCentered: true,
                 isDestructive: true,
                 onSubmitClick: () => {
                     onConfirm();
