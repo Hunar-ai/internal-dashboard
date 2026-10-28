@@ -43,7 +43,6 @@ export const ChecklistEditForm = () => {
         handlers,
         onQuestionAdd,
         openUploadModal,
-        isSaveDisabled,
         activeOperation,
         loadCompanyChecklist,
         validate
@@ -63,14 +62,6 @@ export const ChecklistEditForm = () => {
     const onSubmitClick = () => {
         if (!companyId) {
             setHasCompanyIdError(true);
-            return;
-        }
-
-        if (!checklistForm.length) {
-            showError({
-                title: 'Error',
-                description: 'Add at least one question'
-            });
             return;
         }
 
@@ -125,7 +116,6 @@ export const ChecklistEditForm = () => {
             id="selection-checklist-form-container"
             formTitle="Selection Checklist Settings"
             isFormDisabled={false}
-            isSubmitDisabled={isSaveDisabled}
             isLoading={saveChecklist.isLoading}
             onSubmit={onSubmitClick}
             gridColumns={1}

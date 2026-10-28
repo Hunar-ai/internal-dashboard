@@ -399,10 +399,6 @@ export const useChecklistForm = () => {
         return { hasError: hasFormError, firstErrorKey };
     };
 
-    //an empty form is the only state the button blocks, because there is no card
-
-    const isSaveDisabled = !checklistForm.length;
-
     return {
         checklistForm,
         checklistFormErrorState,
@@ -410,7 +406,6 @@ export const useChecklistForm = () => {
         handlers,
         onQuestionAdd,
         openUploadModal,
-        isSaveDisabled,
         activeOperation,
         loadCompanyChecklist,
         validate

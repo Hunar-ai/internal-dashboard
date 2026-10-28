@@ -14,7 +14,6 @@ interface FormWrapperProps {
     formTitle: string;
     children: React.ReactNode;
     isFormDisabled: boolean;
-    isSubmitDisabled?: boolean;
     isLoading: boolean;
     width?: ResponsiveValue<string | number>;
     gridColumns?: ResponsiveValue<number>;
@@ -27,7 +26,6 @@ export const FormWrapper = ({
     formTitle,
     children,
     isFormDisabled,
-    isSubmitDisabled = false,
     isLoading,
     width = undefined,
     gridColumns = undefined,
@@ -74,7 +72,7 @@ export const FormWrapper = ({
                             <Button
                                 colorScheme="blue"
                                 onClick={onSubmit}
-                                isDisabled={isFormDisabled || isSubmitDisabled}
+                                isDisabled={isFormDisabled}
                                 isLoading={isLoading}
                             >
                                 SAVE AND PUBLISH
