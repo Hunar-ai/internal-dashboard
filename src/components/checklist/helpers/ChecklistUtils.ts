@@ -384,16 +384,22 @@ export const removeOption = (
             question.key === questionKey
                 ? question.options.filter(({ id }) => id !== optionId)
                 : question.options,
-        rules: question.rules
-            .map(rule =>
-                pruneOptionFromRule({
-                    rule,
-                    ruleOwnerKey: question.key,
-                    optionOwnerKey: questionKey,
-                    value: removedValue
-                })
-            )
-            .filter(canRuleStillFire)
+        rules: question.rules.reduce<ChecklistRuleProps[]>((kept, rule) => {
+            const optionRef = {
+                rule,
+                ruleOwnerKey: question.key,
+                optionOwnerKey: questionKey,
+                value: removedValue
+            };
+
+            if (!usesOptionValue(optionRef)) {
+                return [...kept, rule];
+            }
+
+            const pruned = pruneOptionFromRule(optionRef);
+
+            return canRuleStillFire(pruned) ? [...kept, pruned] : kept;
+        }, [])
     }));
 };
 

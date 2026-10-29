@@ -3,7 +3,6 @@ import { AddIcon, CloseIcon } from '@chakra-ui/icons';
 
 import {
     MAX_CHECKLIST_OPTIONS,
-    MAX_OPTION_LENGTH,
     MAX_VISIBLE_COLLAPSED_OPTIONS,
     OPTION_TOOLTIP_MIN_LENGTH
 } from '../ChecklistConstants';
@@ -107,7 +106,6 @@ export const ChecklistOptions = ({
                                     name={id}
                                     value={value}
                                     placeholder={`Option ${index + 1}`}
-                                    maxLength={MAX_OPTION_LENGTH}
                                     isInvalid={!!optionError?.error}
                                     onFocus={() =>
                                         onOptionFocus(questionKey, id)

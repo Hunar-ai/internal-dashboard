@@ -122,6 +122,7 @@ export const useChecklistForm = () => {
                 isDestructive: true,
                 onSubmitClick: () => {
                     onConfirm();
+                    showError({ description: 'All dependent rules deleted' });
                     closeActiveOperation();
                 },
                 onCancelClick: () => {

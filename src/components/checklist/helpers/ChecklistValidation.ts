@@ -16,6 +16,8 @@ import {
     getSourceQuestion
 } from './ChecklistUtils';
 
+import { RegExUtil } from 'utils';
+
 import { CHECKLIST_RULE_ACTION } from 'Enum';
 
 import type {
@@ -38,6 +40,8 @@ type FieldValidator = (
 
 const invalid = (errorMsg: string) => ({ error: true, errorMsg });
 
+// TODO: We can add a custom validation function like yup for each field type, but for now we can use a generic one
+
 const toFieldError = ({
     hasError,
     errorMsg
@@ -46,13 +50,24 @@ const toFieldError = ({
     errorMsg?: string;
 }) => ({ error: hasError, errorMsg });
 
+const getTextFieldError = (
+    value: string,
+    isRequired: boolean,
+    meta: { min: number; max: number },
+    validateField: FieldValidator
+): NonNullable<FieldError> => {
+    const fieldError = toFieldError(validateField(value, isRequired, meta));
+
+    return fieldError.error || RegExUtil.isPlainText(value)
+        ? fieldError
+        : invalid('Emojis and special characters are not allowed');
+};
+
 const listMissing = (values: string[], available: string[]) =>
     values.filter(value => !available.includes(value));
 
 const optionValues = (question?: ChecklistQuestionProps) =>
     (question?.options ?? []).map(({ value }) => value);
-
-/* ------------------------------------------------------------------ rules */
 
 const getDependentIdError = (
     checklistForm: ChecklistFormProps,
@@ -155,8 +170,6 @@ const dropEmpty = (errors: Record<string, FieldError>) =>
         {}
     );
 
-/* -------------------------------------------------------------- questions */
-
 type OptionErrors = NonNullable<ChecklistQuestionErrorProps['options']>;
 type RuleErrors = NonNullable<ChecklistQuestionErrorProps['rules']>;
 
@@ -170,11 +183,11 @@ const getOptionErrorsById = (
         (optionErrors, { id, value }) => {
             const optionError = duplicateIds.includes(id)
                 ? invalid('Duplicate MCQ Options')
-                : toFieldError(
-                      validateField(value, false, {
-                          min: MIN_OPTION_LENGTH,
-                          max: MAX_OPTION_LENGTH
-                      })
+                : getTextFieldError(
+                      value,
+                      false,
+                      { min: MIN_OPTION_LENGTH, max: MAX_OPTION_LENGTH },
+                      validateField
                   );
 
             return { ...optionErrors, [id]: optionError };
@@ -208,11 +221,11 @@ const getQuestionErrors = (
 ): ChecklistQuestionErrorProps => ({
     question: isDuplicate
         ? invalid('Duplicate question')
-        : toFieldError(
-              validateField(question.question, true, {
-                  min: MIN_QUESTION_LENGTH,
-                  max: MAX_QUESTION_LENGTH
-              })
+        : getTextFieldError(
+              question.question,
+              true,
+              { min: MIN_QUESTION_LENGTH, max: MAX_QUESTION_LENGTH },
+              validateField
           ),
     ...(canHaveOptions(question.type)
         ? {

@@ -110,7 +110,12 @@ export const ChecklistDropdown = ({
                 isDisabled={isDisabled || !options.length}
                 width={width}
             />
-            <MenuList maxHeight="260px" overflowY="auto" zIndex="dropdown">
+            <MenuList
+                maxHeight="260px"
+                overflowY="auto"
+                overscrollBehavior="contain"
+                zIndex="dropdown"
+            >
                 <MenuOptionGroup
                     type="radio"
                     value={value}
@@ -183,7 +188,11 @@ export const ChecklistMultiDropdown = ({
                         }
                     />
                 </InputGroup>
-                <Box maxHeight="260px" overflowY="auto">
+                <Box
+                    maxHeight="260px"
+                    overflowY="auto"
+                    overscrollBehavior="contain"
+                >
                     {!options.some(option => isMatch(option.label)) && (
                         <Text px={4} py={2} fontSize="sm" color="gray.500">
                             {`No matches`}

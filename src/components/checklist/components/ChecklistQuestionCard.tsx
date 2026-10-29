@@ -17,7 +17,6 @@ import { ChecklistOptions } from './ChecklistOptions';
 import { ChecklistQuestionTypeSelect } from './ChecklistQuestionTypeSelect';
 import { ChecklistRuleRow } from './ChecklistRuleRow';
 
-import { MAX_QUESTION_LENGTH } from '../ChecklistConstants';
 import { canHaveOptions } from '../helpers/ChecklistUtils';
 
 import type { ChecklistHandlers } from '../useChecklistForm';
@@ -87,7 +86,6 @@ export const ChecklistQuestionCard = React.memo(
                                 name={key}
                                 value={question.question}
                                 placeholder="Question"
-                                maxLength={MAX_QUESTION_LENGTH}
                                 isInvalid={hasQuestionError}
                                 onBlur={() => onQuestionBlur(key)}
                                 onChange={({ target }) =>
