@@ -16,6 +16,7 @@ interface FormWrapperProps {
     isFormDisabled: boolean;
     isLoading: boolean;
     width?: ResponsiveValue<string | number>;
+    overflow?: ResponsiveValue<string>;
     gridColumns?: ResponsiveValue<number>;
     hideSubmitButton?: boolean;
     onSubmit?: VoidFunction;
@@ -28,6 +29,7 @@ export const FormWrapper = ({
     isFormDisabled,
     isLoading,
     width = undefined,
+    overflow = 'hidden',
     gridColumns = undefined,
     hideSubmitButton = false,
     onSubmit
@@ -38,7 +40,7 @@ export const FormWrapper = ({
             <Box
                 borderWidth="1px"
                 borderRadius="lg"
-                overflow="hidden"
+                overflow={overflow}
                 padding={4}
                 position="relative"
                 width={width}

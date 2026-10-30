@@ -115,6 +115,7 @@ export const ChecklistEditForm = () => {
         <FormWrapper
             id="selection-checklist-form-container"
             formTitle="Selection Checklist Settings"
+            overflow="visible"
             isFormDisabled={false}
             isLoading={saveChecklist.isLoading}
             onSubmit={onSubmitClick}

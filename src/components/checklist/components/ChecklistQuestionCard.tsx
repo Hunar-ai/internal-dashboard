@@ -8,16 +8,23 @@ import {
     IconButton,
     Input,
     Switch,
-    Text
+    Text,
+    type FlexProps
 } from '@chakra-ui/react';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import InfoIcon from '@mui/icons-material/Info';
 
 import { ChecklistOptions } from './ChecklistOptions';
 import { ChecklistQuestionTypeSelect } from './ChecklistQuestionTypeSelect';
 import { ChecklistRuleRow } from './ChecklistRuleRow';
 
-import { canHaveOptions } from '../helpers/ChecklistUtils';
+import {
+    canHaveOptions,
+    getConflictingRuleCount
+} from '../helpers/ChecklistUtils';
+
+import { CHECKLIST_RULE_CONFLICT } from '../ChecklistConstants';
 
 import type { ChecklistHandlers } from '../useChecklistForm';
 
@@ -26,6 +33,37 @@ import type {
     ChecklistQuestionErrorProps,
     ChecklistQuestionProps
 } from 'interfaces';
+
+const PANEL_EDGE_GAP = '16px';
+const PANEL_TOP = '80px';
+
+const PANEL_WIDTH = 'calc(12.5vw + 2px)';
+
+interface ConflictPanelProps extends FlexProps {
+    ruleCount: number;
+}
+
+const ConflictPanel = ({ ruleCount, ...positionProps }: ConflictPanelProps) => (
+    <Flex
+        direction="column"
+        gap={1}
+        padding={5}
+        borderRadius="lg"
+        backgroundColor="orange.100"
+        color="orange.900"
+        {...positionProps}
+    >
+        <Box color="orange.500" lineHeight={0}>
+            <InfoIcon sx={{ fontSize: 20 }} />
+        </Box>
+        <Text fontSize="md" fontWeight={600}>
+            {CHECKLIST_RULE_CONFLICT.title}
+        </Text>
+        <Text fontSize="sm" lineHeight={1.6}>
+            {CHECKLIST_RULE_CONFLICT.getDescription(ruleCount)}
+        </Text>
+    </Flex>
+);
 
 interface ChecklistQuestionCardProps {
     index: number;
@@ -59,6 +97,7 @@ export const ChecklistQuestionCard = React.memo(
         } = handlers;
 
         const hasQuestionError = !!errorState.question?.error;
+        const conflictingRuleCount = getConflictingRuleCount(question);
 
         return (
             <Box
@@ -72,6 +111,16 @@ export const ChecklistQuestionCard = React.memo(
                 padding={4}
                 onClick={() => onExpand(key)}
             >
+                {isExpanded && conflictingRuleCount > 0 && (
+                    <ConflictPanel
+                        ruleCount={conflictingRuleCount}
+                        position="fixed"
+                        top={PANEL_TOP}
+                        right={PANEL_EDGE_GAP}
+                        width={PANEL_WIDTH}
+                        display={{ base: 'none', lg: 'flex' }}
+                    />
+                )}
                 <Flex direction="column" gap={4}>
                     <Text fontWeight={600}>{`Question ${index + 1}`}</Text>
 

@@ -84,6 +84,14 @@ export interface ChecklistConfirmationProps {
     submitText: string;
 }
 
+export const CHECKLIST_RULE_CONFLICT = {
+    title: 'Conflicts possible',
+    getDescription: (ruleCount: number) =>
+        `You've added ${ruleCount} rules that may conflict with each other. ` +
+        'If a conflict occurs, the system will try to show as many options ' +
+        'as possible.'
+} as const;
+
 export const CHECKLIST_CONFIRMATION = {
     DELETE_OPTION: {
         description:

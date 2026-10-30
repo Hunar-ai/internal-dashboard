@@ -164,6 +164,52 @@ export const filtersOptions = (ruleAction: CHECKLIST_RULE_ACTION | '') =>
     ruleAction === CHECKLIST_RULE_ACTION.ONLY_SHOW ||
     ruleAction === CHECKLIST_RULE_ACTION.ONLY_HIDE;
 
+const sharesAnyOption = (first: string[], second: string[]) =>
+    first.some(option => second.includes(option));
+
+const canBothRulesFire = (
+    first: ChecklistRuleProps,
+    second: ChecklistRuleProps
+) =>
+    first.dependentId !== second.dependentId ||
+    sharesAnyOption(first.dependentOptions, second.dependentOptions);
+
+const areOutcomesIncompatible = (
+    first: ChecklistRuleProps,
+    second: ChecklistRuleProps
+) => {
+    const sharesTarget = sharesAnyOption(
+        first.selectedOptions,
+        second.selectedOptions
+    );
+
+    if (first.ruleAction !== second.ruleAction) {
+        return sharesTarget;
+    }
+
+    return (
+        first.ruleAction === CHECKLIST_RULE_ACTION.ONLY_SHOW && !sharesTarget
+    );
+};
+
+const isComplete = (rule: ChecklistRuleProps) =>
+    filtersOptions(rule.ruleAction) &&
+    rule.dependentOptions.length > 0 &&
+    rule.selectedOptions.length > 0;
+
+export const getConflictingRuleCount = ({ rules }: ChecklistQuestionProps) =>
+    rules.filter(
+        rule =>
+            isComplete(rule) &&
+            rules.some(
+                other =>
+                    other.id !== rule.id &&
+                    isComplete(other) &&
+                    canBothRulesFire(rule, other) &&
+                    areOutcomesIncompatible(rule, other)
+            )
+    ).length;
+
 export const getQuestionLabel = (
     checklistForm: ChecklistFormProps,
     question: ChecklistQuestionProps
