@@ -33,7 +33,7 @@ export const AppContainer = () => {
     ) : (
         <SettingsContext.Provider
             value={{
-                formFields: data || settingsInitialState.formFields,
+                formFields: { ...settingsInitialState.formFields, ...data },
                 loggedInPersonnel: {
                     personnelId: personnel?.personnelId || '',
                     fullName: personnel?.fullName,
