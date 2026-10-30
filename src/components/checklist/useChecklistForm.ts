@@ -72,7 +72,7 @@ export interface ChecklistHandlers {
 }
 
 export const useChecklistForm = () => {
-    const { showError } = useToast();
+    const { showError, showInfo } = useToast();
     const { getStandardFieldValidity } = useValidationHelper();
 
     const [checklistForm, setChecklistForm] =
@@ -123,7 +123,7 @@ export const useChecklistForm = () => {
                 isDestructive: true,
                 onSubmitClick: () => {
                     onConfirm();
-                    showError({ description: 'All dependent rules deleted' });
+                    showInfo({ description: 'All dependent rules deleted' });
                     closeActiveOperation();
                 },
                 onCancelClick: () => {
