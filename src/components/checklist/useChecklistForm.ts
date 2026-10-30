@@ -38,6 +38,7 @@ import type {
     ChecklistFieldProps,
     ChecklistFormErrorStateProps,
     ChecklistFormProps,
+    ChecklistRuleErrorProps,
     ChecklistQuestionProps,
     ChecklistRuleProps
 } from 'interfaces';
@@ -143,6 +144,34 @@ export const useChecklistForm = () => {
                 question.key === key ? getModifiedQuestion(question) : question
             )
         );
+
+    const clearRuleFieldErrors = (
+        questionKey: string,
+        ruleId: string,
+        fields: (keyof ChecklistRuleErrorProps)[]
+    ) =>
+        setChecklistFormErrorState(prevState => {
+            const questionErrors = prevState[questionKey];
+            const ruleErrors = questionErrors?.rules?.[ruleId];
+
+            if (!ruleErrors) {
+                return prevState;
+            }
+
+            const remainingErrors = { ...ruleErrors };
+            fields.forEach(field => delete remainingErrors[field]);
+
+            return {
+                ...prevState,
+                [questionKey]: {
+                    ...questionErrors,
+                    rules: {
+                        ...questionErrors.rules,
+                        [ruleId]: remainingErrors
+                    }
+                }
+            };
+        });
 
     //called when user suddenly chagnes company id dropdown
     const replaceForm = (modifiedForm: ChecklistFormProps) => {
@@ -349,13 +378,19 @@ export const useChecklistForm = () => {
                           }
                 ),
 
-            onRuleChange: (key, ruleId, patch) =>
+            onRuleChange: (key, ruleId, patch) => {
                 updateQuestion(key, question => ({
                     ...question,
                     rules: question.rules.map(rule =>
                         rule.id === ruleId ? { ...rule, ...patch } : rule
                     )
-                })),
+                }));
+                clearRuleFieldErrors(
+                    key,
+                    ruleId,
+                    Object.keys(patch) as (keyof ChecklistRuleErrorProps)[]
+                );
+            },
 
             onRuleDelete: (key, ruleId) =>
                 updateQuestion(key, question => ({
