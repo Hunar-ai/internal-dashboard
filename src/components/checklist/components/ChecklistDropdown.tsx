@@ -85,6 +85,7 @@ interface ChecklistDropdownProps {
     width?: ResponsiveValue<string>;
     isInvalid?: boolean;
     isDisabled?: boolean;
+    shouldWrapOptions?: boolean;
     onChange: (value: string) => void;
 }
 
@@ -96,6 +97,7 @@ export const ChecklistDropdown = ({
     width = '220px',
     isInvalid = false,
     isDisabled = false,
+    shouldWrapOptions = false,
     onChange
 }: ChecklistDropdownProps) => {
     const selected = options.find(option => option.value === value);
@@ -123,7 +125,14 @@ export const ChecklistDropdown = ({
                 >
                     {options.map(option => (
                         <MenuItemOption key={option.value} value={option.value}>
-                            {option.label}
+                            <Text
+                                as="span"
+                                overflowWrap={
+                                    shouldWrapOptions ? 'anywhere' : undefined
+                                }
+                            >
+                                {option.label}
+                            </Text>
                         </MenuItemOption>
                     ))}
                 </MenuOptionGroup>
@@ -146,6 +155,7 @@ export const ChecklistMultiDropdown = ({
     width = '220px',
     isInvalid = false,
     isDisabled = false,
+    shouldWrapOptions = false,
     onChange
 }: ChecklistMultiDropdownProps) => {
     const [query, setQuery] = React.useState('');
@@ -211,7 +221,16 @@ export const ChecklistMultiDropdown = ({
                                     isMatch(option.label) ? undefined : 'none'
                                 }
                             >
-                                {option.label}
+                                <Text
+                                    as="span"
+                                    overflowWrap={
+                                        shouldWrapOptions
+                                            ? 'anywhere'
+                                            : undefined
+                                    }
+                                >
+                                    {option.label}
+                                </Text>
                             </MenuItemOption>
                         ))}
                     </MenuOptionGroup>

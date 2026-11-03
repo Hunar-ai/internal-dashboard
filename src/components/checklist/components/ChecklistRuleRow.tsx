@@ -83,6 +83,7 @@ export const ChecklistRuleRow = ({
                     options={sourceOptions}
                     placeholder="Select question"
                     width="240px"
+                    shouldWrapOptions
                     isInvalid={!!ruleError.dependentId?.error}
                     onChange={dependentId =>
                         onRuleChange(question.key, rule.id, {
@@ -103,6 +104,7 @@ export const ChecklistRuleRow = ({
                             : 'No options yet'
                     }
                     width="200px"
+                    shouldWrapOptions
                     isInvalid={!!ruleError.dependentOptions?.error}
                     isDisabled={!rule.dependentId}
                     onChange={dependentOptions =>
@@ -139,6 +141,7 @@ export const ChecklistRuleRow = ({
                                 : 'No options yet'
                         }
                         width="220px"
+                        shouldWrapOptions
                         isInvalid={!!ruleError.selectedOptions?.error}
                         onChange={selectedOptions =>
                             onRuleChange(question.key, rule.id, {

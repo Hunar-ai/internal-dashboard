@@ -70,6 +70,8 @@ export const ChecklistOptions = ({
                             color="gray.800"
                             borderRadius="md"
                             fontWeight={400}
+                            overflowWrap={'anywhere'}
+                            padding={2.5}
                         >
                             {value}
                         </Tag>

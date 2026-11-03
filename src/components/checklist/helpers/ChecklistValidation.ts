@@ -60,7 +60,7 @@ const getTextFieldError = (
 
     return fieldError.error || RegExUtil.isPlainText(value)
         ? fieldError
-        : invalid('Emojis and special characters are not allowed');
+        : invalid('Emojis are not allowed');
 };
 
 const listMissing = (values: string[], available: string[]) =>

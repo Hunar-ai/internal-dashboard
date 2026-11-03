@@ -3,7 +3,7 @@ export const RegExUtil = {
     optionHeader: /^option\s*(\d+)$/,
     //allow keyboard characters only, and also hindi characters since hindi vowels are counted as a mark, not a letter
     isPlainText(str: string): boolean {
-        const re = /^[\p{L}\p{M}\p{N}\p{P}\p{Zs}+=<>^|~$₹]*$/u;
+        const re = /^[\p{L}\p{M}\p{N}\p{P}\p{Zs}+=<>^|~$₹`]*$/u;
         return re.test(str);
     },
     conformToId: (psuedoId: string, limit = 33): string => {
