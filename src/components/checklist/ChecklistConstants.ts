@@ -98,7 +98,7 @@ export const CHECKLIST_CONFIRMATION = {
             'Deleting this option will also modify/delete all rules that are dependent on it.',
         detail:
             'You have added rules that are dependent on this option. If you delete this option, ' +
-            'those rules will also be modify/deleted. Are you sure?',
+            'those rules will also be modified/deleted. Are you sure?',
         submitText: 'Yes, delete'
     },
     DELETE_QUESTION: {
@@ -106,7 +106,7 @@ export const CHECKLIST_CONFIRMATION = {
             'Deleting this question will also modify/delete all rules that are dependent on it.',
         detail:
             'You have added rules that are dependent on this question. ' +
-            'If you delete this question, those rules will also be modify/deleted. ' +
+            'If you delete this question, those rules will also be modified/deleted. ' +
             'Are you sure?',
         submitText: 'Yes, delete'
     },
@@ -115,7 +115,7 @@ export const CHECKLIST_CONFIRMATION = {
             'Editing this option will modify/delete all rules that are dependent on it.',
         detail:
             'You have added rules that are dependent on this option. ' +
-            'If you edit this option, those rules will be modify/deleted. ' +
+            'If you edit this option, those rules will be modified/deleted. ' +
             'Are you sure?',
         submitText: 'Yes, delete and edit'
     },
@@ -124,7 +124,7 @@ export const CHECKLIST_CONFIRMATION = {
             'Changing this question will modify/delete all rules that are dependent on it.',
         detail:
             'You have added rules that are dependent on this option. ' +
-            'If you change this question, those rules will be modify/deleted. ' +
+            'If you change this question, those rules will be modified/deleted. ' +
             'Are you sure?',
         submitText: 'Yes, delete and change'
     }
