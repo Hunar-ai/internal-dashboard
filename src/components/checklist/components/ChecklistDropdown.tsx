@@ -58,6 +58,7 @@ const DropdownTrigger = ({
         <MenuButton
             as={Button}
             aria-label={label}
+            aria-invalid={isInvalid}
             variant="outline"
             width={width}
             borderColor={isInvalid ? 'red.300' : 'gray.200'}

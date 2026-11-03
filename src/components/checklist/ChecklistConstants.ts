@@ -95,36 +95,36 @@ export const CHECKLIST_RULE_CONFLICT = {
 export const CHECKLIST_CONFIRMATION = {
     DELETE_OPTION: {
         description:
-            'Deleting this option will also delete all rules that are dependent on it.',
+            'Deleting this option will also modify/delete all rules that are dependent on it.',
         detail:
             'You have added rules that are dependent on this option. If you delete this option, ' +
-            'those rules will also be deleted. Are you sure?',
+            'those rules will also be modify/deleted. Are you sure?',
         submitText: 'Yes, delete'
     },
     DELETE_QUESTION: {
         description:
-            'Deleting this question will also delete all rules that are dependent on it.',
+            'Deleting this question will also modify/delete all rules that are dependent on it.',
         detail:
             'You have added rules that are dependent on this question. ' +
-            'If you delete this question, those rules will also be deleted. ' +
+            'If you delete this question, those rules will also be modify/deleted. ' +
             'Are you sure?',
         submitText: 'Yes, delete'
     },
     EDIT_OPTION: {
         description:
-            'Editing this option will delete all rules that are dependent on it.',
+            'Editing this option will modify/delete all rules that are dependent on it.',
         detail:
             'You have added rules that are dependent on this option. ' +
-            'If you edit this option, those rules will be deleted. ' +
+            'If you edit this option, those rules will be modify/deleted. ' +
             'Are you sure?',
         submitText: 'Yes, delete and edit'
     },
     CHANGE_QUESTION_TYPE: {
         description:
-            'Changing this question will delete all rules that are dependent on it.',
+            'Changing this question will modify/delete all rules that are dependent on it.',
         detail:
             'You have added rules that are dependent on this option. ' +
-            'If you change this question, those rules will be deleted. ' +
+            'If you change this question, those rules will be modify/deleted. ' +
             'Are you sure?',
         submitText: 'Yes, delete and change'
     }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { flushSync } from 'react-dom';
 
 import { Flex, Text } from '@chakra-ui/react';
 
@@ -65,12 +66,14 @@ export const ChecklistEditForm = () => {
             return;
         }
 
-        const { hasError, firstErrorKey } = validate();
+        const { hasError, firstErrorKey } = flushSync(() => validate());
 
         if (hasError) {
-            document
-                .getElementById(`${firstErrorKey}-card`)
-                ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const card = document.getElementById(`${firstErrorKey}-card`);
+
+            (
+                card?.querySelector('[aria-invalid="true"]') ?? card
+            )?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
 
