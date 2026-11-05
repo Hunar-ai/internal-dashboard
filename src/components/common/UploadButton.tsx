@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button } from '@chakra-ui/react';
+import { Button, type ButtonProps } from '@chakra-ui/react';
 
 import { UploadInputPreview } from './UploadInputPreview';
 
@@ -8,7 +8,7 @@ import { ALLOWED_EXTENSION, FIELD_SIZE } from 'Enum';
 
 const FILENAME_LENGTH_LIMIT = 15;
 
-interface UploadButtonProps {
+interface UploadButtonProps extends Omit<ButtonProps, 'onChange' | 'value'> {
     name: string;
     value: string;
     title: string;
@@ -29,7 +29,8 @@ export const UploadButton = ({
     isLoading = false,
     isDisabled = false,
     onChange,
-    onRemove
+    onRemove,
+    ...buttonProps
 }: UploadButtonProps) => {
     const getFormattedFilename = (filename: string, maxLength: number) => {
         if (filename.length <= maxLength) return filename;
@@ -61,6 +62,7 @@ export const UploadButton = ({
                 />
             ) : (
                 <Button
+                    {...buttonProps}
                     colorScheme="blue"
                     variant="outline"
                     size={size}

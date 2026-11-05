@@ -6,16 +6,19 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
-    ModalOverlay
+    ModalOverlay,
+    Text
 } from '@chakra-ui/react';
 
-interface ConfirmationDialogProps {
+export interface ConfirmationDialogProps {
     title: string;
     description: string;
+    detail?: string;
     isOpen: boolean;
     cancelText?: string;
     submitText?: string;
     isCentered?: boolean;
+    isDestructive?: boolean;
     onSubmitClick: VoidFunction;
     onCancelClick: VoidFunction;
 }
@@ -23,9 +26,11 @@ interface ConfirmationDialogProps {
 export const ConfirmationDialog = ({
     title,
     description,
+    detail,
     isOpen,
     cancelText = 'CANCEL',
     submitText = 'SURE',
+    isDestructive = false,
     isCentered = false,
     onCancelClick,
     onSubmitClick
@@ -36,12 +41,27 @@ export const ConfirmationDialog = ({
             <ModalContent>
                 <ModalHeader>{title}</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>{description}</ModalBody>
+                <ModalBody>
+                    <Text fontWeight={detail ? 500 : 400}>{description}</Text>
+                    {!!detail && (
+                        <Text mt={3} color="gray.600">
+                            {detail}
+                        </Text>
+                    )}
+                </ModalBody>
                 <ModalFooter>
-                    <Button variant="ghost" mr={3} onClick={onCancelClick}>
+                    <Button
+                        variant="outline"
+                        colorScheme="blue"
+                        mr={3}
+                        onClick={onCancelClick}
+                    >
                         {cancelText}
                     </Button>
-                    <Button colorScheme="blue" onClick={onSubmitClick}>
+                    <Button
+                        colorScheme={isDestructive ? 'red' : 'blue'}
+                        onClick={onSubmitClick}
+                    >
                         {submitText}
                     </Button>
                 </ModalFooter>
